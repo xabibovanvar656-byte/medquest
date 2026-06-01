@@ -140,8 +140,8 @@ select option{background:var(--bg2)}
   <div id="dbst" style="font-size:11px;font-family:var(--fm);color:var(--tx3)"></div>
   <button class="hib" onclick="toggleTheme()" title="Тема"><i class="ti ti-moon" id="thic"></i></button>
   <div id="authhdr">
-    <button class="bh" onclick="openModal('login')">Войти</button>
-    <button class="bh bhp" style="margin-left:6px" onclick="openModal('register')">Регистрация</button>
+    <button class="bh" onclick="openModal(&quot;login&quot;)">Войти</button>
+    <button class="bh bhp" style="margin-left:6px" onclick="openModal(&quot;register&quot;)">Регистрация</button>
   </div>
 </header>
 
@@ -326,7 +326,7 @@ select option{background:var(--bg2)}
       <div style="font-size:56px;margin-bottom:16px;opacity:.3">🛡️</div>
       <div class="pt" style="margin-bottom:8px">Панель администратора</div>
       <div class="ps" style="margin-bottom:24px">Только для администраторов</div>
-      <button class="btn bbl" onclick="openModal('admin')"><i class="ti ti-lock-open"></i>Войти</button>
+      <button class="btn bbl" onclick="openModal(&quot;admin&quot;)"><i class="ti ti-lock-open"></i>Войти</button>
     </div>
   </div>
   <div id="admPanel" style="display:none">
@@ -1067,8 +1067,8 @@ function renderAuthHdr(){
     el.innerHTML = '<span style="font-size:12px;color:var(--tx2);margin-right:8px">👤 '+S.user.name+'</span>'
       +'<button class="bh" onclick="doLogout()">Выйти</button>';
   } else {
-    el.innerHTML = '<button class="bh" onclick="openModal('login')">Войти</button>'
-      +'<button class="bh bhp" style="margin-left:6px" onclick="openModal('register')">Регистрация</button>';
+    el.innerHTML = '<button class="bh" onclick="openModal(&quot;login&quot;)">Войти</button>'
+      +'<button class="bh bhp" style="margin-left:6px" onclick="openModal(&quot;register&quot;)">Регистрация</button>';
   }
   document.getElementById('admNav').style.display = S.isAdm ? '' : 'none';
   updPendBadge();
@@ -1100,8 +1100,8 @@ function showLoginWall(){
     div.style.marginBottom = '16px';
     div.innerHTML = '<i class="ti ti-lock"></i>'
       +' Для доступа необходимо войти.'
-      +' <button class="btn bbl bsm" style="margin-left:8px" onclick="openModal('login')">Войти</button>'
-      +' <button class="btn bgh bsm" style="margin-left:4px" onclick="openModal('register')">Регистрация</button>';
+      +' <button class="btn bbl bsm" style="margin-left:8px" onclick="openModal(&quot;login&quot;)">Войти</button>'
+      +' <button class="btn bgh bsm" style="margin-left:4px" onclick="openModal(&quot;register&quot;)">Регистрация</button>';
     ha.innerHTML = '';
     ha.appendChild(div);
     setTimeout(function(){ ha.innerHTML=''; }, 8000);
@@ -1138,11 +1138,11 @@ function openModal(m){
     b.innerHTML = '<div class="fg"><label class="fl">Email</label>'
       +'<input id="mEm" type="email" placeholder="student@med.uz"></div>'
       +'<div class="fg"><label class="fl">Пароль</label>'
-      +'<input id="mPw" type="password" onkeydown="if(event.key==='Enter')doAuth()"></div>'
+      +'<input id="mPw" type="password" onkeydown="if(event.key===&apos;Enter&apos;)doAuth()"></div>'
       +'<p id="mErr" class="ferr"></p>'
       +'<button class="btn bbl bfu" onclick="doAuth()">Войти</button>'
       +'<p style="text-align:center;margin-top:11px;font-size:12px;color:var(--tx2)">'
-      +'Нет аккаунта? <a href="#" onclick="openModal('register')" style="color:var(--bl)">Регистрация</a></p>';
+      +'Нет аккаунта? <a href="#" onclick="openModal(&quot;register&quot;)" style="color:var(--bl)">Регистрация</a></p>';
   } else if(m === 'register'){
     t.textContent = 'Регистрация';
     b.innerHTML = '<div class="fg"><label class="fl">Имя</label>'
@@ -1152,17 +1152,17 @@ function openModal(m){
       +'<div class="fg"><label class="fl">Email</label>'
       +'<input id="mEm" type="email" placeholder="student@med.uz"></div>'
       +'<div class="fg"><label class="fl">Пароль</label>'
-      +'<input id="mPw" type="password" onkeydown="if(event.key==='Enter')doAuth()"></div>'
+      +'<input id="mPw" type="password" onkeydown="if(event.key===&apos;Enter&apos;)doAuth()"></div>'
       +'<p id="mErr" class="ferr"></p>'
       +'<button class="btn bbl bfu" onclick="doAuth()">Отправить заявку</button>'
       +'<p style="text-align:center;margin-top:11px;font-size:12px;color:var(--tx2)">'
-      +'Есть аккаунт? <a href="#" onclick="openModal('login')" style="color:var(--bl)">Войти</a></p>';
+      +'Есть аккаунт? <a href="#" onclick="openModal(&quot;login&quot;)" style="color:var(--bl)">Войти</a></p>';
   } else if(m === 'admin'){
     t.textContent = '🛡️ Вход администратора';
     b.innerHTML = '<div class="alert ali" style="margin-bottom:14px">'
       +'<i class="ti ti-alert-triangle"></i>Только для администраторов</div>'
       +'<div class="fg"><label class="fl">Пароль</label>'
-      +'<input id="mAp" type="password" onkeydown="if(event.key==='Enter')doAdm()"></div>'
+      +'<input id="mAp" type="password" onkeydown="if(event.key===&apos;Enter&apos;)doAdm()"></div>'
       +'<p id="mErr" class="ferr"></p>'
       +'<button class="btn bbl bfu" onclick="doAdm()">Войти</button>';
   }
@@ -1224,6 +1224,15 @@ function doLogout(){ S.user=null; S.hist=[]; S.prog={}; sv(); renderAuthHdr(); r
 function admOut(){ S.isAdm=false; sv(); renderAuthHdr(); renderAdm(); }
 
 // ── HOME ──
+
+function goSubj(k){
+  document.getElementById('fcS').value=k;
+  go('flashcards',document.querySelector('[data-pg=flashcards]'));
+}
+function goPage(pg){
+  go(pg,document.querySelector('[data-pg='+pg+']'));
+}
+
 function renderHome(){
   renderAuthHdr();
   document.getElementById('hTitle').textContent = S.user ? 'Привет, '+S.user.name+'! 👋' : 'Добро пожаловать в МедКвест 🏥';
@@ -1253,7 +1262,7 @@ function renderHome(){
     qs.forEach(function(q){a+=(S.prog[q.id]?S.prog[q.id].a:0);c+=(S.prog[q.id]?S.prog[q.id].c:0);});
     var pct=a?Math.round(c/a*100):0;
     var locked = PROTECTED.indexOf('flashcards')>=0 && !S.user && !S.isAdm;
-    var onclick = locked ? 'showLoginWall()' : 'document.getElementById('fcS').value=''+k+'';go('flashcards',document.querySelector('[data-pg=flashcards]'))';
+    var onclick = locked ? 'showLoginWall()' : 'goSubj("'+k+'")';
     return '<div class="sc" style="background:'+m.dim+';border-color:'+m.color+'22" onclick="'+onclick+'">'
       +'<div style="font-size:26px;margin-bottom:7px">'+m.icon+'</div>'
       +'<div style="font-weight:700;color:'+m.color+'">'+m.label+'</div>'
@@ -1272,7 +1281,7 @@ function renderHome(){
   ];
   document.getElementById('hModes').innerHTML = modes.map(function(a){
     var locked2 = PROTECTED.indexOf(a.pg)>=0 && !S.user && !S.isAdm;
-    var fn = locked2 ? 'showLoginWall()' : 'go(''+a.pg+'',document.querySelector('[data-pg='+a.pg+']'))';
+    var fn = locked2 ? 'showLoginWall()' : 'goPage("'+a.pg+'")';
     return '<button onclick="'+fn+'" style="display:flex;align-items:flex-start;gap:10px;padding:14px;'
       +'background:var(--bg2);border:1px solid var(--bor);border-radius:var(--r);cursor:pointer;'
       +'text-align:left;font-family:var(--f);transition:all .15s;position:relative"'
@@ -1384,12 +1393,7 @@ async function trExplain(){
   var box=document.getElementById('trAi');
   box.innerHTML='<div class="aihdr"><i class="ti ti-loader spin"></i>Загрузка...</div>';
   try{
-    var prompt='Вопрос: "'+TRC.q+'"
-Варианты: '+TRC.o.map(function(o,i){return (i+1)+') '+o;}).join(', ')
-      +'
-Правильный ответ: '+TRC.o[TRC.a]+'
-
-Объясни кратко (2-3 предложения) почему этот ответ правильный. Для студента мед. вуза, на русском.';
+    var prompt='Вопрос: '+TRC.q+'\nВарианты: '+TRC.o.map(function(o,i){return (i+1)+') '+o;}).join(', ')+'\nПравильный ответ: '+TRC.o[TRC.a]+'\n\nОбъясни кратко (2-3 предложения) почему этот ответ правильный. Для студента мед. вуза, на русском.';
     var res=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
