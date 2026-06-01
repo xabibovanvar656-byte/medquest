@@ -1058,7 +1058,28 @@ async function saveExam(score,total,subj,mins){
 }
 
 // NAV
+const PROTECTED=['flashcards','trainer','exam','progress','leaderboard'];
+
+function showLoginWall(){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  document.getElementById('pg-home').classList.add('on');
+  const hb=document.querySelector('[data-pg=home]');if(hb)hb.classList.add('on');
+  renderHome();
+  document.getElementById('home-alert').innerHTML=
+    '<div class="alert al-w"><i class="ti ti-lock"></i>'+
+    'Для доступа к обучению необходимо войти или зарегистрироваться.'+
+    ' <button class="btn bb bsm" style="margin-left:8px" onclick="openModal('login')">Войти</button>'+
+    ' <button class="btn bgh bsm" style="margin-left:4px" onclick="openModal('register')">Регистрация</button></div>';
+  setTimeout(()=>{const a=document.getElementById('home-alert');if(a)a.innerHTML='';},8000);
+}
+
 function go(pg,btn){
+  // Block learning pages for guests
+  if(PROTECTED.includes(pg)&&!S.user&&!S.isAdm){
+    showLoginWall();
+    return;
+  }
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
   document.getElementById('pg-'+pg).classList.add('on');
@@ -1182,14 +1203,18 @@ function renderHome(){
     const a=qs.reduce((s,q)=>s+(S.prog[q.id]?.a||0),0);
     const c=qs.reduce((s,q)=>s+(S.prog[q.id]?.c||0),0);
     const pct=a?Math.round(c/a*100):0;
-    return '<div class="sc" style="background:'+m.dim+';border-color:'+m.color+'22" onclick="document.getElementById(\'fc-s\').value=\''+k+'\';go(\'flashcards\',document.querySelector(\'[data-pg=flashcards]\'))"><div style="font-size:26px;margin-bottom:7px">'+m.icon+'</div><div style="font-weight:700;color:'+m.color+'">'+m.label+'</div><div style="font-size:11px;color:var(--tx3);margin-top:2px">'+cnt+' вопросов</div><div style="margin-top:10px"><div style="height:3px;background:'+m.color+'22;border-radius:2px"><div style="height:100%;width:'+pct+'%;background:'+m.color+';border-radius:2px"></div></div><div style="font-size:10px;color:'+m.color+';margin-top:3px;font-family:var(--fm)">'+pct+'%</div></div></div>';
+    return '<div class="sc" style="background:'+m.dim+';border-color:'+m.color+'22" onclick="'+(S.user||S.isAdm?'document.getElementById(\'fc-s\').value=\''+k+'\';go(\'flashcards\',document.querySelector(\'[data-pg=flashcards]\'))':'showLoginWall()')+'"><div style="font-size:26px;margin-bottom:7px">'+m.icon+'</div><div style="font-weight:700;color:'+m.color+'">'+m.label+'</div><div style="font-size:11px;color:var(--tx3);margin-top:2px">'+cnt+' вопросов</div><div style="margin-top:10px"><div style="height:3px;background:'+m.color+'22;border-radius:2px"><div style="height:100%;width:'+pct+'%;background:'+m.color+';border-radius:2px"></div></div><div style="font-size:10px;color:'+m.color+';margin-top:3px;font-family:var(--fm)">'+pct+'%</div></div></div>';
   }).join('');
   document.getElementById('home-modes').innerHTML=[
     {l:'Флеш-карточки',d:'Вопрос → ответ',i:'ti-layers-subtract',pg:'flashcards',c:'var(--blue)'},
     {l:'Тренажёр',d:'Неверный → повторяется',i:'ti-target',pg:'trainer',c:'var(--green)'},
     {l:'Экзамен',d:'Таймер, без подсказок',i:'ti-certificate',pg:'exam',c:'var(--amb)'},
     {l:'Прогресс',d:'Моя статистика',i:'ti-chart-line',pg:'progress',c:'var(--pur)'},
-  ].map(a=>'<button onclick="go(\''+a.pg+'\',document.querySelector(\'[data-pg='+a.pg+']\'))" style="display:flex;align-items:flex-start;gap:10px;padding:14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);cursor:pointer;text-align:left;font-family:var(--f);transition:all .15s" onmouseover="this.style.borderColor=\''+a.c+'\';this.style.background=\'var(--bg3)\'" onmouseout="this.style.borderColor=\'var(--border)\';this.style.background=\'var(--bg2)\'"><i class="ti '+a.i+'" style="font-size:20px;color:'+a.c+';flex-shrink:0;margin-top:2px"></i><div><div style="font-weight:600;color:var(--tx)">'+a.l+'</div><div style="font-size:11px;color:var(--tx3);margin-top:2px">'+a.d+'</div></div></button>').join('');
+    ].map(a=>{
+    const locked=PROTECTED.includes(a.pg)&&!S.user&&!S.isAdm;
+    const clickFn=locked?'showLoginWall()':'go(\''+a.pg+'\',document.querySelector(\'[data-pg='+a.pg+']\')):';
+    return '<button onclick="'+clickFn+'" style="display:flex;align-items:flex-start;gap:10px;padding:14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);cursor:pointer;text-align:left;font-family:var(--f);transition:all .15s;position:relative" onmouseover="this.style.borderColor=\''+a.c+'\';this.style.background=\'var(--bg3)\'" onmouseout="this.style.borderColor=\'var(--border)\';this.style.background=\'var(--bg2)\'"><i class="ti '+a.i+'" style="font-size:20px;color:'+a.c+';flex-shrink:0;margin-top:2px"></i><div><div style="font-weight:600;color:var(--tx)">'+a.l+'</div><div style="font-size:11px;color:var(--tx3);margin-top:2px">'+a.d+'</div></div>'+(locked?'<span style="position:absolute;top:8px;right:10px;font-size:12px">🔒</span>':'')+'</button>';
+  }).join('');
 }
 
 // FLASHCARDS
