@@ -16,14 +16,14 @@
   --amb:#f5a623;--adim:#1e1200;
   --red:#f04060;--rdim:#1a0810;
   --pur:#a78bfa;--pdim:#120d26;
-  --teal:#00d4c8;--tdim:#001a19;
+  --teal:#00d4c8;
   --r:10px;--rs:7px;
   --f:'Sora',system-ui,sans-serif;--fm:'JetBrains Mono',monospace;
 }
 [data-light]{
   --bg:#f0f4fc;--bg2:#fff;--bg3:#e8eef8;--bg4:#dde5f5;
   --border:#c0cee8;--bord2:#9aaed0;--tx:#0d1a30;--tx2:#3a5080;--tx3:#8099c0;
-  --bdim:#dae8ff;--gdim:#d0f8e8;--adim:#fff3d8;--rdim:#ffe0e8;--pdim:#ede8ff;--tdim:#d8faf8;
+  --bdim:#dae8ff;--gdim:#d0f8e8;--adim:#fff3d8;--rdim:#ffe0e8;--pdim:#ede8ff;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;font-family:var(--f);background:var(--bg);color:var(--tx);font-size:14px;line-height:1.6;overflow:hidden}
@@ -42,7 +42,7 @@ html,body{height:100%;font-family:var(--f);background:var(--bg);color:var(--tx);
 .nb:hover{background:var(--bg3);color:var(--tx)}.nb.on{background:var(--bdim);color:var(--blue);border-left-color:var(--blue);font-weight:500}
 .nb i{font-size:16px;flex-shrink:0}.nsep{height:1px;background:var(--border);margin:5px 12px}.nsp{flex:1}
 .nbadge{background:var(--red);color:#fff;font-size:10px;font-weight:700;min-width:17px;height:17px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-left:auto;padding:0 4px}
-.main{flex:1;overflow-y:auto;padding:20px;scroll-behavior:smooth}
+.main{flex:1;overflow-y:auto;padding:20px}
 .page{display:none}.page.on{display:block}
 .ph{margin-bottom:18px}.pt{font-size:20px;font-weight:700;margin-bottom:3px;letter-spacing:-.3px}.ps{font-size:13px;color:var(--tx2)}
 .card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:16px}
@@ -61,15 +61,19 @@ select option{background:var(--bg2)}
 .tab:hover{color:var(--tx)}.tab.on{color:var(--blue);border-bottom-color:var(--blue);font-weight:500}
 .bdg{padding:2px 7px;border-radius:20px;font-size:11px;font-weight:600}
 .b-bl{background:var(--bdim);color:var(--blue)}.b-gr{background:var(--gdim);color:var(--green)}
-.b-am{background:var(--adim);color:var(--amb)}.b-re{background:var(--rdim);color:var(--red)}.b-pu{background:var(--pdim);color:var(--pur)}
+.b-am{background:var(--adim);color:var(--amb)}.b-re{background:var(--rdim);color:var(--red)}
 .alert{padding:10px 14px;border-radius:var(--rs);font-size:13px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.al-w{background:var(--adim);border:1px solid var(--amb)44;color:var(--amb)}.al-i{background:var(--bdim);border:1px solid var(--blue)44;color:var(--blue)}
-.al-ok{background:var(--gdim);border:1px solid var(--green)44;color:var(--green)}.al-r{background:var(--rdim);border:1px solid var(--red)44;color:var(--red)}
+.al-w{background:var(--adim);border:1px solid rgba(245,166,35,.3);color:var(--amb)}
+.al-i{background:var(--bdim);border:1px solid rgba(79,142,247,.3);color:var(--blue)}
+.al-ok{background:var(--gdim);border:1px solid rgba(34,208,122,.3);color:var(--green)}
+.al-r{background:var(--rdim);border:1px solid rgba(240,64,96,.3);color:var(--red)}
 .pb{height:5px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:12px}
 .pbf{height:100%;border-radius:3px;transition:width .35s}
 .opt{display:flex;align-items:center;gap:10px;width:100%;padding:11px 14px;border-radius:var(--rs);border:1px solid var(--border);background:var(--bg3);color:var(--tx);text-align:left;cursor:pointer;font-size:13px;margin-bottom:7px;transition:all .15s;font-family:var(--f);line-height:1.4}
-.opt:hover:not(:disabled){background:var(--bdim);border-color:var(--blue)33}
-.opt.sel{background:var(--bdim);border-color:var(--blue);color:var(--blue)}.opt.ok{background:var(--gdim);border-color:var(--green);color:var(--green)}.opt.bad{background:var(--rdim);border-color:var(--red);color:var(--red)}
+.opt:hover:not(:disabled){background:var(--bdim);border-color:rgba(79,142,247,.3)}
+.opt.sel{background:var(--bdim);border-color:var(--blue);color:var(--blue)}
+.opt.ok{background:var(--gdim);border-color:var(--green);color:var(--green)}
+.opt.bad{background:var(--rdim);border-color:var(--red);color:var(--red)}
 .ol{width:26px;height:26px;border-radius:50%;background:var(--bg4);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--fm)}
 .opt.sel .ol{background:var(--blue);color:#fff}.opt.ok .ol{background:var(--green);color:#000}.opt.bad .ol{background:var(--red);color:#fff}
 .fcard{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:26px;min-height:230px;cursor:pointer;position:relative;transition:border-color .2s}
@@ -93,8 +97,8 @@ select option{background:var(--bg2)}
 @keyframes spin{to{transform:rotate(360deg)}}
 .mmap{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px}
 .mq{width:27px;height:27px;border-radius:4px;border:1px solid var(--border);background:var(--bg3);cursor:pointer;font-size:11px;font-weight:600;font-family:var(--fm);display:flex;align-items:center;justify-content:center;color:var(--tx3);transition:all .15s}
-.mq.ans{background:var(--bdim);border-color:var(--blue)44;color:var(--blue)}.mq.cur{border:2px solid var(--blue);color:var(--blue)}
-.ai-box{background:var(--pdim);border:1px solid var(--pur)33;border-radius:var(--rs);padding:14px;font-size:13px;line-height:1.7;margin-top:10px}
+.mq.ans{background:var(--bdim);border-color:rgba(79,142,247,.3);color:var(--blue)}.mq.cur{border:2px solid var(--blue);color:var(--blue)}
+.ai-box{background:var(--pdim);border:1px solid rgba(167,139,250,.2);border-radius:var(--rs);padding:14px;font-size:13px;line-height:1.7;margin-top:10px}
 .ai-hdr{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--pur);margin-bottom:7px}
 .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.78);display:flex;align-items:center;justify-content:center;z-index:300;backdrop-filter:blur(6px)}
 .modal{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:24px;width:380px;max-width:92vw;max-height:90vh;overflow-y:auto}
@@ -114,16 +118,13 @@ select option{background:var(--bg2)}
 .db{text-align:center;min-width:50px;background:var(--bg3);border-radius:var(--rs);padding:6px;border:1px solid var(--border)}
 .dd{font-size:20px;font-weight:700;font-family:var(--fm);line-height:1}.dm{font-size:10px;color:var(--tx3);text-transform:uppercase}
 .lr{display:flex;align-items:center;gap:12px;padding:11px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);margin-bottom:6px}
-.lr.me{background:var(--bdim);border-color:var(--blue)33}
+.lr.me{background:var(--bdim);border-color:rgba(79,142,247,.2)}
 .adm-lock{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;text-align:center}
 .res-pct{font-size:80px;font-weight:700;font-family:var(--fm);line-height:1;text-align:center;letter-spacing:-3px}
 .sc{border-radius:var(--r);padding:18px;cursor:pointer;border:1px solid transparent;transition:transform .15s}.sc:hover{transform:translateY(-2px)}
 .prow{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--rs);margin-bottom:6px}
+.loading{position:fixed;inset:0;background:rgba(8,12,20,.9);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:400}
 .spin{animation:spin 1s linear infinite}
-/* Loading overlay */
-.loading{position:fixed;inset:0;background:rgba(8,12,20,.85);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:400}
-.loading-icon{font-size:48px;margin-bottom:16px;animation:spin 1.5s linear infinite}
-.loading-txt{font-size:14px;color:var(--tx2)}
 @media(max-width:640px){
   .sidebar{width:50px}
   .sidebar .nb span,.sidebar .nlbl,.sidebar .nsep,.sidebar .nsp{display:none}
@@ -136,13 +137,11 @@ select option{background:var(--bg2)}
 <body>
 <div class="app">
 
-<!-- LOADING -->
 <div class="loading" id="loading">
-  <div class="loading-icon">⚡</div>
-  <div class="loading-txt">Подключение к базе данных...</div>
+  <div style="font-size:48px;margin-bottom:16px;animation:spin 2s linear infinite">⚡</div>
+  <div style="font-size:14px;color:var(--tx2)" id="ltxt">Подключение к Supabase...</div>
 </div>
 
-<!-- HEADER -->
 <header class="hdr">
   <div class="logo"><span style="-webkit-text-fill-color:initial">🏥</span>МедКвест</div>
   <span class="bdg b-bl" style="font-size:10px">BETA</span>
@@ -156,7 +155,6 @@ select option{background:var(--bg2)}
 </header>
 
 <div class="layout">
-<!-- SIDEBAR -->
 <nav class="sidebar">
   <div style="padding:4px 0">
     <button class="nb on" data-pg="home" onclick="go('home',this)"><i class="ti ti-home"></i><span>Главная</span></button>
@@ -187,10 +185,8 @@ select option{background:var(--bg2)}
   </div>
 </nav>
 
-<!-- MAIN -->
 <main class="main" id="mscroll">
 
-<!-- HOME -->
 <div id="pg-home" class="page on">
   <div class="ph"><div class="pt" id="home-title">Добро пожаловать 🏥</div><div class="ps" id="home-sub">Учебная платформа</div></div>
   <div id="home-alert"></div>
@@ -201,7 +197,6 @@ select option{background:var(--bg2)}
   <div id="home-modes" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px"></div>
 </div>
 
-<!-- FLASHCARDS -->
 <div id="pg-flashcards" class="page">
   <div class="ph"><div class="pt">Флеш-карточки</div><div class="ps">Вопрос → переворот → ответ</div></div>
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center">
@@ -235,11 +230,10 @@ select option{background:var(--bg2)}
   <div style="margin-top:8px;font-size:11px;color:var(--tx3);font-family:var(--fm)" id="fc-stat"></div>
 </div>
 
-<!-- TRAINER -->
 <div id="pg-trainer" class="page">
   <div class="ph">
     <div style="display:flex;justify-content:space-between;align-items:flex-start">
-      <div><div class="pt">Тренажёр</div><div class="ps">Неверный → вопрос вернётся</div></div>
+      <div><div class="pt">Тренажёр</div><div class="ps">Неверный → вернётся снова</div></div>
       <div style="display:flex;gap:12px;font-size:14px;font-weight:600;font-family:var(--fm)">
         <span style="color:var(--green)" id="tr-ok">✓ 0</span>
         <span style="color:var(--red)" id="tr-err">✗ 0</span>
@@ -270,13 +264,12 @@ select option{background:var(--bg2)}
   <button class="btn bb bfull" id="tr-nxt" style="display:none;margin-top:10px" onclick="trNext()">Следующий →</button>
 </div>
 
-<!-- EXAM -->
 <div id="pg-exam" class="page">
   <div id="ex-setup">
     <div class="ph"><div class="pt">Экзамен</div><div class="ps">Таймер, без подсказок</div></div>
     <div class="card" style="max-width:460px">
       <div class="fg"><label class="fl">Предмет</label>
-        <select id="ex-s"><option value="all">Все (545+)</option><option value="physics">🔬 Физика</option><option value="chemistry">⚗️ Химия</option><option value="biology">🧬 Биология</option></select></div>
+        <select id="ex-s"><option value="all">Все (545)</option><option value="physics">🔬 Физика</option><option value="chemistry">⚗️ Химия</option><option value="biology">🧬 Биология</option></select></div>
       <div class="fg"><label class="fl">Вопросов: <b id="ex-cl">25</b></label>
         <input type="range" min="10" max="80" step="5" value="25" id="ex-c" oninput="document.getElementById('ex-cl').textContent=this.value"></div>
       <div class="fg"><label class="fl">Время: <b id="ex-tl">30</b> мин</label>
@@ -310,14 +303,10 @@ select option{background:var(--bg2)}
       <div style="font-size:13px;color:var(--tx2);margin-top:4px" id="ex-rverd"></div>
     </div>
     <div class="card" style="max-height:400px;overflow-y:auto;margin-bottom:12px" id="ex-review"></div>
-    <div style="display:flex;gap:8px">
-      <button class="btn bb" onclick="exReset()"><i class="ti ti-refresh"></i>Новый</button>
-      <button class="btn bgh" onclick="go('trainer',document.querySelector('[data-pg=trainer]'))"><i class="ti ti-target"></i>Тренировать ошибки</button>
-    </div>
+    <button class="btn bb" onclick="exReset()"><i class="ti ti-refresh"></i>Новый экзамен</button>
   </div>
 </div>
 
-<!-- PROGRESS -->
 <div id="pg-progress" class="page">
   <div class="ph"><div class="pt">Прогресс</div><div class="ps">Статистика и история экзаменов</div></div>
   <div id="prog-s" style="margin-bottom:20px"></div>
@@ -325,25 +314,21 @@ select option{background:var(--bg2)}
   <div id="prog-h"></div>
 </div>
 
-<!-- LEADERBOARD -->
 <div id="pg-leaderboard" class="page">
   <div class="ph"><div class="pt">Таблица лидеров 🏆</div><div class="ps">Рейтинг по точности</div></div>
   <div id="lb-list"></div>
 </div>
 
-<!-- NEWS -->
 <div id="pg-news" class="page">
   <div class="ph"><div class="pt">Новости</div><div class="ps">Объявления платформы</div></div>
   <div id="news-list"></div>
 </div>
 
-<!-- SCHEDULE -->
 <div id="pg-schedule" class="page">
   <div class="ph"><div class="pt">Расписание</div><div class="ps">Предстоящие экзамены</div></div>
   <div id="sched-list"></div>
 </div>
 
-<!-- ADMIN -->
 <div id="pg-admin" class="page">
   <div id="adm-lock">
     <div class="adm-lock">
@@ -356,13 +341,13 @@ select option{background:var(--bg2)}
   <div id="adm-panel" style="display:none">
     <div class="ph">
       <div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <div><div class="pt">Панель администратора</div><div class="ps" id="adm-dbstatus"></div></div>
+        <div><div class="pt">Панель администратора</div><div class="ps" id="adm-dbst"></div></div>
         <button class="btn bgh bsm" onclick="admOut()"><i class="ti ti-logout"></i>Выйти</button>
       </div>
     </div>
     <div class="tabs">
       <button class="tab on" onclick="admTab('stats',this)">Статистика</button>
-      <button class="tab" onclick="admTab('pending',this)">Заявки <span id="adm-pend-cnt" class="bdg b-re" style="font-size:10px;margin-left:3px"></span></button>
+      <button class="tab" onclick="admTab('pending',this)">Заявки <span id="pend-cnt" class="bdg b-re" style="font-size:10px;margin-left:3px"></span></button>
       <button class="tab" onclick="admTab('students',this)">Студенты</button>
       <button class="tab" onclick="admTab('questions',this)">Вопросы</button>
       <button class="tab" onclick="admTab('news-edit',this)">Новости</button>
@@ -376,8 +361,7 @@ select option{background:var(--bg2)}
     <div id="adm-news-edit" style="display:none"></div>
     <div id="adm-sched-edit" style="display:none"></div>
     <div id="adm-ai" style="display:none">
-      <p style="font-size:13px;color:var(--tx2);margin-bottom:12px">Задайте вопрос ИИ</p>
-      <textarea id="adm-ai-q" rows="3" placeholder="Например: Объясни буферные системы крови..."></textarea>
+      <textarea id="adm-ai-q" rows="3" placeholder="Задайте вопрос ИИ..."></textarea>
       <button class="btn bb" style="margin-top:8px" onclick="admAsk()"><i class="ti ti-sparkles"></i>Спросить</button>
       <div id="adm-ai-ans"></div>
     </div>
@@ -388,60 +372,48 @@ select option{background:var(--bg2)}
 </div>
 </div>
 
-<!-- MODAL -->
 <div class="modal-bg" id="modal" style="display:none" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <div class="modal-hdr"><div class="modal-t" id="modal-t">Вход</div><button class="modal-x" onclick="closeModal()">×</button></div>
     <div id="modal-body"></div>
   </div>
 </div>
-
 <script>
-// ══════════════════════════════════════════════
-// SUPABASE CONFIG
-// ══════════════════════════════════════════════
-const SB_URL = 'https://ryswcwqyiopcqxkbgwng.supabase.co';
-const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ5c3djd3F5aW9wY3F4a2Jnd25nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzMTEwMzgsImV4cCI6MjA5NTg4NzAzOH0.j5l-V5suO1P076HvQxkI6z9UpMkM1_QDhGKihB0Et8c';
+// SUPABASE
+const SB_URL="https://ryswcwqyiopcqxkbgwng.supabase.co";
+const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ5c3djd3F5aW9wY3F4a2Jnd25nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzMTEwMzgsImV4cCI6MjA5NTg4NzAzOH0.j5l-V5suO1P076HvQxkI6z9UpMkM1_QDhGKihB0Et8c";
 
-const sbHeaders = {
-  'apikey': SB_KEY,
-  'Authorization': `Bearer ${SB_KEY}`,
-  'Content-Type': 'application/json',
-  'Prefer': 'return=representation'
-};
+const SBH = {'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=representation'};
 
-async function sbGet(table, params='') {
-  const r = await fetch(`${SB_URL}/rest/v1/${table}?${params}`, {headers: sbHeaders});
-  if(!r.ok) throw new Error(`GET ${table}: ${r.status}`);
+async function sbGet(t,p){
+  const r=await fetch(SB_URL+'/rest/v1/'+t+'?'+(p||''),{headers:SBH});
+  if(!r.ok)throw new Error(t+' '+r.status);
   return r.json();
 }
-async function sbPost(table, body) {
-  const r = await fetch(`${SB_URL}/rest/v1/${table}`, {method:'POST', headers: sbHeaders, body: JSON.stringify(body)});
-  if(!r.ok){const t=await r.text();throw new Error(`POST ${table}: ${r.status} ${t}`);}
+async function sbPost(t,b){
+  const r=await fetch(SB_URL+'/rest/v1/'+t,{method:'POST',headers:SBH,body:JSON.stringify(b)});
+  if(!r.ok){const e=await r.text();throw new Error(e);}
   return r.json();
 }
-async function sbPatch(table, filter, body) {
-  const r = await fetch(`${SB_URL}/rest/v1/${table}?${filter}`, {method:'PATCH', headers: sbHeaders, body: JSON.stringify(body)});
-  if(!r.ok){const t=await r.text();throw new Error(`PATCH ${table}: ${r.status} ${t}`);}
+async function sbPatch(t,f,b){
+  const r=await fetch(SB_URL+'/rest/v1/'+t+'?'+f,{method:'PATCH',headers:SBH,body:JSON.stringify(b)});
+  if(!r.ok){const e=await r.text();throw new Error(e);}
   return r.json();
 }
-async function sbDelete(table, filter) {
-  const r = await fetch(`${SB_URL}/rest/v1/${table}?${filter}`, {method:'DELETE', headers: sbHeaders});
-  if(!r.ok){const t=await r.text();throw new Error(`DELETE ${table}: ${r.status} ${t}`);}
+async function sbDel(t,f){
+  const r=await fetch(SB_URL+'/rest/v1/'+t+'?'+f,{method:'DELETE',headers:SBH});
+  if(!r.ok){const e=await r.text();throw new Error(e);}
   return true;
 }
-async function sbUpsert(table, body, onConflict='') {
-  const h = {...sbHeaders, 'Prefer': `resolution=merge-duplicates,return=representation`};
-  const url = onConflict ? `${SB_URL}/rest/v1/${table}?on_conflict=${onConflict}` : `${SB_URL}/rest/v1/${table}`;
-  const r = await fetch(url, {method:'POST', headers: h, body: JSON.stringify(body)});
-  if(!r.ok){const t=await r.text();throw new Error(`UPSERT ${table}: ${r.status} ${t}`);}
+async function sbUps(t,b,c){
+  const h={...SBH,'Prefer':'resolution=merge-duplicates,return=representation'};
+  const u=c?SB_URL+'/rest/v1/'+t+'?on_conflict='+c:SB_URL+'/rest/v1/'+t;
+  const r=await fetch(u,{method:'POST',headers:h,body:JSON.stringify(b)});
+  if(!r.ok){const e=await r.text();throw new Error(e);}
   return r.json();
 }
-
-// ══════════════════════════════════════════════
-// QUESTIONS DATABASE
-// ══════════════════════════════════════════════
-const BASE_QS = [
+// QUESTIONS
+const BASE_QS=[
 {id:"p1",s:"physics",t:"Биомеханика и СИ",q:"Скорость движения это",o:["вторая производная перемещения по времени","первая производная импульса по времени","вторая производная ускорения по времени","первая производная перемещения по времени"],a:3},
 {id:"p2",s:"physics",t:"Биомеханика и СИ",q:"Модуль Юнга является характеристикой",o:["только геометрических свойств конструкции","характеристикой свойств конструкции в целом","упругих свойств материала","эластичности материала"],a:2},
 {id:"p3",s:"physics",t:"Биомеханика и СИ",q:"При каком значении относительной деформации напряжение будет численно равна модулю упругости?",o:["Равном  двум","Ровно шести","Ровно одной второй","Равном  единице"],a:3},
@@ -989,126 +961,103 @@ const BASE_QS = [
 {id:"b18",s:"biology",t:"Физиология",q:"Нормальный уровень глюкозы натощак:",o:["10-15","1-2","3,3-5,5 ммоль/л","7-10"],a:2}
 ];
 
-let CUSTOM_QS = [];
-function getQS(){ return [...BASE_QS, ...CUSTOM_QS]; }
+let CUSTOM_QS=[];
+function getQS(){return [...BASE_QS,...CUSTOM_QS];}
 
-const SM = {
-  physics:  {label:'Физика',  icon:'🔬',color:'#22d07a',dim:'#061a10'},
-  chemistry:{label:'Химия',   icon:'⚗️',color:'#4f8ef7',dim:'#0a1933'},
-  biology:  {label:'Биология',icon:'🧬',color:'#f5a623',dim:'#1e1200'}
+const SM={
+  physics:{label:'Физика',icon:'🔬',color:'#22d07a',dim:'#061a10'},
+  chemistry:{label:'Химия',icon:'⚗️',color:'#4f8ef7',dim:'#0a1933'},
+  biology:{label:'Биология',icon:'🧬',color:'#f5a623',dim:'#1e1200'}
 };
 
-// ══════════════════════════════════════════════
-// LOCAL STATE (fallback when offline)
-// ══════════════════════════════════════════════
-const KEY='mq6';
+const KEY='mq7';
 let S={prog:{},hist:[],user:null,isAdm:false,dark:true};
 try{const d=localStorage.getItem(KEY);if(d)S={...S,...JSON.parse(d)};}catch{}
-const saveLocal=()=>{try{localStorage.setItem(KEY,JSON.stringify(S));}catch{}};
+const sv=()=>{try{localStorage.setItem(KEY,JSON.stringify(S));}catch{}};
 
-let dbOK = false;
-let newsCache = [];
-let schedCache = [];
+let dbOK=false;
+let newsCache=[];
+let schedCache=[];
 
-// ══════════════════════════════════════════════
-// INIT — connect to Supabase
-// ══════════════════════════════════════════════
-async function init() {
-  try {
-    // Test connection by loading news
-    const [news, sched, customQs] = await Promise.all([
-      sbGet('news', 'order=created_at.desc'),
-      sbGet('schedule', 'order=exam_date.asc'),
-      sbGet('custom_questions', 'order=created_at.asc')
-    ]);
-    newsCache = news || [];
-    schedCache = sched || [];
-    CUSTOM_QS = (customQs||[]).map(q=>({
-      id: q.id, s: q.subject, t: q.topic,
-      q: q.question, o: q.options, a: q.correct_index
-    }));
-    dbOK = true;
-    document.getElementById('db-status').innerHTML =
-      '<span style="color:var(--green)">● Supabase</span>';
-  } catch(e) {
-    console.warn('Supabase offline, using localStorage:', e.message);
-    dbOK = false;
-    document.getElementById('db-status').innerHTML =
-      '<span style="color:var(--amb)">● Локально</span>';
-    // Fallback news/sched
-    newsCache = [{id:1,title:'МедКвест запущен! 🚀',body:'545 вопросов. Три режима обучения.',pinned:true,news_date:'01.06.2026'}];
-    schedCache = [
-      {id:1,subject:'Биохимия',exam_date:'2026-06-15',exam_time:'09:00',room:'305'},
-      {id:2,subject:'Биофизика',exam_date:'2026-06-22',exam_time:'10:00',room:'201'},
-      {id:3,subject:'Органическая химия',exam_date:'2026-06-29',exam_time:'09:00',room:'405'}
-    ];
-  }
-  document.getElementById('loading').style.display = 'none';
-  applyTheme(S.dark);
-  renderHome();
-  // Load progress if logged in
-  if(S.user) loadUserProgress();
-}
-
-async function loadUserProgress() {
-  if(!dbOK || !S.user) return;
-  try {
-    const rows = await sbGet('progress', `user_email=eq.${encodeURIComponent(S.user.email)}`);
-    rows.forEach(r => {
-      S.prog[r.question_id] = {c: r.correct_count, a: r.attempt_count};
-    });
-    const hist = await sbGet('exam_history',
-      `user_email=eq.${encodeURIComponent(S.user.email)}&order=created_at.desc&limit=20`);
-    S.hist = hist.map(h=>({date:h.exam_date,score:h.score,total:h.total,subj:h.subject,mins:h.mins}));
-    saveLocal();
-  } catch(e) { console.warn('Progress load error:', e.message); }
-}
-
-async function saveProgress(questionId, correct) {
-  const p = S.prog[questionId] || {c:0,a:0};
-  p.c += correct ? 1 : 0;
-  p.a += 1;
-  S.prog[questionId] = p;
-  saveLocal();
-  if(!dbOK || !S.user) return;
-  try {
-    await sbUpsert('progress', {
-      user_email: S.user.email,
-      question_id: questionId,
-      correct_count: p.c,
-      attempt_count: p.a,
-      updated_at: new Date().toISOString()
-    }, 'user_email,question_id');
-  } catch(e) { console.warn('Save progress error:', e.message); }
-}
-
-async function saveExam(score, total, subj, mins) {
-  const entry = {date: new Date().toLocaleDateString('ru-RU'), score, total, subj, mins};
-  S.hist.unshift(entry);
-  saveLocal();
-  if(!dbOK || !S.user) return;
-  try {
-    await sbPost('exam_history', {
-      user_email: S.user.email,
-      score, total, subject: subj, mins,
-      exam_date: entry.date
-    });
-  } catch(e) { console.warn('Save exam error:', e.message); }
-}
-
-// ══════════════════════════════════════════════
 // THEME
-// ══════════════════════════════════════════════
 function applyTheme(d){
   if(d)document.documentElement.removeAttribute('data-light');
   else document.documentElement.setAttribute('data-light','');
   document.getElementById('theme-ic').className=d?'ti ti-moon':'ti ti-sun';
 }
-function toggleTheme(){S.dark=!S.dark;applyTheme(S.dark);saveLocal();}
+function toggleTheme(){S.dark=!S.dark;applyTheme(S.dark);sv();}
+applyTheme(S.dark);
 
-// ══════════════════════════════════════════════
-// NAVIGATION
-// ══════════════════════════════════════════════
+// INIT
+async function init(){
+  const setTxt=t=>{const e=document.getElementById('ltxt');if(e)e.textContent=t;};
+  setTxt('Подключение к Supabase...');
+  setTimeout(()=>setTxt('Загрузка данных...'),4000);
+  setTimeout(()=>setTxt('Почти готово...'),8000);
+  // Auto-hide loading after 12s no matter what
+  setTimeout(()=>{
+    const l=document.getElementById('loading');
+    if(l)l.style.display='none';
+  },12000);
+  try{
+    const tout=new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),10000));
+    const conn=Promise.all([
+      sbGet('news','order=created_at.desc&limit=20'),
+      sbGet('schedule','order=exam_date.asc&limit=20'),
+      sbGet('custom_questions','order=created_at.asc&limit=500')
+    ]);
+    const [news,sched,cqs]=await Promise.race([conn,tout]);
+    newsCache=news||[];
+    schedCache=sched||[];
+    CUSTOM_QS=(cqs||[]).map(q=>({id:q.id,s:q.subject,t:q.topic,q:q.question,o:q.options,a:q.correct_index}));
+    dbOK=true;
+    document.getElementById('db-status').innerHTML='<span style="color:var(--green)">● Supabase</span>';
+  }catch(e){
+    console.warn('Supabase fallback:',e.message);
+    dbOK=false;
+    document.getElementById('db-status').innerHTML='<span style="color:var(--amb)">● Локально</span>';
+    newsCache=[{id:1,title:'МедКвест запущен! 🚀',body:'545 вопросов по физике, химии и биологии.',pinned:true,news_date:'01.06.2026'}];
+    schedCache=[
+      {id:1,subject:'Биохимия',exam_date:'2026-06-15',exam_time:'09:00',room:'305'},
+      {id:2,subject:'Биофизика',exam_date:'2026-06-22',exam_time:'10:00',room:'201'},
+      {id:3,subject:'Органическая химия',exam_date:'2026-06-29',exam_time:'09:00',room:'405'}
+    ];
+  }
+  document.getElementById('loading').style.display='none';
+  renderHome();
+  if(S.user)loadProg();
+}
+
+async function loadProg(){
+  if(!dbOK||!S.user)return;
+  try{
+    const rows=await sbGet('progress','user_email=eq.'+encodeURIComponent(S.user.email));
+    rows.forEach(r=>{S.prog[r.question_id]={c:r.correct_count,a:r.attempt_count};});
+    const hist=await sbGet('exam_history','user_email=eq.'+encodeURIComponent(S.user.email)+'&order=created_at.desc&limit=20');
+    S.hist=hist.map(h=>({date:h.exam_date,score:h.score,total:h.total,subj:h.subject,mins:h.mins}));
+    sv();
+  }catch(e){console.warn('loadProg:',e.message);}
+}
+
+async function saveProg(qid,ok){
+  const p=S.prog[qid]||{c:0,a:0};
+  p.c+=ok?1:0;p.a+=1;
+  S.prog[qid]=p;sv();
+  if(!dbOK||!S.user)return;
+  try{
+    await sbUps('progress',{user_email:S.user.email,question_id:qid,correct_count:p.c,attempt_count:p.a,updated_at:new Date().toISOString()},'user_email,question_id');
+  }catch(e){console.warn('saveProg:',e.message);}
+}
+
+async function saveExam(score,total,subj,mins){
+  const d=new Date().toLocaleDateString('ru-RU');
+  S.hist.unshift({date:d,score,total,subj,mins});sv();
+  if(!dbOK||!S.user)return;
+  try{await sbPost('exam_history',{user_email:S.user.email,score,total,subject:subj,mins,exam_date:d});}
+  catch(e){console.warn('saveExam:',e.message);}
+}
+
+// NAV
 function go(pg,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
@@ -1116,244 +1065,190 @@ function go(pg,btn){
   document.getElementById('mscroll').scrollTop=0;
   if(btn)btn.classList.add('on');
   else{const b=document.querySelector('[data-pg="'+pg+'"]');if(b)b.classList.add('on');}
-  ({home:renderHome,flashcards:fcInit,trainer:trInit,progress:renderProg,
-    leaderboard:renderLB,news:renderNews,schedule:renderSched,admin:renderAdm}[pg]||function(){})();
+  const m={home:renderHome,flashcards:fcInit,trainer:trInit,progress:renderProg,leaderboard:renderLB,news:renderNews,schedule:renderSched,admin:renderAdm};
+  if(m[pg])m[pg]();
 }
 
-// ══════════════════════════════════════════════
 // AUTH HEADER
-// ══════════════════════════════════════════════
 function renderAuthHdr(){
   const el=document.getElementById('auth-hdr');
   if(S.user){
-    el.innerHTML=`<span style="font-size:12px;color:var(--tx2);margin-right:8px">👤 ${S.user.name}</span>
-      <button class="bh" onclick="doLogout()">Выйти</button>`;
+    el.innerHTML='<span style="font-size:12px;color:var(--tx2);margin-right:8px">👤 '+S.user.name+'</span><button class="bh" onclick="doLogout()">Выйти</button>';
   }else{
-    el.innerHTML=`<button class="bh" onclick="openModal('login')">Войти</button>
-      <button class="bh bhp" style="margin-left:6px" onclick="openModal('register')">Регистрация</button>`;
+    el.innerHTML='<button class="bh" onclick="openModal(\'login\')">Войти</button><button class="bh bhp" style="margin-left:6px" onclick="openModal(\'register\')">Регистрация</button>';
   }
   document.getElementById('adm-nav').style.display=S.isAdm?'':'none';
-  updatePendingBadge();
+  updPendBadge();
 }
 
-async function updatePendingBadge(){
+async function updPendBadge(){
   if(!S.isAdm)return;
-  let count=0;
-  if(dbOK){
-    try{const r=await sbGet('users','status=eq.pending&select=email');count=r.length;}catch{}
-  }
+  let n=0;
+  if(dbOK){try{const r=await sbGet('users','status=eq.pending&select=email');n=r.length;}catch{}}
   const b=document.getElementById('adm-badge');
-  const c=document.getElementById('adm-pend-cnt');
-  if(b){b.style.display=count>0?'flex':'none';b.textContent=count;}
-  if(c){c.textContent=count>0?count:'';}
+  const c=document.getElementById('pend-cnt');
+  if(b){b.style.display=n>0?'flex':'none';b.textContent=n;}
+  if(c)c.textContent=n>0?n:'';
 }
 
-// ══════════════════════════════════════════════
 // MODALS
-// ══════════════════════════════════════════════
 let mmode='login';
 function openModal(m){
   mmode=m;
   document.getElementById('modal').style.display='flex';
+  const t=document.getElementById('modal-t');
+  const b=document.getElementById('modal-body');
   if(m==='login'){
-    document.getElementById('modal-t').textContent='Вход';
-    document.getElementById('modal-body').innerHTML=`
-      <div class="fg"><label class="fl">Email</label><input id="m-em" type="email" placeholder="student@med.uz"></div>
-      <div class="fg"><label class="fl">Пароль</label><input id="m-pw" type="password" onkeydown="if(event.key==='Enter')doAuth()"></div>
-      <p id="m-err" class="ferr"></p>
-      <button class="btn bb bfull" onclick="doAuth()">Войти</button>
-      <p style="text-align:center;margin-top:11px;font-size:12px;color:var(--tx2)">
-        Нет аккаунта? <a href="#" onclick="openModal('register')" style="color:var(--blue)">Зарегистрироваться</a></p>`;
+    t.textContent='Вход';
+    b.innerHTML='<div class="fg"><label class="fl">Email</label><input id="m-em" type="email" placeholder="student@med.uz"></div><div class="fg"><label class="fl">Пароль</label><input id="m-pw" type="password"></div><p id="m-err" class="ferr"></p><button class="btn bb bfull" onclick="doAuth()">Войти</button><p style="text-align:center;margin-top:11px;font-size:12px;color:var(--tx2)">Нет аккаунта? <a href="#" onclick="openModal(\'register\')" style="color:var(--blue)">Регистрация</a></p>';
+    document.getElementById('m-pw').addEventListener('keydown',e=>{if(e.key==='Enter')doAuth();});
   }else if(m==='register'){
-    document.getElementById('modal-t').textContent='Регистрация';
-    document.getElementById('modal-body').innerHTML=`
-      <div class="fg"><label class="fl">Имя</label><input id="m-nm" type="text" placeholder="Ваше имя"></div>
-      <div class="fg"><label class="fl">Группа</label><input id="m-gr" type="text" placeholder="305-А"></div>
-      <div class="fg"><label class="fl">Email</label><input id="m-em" type="email" placeholder="student@med.uz"></div>
-      <div class="fg"><label class="fl">Пароль</label><input id="m-pw" type="password" onkeydown="if(event.key==='Enter')doAuth()"></div>
-      <p id="m-err" class="ferr"></p>
-      <button class="btn bb bfull" onclick="doAuth()">Отправить заявку</button>
-      <p style="text-align:center;margin-top:11px;font-size:12px;color:var(--tx2)">
-        Есть аккаунт? <a href="#" onclick="openModal('login')" style="color:var(--blue)">Войти</a></p>`;
+    t.textContent='Регистрация';
+    b.innerHTML='<div class="fg"><label class="fl">Имя</label><input id="m-nm" type="text" placeholder="Ваше имя"></div><div class="fg"><label class="fl">Группа</label><input id="m-gr" type="text" placeholder="305-А"></div><div class="fg"><label class="fl">Email</label><input id="m-em" type="email" placeholder="student@med.uz"></div><div class="fg"><label class="fl">Пароль</label><input id="m-pw" type="password"></div><p id="m-err" class="ferr"></p><button class="btn bb bfull" onclick="doAuth()">Отправить заявку</button><p style="text-align:center;margin-top:11px;font-size:12px;color:var(--tx2)">Есть аккаунт? <a href="#" onclick="openModal(\'login\')" style="color:var(--blue)">Войти</a></p>';
   }else if(m==='admin'){
-    document.getElementById('modal-t').textContent='🛡️ Вход администратора';
-    document.getElementById('modal-body').innerHTML=`
-      <div class="alert al-w" style="margin-bottom:14px"><i class="ti ti-alert-triangle"></i>Только для администраторов</div>
-      <div class="fg"><label class="fl">Пароль</label><input id="m-ap" type="password" onkeydown="if(event.key==='Enter')doAdm()"></div>
-      <p id="m-err" class="ferr"></p>
-      <button class="btn bb bfull" onclick="doAdm()">Войти</button>`;
+    t.textContent='🛡️ Вход администратора';
+    b.innerHTML='<div class="alert al-w" style="margin-bottom:14px"><i class="ti ti-alert-triangle"></i>Только для администраторов</div><div class="fg"><label class="fl">Пароль</label><input id="m-ap" type="password"></div><p id="m-err" class="ferr"></p><button class="btn bb bfull" onclick="doAdm()">Войти</button>';
+    document.getElementById('m-ap').addEventListener('keydown',e=>{if(e.key==='Enter')doAdm();});
   }
 }
 function closeModal(){document.getElementById('modal').style.display='none';}
 function showErr(msg){const e=document.getElementById('m-err');if(e){e.textContent=msg;e.style.display='';}}
 
 async function doAuth(){
-  const email=(document.getElementById('m-em')||{}).value?.trim();
+  const email=(document.getElementById('m-em')||{}).value.trim();
   const pass=(document.getElementById('m-pw')||{}).value;
+  const btn=document.querySelector('#modal-body .btn');
   if(mmode==='register'){
-    const name=(document.getElementById('m-nm')||{}).value?.trim();
-    const group=(document.getElementById('m-gr')||{}).value?.trim();
+    const name=(document.getElementById('m-nm')||{}).value.trim();
+    const group=(document.getElementById('m-gr')||{}).value.trim();
     if(!name||!email||!pass){showErr('Заполните все поля');return;}
-    const btn=document.querySelector('#modal-body .btn');
     btn.disabled=true;btn.textContent='Отправка...';
     try{
       if(dbOK){
-        // Check if email exists
-        const existing = await sbGet('users',`email=eq.${encodeURIComponent(email)}&select=email`);
-        if(existing.length>0){showErr('Email уже зарегистрирован');btn.disabled=false;btn.textContent='Отправить заявку';return;}
+        const ex=await sbGet('users','email=eq.'+encodeURIComponent(email)+'&select=email');
+        if(ex.length>0){showErr('Email уже зарегистрирован');btn.disabled=false;btn.textContent='Отправить заявку';return;}
         await sbPost('users',{email,name,group_name:group,password:pass,status:'pending',joined:new Date().toLocaleDateString('ru-RU')});
       }
       closeModal();
-      document.getElementById('home-alert').innerHTML=
-        `<div class="alert al-w"><i class="ti ti-clock"></i>Заявка отправлена! Ожидайте подтверждения администратора.</div>`;
+      document.getElementById('home-alert').innerHTML='<div class="alert al-w"><i class="ti ti-clock"></i>Заявка отправлена! Ожидайте подтверждения.</div>';
       setTimeout(()=>{document.getElementById('home-alert').innerHTML='';},8000);
-      updatePendingBadge();
+      updPendBadge();
     }catch(e){showErr('Ошибка: '+e.message);btn.disabled=false;btn.textContent='Отправить заявку';}
   }else{
     if(!email||!pass){showErr('Введите email и пароль');return;}
-    const btn=document.querySelector('#modal-body .btn');
     btn.disabled=true;btn.textContent='Вход...';
     try{
       let user=null;
       if(dbOK){
-        const rows=await sbGet('users',`email=eq.${encodeURIComponent(email)}&select=*`);
+        const rows=await sbGet('users','email=eq.'+encodeURIComponent(email)+'&select=*');
         if(!rows.length||rows[0].password!==pass){showErr('Неверный email или пароль');btn.disabled=false;btn.textContent='Войти';return;}
         user=rows[0];
-        if(user.status==='pending'){showErr('Заявка ещё не одобрена');btn.disabled=false;btn.textContent='Войти';return;}
+        if(user.status==='pending'){showErr('Заявка не одобрена');btn.disabled=false;btn.textContent='Войти';return;}
         if(user.status==='blocked'){showErr('Аккаунт заблокирован');btn.disabled=false;btn.textContent='Войти';return;}
       }
-      S.user={name:user?.name||email,email,group:user?.group_name||''};
-      saveLocal();closeModal();renderAuthHdr();
-      await loadUserProgress();
-      renderHome();
+      S.user={name:user?user.name:email,email,group:user?user.group_name:''};
+      sv();closeModal();renderAuthHdr();
+      await loadProg();renderHome();
     }catch(e){showErr('Ошибка: '+e.message);btn.disabled=false;btn.textContent='Войти';}
   }
 }
-
 const APWD='medquest_admin_2026';
 function doAdm(){
   const p=(document.getElementById('m-ap')||{}).value;
   if(p!==APWD){showErr('Неверный пароль');return;}
-  S.isAdm=true;saveLocal();closeModal();renderAuthHdr();
+  S.isAdm=true;sv();closeModal();renderAuthHdr();
   go('admin',document.querySelector('[data-pg=admin]'));
 }
-function doLogout(){S.user=null;S.hist=[];S.prog={};saveLocal();renderAuthHdr();renderHome();}
-function admOut(){S.isAdm=false;saveLocal();renderAuthHdr();renderAdm();}
+function doLogout(){S.user=null;S.hist=[];S.prog={};sv();renderAuthHdr();renderHome();}
+function admOut(){S.isAdm=false;sv();renderAuthHdr();renderAdm();}
 
-// ══════════════════════════════════════════════
 // HOME
-// ══════════════════════════════════════════════
 function renderHome(){
   renderAuthHdr();
-  document.getElementById('home-title').textContent=S.user?`Привет, ${S.user.name}! 👋`:'Добро пожаловать в МедКвест 🏥';
-  document.getElementById('home-sub').textContent=S.user?`Группа: ${S.user.group||'—'}`:'Учебная платформа для медицинских студентов';
+  document.getElementById('home-title').textContent=S.user?'Привет, '+S.user.name+'! 👋':'Добро пожаловать в МедКвест 🏥';
+  document.getElementById('home-sub').textContent=S.user?'Группа: '+(S.user.group||'—'):'Учебная платформа для медицинских студентов';
   const QS=getQS();
-  const totA=Object.values(S.prog).reduce((s,v)=>s+(v.a||0),0);
-  const totC=Object.values(S.prog).reduce((s,v)=>s+(v.c||0),0);
-  const acc=totA?Math.round(totC/totA*100):0;
+  const tA=Object.values(S.prog).reduce((s,v)=>s+(v.a||0),0);
+  const tC=Object.values(S.prog).reduce((s,v)=>s+(v.c||0),0);
+  const acc=tA?Math.round(tC/tA*100):0;
   const mast=Object.values(S.prog).filter(v=>v.a>=2&&v.c/v.a>=0.8).length;
   document.getElementById('home-stats').innerHTML=[
-    {l:'Попыток',v:totA,i:'ti-pencil',c:'blue'},{l:'Точность',v:acc+'%',i:'ti-target',c:'green'},
+    {l:'Попыток',v:tA,i:'ti-pencil',c:'blue'},{l:'Точность',v:acc+'%',i:'ti-target',c:'green'},
     {l:'Освоено',v:mast,i:'ti-check',c:'amb'},{l:'Экзаменов',v:S.hist.length,i:'ti-certificate',c:'pur'}
-  ].map(s=>`<div class="card">
-    <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
-      <i class="ti ${s.i}" style="font-size:15px;color:var(--${s.c})"></i>
-      <span style="font-size:11px;color:var(--tx2)">${s.l}</span>
-    </div>
-    <div style="font-size:28px;font-weight:700;font-family:var(--fm)">${s.v}</div>
-  </div>`).join('');
+  ].map(s=>'<div class="card"><div style="display:flex;align-items:center;gap:6px;margin-bottom:8px"><i class="ti '+s.i+'" style="font-size:15px;color:var(--'+s.c+')"></i><span style="font-size:11px;color:var(--tx2)">'+s.l+'</span></div><div style="font-size:28px;font-weight:700;font-family:var(--fm)">'+s.v+'</div></div>').join('');
   document.getElementById('home-subjs').innerHTML=Object.entries(SM).map(([k,m])=>{
     const cnt=QS.filter(q=>q.s===k).length;
     const qs=QS.filter(q=>q.s===k);
     const a=qs.reduce((s,q)=>s+(S.prog[q.id]?.a||0),0);
     const c=qs.reduce((s,q)=>s+(S.prog[q.id]?.c||0),0);
     const pct=a?Math.round(c/a*100):0;
-    return `<div class="sc" style="background:${m.dim};border-color:${m.color}22"
-      onclick="document.getElementById('fc-s').value='${k}';go('flashcards',document.querySelector('[data-pg=flashcards]'))">
-      <div style="font-size:26px;margin-bottom:7px">${m.icon}</div>
-      <div style="font-weight:700;color:${m.color}">${m.label}</div>
-      <div style="font-size:11px;color:var(--tx3);margin-top:2px">${cnt} вопросов</div>
-      <div style="margin-top:10px">
-        <div style="height:3px;background:${m.color}22;border-radius:2px">
-          <div style="height:100%;width:${pct}%;background:${m.color};border-radius:2px"></div></div>
-        <div style="font-size:10px;color:${m.color};margin-top:3px;font-family:var(--fm)">${pct}%</div>
-      </div></div>`;}).join('');
+    return '<div class="sc" style="background:'+m.dim+';border-color:'+m.color+'22" onclick="document.getElementById(\'fc-s\').value=\''+k+'\';go(\'flashcards\',document.querySelector(\'[data-pg=flashcards]\'))"><div style="font-size:26px;margin-bottom:7px">'+m.icon+'</div><div style="font-weight:700;color:'+m.color+'">'+m.label+'</div><div style="font-size:11px;color:var(--tx3);margin-top:2px">'+cnt+' вопросов</div><div style="margin-top:10px"><div style="height:3px;background:'+m.color+'22;border-radius:2px"><div style="height:100%;width:'+pct+'%;background:'+m.color+';border-radius:2px"></div></div><div style="font-size:10px;color:'+m.color+';margin-top:3px;font-family:var(--fm)">'+pct+'%</div></div></div>';
+  }).join('');
   document.getElementById('home-modes').innerHTML=[
     {l:'Флеш-карточки',d:'Вопрос → ответ',i:'ti-layers-subtract',pg:'flashcards',c:'var(--blue)'},
     {l:'Тренажёр',d:'Неверный → повторяется',i:'ti-target',pg:'trainer',c:'var(--green)'},
     {l:'Экзамен',d:'Таймер, без подсказок',i:'ti-certificate',pg:'exam',c:'var(--amb)'},
     {l:'Прогресс',d:'Моя статистика',i:'ti-chart-line',pg:'progress',c:'var(--pur)'},
-  ].map(a=>`<button onclick="go('${a.pg}',document.querySelector('[data-pg=${a.pg}]'))"
-    style="display:flex;align-items:flex-start;gap:10px;padding:14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);cursor:pointer;text-align:left;font-family:var(--f);transition:all .15s"
-    onmouseover="this.style.borderColor='${a.c}';this.style.background='var(--bg3)'"
-    onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--bg2)'">
-    <i class="ti ${a.i}" style="font-size:20px;color:${a.c};flex-shrink:0;margin-top:2px"></i>
-    <div><div style="font-weight:600;color:var(--tx)">${a.l}</div>
-    <div style="font-size:11px;color:var(--tx3);margin-top:2px">${a.d}</div></div>
-  </button>`).join('');
+  ].map(a=>'<button onclick="go(\''+a.pg+'\',document.querySelector(\'[data-pg='+a.pg+']\'))" style="display:flex;align-items:flex-start;gap:10px;padding:14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);cursor:pointer;text-align:left;font-family:var(--f);transition:all .15s" onmouseover="this.style.borderColor=\''+a.c+'\';this.style.background=\'var(--bg3)\'" onmouseout="this.style.borderColor=\'var(--border)\';this.style.background=\'var(--bg2)\'"><i class="ti '+a.i+'" style="font-size:20px;color:'+a.c+';flex-shrink:0;margin-top:2px"></i><div><div style="font-weight:600;color:var(--tx)">'+a.l+'</div><div style="font-size:11px;color:var(--tx3);margin-top:2px">'+a.d+'</div></div></button>').join('');
 }
 
-// ══════════════════════════════════════════════
 // FLASHCARDS
-// ══════════════════════════════════════════════
 let FCP=[],FCI=0,FCf=false;
 function fcInit(){
   const s=document.getElementById('fc-s').value;
-  const topEl=document.getElementById('fc-t');const curT=topEl.value;
+  const topEl=document.getElementById('fc-t');
+  const curT=topEl.value;
   const QS=getQS();
   const topics=[...new Set(QS.filter(q=>s==='all'||q.s===s).map(q=>q.t))].sort();
-  topEl.innerHTML='<option value="all">Все темы</option>'+topics.map(t=>
-    `<option value="${t}"${t===curT?' selected':''}>${t}</option>`).join('');
+  topEl.innerHTML='<option value="all">Все темы</option>'+topics.map(t=>'<option value="'+t+'"'+(t===curT?' selected':'')+'>'+t+'</option>').join('');
   fcFilter();
 }
 function fcFilter(){
-  const s=document.getElementById('fc-s').value;const t=document.getElementById('fc-t').value;
+  const s=document.getElementById('fc-s').value;
+  const t=document.getElementById('fc-t').value;
   FCP=getQS().filter(q=>(s==='all'||q.s===s)&&(t==='all'||q.t===t));
-  FCI=0;FCf=false;document.getElementById('fc-cnt').textContent=FCP.length+' карточек';fcRender();
+  FCI=0;FCf=false;
+  document.getElementById('fc-cnt').textContent=FCP.length+' карточек';
+  fcRender();
 }
 function fcRender(){
   if(!FCP.length){document.getElementById('fc-q').textContent='Нет карточек';return;}
-  const q=FCP[FCI];const p=S.prog[q.id]||{c:0,a:0};
+  const q=FCP[FCI];
+  const p=S.prog[q.id]||{c:0,a:0};
   const n=Math.min(FCP.length,50);
-  document.getElementById('fc-dots').innerHTML=FCP.slice(0,n).map((fq,i)=>{
-    let cl='pd';if(i===FCI%n)cl+=' cur';else if(S.prog[fq.id]?.a>0)cl+=' done';
-    return `<div class="${cl}"></div>`;}).join('');
+  document.getElementById('fc-dots').innerHTML=FCP.slice(0,n).map((fq,i)=>{let cl='pd';if(i===FCI%n)cl+=' cur';else if(S.prog[fq.id]&&S.prog[fq.id].a>0)cl+=' done';return '<div class="'+cl+'"></div>';}).join('');
   document.getElementById('fc-pos').textContent=(FCI+1)+'/'+FCP.length;
   document.getElementById('fc-tp').textContent=q.t;
   document.getElementById('fc-q').textContent=q.q;
   document.getElementById('fc-ans').textContent=q.o[q.a];
-  document.getElementById('fc-opts').innerHTML=q.o.map((o,i)=>
-    `<span class="fc-opt${i===q.a?' win':''}">
-      ${String.fromCharCode(65+i)}. ${o}</span>`).join('');
+  document.getElementById('fc-opts').innerHTML=q.o.map((o,i)=>'<span class="fc-opt'+(i===q.a?' win':'')+'">'+String.fromCharCode(65+i)+'. '+o+'</span>').join('');
   document.getElementById('fc-back').style.display=FCf?'':'none';
   document.getElementById('fc-hint').style.display=FCf?'none':'';
   document.getElementById('fc-prev').disabled=FCI===0;
   document.getElementById('fc-next').disabled=FCI===FCP.length-1;
-  document.getElementById('fc-stat').textContent=p.a>0?`Статистика: ${p.c}/${p.a} (${Math.round(p.c/p.a*100)}%)`:'';
+  document.getElementById('fc-stat').textContent=p.a>0?'Статистика: '+p.c+'/'+p.a+' ('+Math.round(p.c/p.a*100)+'%)':'';
 }
 function fcFlip(){FCf=!FCf;fcRender();}
 function fcPrev(){if(FCI>0){FCI--;FCf=false;fcRender();}}
 function fcNext(){if(FCI<FCP.length-1){FCI++;FCf=false;fcRender();}}
 
-// ══════════════════════════════════════════════
 // TRAINER
-// ══════════════════════════════════════════════
 let TRC=null,TRrev=false,TRss={c:0,w:0};
 function trInit(){TRss={c:0,w:0};trNext();}
 function trNext(){
-  const s=document.getElementById('tr-s')?.value||'all';
+  const s=document.getElementById('tr-s')?document.getElementById('tr-s').value:'all';
   const QS=getQS();
   const pool=QS.filter(q=>s==='all'||q.s===s);
   const weak=pool.filter(q=>{const p=S.prog[q.id];return !p||p.a<3||p.c/p.a<0.7;});
   const arr=weak.length?weak:pool;
-  TRC=arr[Math.floor(Math.random()*arr.length)];TRrev=false;
+  TRC=arr[Math.floor(Math.random()*arr.length)];
+  TRrev=false;
   const m=SM[TRC.s];
   const b=document.getElementById('tr-bdg');
   b.textContent=m.icon+' '+m.label;b.style.background=m.dim;b.style.color=m.color;
   document.getElementById('tr-tbdg').textContent=TRC.t;
   document.getElementById('tr-q').textContent=TRC.q;
-  document.getElementById('tr-opts').innerHTML=TRC.o.map((o,i)=>
-    `<button class="opt" onclick="trAns(${i})"><span class="ol">${String.fromCharCode(65+i)}</span>${o}</button>`).join('');
+  document.getElementById('tr-opts').innerHTML=TRC.o.map((o,i)=>'<button class="opt" onclick="trAns('+i+')"><span class="ol">'+String.fromCharCode(65+i)+'</span>'+o+'</button>').join('');
   document.getElementById('tr-ai-wrap').style.display='none';
   document.getElementById('tr-nxt').style.display='none';
   const eb=document.getElementById('tr-exp');if(eb){eb.disabled=false;eb.textContent='Объяснить ↗';}
@@ -1366,33 +1261,29 @@ async function trAns(idx){
   if(ok)TRss.c++;else TRss.w++;
   document.getElementById('tr-ok').textContent='✓ '+TRss.c;
   document.getElementById('tr-err').textContent='✗ '+TRss.w;
-  await saveProgress(TRC.id, ok);
+  await saveProg(TRC.id,ok);
   document.querySelectorAll('.opt').forEach((btn,i)=>{
-    if(i===TRC.a)btn.className='opt ok';else if(i===idx)btn.className='opt bad';btn.disabled=true;});
+    if(i===TRC.a)btn.className='opt ok';else if(i===idx)btn.className='opt bad';btn.disabled=true;
+  });
   document.getElementById('tr-ai-wrap').style.display='';
   document.getElementById('tr-nxt').style.display='';
-  if(!ok)document.getElementById('tr-ai').textContent='❌ Вы ошиблись. Нажмите «Объяснить» для разъяснения.';
+  if(!ok)document.getElementById('tr-ai').textContent='Вы ошиблись. Нажмите «Объяснить» для разъяснения.';
 }
 async function trExplain(){
   const btn=document.getElementById('tr-exp');btn.disabled=true;btn.textContent='Загрузка...';
   const box=document.getElementById('tr-ai');
   box.innerHTML='<div class="ai-hdr"><i class="ti ti-loader spin"></i>Загрузка...</div>';
   try{
-    const prompt=`Вопрос: "${TRC.q}"\nВарианты: ${TRC.o.map((o,i)=>(i+1)+') '+o).join(', ')}\nПравильный: ${TRC.o[TRC.a]}\n\nОбъясни кратко (2-3 предложения) почему этот ответ правильный. Медицинский вуз, русский язык.`;
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:350,messages:[{role:'user',content:prompt}]})
-    });
+    const p='Вопрос: "'+TRC.q+'"\nВарианты: '+TRC.o.map((o,i)=>(i+1)+') '+o).join(', ')+'\nПравильный ответ: '+TRC.o[TRC.a]+'\n\nОбъясни кратко (2-3 предложения) почему этот ответ правильный. Для студента мед. вуза, на русском.';
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:350,messages:[{role:'user',content:p}]})});
     const data=await res.json();
-    const text=data.content?.map(c=>c.text||'').join('')||'Нет ответа';
-    box.innerHTML=`<div class="ai-hdr"><i class="ti ti-sparkles" style="font-size:11px"></i>Объяснение</div>${text}`;
-  }catch{box.innerHTML='<span style="color:var(--red)">Ошибка запроса</span>';}
+    const text=data.content?data.content.map(c=>c.text||'').join(''):'Нет ответа';
+    box.innerHTML='<div class="ai-hdr"><i class="ti ti-sparkles" style="font-size:11px"></i>Объяснение</div>'+text;
+  }catch(e){box.innerHTML='<span style="color:var(--red)">Ошибка запроса</span>';}
   btn.style.display='none';
 }
 
-// ══════════════════════════════════════════════
 // EXAM
-// ══════════════════════════════════════════════
 let EXP=[],EXA={},EXI=0,EXtmr=null,EXsecs=0;
 function exStart(){
   const s=document.getElementById('ex-s').value;
@@ -1409,8 +1300,8 @@ function exStart(){
     EXsecs--;
     const mm=String(Math.floor(EXsecs/60)).padStart(2,'0');
     const ss=String(EXsecs%60).padStart(2,'0');
-    const t=document.getElementById('ex-timer');
-    t.textContent=mm+':'+ss;t.className='timer'+(EXsecs<180?' urg':'');
+    const el=document.getElementById('ex-timer');
+    el.textContent=mm+':'+ss;el.className='timer'+(EXsecs<180?' urg':'');
     if(EXsecs<=0){clearInterval(EXtmr);exFinish();}
   },1000);
   exRQ();exMmap();
@@ -1422,10 +1313,11 @@ function exRQ(){
   document.getElementById('ex-q').textContent=q.q;
   document.getElementById('ex-pb').style.width=((EXI+1)/EXP.length*100)+'%';
   document.getElementById('ex-pct').textContent=Math.round(Object.keys(EXA).length/EXP.length*100)+'% отвечено';
+  const sel=EXA[q.id];
   document.getElementById('ex-opts').innerHTML=q.o.map((o,i)=>{
-    const sel=EXA[q.id]===i;
-    return `<button class="opt${sel?' sel':\''}" onclick="exAns(${i})">
-      <span class="ol">${String.fromCharCode(65+i)}</span>${o}</button>`;}).join('');
+    const isSel=sel===i;
+    return '<button class="opt'+(isSel?' sel':'')+'" onclick="exAns('+i+')"><span class="ol">'+String.fromCharCode(65+i)+'</span>'+o+'</button>';
+  }).join('');
   const last=EXI===EXP.length-1;
   const nb=document.getElementById('ex-nxt');
   nb.textContent=last?'Завершить':'Далее →';
@@ -1437,7 +1329,8 @@ function exNext(){if(EXI<EXP.length-1){EXI++;exRQ();}else{clearInterval(EXtmr);e
 function exMmap(){
   document.getElementById('ex-mmap').innerHTML=EXP.map((q,i)=>{
     const cl='mq'+(EXA[q.id]!==undefined?' ans':'')+(i===EXI?' cur':'');
-    return `<div class="${cl}" onclick="EXI=${i};exRQ()">${i+1}</div>`;}).join('');
+    return '<div class="'+cl+'" onclick="EXI='+i+';exRQ()">'+( i+1)+'</div>';
+  }).join('');
 }
 async function exFinish(){
   clearInterval(EXtmr);
@@ -1456,11 +1349,8 @@ async function exFinish(){
   document.getElementById('ex-rverd').textContent=pct>=70?'✓ Экзамен сдан!':pct>=50?'⚠ Нужна практика':'✗ Повторите материал';
   document.getElementById('ex-review').innerHTML=EXP.map((q,i)=>{
     const ans=EXA[q.id],ok=ans===q.a;
-    return `<div style="padding:9px 0;border-bottom:1px solid var(--border);display:flex;gap:9px">
-      <span style="font-size:15px;flex-shrink:0">${ok?'✅':'❌'}</span>
-      <div><div style="font-size:13px">${i+1}. ${q.q}</div>
-      ${!ok?`<div style="font-size:12px;color:var(--green);margin-top:2px">✓ ${q.o[q.a]}</div>`:''}
-      ${ans!==undefined&&!ok?`<div style="font-size:12px;color:var(--red)">✗ ${q.o[ans]}</div>`:''}</div></div>`;}).join('');
+    return '<div style="padding:9px 0;border-bottom:1px solid var(--border);display:flex;gap:9px"><span style="font-size:15px;flex-shrink:0">'+(ok?'✅':'❌')+'</span><div><div style="font-size:13px">'+(i+1)+'. '+q.q+'</div>'+((!ok)?'<div style="font-size:12px;color:var(--green);margin-top:2px">✓ '+q.o[q.a]+'</div>':'')+(ans!==undefined&&!ok?'<div style="font-size:12px;color:var(--red)">✗ '+q.o[ans]+'</div>':'')+'</div></div>';
+  }).join('');
 }
 function exReset(){
   clearInterval(EXtmr);
@@ -1469,110 +1359,64 @@ function exReset(){
   document.getElementById('ex-res').style.display='none';
 }
 
-// ══════════════════════════════════════════════
 // PROGRESS
-// ══════════════════════════════════════════════
 function renderProg(){
   const QS=getQS();
   document.getElementById('prog-s').innerHTML=Object.entries(SM).map(([k,m])=>{
     const qs=QS.filter(q=>q.s===k);
-    const a=qs.reduce((s,q)=>s+(S.prog[q.id]?.a||0),0);
-    const c=qs.reduce((s,q)=>s+(S.prog[q.id]?.c||0),0);
-    const done=qs.filter(q=>S.prog[q.id]?.a>0).length;
-    const mast=qs.filter(q=>{const p=S.prog[q.id];return p&&p.a>=2&&p.c/p.a>=0.8;}).length;
+    const a=qs.reduce((s,q)=>s+(S.prog[q.id]?S.prog[q.id].a:0),0);
+    const c=qs.reduce((s,q)=>s+(S.prog[q.id]?S.prog[q.id].c:0),0);
+    const done=qs.filter(q=>S.prog[q.id]&&S.prog[q.id].a>0).length;
+    const mast=qs.filter(q=>S.prog[q.id]&&S.prog[q.id].a>=2&&S.prog[q.id].c/S.prog[q.id].a>=0.8).length;
     const acc=a?Math.round(c/a*100):0;
-    return `<div class="card" style="margin-bottom:10px">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-        <div style="display:flex;align-items:center;gap:8px">
-          <span style="font-size:20px">${m.icon}</span>
-          <div><div style="font-weight:700">${m.label}</div>
-          <div style="font-size:11px;color:var(--tx3)">${done}/${qs.length} пройдено · ${mast} освоено</div></div>
-        </div>
-        <span style="font-size:26px;font-weight:700;font-family:var(--fm);color:${m.color}">${acc}%</span>
-      </div>
-      <div class="pb" style="margin:0"><div class="pbf" style="background:${m.color};width:${acc}%"></div></div>
-    </div>`;}).join('');
+    return '<div class="card" style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">'+m.icon+'</span><div><div style="font-weight:700">'+m.label+'</div><div style="font-size:11px;color:var(--tx3)">'+done+'/'+qs.length+' пройдено · '+mast+' освоено</div></div></div><span style="font-size:26px;font-weight:700;font-family:var(--fm);color:'+m.color+'">'+acc+'%</span></div><div class="pb" style="margin:0"><div class="pbf" style="background:'+m.color+';width:'+acc+'%"></div></div></div>';
+  }).join('');
   if(!S.hist.length){document.getElementById('prog-h').innerHTML='<p style="color:var(--tx3);font-size:13px">Экзаменов ещё не было</p>';return;}
   document.getElementById('prog-h').innerHTML=S.hist.slice(0,12).map(e=>{
     const pct=Math.round(e.score/e.total*100);
     const col=pct>=70?'var(--green)':pct>=50?'var(--amb)':'var(--red)';
-    return `<div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);margin-bottom:6px">
-      <span style="font-size:22px;font-weight:700;font-family:var(--fm);color:${col};min-width:50px">${pct}%</span>
-      <div><div style="font-size:13px;font-weight:500">${e.score}/${e.total} правильно</div>
-      <div style="font-size:11px;color:var(--tx3);font-family:var(--fm)">${e.date} · ${SM[e.subj]?.label||'Все'} · ${e.mins||0} мин</div></div>
-    </div>`;}).join('');
+    return '<div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);margin-bottom:6px"><span style="font-size:22px;font-weight:700;font-family:var(--fm);color:'+col+';min-width:50px">'+pct+'%</span><div><div style="font-size:13px;font-weight:500">'+e.score+'/'+e.total+' правильно</div><div style="font-size:11px;color:var(--tx3);font-family:var(--fm)">'+e.date+' · '+(SM[e.subj]?SM[e.subj].label:'Все')+' · '+(e.mins||0)+' мин</div></div></div>';
+  }).join('');
 }
 
-// ══════════════════════════════════════════════
 // LEADERBOARD
-// ══════════════════════════════════════════════
-async function renderLB(){
-  const el=document.getElementById('lb-list');
-  el.innerHTML='<div style="color:var(--tx3);font-size:13px">Загрузка...</div>';
-  const totA=Object.values(S.prog).reduce((s,v)=>s+(v.a||0),0);
-  const totC=Object.values(S.prog).reduce((s,v)=>s+(v.c||0),0);
-  const myAcc=totA?Math.round(totC/totA*100):0;
-  const BASE=[{name:'Alibek T.',acc:94,ex:12},{name:'Madina K.',acc:91,ex:15},
-    {name:'Timur R.',acc:88,ex:10},{name:'Saida M.',acc:85,ex:8}];
+function renderLB(){
+  const tA=Object.values(S.prog).reduce((s,v)=>s+(v.a||0),0);
+  const tC=Object.values(S.prog).reduce((s,v)=>s+(v.c||0),0);
+  const myAcc=tA?Math.round(tC/tA*100):0;
+  const BASE=[{name:'Alibek T.',acc:94,ex:12},{name:'Madina K.',acc:91,ex:15},{name:'Timur R.',acc:88,ex:10},{name:'Saida M.',acc:85,ex:8}];
   let all=[...BASE];
   if(S.user)all.push({name:S.user.name,acc:myAcc,ex:S.hist.length,isMe:true});
   all.sort((a,b)=>b.acc-a.acc);
   const medals=['🥇','🥈','🥉'];
-  el.innerHTML=all.map((e,i)=>`
-    <div class="lr${e.isMe?' me':''}">
-      <span style="min-width:28px;font-size:18px">${i<3?medals[i]:`<span style="font-family:var(--fm);font-size:13px;color:var(--tx3)">${i+1}</span>`}</span>
-      <div style="flex:1;font-size:13px${e.isMe?';font-weight:700':''">${e.name}${e.isMe?' <span class="bdg b-bl">вы</span>':'' }</div>
-      <span style="font-size:11px;color:var(--tx3);font-family:var(--fm);margin-right:10px">${e.ex} экз.</span>
-      <span style="font-size:20px;font-weight:700;font-family:var(--fm);color:${e.acc>=80?'var(--green)':e.acc>=60?'var(--amb)':'var(--red)'}">${e.acc}%</span>
-    </div>`).join('');
+  document.getElementById('lb-list').innerHTML=all.map((e,i)=>'<div class="lr'+(e.isMe?' me':'')+'"><span style="min-width:28px;font-size:18px">'+(i<3?medals[i]:'<span style="font-family:var(--fm);font-size:13px;color:var(--tx3)">'+(i+1)+'</span>')+'</span><div style="flex:1;font-size:13px'+(e.isMe?';font-weight:700':'')+'">'+e.name+(e.isMe?' <span class="bdg b-bl">вы</span>':'')+'</div><span style="font-size:20px;font-weight:700;font-family:var(--fm);color:'+(e.acc>=80?'var(--green)':e.acc>=60?'var(--amb)':'var(--red)')+'">'+e.acc+'%</span></div>').join('');
 }
 
-// ══════════════════════════════════════════════
-// NEWS (из Supabase)
-// ══════════════════════════════════════════════
+// NEWS
 function renderNews(){
   const news=newsCache;
-  if(!news.length){document.getElementById('news-list').innerHTML='<p style="color:var(--tx3)">Новостей нет</p>';return;}
-  document.getElementById('news-list').innerHTML=news.map(n=>`
-    <div class="nc">
-      ${n.pinned?'<div style="font-size:11px;color:var(--amb);font-weight:600;margin-bottom:4px">📌 Закреплено</div>':''}
-      <div class="nd">${n.news_date||n.date||''}</div>
-      <div class="nt">${n.title}</div>
-      <div class="nb2">${n.body}</div>
-    </div>`).join('');
+  if(!news.length){document.getElementById('news-list').innerHTML='<p style="color:var(--tx3)">Нет новостей</p>';return;}
+  document.getElementById('news-list').innerHTML=news.map(n=>'<div class="nc">'+(n.pinned?'<div style="font-size:11px;color:var(--amb);font-weight:600;margin-bottom:4px">📌 Закреплено</div>':'')+'<div class="nd">'+(n.news_date||n.date||'')+'</div><div class="nt">'+n.title+'</div><div class="nb2">'+n.body+'</div></div>').join('');
 }
 
-// ══════════════════════════════════════════════
-// SCHEDULE (из Supabase)
-// ══════════════════════════════════════════════
+// SCHEDULE
 function renderSched(){
   const now=new Date();
   const sorted=[...schedCache].sort((a,b)=>new Date(a.exam_date)-new Date(b.exam_date));
   document.getElementById('sched-list').innerHTML=sorted.map(s=>{
     const d=new Date(s.exam_date);
     const days=Math.ceil((d-now)/(1000*60*60*24));
-    const urgent=days>=0&&days<=7;
-    return `<div class="sr">
-      <div class="db" style="${urgent?'background:var(--adim);border-color:var(--amb)33':''}">
-        <div class="dd" style="${urgent?'color:var(--amb)':'''}">${d.getDate()}</div>
-        <div class="dm">${d.toLocaleDateString('ru-RU',{month:'short'})}</div>
-      </div>
-      <div style="flex:1">
-        <div style="font-weight:600">${s.subject}</div>
-        <div style="font-size:12px;color:var(--tx2)">Ауд. ${s.room} · ${s.exam_time}</div>
-      </div>
-      <span class="bdg ${urgent?'b-am':'b-bl'}">${days>0?'через '+days+' дн.':days===0?'Сегодня!':'Прошёл'}</span>
-    </div>`;}).join('');
+    const urg=days>=0&&days<=7;
+    return '<div class="sr"><div class="db" style="'+(urg?'background:var(--adim);border-color:rgba(245,166,35,.2)':'')+'"><div class="dd" style="'+(urg?'color:var(--amb)':'')+'">'+d.getDate()+'</div><div class="dm">'+d.toLocaleDateString('ru-RU',{month:'short'})+'</div></div><div style="flex:1"><div style="font-weight:600">'+s.subject+'</div><div style="font-size:12px;color:var(--tx2)">Ауд. '+s.room+' · '+s.exam_time+'</div></div><span class="bdg '+(urg?'b-am':'b-bl')+'">'+(days>0?'через '+days+' дн.':days===0?'Сегодня!':'Прошёл')+'</span></div>';
+  }).join('');
 }
 
-// ══════════════════════════════════════════════
 // ADMIN
-// ══════════════════════════════════════════════
 function renderAdm(){
   document.getElementById('adm-lock').style.display=S.isAdm?'none':'';
-  document.getElementById('adm-panel').style.display=S.isAdm?'':' none';
+  document.getElementById('adm-panel').style.display=S.isAdm?'':'none';
   if(S.isAdm){
-    document.getElementById('adm-dbstatus').textContent=dbOK?'✅ Supabase подключён':'⚠ Работаем локально';
+    document.getElementById('adm-dbst').textContent=dbOK?'✅ Supabase подключён':'⚠ Локальный режим';
     admTab('stats',document.querySelector('.tab'));
   }
 }
@@ -1580,7 +1424,8 @@ function admTab(t,btn){
   document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
   if(btn)btn.classList.add('on');
   ['stats','pending','students','questions','news-edit','sched-edit','ai'].forEach(id=>{
-    const el=document.getElementById('adm-'+id);if(el)el.style.display=id===t?'':' none';});
+    const el=document.getElementById('adm-'+id);if(el)el.style.display=id===t?'':'none';
+  });
   if(t==='stats')admStats();
   if(t==='pending')admPending();
   if(t==='students')admStudents();
@@ -1591,59 +1436,32 @@ function admTab(t,btn){
 
 async function admStats(){
   const QS=getQS();
-  let userStats={total:0,active:0,pending:0,blocked:0};
-  if(dbOK){
-    try{
-      const rows=await sbGet('users','select=status');
-      rows.forEach(r=>{
-        userStats.total++;
-        if(r.status==='active')userStats.active++;
-        else if(r.status==='pending')userStats.pending++;
-        else if(r.status==='blocked')userStats.blocked++;
-      });
-    }catch{}
-  }
-  document.getElementById('adm-stats').innerHTML=`
-    <div class="cgrid">
-      ${[{l:'Вопросов',v:QS.length},{l:'Физика',v:QS.filter(q=>q.s==='physics').length},
-        {l:'Химия',v:QS.filter(q=>q.s==='chemistry').length},{l:'Биология',v:QS.filter(q=>q.s==='biology').length},
-        {l:'Студентов',v:userStats.active},{l:'Ожидают',v:userStats.pending},
-        {l:'Заблокировано',v:userStats.blocked}]
-        .map(s=>`<div class="card"><div style="font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;font-weight:600">${s.l}</div>
-          <div style="font-size:26px;font-weight:700;font-family:var(--fm);margin-top:5px">${s.v}</div></div>`).join('')}
-    </div>
-    <div style="font-size:13px;color:var(--tx2);margin-top:8px">База данных: ${dbOK?'<span style="color:var(--green)">Supabase ✅</span>':'<span style="color:var(--amb)">Локально ⚠</span>'}</div>`;
+  let us={total:0,active:0,pending:0,blocked:0};
+  if(dbOK){try{const r=await sbGet('users','select=status');r.forEach(u=>{us.total++;us[u.status]=(us[u.status]||0)+1;});}catch{}}
+  document.getElementById('adm-stats').innerHTML='<div class="cgrid">'+[
+    {l:'Вопросов',v:QS.length},{l:'Физика',v:QS.filter(q=>q.s==='physics').length},
+    {l:'Химия',v:QS.filter(q=>q.s==='chemistry').length},{l:'Биология',v:QS.filter(q=>q.s==='biology').length},
+    {l:'Студентов',v:us.active||0},{l:'Ожидают',v:us.pending||0},{l:'Заблокировано',v:us.blocked||0}
+  ].map(s=>'<div class="card"><div style="font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;font-weight:600">'+s.l+'</div><div style="font-size:26px;font-weight:700;font-family:var(--fm);margin-top:5px">'+s.v+'</div></div>').join('')+'</div><div style="font-size:13px;color:var(--tx2)">База: '+(dbOK?'<span style="color:var(--green)">Supabase ✅</span>':'<span style="color:var(--amb)">Локально ⚠</span>')+'</div>';
 }
 
 async function admPending(){
   const el=document.getElementById('adm-pending');
   el.innerHTML='<div style="color:var(--tx3);padding:10px">Загрузка...</div>';
-  let pending=[];
-  if(dbOK){
-    try{pending=await sbGet('users','status=eq.pending&order=created_at.asc');}catch{}
-  }
-  if(!pending.length){el.innerHTML='<div class="alert al-ok"><i class="ti ti-check"></i>Нет ожидающих заявок</div>';return;}
-  el.innerHTML=`<p style="font-size:13px;color:var(--tx2);margin-bottom:12px">Новые заявки: ${pending.length}</p>`+
-    pending.map(u=>`<div class="prow">
-      <div style="flex:1">
-        <div style="font-weight:600">${u.name}</div>
-        <div style="font-size:11px;color:var(--tx2)">${u.email} · Группа: ${u.group_name||'—'} · ${u.joined}</div>
-      </div>
-      <button class="btn bg bsm" onclick="admApprove('${u.email}')"><i class="ti ti-check"></i>Принять</button>
-      <button class="btn br bsm" style="margin-left:6px" onclick="admReject('${u.email}')"><i class="ti ti-x"></i>Отклонить</button>
-    </div>`).join('');
-  updatePendingBadge();
+  let rows=[];
+  if(dbOK){try{rows=await sbGet('users','status=eq.pending&order=created_at.asc');}catch{}}
+  if(!rows.length){el.innerHTML='<div class="alert al-ok"><i class="ti ti-check"></i>Нет ожидающих заявок</div>';return;}
+  el.innerHTML='<p style="font-size:13px;color:var(--tx2);margin-bottom:12px">Заявки: '+rows.length+'</p>'+
+    rows.map(u=>'<div class="prow"><div style="flex:1"><div style="font-weight:600">'+u.name+'</div><div style="font-size:11px;color:var(--tx2)">'+u.email+' · '+u.group_name+' · '+u.joined+'</div></div><button class="btn bg bsm" onclick="admApprove(\''+u.email+'\')"><i class="ti ti-check"></i>Принять</button><button class="btn br bsm" style="margin-left:6px" onclick="admReject(\''+u.email+'\')"><i class="ti ti-x"></i>Отклонить</button></div>').join('');
+  updPendBadge();
 }
-
 async function admApprove(email){
-  try{
-    await sbPatch('users',`email=eq.${encodeURIComponent(email)}`,{status:'active'});
-    admPending();
-  }catch(e){alert('Ошибка: '+e.message);}
+  try{await sbPatch('users','email=eq.'+encodeURIComponent(email),{status:'active'});admPending();}
+  catch(e){alert('Ошибка: '+e.message);}
 }
 async function admReject(email){
   if(confirm('Удалить заявку '+email+'?')){
-    try{await sbDelete('users',`email=eq.${encodeURIComponent(email)}`);admPending();}
+    try{await sbDel('users','email=eq.'+encodeURIComponent(email));admPending();}
     catch(e){alert('Ошибка: '+e.message);}
   }
 }
@@ -1651,209 +1469,112 @@ async function admReject(email){
 async function admStudents(){
   const el=document.getElementById('adm-students');
   el.innerHTML='<div style="color:var(--tx3);padding:10px">Загрузка...</div>';
-  let students=[];
-  if(dbOK){
-    try{students=await sbGet('users','status=neq.pending&order=created_at.asc');}catch{}
-  }
-  if(!students.length){el.innerHTML='<p style="color:var(--tx3);font-size:13px">Нет студентов</p>';return;}
-  el.innerHTML=`<table class="tbl"><thead><tr><th>Имя</th><th>Группа</th><th>Email</th><th>Статус</th><th>Действие</th></tr></thead>
-    <tbody>${students.map(u=>`<tr>
-      <td style="font-weight:500">${u.name}</td><td>${u.group_name||'—'}</td>
-      <td style="color:var(--tx2);font-size:11px">${u.email}</td>
-      <td><span class="bdg ${u.status==='active'?'b-gr':'b-re'}">${u.status==='active'?'Активен':'Заблокирован'}</span></td>
-      <td style="display:flex;gap:4px">
-        ${u.status==='active'
-          ?`<button class="btn br bsm" onclick="admBlock('${u.email}')"><i class="ti ti-ban"></i>Блок</button>`
-          :`<button class="btn bg bsm" onclick="admUnblock('${u.email}')"><i class="ti ti-lock-open"></i>Разблок</button>`}
-        <button class="btn bgh bsm" onclick="admDelUser('${u.email}')"><i class="ti ti-trash"></i></button>
-      </td></tr>`).join('')}</tbody></table>`;
+  let rows=[];
+  if(dbOK){try{rows=await sbGet('users','status=neq.pending&order=created_at.asc');}catch{}}
+  if(!rows.length){el.innerHTML='<p style="color:var(--tx3);font-size:13px">Нет студентов</p>';return;}
+  el.innerHTML='<table class="tbl"><thead><tr><th>Имя</th><th>Группа</th><th>Email</th><th>Статус</th><th>Действие</th></tr></thead><tbody>'+
+    rows.map(u=>'<tr><td style="font-weight:500">'+u.name+'</td><td>'+(u.group_name||'—')+'</td><td style="color:var(--tx2);font-size:11px">'+u.email+'</td><td><span class="bdg '+(u.status==='active'?'b-gr':'b-re')+'">'+(u.status==='active'?'Активен':'Заблокирован')+'</span></td><td style="display:flex;gap:4px">'+(u.status==='active'?'<button class="btn br bsm" onclick="admBlock(\''+u.email+'\')"><i class="ti ti-ban"></i>Блок</button>':'<button class="btn bg bsm" onclick="admUnblock(\''+u.email+'\')"><i class="ti ti-lock-open"></i>Разблок</button>')+'<button class="btn bgh bsm" style="margin-left:4px" onclick="admDelUser(\''+u.email+'\')"><i class="ti ti-trash"></i></button></td></tr>').join('')+
+    '</tbody></table>';
 }
+async function admBlock(e){try{await sbPatch('users','email=eq.'+encodeURIComponent(e),{status:'blocked'});admStudents();}catch(err){alert(err.message);}}
+async function admUnblock(e){try{await sbPatch('users','email=eq.'+encodeURIComponent(e),{status:'active'});admStudents();}catch(err){alert(err.message);}}
+async function admDelUser(e){if(confirm('Удалить '+e+'?')){try{await sbDel('users','email=eq.'+encodeURIComponent(e));admStudents();}catch(err){alert(err.message);}}}
 
-async function admBlock(email){try{await sbPatch('users',`email=eq.${encodeURIComponent(email)}`,{status:'blocked'});admStudents();}catch(e){alert(e.message);}}
-async function admUnblock(email){try{await sbPatch('users',`email=eq.${encodeURIComponent(email)}`,{status:'active'});admStudents();}catch(e){alert(e.message);}}
-async function admDelUser(email){
-  if(confirm('Удалить студента '+email+'?')){
-    try{await sbDelete('users',`email=eq.${encodeURIComponent(email)}`);admStudents();}catch(e){alert(e.message);}
-  }
-}
-
-// QUESTIONS EDITOR
+// QUESTIONS
 async function admQuestions(){
   const QS=getQS();
-  let customQs=[];
-  if(dbOK){try{customQs=await sbGet('custom_questions','order=created_at.asc');}catch{}}
-  document.getElementById('adm-questions').innerHTML=`
-    <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
-      <button class="btn bb bsm" onclick="admAddQModal()"><i class="ti ti-plus"></i>Добавить вопрос</button>
-      <span style="font-size:12px;color:var(--tx2);align-self:center">Всего: ${QS.length} | Своих: ${customQs.length}</span>
-    </div>
-    <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
-      <select id="q-fs" onchange="admQFilter()" style="width:auto;min-width:140px">
-        <option value="all">Все предметы</option>
-        <option value="physics">Физика</option><option value="chemistry">Химия</option><option value="biology">Биология</option>
-        <option value="custom">Свои вопросы</option>
-      </select>
-      <input id="q-sr" placeholder="Поиск..." onkeyup="admQFilter()" style="flex:1;min-width:160px">
-    </div>
-    <div id="q-tbl" style="max-height:460px;overflow-y:auto"></div>`;
-  admQFilter();
+  let cqs=[];if(dbOK){try{cqs=await sbGet('custom_questions','order=created_at.asc');}catch{}}
+  document.getElementById('adm-questions').innerHTML='<div style="display:flex;gap:8px;margin-bottom:14px"><button class="btn bb bsm" onclick="admAddQM()"><i class="ti ti-plus"></i>Добавить</button><span style="font-size:12px;color:var(--tx2);align-self:center">Всего: '+QS.length+' | Своих: '+cqs.length+'</span></div><div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap"><select id="q-fs" onchange="admQF()" style="width:auto;min-width:140px"><option value="all">Все</option><option value="physics">Физика</option><option value="chemistry">Химия</option><option value="biology">Биология</option><option value="custom">Свои</option></select><input id="q-sr" placeholder="Поиск..." onkeyup="admQF()" style="flex:1;min-width:160px"></div><div id="q-tbl" style="max-height:460px;overflow-y:auto"></div>';
+  admQF();
 }
-
-function admQFilter(){
+function admQF(){
   const QS=getQS();
-  const sf=(document.getElementById('q-fs')||{}).value||'all';
-  const search=((document.getElementById('q-sr')||{}).value||'').toLowerCase();
-  let pool=QS;
-  if(sf==='custom')pool=CUSTOM_QS;
-  else if(sf!=='all')pool=QS.filter(q=>q.s===sf);
+  const sf=document.getElementById('q-fs')?document.getElementById('q-fs').value:'all';
+  const search=(document.getElementById('q-sr')?document.getElementById('q-sr').value:'').toLowerCase();
+  let pool=sf==='custom'?CUSTOM_QS:sf==='all'?QS:QS.filter(q=>q.s===sf);
   if(search)pool=pool.filter(q=>q.q.toLowerCase().includes(search)||q.t.toLowerCase().includes(search));
   const wrap=document.getElementById('q-tbl');if(!wrap)return;
-  wrap.innerHTML=`<table class="tbl">
-    <thead><tr><th>#</th><th>Предмет</th><th>Тема</th><th>Вопрос</th><th>✓ Ответ</th><th></th></tr></thead>
-    <tbody>${pool.slice(0,100).map((q,i)=>{
-      const isCustom=CUSTOM_QS.find(cq=>cq.id===q.id);
-      return `<tr>
-        <td style="color:var(--tx3);font-family:var(--fm);font-size:11px">${i+1}</td>
-        <td><span class="bdg b-bl" style="font-size:10px">${SM[q.s]?.icon||'?'}</span></td>
-        <td style="font-size:11px;color:var(--tx3);max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${q.t}</td>
-        <td style="font-size:12px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${q.q}</td>
-        <td style="font-size:12px;color:var(--green);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${q.o[q.a]}</td>
-        <td style="white-space:nowrap">
-          <button class="btn bgh bsm" onclick='admEditQM(${JSON.stringify(q).replace(/'/g,"'")})'  style="padding:4px 7px"><i class="ti ti-edit" style="font-size:12px"></i></button>
-          ${isCustom?`<button class="btn br bsm" onclick="admDelQ('${q.id}')" style="padding:4px 7px;margin-left:3px"><i class="ti ti-trash" style="font-size:12px"></i></button>`:''}
-        </td>
-      </tr>`;}).join('')}
-    ${pool.length>100?`<tr><td colspan="6" style="text-align:center;color:var(--tx3);padding:10px;font-size:12px">... ещё ${pool.length-100}</td></tr>`:''}
-    </tbody></table>`;
+  wrap.innerHTML='<table class="tbl"><thead><tr><th>#</th><th>Предм.</th><th>Тема</th><th>Вопрос</th><th>✓</th><th></th></tr></thead><tbody>'+
+    pool.slice(0,100).map((q,i)=>{
+      const isCust=CUSTOM_QS.find(cq=>cq.id===q.id);
+      const qj=JSON.stringify(q).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+      return '<tr><td style="color:var(--tx3);font-family:var(--fm);font-size:11px">'+(i+1)+'</td><td><span class="bdg b-bl" style="font-size:10px">'+(SM[q.s]?SM[q.s].icon:'?')+'</span></td><td style="font-size:11px;color:var(--tx3);max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+q.t+'</td><td style="font-size:12px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+q.q+'</td><td style="font-size:12px;color:var(--green);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+q.o[q.a]+'</td><td style="white-space:nowrap"><button class="btn bgh bsm" onclick="admEditQM(\''+q.id+'\')" style="padding:4px 7px"><i class="ti ti-edit" style="font-size:12px"></i></button>'+(isCust?'<button class="btn br bsm" onclick="admDelQ(\''+q.id+'\')" style="padding:4px 7px;margin-left:3px"><i class="ti ti-trash" style="font-size:12px"></i></button>':'')+'</td></tr>';
+    }).join('')+
+    (pool.length>100?'<tr><td colspan="6" style="text-align:center;color:var(--tx3);padding:10px;font-size:12px">... ещё '+(pool.length-100)+'</td></tr>':'')+
+    '</tbody></table>';
 }
 
-function admAddQModal(){
+function admAddQM(){
   document.getElementById('modal-t').textContent='Добавить вопрос';
-  document.getElementById('modal-body').innerHTML=`
-    <div class="fg"><label class="fl">Предмет</label>
-      <select id="aq-s"><option value="chemistry">⚗️ Химия</option><option value="physics">🔬 Физика</option><option value="biology">🧬 Биология</option></select></div>
-    <div class="fg"><label class="fl">Тема</label><input id="aq-t" placeholder="Тема 7: Буферные системы"></div>
-    <div class="fg"><label class="fl">Вопрос</label><textarea id="aq-q" rows="2" placeholder="Текст вопроса?"></textarea></div>
-    <div class="fg"><label class="fl">✅ Правильный ответ</label><input id="aq-a0" placeholder="Правильный ответ"></div>
-    <div class="fg"><label class="fl">Вариант Б</label><input id="aq-a1" placeholder="Неверный вариант 1"></div>
-    <div class="fg"><label class="fl">Вариант В</label><input id="aq-a2" placeholder="Неверный вариант 2"></div>
-    <div class="fg"><label class="fl">Вариант Г</label><input id="aq-a3" placeholder="Неверный вариант 3"></div>
-    <p id="m-err" class="ferr"></p>
-    <button class="btn bb bfull" onclick="admSaveNewQ()">Сохранить</button>`;
+  document.getElementById('modal-body').innerHTML='<div class="fg"><label class="fl">Предмет</label><select id="aq-s"><option value="chemistry">⚗️ Химия</option><option value="physics">🔬 Физика</option><option value="biology">🧬 Биология</option></select></div><div class="fg"><label class="fl">Тема</label><input id="aq-t" placeholder="Тема 7: Буферные системы"></div><div class="fg"><label class="fl">Вопрос</label><textarea id="aq-q" rows="2" placeholder="Текст вопроса?"></textarea></div><div class="fg"><label class="fl">✅ Правильный ответ</label><input id="aq-a0" placeholder="Правильный ответ"></div><div class="fg"><label class="fl">Вариант Б</label><input id="aq-a1" placeholder="Неверный вариант 1"></div><div class="fg"><label class="fl">Вариант В</label><input id="aq-a2" placeholder="Неверный вариант 2"></div><div class="fg"><label class="fl">Вариант Г</label><input id="aq-a3" placeholder="Неверный вариант 3"></div><p id="m-err" class="ferr"></p><button class="btn bb bfull" onclick="admSaveNewQ()">Сохранить</button>';
   document.getElementById('modal').style.display='flex';
 }
-
 async function admSaveNewQ(){
   const s=document.getElementById('aq-s').value;
   const t=document.getElementById('aq-t').value.trim();
   const q=document.getElementById('aq-q').value.trim();
-  const opts=[0,1,2,3].map(i=>(document.getElementById('aq-a'+i)||{}).value?.trim()||'');
+  const opts=[0,1,2,3].map(i=>(document.getElementById('aq-a'+i)||{value:''}).value.trim());
   if(!t||!q||opts.some(o=>!o)){showErr('Заполните все поля');return;}
-  const correctOpt=opts[0];
+  const correct=opts[0];
   const shuffled=[...opts].sort(()=>Math.random()-.5);
-  const correctIdx=shuffled.indexOf(correctOpt);
-  const id='custom_'+Date.now();
-  const btn=document.querySelector('#modal-body .btn');
-  btn.disabled=true;btn.textContent='Сохранение...';
+  const ci=shuffled.indexOf(correct);
+  const id='cq_'+Date.now();
+  const btn=document.querySelector('#modal-body .btn');btn.disabled=true;btn.textContent='Сохранение...';
   try{
-    if(dbOK){
-      await sbPost('custom_questions',{id,subject:s,topic:t,question:q,options:shuffled,correct_index:correctIdx});
-    }
-    CUSTOM_QS.push({id,s,t,q,o:shuffled,a:correctIdx});
-    closeModal();admQFilter();
+    if(dbOK)await sbPost('custom_questions',{id,subject:s,topic:t,question:q,options:shuffled,correct_index:ci});
+    CUSTOM_QS.push({id,s,t,q,o:shuffled,a:ci});
+    closeModal();admQF();
   }catch(e){showErr('Ошибка: '+e.message);btn.disabled=false;btn.textContent='Сохранить';}
 }
 
-function admEditQM(q){
+function admEditQM(qid){
+  const QS=getQS();
+  const q=QS.find(x=>x.id===qid);if(!q)return;
   document.getElementById('modal-t').textContent='Редактировать вопрос';
-  document.getElementById('modal-body').innerHTML=`
-    <div class="fg"><label class="fl">Вопрос</label><textarea id="eq-q" rows="2"></textarea></div>
-    <div class="fg"><label class="fl">Варианты (отметьте правильный)</label>
-      ${q.o.map((o,i)=>`<div style="display:flex;align-items:center;gap:7px;margin-bottom:6px">
-        <span style="font-size:12px;font-weight:600;width:18px;font-family:var(--fm)">${String.fromCharCode(65+i)}</span>
-        <input id="eq-o${i}" value="" style="flex:1">
-        <input type="radio" name="eq-c" value="${i}" ${i===q.a?'checked':''} title="Правильный" style="width:auto;flex-shrink:0">
-      </div>`).join('')}
-    </div>
-    <div class="fg"><label class="fl">Тема</label><input id="eq-t" value=""></div>
-    <p id="m-err" class="ferr"></p>
-    <button class="btn bb bfull" onclick='admSaveEQ(${JSON.stringify({id:q.id,s:q.s})})'>Сохранить</button>`;
+  document.getElementById('modal-body').innerHTML='<div class="fg"><label class="fl">Вопрос</label><textarea id="eq-q" rows="2"></textarea></div><div class="fg"><label class="fl">Варианты (отметьте правильный)</label>'+q.o.map((o,i)=>'<div style="display:flex;align-items:center;gap:7px;margin-bottom:6px"><span style="font-size:12px;font-weight:600;width:18px;font-family:var(--fm)">'+String.fromCharCode(65+i)+'</span><input id="eq-o'+i+'" value="" style="flex:1"><input type="radio" name="eq-c" value="'+i+'" '+(i===q.a?'checked':'')+' style="width:auto;flex-shrink:0"></div>').join('')+'</div><div class="fg"><label class="fl">Тема</label><input id="eq-t" value=""></div><p id="m-err" class="ferr"></p><button class="btn bb bfull" onclick="admSaveEQ(\''+qid+'\',\''+q.s+'\')">Сохранить</button>';
   document.getElementById('eq-q').value=q.q;
   document.getElementById('eq-t').value=q.t;
   q.o.forEach((o,i)=>{const el=document.getElementById('eq-o'+i);if(el)el.value=o;});
   document.getElementById('modal').style.display='flex';
 }
-
-async function admSaveEQ(meta){
-  const q_text=document.getElementById('eq-q').value.trim();
+async function admSaveEQ(qid,qs){
+  const qt=document.getElementById('eq-q').value.trim();
   const t=document.getElementById('eq-t').value.trim();
-  const opts=[0,1,2,3].map(i=>(document.getElementById('eq-o'+i)||{}).value?.trim()||'');
-  const correctRad=document.querySelector('input[name="eq-c"]:checked');
-  if(!q_text||!t||opts.some(o=>!o)||!correctRad){showErr('Заполните все поля');return;}
-  const ans=+correctRad.value;
-  const btn=document.querySelector('#modal-body .btn');
-  btn.disabled=true;btn.textContent='Сохранение...';
+  const opts=[0,1,2,3].map(i=>(document.getElementById('eq-o'+i)||{value:''}).value.trim());
+  const cr=document.querySelector('input[name="eq-c"]:checked');
+  if(!qt||!t||opts.some(o=>!o)||!cr){showErr('Заполните все поля');return;}
+  const ans=+cr.value;
+  const btn=document.querySelector('#modal-body .btn');btn.disabled=true;btn.textContent='Сохранение...';
   try{
     if(dbOK){
-      // Try to update in Supabase (only custom questions)
-      const exists=await sbGet('custom_questions',`id=eq.${meta.id}`);
-      if(exists.length>0){
-        await sbPatch('custom_questions',`id=eq.${meta.id}`,
-          {subject:meta.s,topic:t,question:q_text,options:opts,correct_index:ans});
-      }
+      const ex=await sbGet('custom_questions','id=eq.'+qid);
+      if(ex.length>0)await sbPatch('custom_questions','id=eq.'+qid,{subject:qs,topic:t,question:qt,options:opts,correct_index:ans});
     }
-    // Update local cache
-    const idx=CUSTOM_QS.findIndex(q=>q.id===meta.id);
-    const updated={id:meta.id,s:meta.s,t,q:q_text,o:opts,a:ans};
-    if(idx>=0)CUSTOM_QS[idx]=updated;else CUSTOM_QS.push(updated);
-    closeModal();admQFilter();
+    const idx=CUSTOM_QS.findIndex(x=>x.id===qid);
+    const upd={id:qid,s:qs,t,q:qt,o:opts,a:ans};
+    if(idx>=0)CUSTOM_QS[idx]=upd;else CUSTOM_QS.push(upd);
+    closeModal();admQF();
   }catch(e){showErr('Ошибка: '+e.message);btn.disabled=false;btn.textContent='Сохранить';}
 }
-
 async function admDelQ(id){
   if(confirm('Удалить вопрос?')){
-    try{
-      if(dbOK)await sbDelete('custom_questions',`id=eq.${id}`);
-      CUSTOM_QS=CUSTOM_QS.filter(q=>q.id!==id);
-      admQFilter();
-    }catch(e){alert(e.message);}
+    try{if(dbOK)await sbDel('custom_questions','id=eq.'+id);CUSTOM_QS=CUSTOM_QS.filter(q=>q.id!==id);admQF();}
+    catch(e){alert(e.message);}
   }
 }
 
-// NEWS EDITOR (Supabase)
+// NEWS EDITOR
 async function admNewsEdit(){
   const el=document.getElementById('adm-news-edit');
   el.innerHTML='<div style="color:var(--tx3);padding:10px">Загрузка...</div>';
-  let news=[];
-  if(dbOK){try{news=await sbGet('news','order=created_at.desc');newsCache=news;}catch{}}
-  else{news=newsCache;}
-  el.innerHTML=`<div style="display:flex;gap:8px;margin-bottom:14px">
-    <button class="btn bb bsm" onclick="admAddNewsM()"><i class="ti ti-plus"></i>Добавить новость</button>
-  </div>
-  ${!news.length?'<p style="color:var(--tx3)">Новостей нет</p>':
-  news.map(n=>`<div class="nc">
-    <div style="display:flex;justify-content:space-between;margin-bottom:7px">
-      <div>${n.pinned?'<span class="bdg b-am" style="margin-right:5px">📌</span>':''}<span class="nd">${n.news_date||''}</span></div>
-      <div style="display:flex;gap:4px">
-        <button class="btn bgh bsm" onclick="admEditNewsM(${n.id})" style="padding:4px 7px"><i class="ti ti-edit" style="font-size:12px"></i></button>
-        <button class="btn br bsm" onclick="admDelNews(${n.id})" style="padding:4px 7px"><i class="ti ti-trash" style="font-size:12px"></i></button>
-      </div>
-    </div>
-    <div class="nt">${n.title}</div>
-    <div class="nb2" style="margin-top:5px">${n.body}</div>
-  </div>`).join('')}`;
+  if(dbOK){try{newsCache=await sbGet('news','order=created_at.desc');}catch{}}
+  el.innerHTML='<div style="display:flex;gap:8px;margin-bottom:14px"><button class="btn bb bsm" onclick="admAddNewsM()"><i class="ti ti-plus"></i>Добавить</button></div>'+
+    (!newsCache.length?'<p style="color:var(--tx3)">Нет новостей</p>':
+    newsCache.map(n=>'<div class="nc"><div style="display:flex;justify-content:space-between;margin-bottom:7px"><div>'+(n.pinned?'<span class="bdg b-am" style="margin-right:5px">📌</span>':'')+' <span class="nd">'+(n.news_date||'')+'</span></div><div style="display:flex;gap:4px"><button class="btn bgh bsm" onclick="admEditNewsM('+n.id+')" style="padding:4px 7px"><i class="ti ti-edit" style="font-size:12px"></i></button><button class="btn br bsm" onclick="admDelNews('+n.id+')" style="padding:4px 7px"><i class="ti ti-trash" style="font-size:12px"></i></button></div></div><div class="nt">'+n.title+'</div><div class="nb2" style="margin-top:5px">'+n.body+'</div></div>').join(''));
 }
-
 function admAddNewsM(){
   document.getElementById('modal-t').textContent='Новая новость';
-  document.getElementById('modal-body').innerHTML=`
-    <div class="fg"><label class="fl">Заголовок</label><input id="nn-t" placeholder="Заголовок"></div>
-    <div class="fg"><label class="fl">Текст</label><textarea id="nn-b" rows="4" placeholder="Текст новости..."></textarea></div>
-    <div class="fg" style="display:flex;align-items:center;gap:8px">
-      <input type="checkbox" id="nn-p" style="width:auto"><label for="nn-p" style="font-size:13px">Закрепить наверху</label>
-    </div>
-    <p id="m-err" class="ferr"></p>
-    <button class="btn bb bfull" onclick="admSaveNews()">Опубликовать</button>`;
+  document.getElementById('modal-body').innerHTML='<div class="fg"><label class="fl">Заголовок</label><input id="nn-t" placeholder="Заголовок"></div><div class="fg"><label class="fl">Текст</label><textarea id="nn-b" rows="4" placeholder="Текст новости..."></textarea></div><div class="fg" style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="nn-p" style="width:auto"><label for="nn-p" style="font-size:13px">Закрепить наверху</label></div><p id="m-err" class="ferr"></p><button class="btn bb bfull" onclick="admSaveNews()">Опубликовать</button>';
   document.getElementById('modal').style.display='flex';
 }
 async function admSaveNews(){
@@ -1864,84 +1585,51 @@ async function admSaveNews(){
   const btn=document.querySelector('#modal-body .btn');btn.disabled=true;btn.textContent='Публикация...';
   try{
     const d=new Date().toLocaleDateString('ru-RU');
-    if(dbOK){await sbPost('news',{title,body,pinned,news_date:d});}
-    else{newsCache.unshift({id:Date.now(),title,body,pinned,news_date:d});}
+    if(dbOK)await sbPost('news',{title,body,pinned,news_date:d});
+    else newsCache.unshift({id:Date.now(),title,body,pinned,news_date:d});
     closeModal();admNewsEdit();
   }catch(e){showErr('Ошибка: '+e.message);btn.disabled=false;btn.textContent='Опубликовать';}
 }
 async function admEditNewsM(id){
-  let n=newsCache.find(n=>n.id===id);if(!n)return;
+  const n=newsCache.find(x=>x.id===id);if(!n)return;
   document.getElementById('modal-t').textContent='Редактировать новость';
-  document.getElementById('modal-body').innerHTML=`
-    <div class="fg"><label class="fl">Заголовок</label><input id="nn-t"></div>
-    <div class="fg"><label class="fl">Текст</label><textarea id="nn-b" rows="4"></textarea></div>
-    <div class="fg" style="display:flex;align-items:center;gap:8px">
-      <input type="checkbox" id="nn-p" style="width:auto"><label for="nn-p" style="font-size:13px">Закрепить</label>
-    </div>
-    <p id="m-err" class="ferr"></p>
-    <button class="btn bb bfull" onclick="admUpdateNews(${id})">Сохранить</button>`;
+  document.getElementById('modal-body').innerHTML='<div class="fg"><label class="fl">Заголовок</label><input id="nn-t"></div><div class="fg"><label class="fl">Текст</label><textarea id="nn-b" rows="4"></textarea></div><div class="fg" style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="nn-p" style="width:auto"><label for="nn-p" style="font-size:13px">Закрепить</label></div><p id="m-err" class="ferr"></p><button class="btn bb bfull" onclick="admUpdNews('+id+')">Сохранить</button>';
   document.getElementById('nn-t').value=n.title;
   document.getElementById('nn-b').value=n.body;
   document.getElementById('nn-p').checked=n.pinned;
   document.getElementById('modal').style.display='flex';
 }
-async function admUpdateNews(id){
+async function admUpdNews(id){
   const title=document.getElementById('nn-t').value.trim();
   const body=document.getElementById('nn-b').value.trim();
   const pinned=document.getElementById('nn-p').checked;
   if(!title||!body){showErr('Заполните поля');return;}
   const btn=document.querySelector('#modal-body .btn');btn.disabled=true;btn.textContent='Сохранение...';
   try{
-    if(dbOK)await sbPatch('news',`id=eq.${id}`,{title,body,pinned});
+    if(dbOK)await sbPatch('news','id=eq.'+id,{title,body,pinned});
     newsCache=newsCache.map(n=>n.id===id?{...n,title,body,pinned}:n);
     closeModal();admNewsEdit();
   }catch(e){showErr('Ошибка: '+e.message);btn.disabled=false;btn.textContent='Сохранить';}
 }
 async function admDelNews(id){
   if(confirm('Удалить новость?')){
-    try{
-      if(dbOK)await sbDelete('news',`id=eq.${id}`);
-      newsCache=newsCache.filter(n=>n.id!==id);
-      admNewsEdit();
-    }catch(e){alert(e.message);}
+    try{if(dbOK)await sbDel('news','id=eq.'+id);newsCache=newsCache.filter(n=>n.id!==id);admNewsEdit();}
+    catch(e){alert(e.message);}
   }
 }
 
-// SCHEDULE EDITOR (Supabase)
+// SCHEDULE EDITOR
 async function admSchedEdit(){
   const el=document.getElementById('adm-sched-edit');
   el.innerHTML='<div style="color:var(--tx3);padding:10px">Загрузка...</div>';
-  let sched=[];
-  if(dbOK){try{sched=await sbGet('schedule','order=exam_date.asc');schedCache=sched;}catch{}}
-  else{sched=schedCache;}
-  el.innerHTML=`<div style="display:flex;gap:8px;margin-bottom:14px">
-    <button class="btn bb bsm" onclick="admAddSchedM()"><i class="ti ti-plus"></i>Добавить</button>
-  </div>
-  ${!sched.length?'<p style="color:var(--tx3)">Расписания нет</p>':
-  sched.map(s=>`<div class="sr">
-    <div class="db">
-      <div class="dd">${new Date(s.exam_date).getDate()}</div>
-      <div class="dm">${new Date(s.exam_date).toLocaleDateString('ru-RU',{month:'short'})}</div>
-    </div>
-    <div style="flex:1">
-      <div style="font-weight:600">${s.subject}</div>
-      <div style="font-size:12px;color:var(--tx2)">${s.exam_date} · ${s.exam_time} · Ауд. ${s.room}</div>
-    </div>
-    <div style="display:flex;gap:4px">
-      <button class="btn bgh bsm" onclick="admEditSchedM(${s.id})" style="padding:4px 7px"><i class="ti ti-edit" style="font-size:12px"></i></button>
-      <button class="btn br bsm" onclick="admDelSched(${s.id})" style="padding:4px 7px"><i class="ti ti-trash" style="font-size:12px"></i></button>
-    </div>
-  </div>`).join('')}`;
+  if(dbOK){try{schedCache=await sbGet('schedule','order=exam_date.asc');}catch{}}
+  el.innerHTML='<div style="display:flex;gap:8px;margin-bottom:14px"><button class="btn bb bsm" onclick="admAddSchedM()"><i class="ti ti-plus"></i>Добавить</button></div>'+
+    (!schedCache.length?'<p style="color:var(--tx3)">Расписания нет</p>':
+    [...schedCache].sort((a,b)=>new Date(a.exam_date)-new Date(b.exam_date)).map(s=>'<div class="sr"><div class="db"><div class="dd">'+new Date(s.exam_date).getDate()+'</div><div class="dm">'+new Date(s.exam_date).toLocaleDateString('ru-RU',{month:'short'})+'</div></div><div style="flex:1"><div style="font-weight:600">'+s.subject+'</div><div style="font-size:12px;color:var(--tx2)">'+s.exam_date+' · '+s.exam_time+' · Ауд. '+s.room+'</div></div><div style="display:flex;gap:4px"><button class="btn bgh bsm" onclick="admEditSchedM('+s.id+')" style="padding:4px 7px"><i class="ti ti-edit" style="font-size:12px"></i></button><button class="btn br bsm" onclick="admDelSched('+s.id+')" style="padding:4px 7px"><i class="ti ti-trash" style="font-size:12px"></i></button></div></div>').join(''));
 }
 function admAddSchedM(){
   document.getElementById('modal-t').textContent='Добавить в расписание';
-  document.getElementById('modal-body').innerHTML=`
-    <div class="fg"><label class="fl">Предмет / Экзамен</label><input id="ns-s" placeholder="Биохимия"></div>
-    <div class="fg"><label class="fl">Дата</label><input id="ns-d" type="date"></div>
-    <div class="fg"><label class="fl">Время</label><input id="ns-ti" type="time" value="09:00" style="width:auto"></div>
-    <div class="fg"><label class="fl">Аудитория</label><input id="ns-r" placeholder="305" style="width:auto"></div>
-    <p id="m-err" class="ferr"></p>
-    <button class="btn bb bfull" onclick="admSaveSched()">Добавить</button>`;
+  document.getElementById('modal-body').innerHTML='<div class="fg"><label class="fl">Предмет</label><input id="ns-s" placeholder="Биохимия"></div><div class="fg"><label class="fl">Дата</label><input id="ns-d" type="date"></div><div class="fg"><label class="fl">Время</label><input id="ns-ti" type="time" value="09:00" style="width:auto"></div><div class="fg"><label class="fl">Аудитория</label><input id="ns-r" placeholder="305" style="width:auto"></div><p id="m-err" class="ferr"></p><button class="btn bb bfull" onclick="admSaveSched()">Добавить</button>';
   document.getElementById('modal').style.display='flex';
 }
 async function admSaveSched(){
@@ -1952,28 +1640,22 @@ async function admSaveSched(){
   if(!subj||!date){showErr('Заполните поля');return;}
   const btn=document.querySelector('#modal-body .btn');btn.disabled=true;btn.textContent='Добавление...';
   try{
-    if(dbOK){await sbPost('schedule',{subject:subj,exam_date:date,exam_time:time,room:room||'—'});}
-    else{schedCache.push({id:Date.now(),subject:subj,exam_date:date,exam_time:time,room:room||'—'});}
+    if(dbOK)await sbPost('schedule',{subject:subj,exam_date:date,exam_time:time,room:room||'—'});
+    else schedCache.push({id:Date.now(),subject:subj,exam_date:date,exam_time:time,room:room||'—'});
     closeModal();admSchedEdit();
   }catch(e){showErr('Ошибка: '+e.message);btn.disabled=false;btn.textContent='Добавить';}
 }
 async function admEditSchedM(id){
-  const s=schedCache.find(s=>s.id===id);if(!s)return;
+  const s=schedCache.find(x=>x.id===id);if(!s)return;
   document.getElementById('modal-t').textContent='Редактировать';
-  document.getElementById('modal-body').innerHTML=`
-    <div class="fg"><label class="fl">Предмет</label><input id="ns-s"></div>
-    <div class="fg"><label class="fl">Дата</label><input id="ns-d" type="date"></div>
-    <div class="fg"><label class="fl">Время</label><input id="ns-ti" type="time" style="width:auto"></div>
-    <div class="fg"><label class="fl">Аудитория</label><input id="ns-r" style="width:auto"></div>
-    <p id="m-err" class="ferr"></p>
-    <button class="btn bb bfull" onclick="admUpdateSched(${id})">Сохранить</button>`;
+  document.getElementById('modal-body').innerHTML='<div class="fg"><label class="fl">Предмет</label><input id="ns-s"></div><div class="fg"><label class="fl">Дата</label><input id="ns-d" type="date"></div><div class="fg"><label class="fl">Время</label><input id="ns-ti" type="time" style="width:auto"></div><div class="fg"><label class="fl">Аудитория</label><input id="ns-r" style="width:auto"></div><p id="m-err" class="ferr"></p><button class="btn bb bfull" onclick="admUpdSched('+id+')">Сохранить</button>';
   document.getElementById('ns-s').value=s.subject;
   document.getElementById('ns-d').value=s.exam_date;
   document.getElementById('ns-ti').value=s.exam_time;
   document.getElementById('ns-r').value=s.room;
   document.getElementById('modal').style.display='flex';
 }
-async function admUpdateSched(id){
+async function admUpdSched(id){
   const subj=document.getElementById('ns-s').value.trim();
   const date=document.getElementById('ns-d').value;
   const time=document.getElementById('ns-ti').value;
@@ -1981,45 +1663,34 @@ async function admUpdateSched(id){
   if(!subj||!date){showErr('Заполните поля');return;}
   const btn=document.querySelector('#modal-body .btn');btn.disabled=true;btn.textContent='Сохранение...';
   try{
-    if(dbOK)await sbPatch('schedule',`id=eq.${id}`,{subject:subj,exam_date:date,exam_time:time,room});
+    if(dbOK)await sbPatch('schedule','id=eq.'+id,{subject:subj,exam_date:date,exam_time:time,room});
     schedCache=schedCache.map(s=>s.id===id?{...s,subject:subj,exam_date:date,exam_time:time,room}:s);
     closeModal();admSchedEdit();
   }catch(e){showErr('Ошибка: '+e.message);btn.disabled=false;btn.textContent='Сохранить';}
 }
 async function admDelSched(id){
   if(confirm('Удалить из расписания?')){
-    try{
-      if(dbOK)await sbDelete('schedule',`id=eq.${id}`);
-      schedCache=schedCache.filter(s=>s.id!==id);
-      admSchedEdit();
-    }catch(e){alert(e.message);}
+    try{if(dbOK)await sbDel('schedule','id=eq.'+id);schedCache=schedCache.filter(s=>s.id!==id);admSchedEdit();}
+    catch(e){alert(e.message);}
   }
 }
 
-// ══════════════════════════════════════════════
-// ADMIN AI
-// ══════════════════════════════════════════════
+// AI
 async function admAsk(){
   const q=document.getElementById('adm-ai-q').value.trim();if(!q)return;
   const btn=document.querySelector('#adm-ai .btn');btn.disabled=true;btn.textContent='Обработка...';
   const box=document.getElementById('adm-ai-ans');
   box.innerHTML='<div class="ai-box"><div class="ai-hdr"><i class="ti ti-loader spin"></i>Загрузка...</div></div>';
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,
-        messages:[{role:'user',content:`Ты помощник преподавателя мед. вуза Узбекистана. Отвечай по-русски.\n${q}`}]})
-    });
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,messages:[{role:'user',content:'Ты помощник преподавателя мед. вуза Узбекистана. Отвечай по-русски.\n'+q}]})});
     const data=await res.json();
-    const text=data.content?.map(c=>c.text||'').join('')||'Нет ответа';
-    box.innerHTML=`<div class="ai-box"><div class="ai-hdr"><i class="ti ti-sparkles" style="font-size:11px"></i>Ответ</div>${text}</div>`;
-  }catch{box.innerHTML='<div class="alert al-r">Ошибка запроса</div>';}
+    const text=data.content?data.content.map(c=>c.text||'').join(''):'Нет ответа';
+    box.innerHTML='<div class="ai-box"><div class="ai-hdr"><i class="ti ti-sparkles" style="font-size:11px"></i>Ответ</div>'+text+'</div>';
+  }catch(e){box.innerHTML='<div class="alert al-r">Ошибка запроса</div>';}
   btn.disabled=false;btn.innerHTML='<i class="ti ti-sparkles"></i>Спросить';
 }
 
-// ══════════════════════════════════════════════
 // START
-// ══════════════════════════════════════════════
 init();
 </script>
 </body>
