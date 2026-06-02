@@ -913,7 +913,6 @@ var BASE_QS=[
 {id:"c268",s:"chemistry",t:"Тема 16: Жиры",q:"Бурый жир в организме человека:",o:["Генерирует тепло (термогенез)","Синтезирует гормоны","Транспортирует жиры","Хранит энергию"],a:0},
 {id:"c269",s:"chemistry",t:"Тема 16: Жиры",q:"ЛПВП (высокой плотности) транспортируют холестерин:",o:["В мозг","В ткани","В мышцы","Из тканей в печень"],a:3},
 {id:"c270",s:"chemistry",t:"Тема 16: Жиры",q:"Витамин A (ретинол) относится к группе:",o:["Жирорастворимых витаминов","Коферментов","Антиоксидантов","Водорастворимых витаминов"],a:0},
-
 ];
 
 var CQS=[];
@@ -1073,6 +1072,11 @@ function showLoginWall(){
   renderHome();
 }
 
+var PAGE_LABELS={home:'на главной',flashcards:'учит карточки',trainer:'решает тренажёр',exam:'на экзамене',progress:'смотрит прогресс',leaderboard:'смотрит рейтинг',news:'читает новости',schedule:'смотрит расписание'};
+async function pushActivity(action){
+  if(!dbOK||!S.user)return;
+  try{await sbUps('student_activity',{email:S.user.email,name:S.user.name,current_action:action,last_seen:new Date().toISOString()},'email');}catch(e){}
+}
 function go(pg,btn){
   if(PROTECTED.indexOf(pg)>=0&&!S.user&&!S.isAdm){showLoginWall();return;}
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('on');});
@@ -1083,6 +1087,7 @@ function go(pg,btn){
   else{var b=document.querySelector('[data-pg="'+pg+'"]');if(b)b.classList.add('on');}
   var fns={home:renderHome,flashcards:fcInit,trainer:trInit,progress:renderProg,leaderboard:renderLB,news:renderNews,schedule:renderSched,admin:renderAdm};
   if(fns[pg])fns[pg]();
+  if(S.user&&PAGE_LABELS[pg])pushActivity(PAGE_LABELS[pg]);
 }
 
 function openModal(m){
@@ -1200,17 +1205,24 @@ async function doAuth(){
   }
 }
 
-var APWD='medquest_admin_2026';
+// Проверка пароля главного админа через защищённую функцию Supabase
+// (пароль НЕ хранится в коде — F12 его не покажет)
+async function checkSuperPassword(pw){
+  if(!dbOK)return false;
+  try{
+    var r=await fetch(SB_URL+'/rest/v1/rpc/check_super_password',{
+      method:'POST',headers:SBH,body:JSON.stringify({pw:pw})
+    });
+    if(!r.ok)return false;
+    var ok=await r.json();
+    return ok===true;
+  }catch(e){return false;}
+}
 async function doAdm(){
   var p=val('mAp');
-  // Главный админ по паролю
-  if(p===APWD){
-    S.isAdm=true;S.isSuper=true;S.adminEmail='super';sv();closeModal();renderAuthHdr();
-    go('admin',document.querySelector('[data-pg=admin]'));
-    return;
-  }
-  // Обычный админ: проверяем что текущий вошедший студент имеет role=admin
-  if(S.user&&dbOK){
+  var btn=document.querySelector('#mdBody .btn');
+  // Обычный админ: вошёл студентом с role=admin (проверяем первым — без пароля)
+  if((!p||p.length<3)&&S.user&&dbOK){
     try{
       var rows=await sbGet('users','email=eq.'+encodeURIComponent(S.user.email)+'&select=role,name');
       if(rows.length&&rows[0].role==='admin'){
@@ -1220,8 +1232,23 @@ async function doAdm(){
         return;
       }
     }catch(e){}
+    showErr('У вашего аккаунта нет прав админа. Обратитесь к главному админу.');
+    return;
   }
-  showErr('Неверный пароль. Обычные админы: сначала войдите как студент, потом откройте админку.');
+  // Главный админ: проверяем пароль через Supabase
+  if(p){
+    if(btn){btn.disabled=true;btn.textContent='Проверка...';}
+    var valid=await checkSuperPassword(p);
+    if(btn){btn.disabled=false;btn.textContent='Войти по паролю';}
+    if(valid){
+      S.isAdm=true;S.isSuper=true;S.adminEmail='super';sv();closeModal();renderAuthHdr();
+      go('admin',document.querySelector('[data-pg=admin]'));
+      return;
+    }
+    showErr('Неверный пароль.');
+    return;
+  }
+  showErr('Введите пароль (главный админ) или войдите как студент с правами админа.');
 }
 async function registerAdminSession(name,email){
   if(!dbOK)return;
@@ -1229,6 +1256,7 @@ async function registerAdminSession(name,email){
 }
 // Обновляем «онлайн» каждые 30 сек
 setInterval(function(){if(S.isAdm&&!S.isSuper&&S.adminEmail)registerAdminSession(S.user?S.user.name:'',S.adminEmail);},30000);
+setInterval(function(){if(S.user)pushActivity('в сети');},40000);
 function doLogout(){S.user=null;S.hist=[];S.prog={};sv();renderAuthHdr();renderHome();}
 async function admOut(){if(!S.isSuper&&S.adminEmail&&dbOK){try{await sbDel('admin_sessions','email=eq.'+encodeURIComponent(S.adminEmail));}catch(e){}}S.isAdm=false;S.isSuper=false;S.adminEmail=null;sv();renderAuthHdr();renderAdm();}
 
@@ -1563,22 +1591,65 @@ async function admReject(email,name){
     }
   }
 }
+var ACT_CACHE={};
 async function admStudents(){
   var el=document.getElementById('admStudents');el.innerHTML='<div style="color:var(--tx3);padding:10px">Загрузка...</div>';
   var rows=[];if(dbOK){try{rows=await sbGet('users','status=neq.pending&order=created_at.asc');}catch(e){}}
+  // Активность
+  ACT_CACHE={};
+  if(dbOK){try{var acts=await sbGet('student_activity','select=email,current_action,last_seen');acts.forEach(function(a){ACT_CACHE[a.email]=a;});}catch(e){}}
   if(!rows.length){el.innerHTML='<p style="color:var(--tx3);font-size:13px">Нет студентов</p>';return;}
-  el.innerHTML='<table class="tbl"><thead><tr><th>Имя</th><th>Email</th><th>Роль</th><th>Статус</th><th>Действие</th></tr></thead><tbody>'+rows.map(function(u){
-    var roleBdg=u.role==='admin'?'<span class="bdg bam2" style="font-size:9px">🛡️ Админ</span>':'<span style="color:var(--tx3);font-size:11px">студент</span>';
-    var actions='';
-    actions+=(u.status==='active'?'<button class="btn bre bsm" onclick="admBlock(\''+u.email+'\',\''+u.name+'\')"><i class="ti ti-ban"></i></button>':'<button class="btn bgr bsm" onclick="admUnblock(\''+u.email+'\')"><i class="ti ti-lock-open"></i></button>');
-    actions+='<button class="btn bgh bsm" style="margin-left:3px" onclick="admDelUser(\''+u.email+'\',\''+u.name+'\')"><i class="ti ti-trash"></i></button>';
-    // Кнопка Сделать/Убрать админом — только для главного
-    if(S.isSuper){
-      if(u.role==='admin')actions+='<button class="btn bgh bsm" style="margin-left:3px" title="Убрать админа" onclick="admRevokeAdmin(\''+u.email+'\')">⬇️</button>';
-      else actions+='<button class="btn bam bsm" style="margin-left:3px" title="Сделать админом" onclick="admMakeAdmin(\''+u.email+'\')">⭐</button>';
+  var now=Date.now();
+  el.innerHTML='<p style="font-size:11px;color:var(--tx3);margin-bottom:8px">Номаша зер куни — статистикеш мубурот. 🟢 = сейчас в сети.</p><table class="tbl"><thead><tr><th>Имя</th><th>Активность</th><th>Роль</th><th>Статус</th><th>Действие</th></tr></thead><tbody>'+rows.map(function(u){
+    var roleBdg=u.role==='admin'?'<span class="bdg bam2" style="font-size:9px">🛡️</span>':'<span style="color:var(--tx3);font-size:11px">студ.</span>';
+    // Активность
+    var act=ACT_CACHE[u.email];
+    var actHtml='<span style="color:var(--tx3);font-size:11px">—</span>';
+    if(act){
+      var diff=now-new Date(act.last_seen).getTime();
+      var online=diff<90000;
+      var when=online?'🟢 '+(act.current_action||'в сети'):'⚪ '+(diff<3600000?Math.round(diff/60000)+' мин назад':Math.round(diff/3600000)+' ч назад');
+      actHtml='<span style="font-size:11px;color:'+(online?'var(--gr)':'var(--tx3)')+'">'+when+'</span>';
     }
-    return '<tr><td style="font-weight:500">'+u.name+'</td><td style="color:var(--tx2);font-size:11px">'+u.email+'</td><td>'+roleBdg+'</td><td><span class="bdg '+(u.status==='active'?'bgr2':'bre2')+'">'+(u.status==='active'?'Активен':'Заблок.')+'</span></td><td style="display:flex;gap:2px;flex-wrap:wrap">'+actions+'</td></tr>';
+    var actions='';
+    actions+=(u.status==='active'?'<button class="btn bre bsm" onclick="event.stopPropagation();admBlock(\''+u.email+'\',\''+u.name+'\')"><i class="ti ti-ban"></i></button>':'<button class="btn bgr bsm" onclick="event.stopPropagation();admUnblock(\''+u.email+'\')"><i class="ti ti-lock-open"></i></button>');
+    actions+='<button class="btn bgh bsm" style="margin-left:3px" onclick="event.stopPropagation();admDelUser(\''+u.email+'\',\''+u.name+'\')"><i class="ti ti-trash"></i></button>';
+    if(S.isSuper){
+      if(u.role==='admin')actions+='<button class="btn bgh bsm" style="margin-left:3px" title="Убрать админа" onclick="event.stopPropagation();admRevokeAdmin(\''+u.email+'\')">⬇️</button>';
+      else actions+='<button class="btn bam bsm" style="margin-left:3px" title="Сделать админом" onclick="event.stopPropagation();admMakeAdmin(\''+u.email+'\')">⭐</button>';
+    }
+    return '<tr style="cursor:pointer" onclick="admStudentCard(\''+u.email+'\',\''+(u.name||'').replace(/\x27/g,'')+'\')"><td style="font-weight:500">'+u.name+'<div style="font-size:10px;color:var(--tx3)">'+u.email+'</div></td><td>'+actHtml+'</td><td>'+roleBdg+'</td><td><span class="bdg '+(u.status==='active'?'bgr2':'bre2')+'">'+(u.status==='active'?'Акт.':'Блок')+'</span></td><td style="display:flex;gap:2px;flex-wrap:wrap" onclick="event.stopPropagation()">'+actions+'</td></tr>';
   }).join('')+'</tbody></table>';
+}
+// Карточка статистики студента
+async function admStudentCard(email,name){
+  document.getElementById('mdT').textContent='📊 '+name;
+  var b=document.getElementById('mdBody');b.innerHTML='<div style="color:var(--tx3);padding:10px">Загрузка...</div>';
+  document.getElementById('modal').style.display='flex';
+  var prog=[],exams=[],act=ACT_CACHE[email];
+  if(dbOK){
+    try{prog=await sbGet('progress','user_email=eq.'+encodeURIComponent(email)+'&select=correct_count,attempt_count');}catch(e){}
+    try{exams=await sbGet('exam_history','user_email=eq.'+encodeURIComponent(email)+'&order=created_at.desc&limit=10');}catch(e){}
+  }
+  var tA=0,tC=0;prog.forEach(function(p){tA+=p.attempt_count;tC+=p.correct_count;});
+  var acc=tA?Math.round(tC/tA*100):0;
+  var solved=prog.length;
+  var actLine='нет данных';
+  if(act){var diff=Date.now()-new Date(act.last_seen).getTime();var online=diff<90000;actLine=online?'🟢 сейчас: '+(act.current_action||'в сети'):'был '+(diff<3600000?Math.round(diff/60000)+' мин':Math.round(diff/3600000)+' ч')+' назад';}
+  var html='<div class="cgrid" style="margin-bottom:14px">';
+  html+='<div class="card"><div style="font-size:11px;color:var(--tx2)">Точность</div><div style="font-size:24px;font-weight:700;font-family:var(--fm);color:'+(acc>=70?'var(--gr)':acc>=50?'var(--am)':'var(--re)')+'">'+acc+'%</div></div>';
+  html+='<div class="card"><div style="font-size:11px;color:var(--tx2)">Решено</div><div style="font-size:24px;font-weight:700;font-family:var(--fm)">'+solved+'</div></div>';
+  html+='<div class="card"><div style="font-size:11px;color:var(--tx2)">Попыток</div><div style="font-size:24px;font-weight:700;font-family:var(--fm)">'+tA+'</div></div>';
+  html+='<div class="card"><div style="font-size:11px;color:var(--tx2)">Экзаменов</div><div style="font-size:24px;font-weight:700;font-family:var(--fm)">'+exams.length+'</div></div>';
+  html+='</div>';
+  html+='<div style="font-size:12px;color:var(--tx2);margin-bottom:12px">📍 '+actLine+'</div>';
+  if(exams.length){
+    html+='<div style="font-size:13px;font-weight:600;margin-bottom:8px">Последние экзамены</div>';
+    html+=exams.map(function(e){var pct=Math.round(e.score/e.total*100);var col=pct>=70?'var(--gr)':pct>=50?'var(--am)':'var(--re)';return '<div style="display:flex;justify-content:space-between;padding:7px 10px;background:var(--bg3);border-radius:6px;margin-bottom:5px;font-size:12px"><span>'+(SM[e.subject]?SM[e.subject].label:'Все')+' · '+e.exam_date+'</span><span style="font-weight:700;color:'+col+'">'+pct+'%</span></div>';}).join('');
+  }else{
+    html+='<div style="font-size:12px;color:var(--tx3)">Экзаменов ещё не было</div>';
+  }
+  b.innerHTML=html;
 }
 async function admMakeAdmin(email){
   if(!S.isSuper)return;
@@ -1662,7 +1733,7 @@ async function admDenyReq(id){
 }
 async function admQuestions(){
   var QS=getQS();var cqs=[];if(dbOK){try{cqs=await sbGet('custom_questions','order=created_at.asc');}catch(e){}}
-  document.getElementById('admQuestions').innerHTML='<div style="display:flex;gap:8px;margin-bottom:14px"><button class="btn bbl bsm" onclick="admAddQM()"><i class="ti ti-plus"></i>Добавить</button><span style="font-size:12px;color:var(--tx2);align-self:center">Всего: '+QS.length+' | Своих: '+cqs.length+'</span></div><div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap"><select id="qFs" onchange="admQF()" style="width:auto;min-width:140px"><option value="all">Все</option><option value="physics">Физика</option><option value="chemistry">Химия</option><option value="biology">Биология</option><option value="custom">Свои</option></select><input id="qSr" placeholder="Поиск..." onkeyup="admQF()" style="flex:1;min-width:160px"></div><div id="qCount" style="font-size:11px;color:var(--tx3);margin-bottom:6px"></div><div id="qTbl" style="max-height:55vh;overflow-y:auto;-webkit-overflow-scrolling:touch"></div>';
+  document.getElementById('admQuestions').innerHTML='<div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap"><button class="btn bbl bsm" onclick="admAddQM()"><i class="ti ti-plus"></i>Добавить</button><button class="btn bgr bsm" onclick="admBulkM()"><i class="ti ti-upload"></i>Массово</button><span style="font-size:12px;color:var(--tx2);align-self:center">Всего: '+QS.length+' | Своих: '+cqs.length+'</span></div><div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap"><select id="qFs" onchange="admQF()" style="width:auto;min-width:140px"><option value="all">Все</option><option value="physics">Физика</option><option value="chemistry">Химия</option><option value="biology">Биология</option><option value="custom">Свои</option></select><input id="qSr" placeholder="Поиск..." onkeyup="admQF()" style="flex:1;min-width:160px"></div><div id="qCount" style="font-size:11px;color:var(--tx3);margin-bottom:6px"></div><div id="qTbl" style="max-height:55vh;overflow-y:auto;-webkit-overflow-scrolling:touch"></div>';
   admQF();
 }
 function admQF(){
@@ -1673,6 +1744,114 @@ function admQF(){
   document.getElementById('qCount').textContent='Показано: '+pool.length;
   wrap.innerHTML='<table class="tbl"><thead><tr><th>#</th><th>Предм.</th><th>Тема</th><th>Вопрос</th><th>✓</th><th></th></tr></thead><tbody>'+pool.map(function(q,i){var isCust=CQS.some(function(cq){return cq.id===q.id;});return '<tr><td style="color:var(--tx3);font-family:var(--fm);font-size:11px">'+(i+1)+'</td><td><span class="bdg bbl2" style="font-size:10px">'+(SM[q.s]?SM[q.s].icon:'?')+'</span></td><td style="font-size:11px;color:var(--tx3);max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+q.t+'</td><td style="font-size:12px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+q.q+'</td><td style="font-size:12px;color:var(--gr);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+q.o[q.a]+'</td><td style="white-space:nowrap"><button class="btn bgh bsm" onclick="admEditQM(\''+q.id+'\')" style="padding:4px 7px"><i class="ti ti-edit" style="font-size:12px"></i></button>'+(isCust?'<button class="btn bre bsm" onclick="admDelQ(\''+q.id+'\')" style="padding:4px 7px;margin-left:3px"><i class="ti ti-trash" style="font-size:12px"></i></button>':'')+'</td></tr>';}).join('')+'</tbody></table>';
 }
+// ===== МАССОВЫЙ ИМПОРТ ВОПРОСОВ =====
+function admBulkM(){
+  document.getElementById('mdT').textContent='\U0001F4E5 \u041C\u0430\u0441\u0441\u043E\u0432\u043E\u0435 \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u0438\u0435';
+  var b=document.getElementById('mdBody');b.innerHTML='';
+  // \u0412\u044B\u0431\u043E\u0440 \u043F\u0440\u0435\u0434\u043C\u0435\u0442\u0430 \u0438 \u0442\u0435\u043C\u044B \u0441\u0432\u0435\u0440\u0445\u0443 (\u043E\u0434\u0438\u043D \u0440\u0430\u0437 \u043D\u0430 \u0432\u0441\u044E \u043F\u0430\u0447\u043A\u0443)
+  var sel=document.createElement('div');sel.className='fg';
+  var subjOpts='<option value="chemistry">\u2697\uFE0F \u0425\u0438\u043C\u0438\u044F</option><option value="physics">\U0001F52C \u0424\u0438\u0437\u0438\u043A\u0430</option><option value="biology">\U0001F9EC \u0411\u0438\u043E\u043B\u043E\u0433\u0438\u044F</option>';
+  Object.keys(SM).forEach(function(k){if(['chemistry','physics','biology'].indexOf(k)<0)subjOpts+='<option value="'+k+'">'+SM[k].icon+' '+SM[k].label+'</option>';});
+  subjOpts+='<option value="__new__">\u2795 \u041D\u043E\u0432\u044B\u0439 \u043F\u0440\u0435\u0434\u043C\u0435\u0442...</option>';
+  sel.innerHTML='<label class="fl">\u041F\u0440\u0435\u0434\u043C\u0435\u0442 (\u0434\u043B\u044F \u0432\u0441\u0435\u0445)</label><select id="bkS" onchange="if(this.value===\'__new__\'){document.getElementById(\'bkNewWrap\').style.display=\'\';}else{document.getElementById(\'bkNewWrap\').style.display=\'none\';}">'+subjOpts+'</select>';
+  b.appendChild(sel);
+  var nw=document.createElement('div');nw.className='fg';nw.id='bkNewWrap';nw.style.display='none';
+  nw.innerHTML='<label class="fl">\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u043D\u043E\u0432\u043E\u0433\u043E \u043F\u0440\u0435\u0434\u043C\u0435\u0442\u0430</label><input id="bkNewName" placeholder="\u041D\u0430\u043F\u0440. \u0410\u043D\u0430\u0442\u043E\u043C\u0438\u044F">';
+  b.appendChild(nw);
+  addInput(b,'bkT','text','\u0422\u0435\u043C\u0430 (\u0434\u043B\u044F \u0432\u0441\u0435\u0445)','\u041D\u0430\u043F\u0440. \u0422\u0435\u043C\u0430 2: \u0413\u0435\u043D\u0435\u0442\u0438\u043A\u0430');
+  var info=document.createElement('div');info.className='alert ali';info.style.marginBottom='12px';info.style.fontSize='12px';
+  info.innerHTML='<div><b>\u0424\u043E\u0440\u043C\u0430\u0442:</b> \u043A\u0430\u0436\u0434\u044B\u0439 \u0432\u043E\u043F\u0440\u043E\u0441 \u2014 <code>\u043D\u043E\u043C\u0435\u0440) \u0432\u043E\u043F\u0440\u043E\u0441: \u043E\u0442\u0432\u0435\u0442</code>.<br>\u041D\u0435\u0432\u0435\u0440\u043D\u044B\u0435 \u0432\u0430\u0440\u0438\u0430\u043D\u0442\u044B \u043F\u043E\u0434\u0442\u044F\u043D\u0443\u0442\u0441\u044F \u0430\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0447\u0435\u0441\u043A\u0438 \u0438\u0437 \u043E\u0442\u0432\u0435\u0442\u043E\u0432 \u0434\u0440\u0443\u0433\u0438\u0445 \u0432\u043E\u043F\u0440\u043E\u0441\u043E\u0432.</div>';
+  b.appendChild(info);
+  var ex=document.createElement('div');ex.style.cssText='font-size:11px;color:var(--tx3);background:var(--bg3);padding:10px;border-radius:7px;margin-bottom:12px;font-family:var(--fm);white-space:pre-wrap';
+  ex.textContent='1) \u0420\u0435\u0433\u0443\u043B\u044F\u0442\u043E\u0440\u043D\u044B\u0435 \u0433\u0435\u043D\u044B? \u041A\u043E\u043D\u0442\u0440\u043E\u043B\u0438\u0440\u0443\u044E\u0442 \u0431\u0438\u043E\u0441\u0438\u043D\u0442\u0435\u0437 \u0431\u0435\u043B\u043A\u0430\n2) \u041D\u0430\u0441\u043B\u0435\u0434\u0441\u0442\u0432\u0435\u043D\u043D\u044B\u0435 \u0441\u0432\u043E\u0439\u0441\u0442\u0432\u0430 \u0441\u0432\u044F\u0437\u0430\u043D\u044B \u0441: \u0425\u0440\u043E\u043C\u043E\u0441\u043E\u043C\u0430\u043C\u0438\n3) \u041F\u0435\u0440\u0432\u0438\u0447\u043D\u044B\u0435 \u043F\u0435\u0440\u0435\u0442\u044F\u0436\u043A\u0438? \u0426\u0435\u043D\u0442\u0440\u043E\u043C\u0435\u0440\u044B';
+  b.appendChild(ex);
+  var fg=document.createElement('div');fg.className='fg';
+  fg.innerHTML='<label class="fl">\u0412\u0441\u0442\u0430\u0432\u044C\u0442\u0435 \u0432\u043E\u043F\u0440\u043E\u0441\u044B</label><textarea id="bulkTxt" rows="9" placeholder="1) \u0412\u043E\u043F\u0440\u043E\u0441: \u041E\u0442\u0432\u0435\u0442..." style="font-family:var(--fm);font-size:12px"></textarea>';
+  b.appendChild(fg);
+  var prev=document.createElement('div');prev.id='bulkPrev';prev.style.cssText='font-size:12px;color:var(--tx2);margin-bottom:10px';
+  b.appendChild(prev);
+  addErr(b);
+  var row=document.createElement('div');row.style.cssText='display:flex;gap:8px';
+  var pb=document.createElement('button');pb.className='btn bgh bfu';pb.textContent='\U0001F441\uFE0F \u041F\u0440\u043E\u0432\u0435\u0440\u0438\u0442\u044C';
+  pb.addEventListener('click',admBulkPreview);
+  var sb=document.createElement('button');sb.className='btn bbl bfu';sb.textContent='\U0001F4BE \u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0432\u0441\u0435';
+  sb.addEventListener('click',admBulkSave);
+  row.appendChild(pb);row.appendChild(sb);b.appendChild(row);
+  document.getElementById('modal').style.display='flex';
+}
+// \u0420\u0430\u0437\u0431\u043E\u0440: \u043A\u0430\u0436\u0434\u0430\u044F \u0441\u0442\u0440\u043E\u043A\u0430 "\u043D\u043E\u043C\u0435\u0440) \u0432\u043E\u043F\u0440\u043E\u0441: \u043E\u0442\u0432\u0435\u0442"
+function parseBulkQA(txt){
+  var result=[];
+  // \u0420\u0430\u0437\u0431\u0438\u0432\u0430\u0435\u043C \u043F\u043E \u043D\u043E\u043C\u0435\u0440\u0430\u043C \u0432\u0438\u0434\u0430 "1)" "2)" \u0432 \u043D\u0430\u0447\u0430\u043B\u0435 \u0441\u0442\u0440\u043E\u043A\u0438
+  var parts=txt.split(/(?:^|\n)\s*\d+[\)\.]\s*/).map(function(x){return x.trim();}).filter(function(x){return x;});
+  parts.forEach(function(seg){
+    // \u0420\u0430\u0437\u0434\u0435\u043B\u044F\u0435\u043C \u0432\u043E\u043F\u0440\u043E\u0441 \u0438 \u043E\u0442\u0432\u0435\u0442: \u0441\u043D\u0430\u0447\u0430\u043B\u0430 \u043F\u043E "?", \u043F\u043E\u0442\u043E\u043C \u043F\u043E ":"
+    seg=seg.replace(/\n+/g,' ').trim();
+    var q='',a='';
+    var qm=seg.indexOf('?');
+    var cm=seg.indexOf(':');
+    if(qm>=0&&(cm<0||qm<cm)){
+      q=seg.slice(0,qm+1).trim();
+      a=seg.slice(qm+1).trim();
+    }else if(cm>=0){
+      q=seg.slice(0,cm).trim();
+      a=seg.slice(cm+1).trim();
+    }else{
+      return; // \u043D\u0435 \u0440\u0430\u0441\u043F\u043E\u0437\u043D\u0430\u043D\u043E
+    }
+    if(q&&a)result.push({q:q,a:a});
+  });
+  return result;
+}
+function admBulkPreview(){
+  var qa=parseBulkQA(document.getElementById('bulkTxt').value);
+  var prev=document.getElementById('bulkPrev');
+  if(!qa.length){prev.innerHTML='<span style="color:var(--re)">\u041D\u0435 \u0440\u0430\u0441\u043F\u043E\u0437\u043D\u0430\u043D\u043E. \u041F\u0440\u043E\u0432\u0435\u0440\u044C\u0442\u0435 \u0444\u043E\u0440\u043C\u0430\u0442 (\u043D\u043E\u043C\u0435\u0440) \u0432\u043E\u043F\u0440\u043E\u0441: \u043E\u0442\u0432\u0435\u0442).</span>';return;}
+  var sample=qa.slice(0,3).map(function(x){return '\u2022 '+x.q+' \u2192 <b>'+x.a+'</b>';}).join('<br>');
+  prev.innerHTML='<span style="color:var(--gr)">\u2713 \u0420\u0430\u0441\u043F\u043E\u0437\u043D\u0430\u043D\u043E: '+qa.length+'</span><div style="margin-top:6px;font-size:11px;color:var(--tx3)">'+sample+(qa.length>3?'<br>...':'')+'</div>';
+}
+async function admBulkSave(){
+  var qa=parseBulkQA(document.getElementById('bulkTxt').value);
+  if(!qa.length){showErr('\u041D\u0435 \u0440\u0430\u0441\u043F\u043E\u0437\u043D\u0430\u043D\u043E \u043D\u0438 \u043E\u0434\u043D\u043E\u0433\u043E \u0432\u043E\u043F\u0440\u043E\u0441\u0430');return;}
+  var s=val('bkS'),t=val('bkT');
+  if(s==='__new__'){
+    var nn=val('bkNewName');
+    if(!nn){showErr('\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u043D\u043E\u0432\u043E\u0433\u043E \u043F\u0440\u0435\u0434\u043C\u0435\u0442\u0430');return;}
+    s=nn.toLowerCase().replace(/\s+/g,'_');
+    if(!SM[s]){var pal=['#e879a6','#38bdf8','#fb923c','#a78bfa','#34d399','#f472b6','#facc15'];SM[s]={label:nn,icon:'\U0001F4D8',color:pal[Object.keys(SM).length%pal.length],dim:'#15171f'};}
+  }
+  if(!t){showErr('\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0442\u0435\u043C\u0443');return;}
+  // \u041F\u0443\u043B \u043E\u0442\u0432\u0435\u0442\u043E\u0432 \u0434\u043B\u044F \u043D\u0435\u0432\u0435\u0440\u043D\u044B\u0445 \u0432\u0430\u0440\u0438\u0430\u043D\u0442\u043E\u0432: \u0441\u043D\u0430\u0447\u0430\u043B\u0430 \u0438\u0437 \u044D\u0442\u043E\u0439 \u0436\u0435 \u043F\u0430\u0447\u043A\u0438, \u043F\u043E\u0442\u043E\u043C \u0438\u0437 \u0442\u043E\u0433\u043E \u0436\u0435 \u043F\u0440\u0435\u0434\u043C\u0435\u0442\u0430
+  var ownAnswers=qa.map(function(x){return x.a;});
+  var subjAnswers=getQS().filter(function(q){return q.s===s;}).map(function(q){return q.o[q.a];});
+  var pool=ownAnswers.concat(subjAnswers);
+  var btn=document.querySelectorAll('#mdBody .btn')[1];btn.disabled=true;
+  var saved=0,failed=0;
+  for(var i=0;i<qa.length;i++){
+    btn.textContent='\u0421\u043E\u0445\u0440\u0430\u043D\u0435\u043D\u0438\u0435 '+(i+1)+'/'+qa.length+'...';
+    var correct=qa[i].a;
+    // \u0421\u043E\u0431\u0438\u0440\u0430\u0435\u043C 3 \u043D\u0435\u0432\u0435\u0440\u043D\u044B\u0445 \u0438\u0437 \u043F\u0443\u043B\u0430 (\u043D\u0435 \u0440\u0430\u0432\u043D\u044B\u0445 \u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u043E\u043C\u0443)
+    var distractors=pool.filter(function(x){return x&&x!==correct;});
+    // \u0443\u0431\u0438\u0440\u0430\u0435\u043C \u0434\u0443\u0431\u043B\u0438\u043A\u0430\u0442\u044B
+    var uniq=[];distractors.forEach(function(x){if(uniq.indexOf(x)<0)uniq.push(x);});
+    // \u043F\u0435\u0440\u0435\u043C\u0435\u0448\u0438\u0432\u0430\u0435\u043C \u0438 \u0431\u0435\u0440\u0451\u043C 3
+    uniq.sort(function(){return Math.random()-.5;});
+    var wrong=uniq.slice(0,3);
+    while(wrong.length<3)wrong.push('\u2014'); // \u0435\u0441\u043B\u0438 \u043C\u0430\u043B\u043E \u0432\u0430\u0440\u0438\u0430\u043D\u0442\u043E\u0432
+    var allOpts=[correct].concat(wrong);
+    var shuffled=allOpts.slice().sort(function(){return Math.random()-.5;});
+    var ci=shuffled.indexOf(correct);
+    var id='cq_'+Date.now()+'_'+i;
+    try{
+      if(dbOK)await sbPost('custom_questions',{id:id,subject:s,topic:t,question:qa[i].q,options:shuffled,correct_index:ci});
+      CQS.push({id:id,s:s,t:t,q:qa[i].q,o:shuffled,a:ci});
+      saved++;
+    }catch(e){failed++;}
+  }
+  closeModal();admQF();
+  alert('\u0413\u043E\u0442\u043E\u0432\u043E! \u0414\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u043E: '+saved+(failed?', \u043E\u0448\u0438\u0431\u043E\u043A: '+failed:'')+'\n\u041D\u0435\u0432\u0435\u0440\u043D\u044B\u0435 \u0432\u0430\u0440\u0438\u0430\u043D\u0442\u044B \u0432\u0437\u044F\u0442\u044B \u0438\u0437 \u043E\u0442\u0432\u0435\u0442\u043E\u0432 \u0434\u0440\u0443\u0433\u0438\u0445 \u0432\u043E\u043F\u0440\u043E\u0441\u043E\u0432.');
+}
+
 function admAddQM(){
   document.getElementById('mdT').textContent='Добавить вопрос';
   var b=document.getElementById('mdBody');b.innerHTML='';
@@ -1689,10 +1868,34 @@ function admAddQM(){
   ['aqQ','aqA0','aqA1','aqA2','aqA3'].forEach(function(id,i){
     if(id==='aqQ')addInput(b,id,'text','Вопрос','Текст вопроса?');
     else if(id==='aqA0')addInput(b,id,'text','✅ Правильный ответ','Правильный ответ');
-    else addInput(b,id,'text','Вариант '+'БВГД'[i-2],'Неверный '+(i-1));
+    else addInput(b,id,'text','Вариант '+'БВГД'[i-2],'Неверный (или 🤖 сгенерировать)');
   });
-  addErr(b);addBtn(b,'bbl','Сохранить',admSaveNewQ);
+  addErr(b);
+  // ИИ-кнопка: заполнить неверные варианты автоматически
+  var aiBtn=document.createElement('button');aiBtn.className='btn bgh bfu';aiBtn.style.marginBottom='8px';
+  aiBtn.innerHTML='🤖 Сгенерировать неверные варианты (ИИ)';
+  aiBtn.addEventListener('click',admGenOpts);
+  b.appendChild(aiBtn);
+  addBtn(b,'bbl','Сохранить',admSaveNewQ);
   document.getElementById('modal').style.display='flex';
+}
+async function admGenOpts(){
+  var q=val('aqQ'),correct=val('aqA0');
+  if(!q||!correct){showErr('Сначала впишите вопрос и правильный ответ');return;}
+  var aiBtn=document.querySelectorAll('#mdBody .btn')[0];
+  aiBtn.disabled=true;aiBtn.innerHTML='🤖 Генерация...';
+  try{
+    var parts=['Вопрос: ',q,'\nПравильный ответ: ',correct,'\n\nПридумай ровно 3 правдоподобных НЕВЕРНЫХ варианта ответа для теста. Они должны быть похожи на правильный по теме, но быть ошибочными. Ответь ТОЛЬКО списком из 3 строк, без нумерации, без пояснений.'];
+    var res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:300,messages:[{role:'user',content:parts.join('')}]})});
+    var data=await res.json();
+    var text=data.content?data.content.map(function(c){return c.text||'';}).join(''):'';
+    var wrong=text.split('\n').map(function(l){return l.replace(/^[-*•\d.)\s]+/,'').trim();}).filter(function(l){return l;}).slice(0,3);
+    if(wrong.length<3){showErr('ИИ не сработал (нужен API-ключ). Заполните вручную.');aiBtn.disabled=false;aiBtn.innerHTML='🤖 Сгенерировать неверные варианты (ИИ)';return;}
+    document.getElementById('aqA1').value=wrong[0];
+    document.getElementById('aqA2').value=wrong[1];
+    document.getElementById('aqA3').value=wrong[2];
+    aiBtn.innerHTML='✅ Готово! Проверьте варианты';
+  }catch(e){showErr('ИИ недоступен (нужен API-ключ). Заполните вручную.');aiBtn.disabled=false;aiBtn.innerHTML='🤖 Сгенерировать неверные варианты (ИИ)';}
 }
 async function admSaveNewQ(){
   var s=val('aqS'),t=val('aqT'),q=val('aqQ');
