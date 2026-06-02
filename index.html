@@ -195,8 +195,8 @@ select option{background:var(--bg2)}
   <div class="ph"><div class="pt">Флеш-карточки</div><div class="ps">Вопрос → переворот → ответ</div></div>
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center">
     <select id="fcS" onchange="fcInit()" style="min-width:160px;width:auto">
-      <option value="all">Все предметы</option><option value="physics">🔬 Физика (257)</option>
-      <option value="chemistry">⚗️ Химия (270)</option><option value="biology">🧬 Биология (18)</option>
+      <option value="all">Все предметы</option><option value="physics">🔬 Физика</option>
+      <option value="chemistry">⚗️ Химия</option><option value="biology">🧬 Биология</option>
     </select>
     <select id="fcT" onchange="fcFilter()" style="min-width:180px;width:auto"><option value="all">Все темы</option></select>
     <span id="fcCnt" style="font-size:12px;color:var(--tx2);margin-left:auto"></span>
@@ -227,10 +227,13 @@ select option{background:var(--bg2)}
       </div>
     </div>
   </div>
-  <select id="trS" onchange="trInit()" style="min-width:160px;width:auto;margin-bottom:14px">
-    <option value="all">Все предметы</option><option value="physics">🔬 Физика</option>
-    <option value="chemistry">⚗️ Химия</option><option value="biology">🧬 Биология</option>
-  </select>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+    <select id="trS" onchange="trTopics()" style="min-width:150px;width:auto">
+      <option value="all">Все предметы</option><option value="physics">🔬 Физика</option>
+      <option value="chemistry">⚗️ Химия</option><option value="biology">🧬 Биология</option>
+    </select>
+    <select id="trT" onchange="trInit()" style="min-width:170px;width:auto"><option value="all">Все темы</option></select>
+  </div>
   <div class="card" style="margin-bottom:10px">
     <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px">
       <span class="bdg" id="trBdg">⚗️ Химия</span><span style="font-size:11px;color:var(--tx3)" id="trTbdg"></span>
@@ -252,7 +255,7 @@ select option{background:var(--bg2)}
     <div class="ph"><div class="pt">Экзамен</div><div class="ps">Таймер, без подсказок</div></div>
     <div class="card" style="max-width:460px">
       <div class="fg"><label class="fl">Предмет</label>
-        <select id="exS"><option value="all">Все (545)</option><option value="physics">🔬 Физика</option><option value="chemistry">⚗️ Химия</option><option value="biology">🧬 Биология</option></select></div>
+        <select id="exS"><option value="all">Все предметы</option><option value="physics">🔬 Физика</option><option value="chemistry">⚗️ Химия</option><option value="biology">🧬 Биология</option></select></div>
       <div class="fg"><label class="fl">Вопросов: <b id="exCL">25</b></label>
         <input type="range" min="10" max="80" step="5" value="25" id="exC" oninput="document.getElementById('exCL').textContent=this.value"></div>
       <div class="fg"><label class="fl">Время: <b id="exTL">30</b> мин</label>
@@ -959,7 +962,7 @@ async function init(){
     ]);
     if(r[0]&&r[0].length)newsCache=r[0];
     if(r[1]&&r[1].length)schedCache=r[1];
-    CQS=(r[2]||[]).map(function(q){return{id:q.id,s:q.subject,t:q.topic,q:q.question,o:q.options,a:q.correct_index};});
+    CQS=(r[2]||[]).map(function(q){return{id:q.id,s:q.subject,t:q.topic,q:q.question,o:q.options,a:q.correct_index,batch:q.batch};});
     // Register any custom subjects not in SM
     var palette=['#e879a6','#38bdf8','#fb923c','#a78bfa','#34d399','#f472b6','#facc15'];
     CQS.forEach(function(q){if(!SM[q.s]){var col=palette[Object.keys(SM).length%palette.length];SM[q.s]={label:q.s,icon:'📘',color:col,dim:'#15171f'};}});
@@ -1085,7 +1088,7 @@ function go(pg,btn){
   document.getElementById('mscroll').scrollTop=0;
   if(btn)btn.classList.add('on');
   else{var b=document.querySelector('[data-pg="'+pg+'"]');if(b)b.classList.add('on');}
-  var fns={home:renderHome,flashcards:fcInit,trainer:trInit,progress:renderProg,leaderboard:renderLB,news:renderNews,schedule:renderSched,admin:renderAdm};
+  var fns={home:renderHome,flashcards:fcInit,trainer:trTopics,progress:renderProg,leaderboard:renderLB,news:renderNews,schedule:renderSched,admin:renderAdm};
   if(fns[pg])fns[pg]();
   if(S.user&&PAGE_LABELS[pg])pushActivity(PAGE_LABELS[pg]);
 }
@@ -1356,6 +1359,15 @@ function fcPrev(){if(FCI>0){FCI--;FCf=false;fcRender();}}
 function fcNext(){if(FCI<FCP.length-1){FCI++;FCf=false;fcRender();}}
 
 var TRC=null,TRrev=false,TRss={c:0,w:0};
+function trTopics(){
+  var s=document.getElementById('trS').value;
+  var topEl=document.getElementById('trT');var curT=topEl.value;
+  var topics=[];getQS().forEach(function(q){if((s==='all'||q.s===s)&&topics.indexOf(q.t)<0)topics.push(q.t);});
+  topics.sort();
+  topEl.innerHTML='<option value="all">Все темы</option>';
+  topics.forEach(function(t){var o=document.createElement('option');o.value=t;o.textContent=t;if(t===curT)o.selected=true;topEl.appendChild(o);});
+  trInit();
+}
 function trInit(){TRss={c:0,w:0};trNext();}
 function shuffleOpts(q){
   // Returns {opts:[...], correctIdx:N} with options in random order
@@ -1368,8 +1380,10 @@ function shuffleOpts(q){
 var TRshuf=null;
 function trNext(){
   var s=document.getElementById('trS')?document.getElementById('trS').value:'all';
+  var tp=document.getElementById('trT')?document.getElementById('trT').value:'all';
   var QS=getQS();
-  var pool=QS.filter(function(q){return s==='all'||q.s===s;});
+  var pool=QS.filter(function(q){return (s==='all'||q.s===s)&&(tp==='all'||q.t===tp);});
+  if(!pool.length){document.getElementById('trQ').textContent='Нет вопросов в этой теме';document.getElementById('trOpts').innerHTML='';return;}
   var weak=pool.filter(function(q){var p=S.prog[q.id];return !p||p.a<3||p.c/p.a<0.7;});
   var arr=weak.length?weak:pool;
   TRC=arr[Math.floor(Math.random()*arr.length)];TRrev=false;
@@ -1600,7 +1614,7 @@ async function admStudents(){
   if(dbOK){try{var acts=await sbGet('student_activity','select=email,current_action,last_seen');acts.forEach(function(a){ACT_CACHE[a.email]=a;});}catch(e){}}
   if(!rows.length){el.innerHTML='<p style="color:var(--tx3);font-size:13px">Нет студентов</p>';return;}
   var now=Date.now();
-  el.innerHTML='<p style="font-size:11px;color:var(--tx3);margin-bottom:8px">Номаша зер куни — статистикеш мубурот. 🟢 = сейчас в сети.</p><table class="tbl"><thead><tr><th>Имя</th><th>Активность</th><th>Роль</th><th>Статус</th><th>Действие</th></tr></thead><tbody>'+rows.map(function(u){
+  el.innerHTML='<p style="font-size:11px;color:var(--tx3);margin-bottom:8px">Нажмите на имя — статистика студента. 🟢 = сейчас в сети.</p><table class="tbl"><thead><tr><th>Имя</th><th>Активность</th><th>Роль</th><th>Статус</th><th>Действие</th></tr></thead><tbody>'+rows.map(function(u){
     var roleBdg=u.role==='admin'?'<span class="bdg bam2" style="font-size:9px">🛡️</span>':'<span style="color:var(--tx3);font-size:11px">студ.</span>';
     // Активность
     var act=ACT_CACHE[u.email];
@@ -1733,16 +1747,63 @@ async function admDenyReq(id){
 }
 async function admQuestions(){
   var QS=getQS();var cqs=[];if(dbOK){try{cqs=await sbGet('custom_questions','order=created_at.asc');}catch(e){}}
-  document.getElementById('admQuestions').innerHTML='<div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap"><button class="btn bbl bsm" onclick="admAddQM()"><i class="ti ti-plus"></i>Добавить</button><button class="btn bgr bsm" onclick="admBulkM()"><i class="ti ti-upload"></i>Массово</button><span style="font-size:12px;color:var(--tx2);align-self:center">Всего: '+QS.length+' | Своих: '+cqs.length+'</span></div><div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap"><select id="qFs" onchange="admQF()" style="width:auto;min-width:140px"><option value="all">Все</option><option value="physics">Физика</option><option value="chemistry">Химия</option><option value="biology">Биология</option><option value="custom">Свои</option></select><input id="qSr" placeholder="Поиск..." onkeyup="admQF()" style="flex:1;min-width:160px"></div><div id="qCount" style="font-size:11px;color:var(--tx3);margin-bottom:6px"></div><div id="qTbl" style="max-height:55vh;overflow-y:auto;-webkit-overflow-scrolling:touch"></div>';
+  // Список партий
+  var batches=[];CQS.forEach(function(q){if(q.batch&&batches.indexOf(q.batch)<0)batches.push(q.batch);});
+  var batchOpts='<option value="all">— партия (массовые) —</option>';
+  batches.forEach(function(bn){batchOpts+='<option value="'+bn.replace(/"/g,'')+'">'+bn+'</option>';});
+  document.getElementById('admQuestions').innerHTML=
+    '<div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap"><button class="btn bbl bsm" onclick="admAddQM()"><i class="ti ti-plus"></i>Добавить</button><button class="btn bgr bsm" onclick="admBulkM()"><i class="ti ti-upload"></i>Массово</button><span style="font-size:12px;color:var(--tx2);align-self:center">Всего: '+QS.length+' | Своих: '+cqs.length+'</span></div>'
+    +'<div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap"><select id="qFs" onchange="admQF()" style="width:auto;min-width:130px"><option value="all">Все предметы</option><option value="physics">Физика</option><option value="chemistry">Химия</option><option value="biology">Биология</option><option value="custom">Только свои</option></select><input id="qSr" placeholder="Поиск..." onkeyup="admQF()" style="flex:1;min-width:140px"></div>'
+    +(batches.length?'<div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;align-items:center"><select id="qBatch" onchange="admQF()" style="width:auto;min-width:200px">'+batchOpts+'</select><button class="btn bre bsm" onclick="admDelBatch()"><i class="ti ti-trash"></i>Удалить партию</button></div>':'')
+    +'<div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;align-items:center"><button class="btn bgh bsm" onclick="admToggleAll(true)">☑ Выбрать все</button><button class="btn bgh bsm" onclick="admToggleAll(false)">☐ Снять</button><button class="btn bre bsm" onclick="admDelChecked()"><i class="ti ti-trash"></i>Удалить выбранные</button><button class="btn bre bsm" onclick="admDelShown()"><i class="ti ti-trash"></i>Удалить все показанные</button></div>'
+    +'<div id="qCount" style="font-size:11px;color:var(--tx3);margin-bottom:6px"></div><div id="qTbl" style="max-height:50vh;overflow-y:auto;-webkit-overflow-scrolling:touch"></div>';
   admQF();
 }
+var QF_SHOWN=[];
 function admQF(){
   var QS=getQS();var sf=val('qFs')||'all';var search=(val('qSr')||'').toLowerCase();
+  var batchSel=val('qBatch')||'all';
   var pool=sf==='custom'?CQS:sf==='all'?QS:QS.filter(function(q){return q.s===sf;});
+  if(batchSel!=='all')pool=pool.filter(function(q){return q.batch===batchSel;});
   if(search)pool=pool.filter(function(q){return q.q.toLowerCase().indexOf(search)>=0||q.t.toLowerCase().indexOf(search)>=0;});
+  QF_SHOWN=pool.slice();
   var wrap=document.getElementById('qTbl');if(!wrap)return;
   document.getElementById('qCount').textContent='Показано: '+pool.length;
-  wrap.innerHTML='<table class="tbl"><thead><tr><th>#</th><th>Предм.</th><th>Тема</th><th>Вопрос</th><th>✓</th><th></th></tr></thead><tbody>'+pool.map(function(q,i){var isCust=CQS.some(function(cq){return cq.id===q.id;});return '<tr><td style="color:var(--tx3);font-family:var(--fm);font-size:11px">'+(i+1)+'</td><td><span class="bdg bbl2" style="font-size:10px">'+(SM[q.s]?SM[q.s].icon:'?')+'</span></td><td style="font-size:11px;color:var(--tx3);max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+q.t+'</td><td style="font-size:12px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+q.q+'</td><td style="font-size:12px;color:var(--gr);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+q.o[q.a]+'</td><td style="white-space:nowrap"><button class="btn bgh bsm" onclick="admEditQM(\''+q.id+'\')" style="padding:4px 7px"><i class="ti ti-edit" style="font-size:12px"></i></button>'+(isCust?'<button class="btn bre bsm" onclick="admDelQ(\''+q.id+'\')" style="padding:4px 7px;margin-left:3px"><i class="ti ti-trash" style="font-size:12px"></i></button>':'')+'</td></tr>';}).join('')+'</tbody></table>';
+  wrap.innerHTML='<table class="tbl"><thead><tr><th></th><th>#</th><th>Тема</th><th>Вопрос</th><th>✓</th><th></th></tr></thead><tbody>'+pool.map(function(q,i){
+    var isCust=CQS.some(function(cq){return cq.id===q.id;});
+    var chk=isCust?'<input type="checkbox" class="qchk" value="'+q.id+'" style="width:auto">':'';
+    return '<tr><td>'+chk+'</td><td style="color:var(--tx3);font-family:var(--fm);font-size:11px">'+(i+1)+'</td><td style="font-size:11px;color:var(--tx3);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(SM[q.s]?SM[q.s].icon:'')+' '+q.t+'</td><td style="font-size:12px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+q.q+'</td><td style="font-size:12px;color:var(--gr);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+q.o[q.a]+'</td><td style="white-space:nowrap"><button class="btn bgh bsm" onclick="admEditQM(\''+q.id+'\')" style="padding:4px 7px"><i class="ti ti-edit" style="font-size:12px"></i></button>'+(isCust?'<button class="btn bre bsm" onclick="admDelQ(\''+q.id+'\')" style="padding:4px 7px;margin-left:3px"><i class="ti ti-trash" style="font-size:12px"></i></button>':'')+'</td></tr>';
+  }).join('')+'</tbody></table>';
+}
+function admToggleAll(on){document.querySelectorAll('.qchk').forEach(function(c){c.checked=on;});}
+async function admDelChecked(){
+  var ids=[];document.querySelectorAll('.qchk:checked').forEach(function(c){ids.push(c.value);});
+  if(!ids.length){alert('Отметьте галочками вопросы для удаления');return;}
+  if(!confirm('Удалить выбранные ('+ids.length+')?'))return;
+  await delQuestionIds(ids);
+}
+async function admDelShown(){
+  var ids=QF_SHOWN.filter(function(q){return CQS.some(function(cq){return cq.id===q.id;});}).map(function(q){return q.id;});
+  if(!ids.length){alert('Среди показанных нет своих вопросов (базовые удалять нельзя)');return;}
+  if(!confirm('Удалить ВСЕ показанные свои вопросы ('+ids.length+')?'))return;
+  await delQuestionIds(ids);
+}
+async function admDelBatch(){
+  var bn=val('qBatch');
+  if(!bn||bn==='all'){alert('Выберите партию из списка');return;}
+  var ids=CQS.filter(function(q){return q.batch===bn;}).map(function(q){return q.id;});
+  if(!ids.length){alert('В этой партии нет вопросов');return;}
+  if(!confirm('Удалить всю партию «'+bn+'» ('+ids.length+' вопросов)?'))return;
+  await delQuestionIds(ids);
+}
+async function delQuestionIds(ids){
+  var ok=0,fail=0;
+  for(var i=0;i<ids.length;i++){
+    try{if(dbOK)await sbDel('custom_questions','id=eq.'+ids[i]);ok++;}catch(e){fail++;}
+  }
+  CQS=CQS.filter(function(q){return ids.indexOf(q.id)<0;});
+  admQuestions();
+  alert('Удалено: '+ok+(fail?', ошибок: '+fail:''));
 }
 // ===== МАССОВЫЙ ИМПОРТ ВОПРОСОВ =====
 function admBulkM(){
@@ -1781,34 +1842,41 @@ function admBulkM(){
 }
 // \u0420\u0430\u0437\u0431\u043E\u0440: \u043A\u0430\u0436\u0434\u0430\u044F \u0441\u0442\u0440\u043E\u043A\u0430 "\u043D\u043E\u043C\u0435\u0440) \u0432\u043E\u043F\u0440\u043E\u0441: \u043E\u0442\u0432\u0435\u0442"
 function parseBulkQA(txt){
-  var result=[];
-  // \u0420\u0430\u0437\u0431\u0438\u0432\u0430\u0435\u043C \u043F\u043E \u043D\u043E\u043C\u0435\u0440\u0430\u043C \u0432\u0438\u0434\u0430 "1)" "2)" \u0432 \u043D\u0430\u0447\u0430\u043B\u0435 \u0441\u0442\u0440\u043E\u043A\u0438
-  var parts=txt.split(/(?:^|\n)\s*\d+[\)\.]\s*/).map(function(x){return x.trim();}).filter(function(x){return x;});
-  parts.forEach(function(seg){
-    // \u0420\u0430\u0437\u0434\u0435\u043B\u044F\u0435\u043C \u0432\u043E\u043F\u0440\u043E\u0441 \u0438 \u043E\u0442\u0432\u0435\u0442: \u0441\u043D\u0430\u0447\u0430\u043B\u0430 \u043F\u043E "?", \u043F\u043E\u0442\u043E\u043C \u043F\u043E ":"
+  var result=[],bad=[];
+  // Разбиваем по номерам "1)" "2)"
+  // Сохраняем номера чтобы показать какой не распознался
+  var matches=txt.split(/(?=(?:^|\n)\s*\d+[\)\.])/);
+  matches.forEach(function(seg){
     seg=seg.replace(/\n+/g,' ').trim();
+    if(!seg)return;
+    var numMatch=seg.match(/^(\d+)[\)\.]/);
+    var num=numMatch?numMatch[1]:'?';
+    var body=seg.replace(/^\d+[\)\.]\s*/,'').trim();
+    if(!body)return;
     var q='',a='';
-    var qm=seg.indexOf('?');
-    var cm=seg.indexOf(':');
-    if(qm>=0&&(cm<0||qm<cm)){
-      q=seg.slice(0,qm+1).trim();
-      a=seg.slice(qm+1).trim();
-    }else if(cm>=0){
-      q=seg.slice(0,cm).trim();
-      a=seg.slice(cm+1).trim();
-    }else{
-      return; // \u043D\u0435 \u0440\u0430\u0441\u043F\u043E\u0437\u043D\u0430\u043D\u043E
-    }
-    if(q&&a)result.push({q:q,a:a});
+    var qm=body.indexOf('?');
+    var cm=body.indexOf(':');
+    if(qm>=0&&(cm<0||qm<cm)){q=body.slice(0,qm+1).trim();a=body.slice(qm+1).trim();}
+    else if(cm>=0){q=body.slice(0,cm).trim();a=body.slice(cm+1).trim();}
+    if(q&&a)result.push({q:q,a:a,num:num});
+    else bad.push({num:num,text:body.slice(0,60)});
   });
+  result._bad=bad;
   return result;
 }
 function admBulkPreview(){
   var qa=parseBulkQA(document.getElementById('bulkTxt').value);
   var prev=document.getElementById('bulkPrev');
-  if(!qa.length){prev.innerHTML='<span style="color:var(--re)">\u041D\u0435 \u0440\u0430\u0441\u043F\u043E\u0437\u043D\u0430\u043D\u043E. \u041F\u0440\u043E\u0432\u0435\u0440\u044C\u0442\u0435 \u0444\u043E\u0440\u043C\u0430\u0442 (\u043D\u043E\u043C\u0435\u0440) \u0432\u043E\u043F\u0440\u043E\u0441: \u043E\u0442\u0432\u0435\u0442).</span>';return;}
-  var sample=qa.slice(0,3).map(function(x){return '\u2022 '+x.q+' \u2192 <b>'+x.a+'</b>';}).join('<br>');
-  prev.innerHTML='<span style="color:var(--gr)">\u2713 \u0420\u0430\u0441\u043F\u043E\u0437\u043D\u0430\u043D\u043E: '+qa.length+'</span><div style="margin-top:6px;font-size:11px;color:var(--tx3)">'+sample+(qa.length>3?'<br>...':'')+'</div>';
+  var bad=qa._bad||[];
+  if(!qa.length){
+    var badMsg=bad.length?('<div style="margin-top:6px;font-size:11px;color:var(--re)">Не распознано: '+bad.map(function(x){return '№'+x.num;}).join(', ')+'</div>'):'';
+    prev.innerHTML='<span style="color:var(--re)">Не распознано ни одного. Нужен формат: номер) вопрос: ответ</span>'+badMsg;return;
+  }
+  var html='<span style="color:var(--gr)">✓ Распознано: '+qa.length+'</span>';
+  if(bad.length){
+    html+='<div style="margin-top:8px;padding:8px;background:var(--red);border-radius:6px;font-size:11px;color:var(--re)"><b>⚠ НЕ распознано ('+bad.length+'):</b><br>'+bad.map(function(x){return '№'+x.num+': '+x.text+'...';}).join('<br>')+'<br><br>Проверьте эти строки — нужен ? или : между вопросом и ответом</div>';
+  }
+  prev.innerHTML=html;
 }
 async function admBulkSave(){
   var qa=parseBulkQA(document.getElementById('bulkTxt').value);
@@ -1821,6 +1889,7 @@ async function admBulkSave(){
     if(!SM[s]){var pal=['#e879a6','#38bdf8','#fb923c','#a78bfa','#34d399','#f472b6','#facc15'];SM[s]={label:nn,icon:'\U0001F4D8',color:pal[Object.keys(SM).length%pal.length],dim:'#15171f'};}
   }
   if(!t){showErr('\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0442\u0435\u043C\u0443');return;}
+  var BATCH_ID=t+' · '+new Date().toLocaleDateString('ru-RU')+' '+new Date().toLocaleTimeString('ru-RU').slice(0,5);
   // \u041F\u0443\u043B \u043E\u0442\u0432\u0435\u0442\u043E\u0432 \u0434\u043B\u044F \u043D\u0435\u0432\u0435\u0440\u043D\u044B\u0445 \u0432\u0430\u0440\u0438\u0430\u043D\u0442\u043E\u0432: \u0441\u043D\u0430\u0447\u0430\u043B\u0430 \u0438\u0437 \u044D\u0442\u043E\u0439 \u0436\u0435 \u043F\u0430\u0447\u043A\u0438, \u043F\u043E\u0442\u043E\u043C \u0438\u0437 \u0442\u043E\u0433\u043E \u0436\u0435 \u043F\u0440\u0435\u0434\u043C\u0435\u0442\u0430
   var ownAnswers=qa.map(function(x){return x.a;});
   var subjAnswers=getQS().filter(function(q){return q.s===s;}).map(function(q){return q.o[q.a];});
@@ -1843,13 +1912,17 @@ async function admBulkSave(){
     var ci=shuffled.indexOf(correct);
     var id='cq_'+Date.now()+'_'+i;
     try{
-      if(dbOK)await sbPost('custom_questions',{id:id,subject:s,topic:t,question:qa[i].q,options:shuffled,correct_index:ci});
-      CQS.push({id:id,s:s,t:t,q:qa[i].q,o:shuffled,a:ci});
+      if(dbOK)await sbPost('custom_questions',{id:id,subject:s,topic:t,question:qa[i].q,options:shuffled,correct_index:ci,batch:BATCH_ID});
+      CQS.push({id:id,s:s,t:t,q:qa[i].q,o:shuffled,a:ci,batch:BATCH_ID});
       saved++;
     }catch(e){failed++;}
   }
   closeModal();admQF();
-  alert('\u0413\u043E\u0442\u043E\u0432\u043E! \u0414\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u043E: '+saved+(failed?', \u043E\u0448\u0438\u0431\u043E\u043A: '+failed:'')+'\n\u041D\u0435\u0432\u0435\u0440\u043D\u044B\u0435 \u0432\u0430\u0440\u0438\u0430\u043D\u0442\u044B \u0432\u0437\u044F\u0442\u044B \u0438\u0437 \u043E\u0442\u0432\u0435\u0442\u043E\u0432 \u0434\u0440\u0443\u0433\u0438\u0445 \u0432\u043E\u043F\u0440\u043E\u0441\u043E\u0432.');
+  var bad=qa._bad||[];
+  var msg='Готово! Добавлено: '+saved;
+  if(failed)msg+=', ошибок сохранения: '+failed;
+  if(bad.length)msg+='\n\n⚠ НЕ распознано ('+bad.length+'): №'+bad.map(function(x){return x.num;}).join(', №')+'\nЭти вопросы НЕ добавлены — проверьте формат (нужен ? или :).';
+  alert(msg);
 }
 
 function admAddQM(){
