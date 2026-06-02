@@ -327,12 +327,16 @@ select option{background:var(--bg2)}
       <button class="tab on" onclick="admTab('stats',this)">Статистика</button>
       <button class="tab" onclick="admTab('pending',this)">Заявки <span id="pendCnt" class="bdg bre2" style="font-size:10px;margin-left:3px"></span></button>
       <button class="tab" onclick="admTab('students',this)">Студенты</button>
+      <button class="tab" id="tabAdmins" onclick="admTab('admins',this)" style="display:none">Админы</button>
+      <button class="tab" id="tabReq" onclick="admTab('requests',this)" style="display:none">Запросы <span id="reqCnt" class="bdg bre2" style="font-size:10px;margin-left:3px"></span></button>
       <button class="tab" onclick="admTab('questions',this)">Вопросы</button>
       <button class="tab" onclick="admTab('newsEdit',this)">Новости</button>
       <button class="tab" onclick="admTab('schedEdit',this)">Расписание</button>
       <button class="tab" onclick="admTab('ai',this)">ИИ</button>
     </div>
     <div id="admStats"></div>
+    <div id="admAdmins" style="display:none"></div>
+    <div id="admRequests" style="display:none"></div>
     <div id="admPending" style="display:none"></div>
     <div id="admStudents" style="display:none"></div>
     <div id="admQuestions" style="display:none"></div>
@@ -937,7 +941,8 @@ var SM={
   biology:{label:'Биология',icon:'🧬',color:'#f5a623',dim:'#1e1200'}
 };
 var KEY='mq9';
-var S={prog:{},hist:[],user:null,isAdm:false,dark:true};
+var S={prog:{},hist:[],user:null,isAdm:false,isSuper:false,adminEmail:null,dark:true};
+var DEVICE=(function(){try{var d=localStorage.getItem('mq_dev');if(!d){d=(navigator.userAgent.indexOf('Mobile')>=0?'📱 Телефон':'💻 Компьютер')+' #'+Math.random().toString(36).slice(2,6);localStorage.setItem('mq_dev',d);}return d;}catch(e){return 'Устройство';}})();
 try{var _d=localStorage.getItem(KEY);if(_d)S=Object.assign({},S,JSON.parse(_d));}catch(e){}
 function sv(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 var dbOK=false,newsCache=[],schedCache=[];
@@ -1129,14 +1134,24 @@ function openModal(m){
     a2.addEventListener('click',function(e){e.preventDefault();openModal('login');});
     p2.appendChild(a2);b.appendChild(p2);
   }else if(m==='admin'){
-    t.textContent='Администратор';
+    t.textContent='Вход в админку';
     b.innerHTML='';
     var al=document.createElement('div');al.className='alert ali';al.style.marginBottom='14px';
-    al.innerHTML='<i class="ti ti-alert-triangle"></i> Только для администраторов';
+    if(S.user){
+      al.innerHTML='<i class="ti ti-info-circle"></i> Вы вошли как '+S.user.name+'. Если вам выдали админку — нажмите «Войти как админ». Главный админ — введите пароль.';
+    }else{
+      al.innerHTML='<i class="ti ti-alert-triangle"></i> Главный админ: введите пароль. Обычный админ: сначала войдите как студент.';
+    }
     b.appendChild(al);
-    addInput(b,'mAp','password','Пароль администратора','');
+    // Кнопка для обычного админа (если вошёл студентом)
+    if(S.user){
+      var rb=document.createElement('button');rb.className='btn bgr bfu';rb.style.marginBottom='10px';rb.textContent='🛡️ Войти как админ (мой аккаунт)';
+      rb.addEventListener('click',function(){document.getElementById('mAp').value='';doAdm();});
+      b.appendChild(rb);
+    }
+    addInput(b,'mAp','password','Пароль главного админа','');
     addErr(b);
-    addBtn(b,'bbl','Войти',doAdm);
+    addBtn(b,'bbl','Войти по паролю',doAdm);
   }
 }
 
@@ -1203,14 +1218,36 @@ async function doAuth(){
 }
 
 var APWD='medquest_admin_2026';
-function doAdm(){
+async function doAdm(){
   var p=val('mAp');
-  if(p!==APWD){showErr('Неверный пароль');return;}
-  S.isAdm=true;sv();closeModal();renderAuthHdr();
-  go('admin',document.querySelector('[data-pg=admin]'));
+  // Главный админ по паролю
+  if(p===APWD){
+    S.isAdm=true;S.isSuper=true;S.adminEmail='super';sv();closeModal();renderAuthHdr();
+    go('admin',document.querySelector('[data-pg=admin]'));
+    return;
+  }
+  // Обычный админ: проверяем что текущий вошедший студент имеет role=admin
+  if(S.user&&dbOK){
+    try{
+      var rows=await sbGet('users','email=eq.'+encodeURIComponent(S.user.email)+'&select=role,name');
+      if(rows.length&&rows[0].role==='admin'){
+        S.isAdm=true;S.isSuper=false;S.adminEmail=S.user.email;sv();closeModal();renderAuthHdr();
+        registerAdminSession(rows[0].name||S.user.name,S.user.email);
+        go('admin',document.querySelector('[data-pg=admin]'));
+        return;
+      }
+    }catch(e){}
+  }
+  showErr('Неверный пароль. Обычные админы: сначала войдите как студент, потом откройте админку.');
 }
+async function registerAdminSession(name,email){
+  if(!dbOK)return;
+  try{await sbUps('admin_sessions',{email:email,name:name,device:DEVICE,last_seen:new Date().toISOString()},'email');}catch(e){}
+}
+// Обновляем «онлайн» каждые 30 сек
+setInterval(function(){if(S.isAdm&&!S.isSuper&&S.adminEmail)registerAdminSession(S.user?S.user.name:'',S.adminEmail);},30000);
 function doLogout(){S.user=null;S.hist=[];S.prog={};sv();renderAuthHdr();renderHome();}
-function admOut(){S.isAdm=false;sv();renderAuthHdr();renderAdm();}
+async function admOut(){if(!S.isSuper&&S.adminEmail&&dbOK){try{await sbDel('admin_sessions','email=eq.'+encodeURIComponent(S.adminEmail));}catch(e){}}S.isAdm=false;S.isSuper=false;S.adminEmail=null;sv();renderAuthHdr();renderAdm();}
 
 function val(id){var e=document.getElementById(id);return e?e.value.trim():'';}
 
@@ -1499,15 +1536,27 @@ function renderSched(){
 function renderAdm(){
   document.getElementById('admLock').style.display=S.isAdm?'none':'';
   document.getElementById('admPanel').style.display=S.isAdm?'':'none';
-  if(S.isAdm){document.getElementById('admDbSt').textContent=dbOK?'✅ Supabase подключён':'⚠ Локальный режим';admTab('stats',document.querySelector('.tab'));}
+  if(S.isAdm){
+    var role=S.isSuper?'👑 Главный администратор':'🛡️ Администратор';
+    document.getElementById('admDbSt').textContent=role+' · '+(dbOK?'Supabase ✅':'Локально ⚠');
+    // Вкладки Админы/Запросы только для главного
+    document.getElementById('tabAdmins').style.display=S.isSuper?'':'none';
+    document.getElementById('tabReq').style.display=S.isSuper?'':'none';
+    if(S.isSuper)updReqBadge();
+    admTab('stats',document.querySelector('.tab'));
+  }
+}
+async function updReqBadge(){
+  if(!S.isSuper||!dbOK)return;
+  try{var r=await sbGet('pending_actions','select=id');var c=document.getElementById('reqCnt');if(c)c.textContent=r.length>0?r.length:'';}catch(e){}
 }
 function admTab(t,btn){
   document.querySelectorAll('.tab').forEach(function(b){b.classList.remove('on');});
   if(btn)btn.classList.add('on');
-  ['admStats','admPending','admStudents','admQuestions','admNewsEdit','admSchedEdit','admAi'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});
-  var tabMap={stats:'admStats',pending:'admPending',students:'admStudents',questions:'admQuestions',newsEdit:'admNewsEdit',schedEdit:'admSchedEdit',ai:'admAi'};
+  ['admStats','admAdmins','admRequests','admPending','admStudents','admQuestions','admNewsEdit','admSchedEdit','admAi'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});
+  var tabMap={stats:'admStats',admins:'admAdmins',requests:'admRequests',pending:'admPending',students:'admStudents',questions:'admQuestions',newsEdit:'admNewsEdit',schedEdit:'admSchedEdit',ai:'admAi'};
   if(tabMap[t]){var el=document.getElementById(tabMap[t]);if(el)el.style.display='';}
-  if(t==='stats')admStats();if(t==='pending')admPending();if(t==='students')admStudents();if(t==='questions')admQuestions();if(t==='newsEdit')admNewsEdit();if(t==='schedEdit')admSchedEdit();
+  if(t==='stats')admStats();if(t==='admins')admAdmins();if(t==='requests')admRequests();if(t==='pending')admPending();if(t==='students')admStudents();if(t==='questions')admQuestions();if(t==='newsEdit')admNewsEdit();if(t==='schedEdit')admSchedEdit();
 }
 async function admStats(){
   var QS=getQS();var us={active:0,pending:0,blocked:0};
@@ -1518,20 +1567,116 @@ async function admPending(){
   var el=document.getElementById('admPending');el.innerHTML='<div style="color:var(--tx3);padding:10px">Загрузка...</div>';
   var rows=[];if(dbOK){try{rows=await sbGet('users','status=eq.pending&order=created_at.asc');}catch(e){}}
   if(!rows.length){el.innerHTML='<div class="alert alok"><i class="ti ti-check"></i> Нет ожидающих заявок</div>';return;}
-  el.innerHTML='<p style="font-size:13px;color:var(--tx2);margin-bottom:12px">Заявки: '+rows.length+'</p>'+rows.map(function(u){return '<div class="prow"><div style="flex:1"><div style="font-weight:600">'+u.name+'</div><div style="font-size:11px;color:var(--tx2)">'+u.email+' · '+u.group_name+' · '+u.joined+'</div></div><button class="btn bgr bsm" onclick="admApprove(\''+u.email+'\')"><i class="ti ti-check"></i>Принять</button><button class="btn bre bsm" style="margin-left:6px" onclick="admReject(\''+u.email+'\')"><i class="ti ti-x"></i>Отклонить</button></div>';}).join('');
+  el.innerHTML='<p style="font-size:13px;color:var(--tx2);margin-bottom:12px">Заявки: '+rows.length+'</p>'+rows.map(function(u){return '<div class="prow"><div style="flex:1"><div style="font-weight:600">'+u.name+'</div><div style="font-size:11px;color:var(--tx2)">'+u.email+' · '+u.group_name+' · '+u.joined+'</div></div><button class="btn bgr bsm" onclick="admApprove(\''+u.email+'\')"><i class="ti ti-check"></i>Принять</button><button class="btn bre bsm" style="margin-left:6px" onclick="admReject(\''+u.email+'\',\''+u.name+'\')"><i class="ti ti-x"></i>Отклонить</button></div>';}).join('');
   updPendBadge();
 }
 async function admApprove(email){try{await sbPatch('users','email=eq.'+encodeURIComponent(email),{status:'active'});admPending();}catch(e){alert('Ошибка: '+e.message);}}
-async function admReject(email){if(confirm('Удалить заявку '+email+'?')){try{await sbDel('users','email=eq.'+encodeURIComponent(email));admPending();}catch(e){alert(e.message);}}}
+async function admReject(email,name){
+  if(S.isSuper){
+    if(confirm('Удалить заявку '+email+'?')){try{await sbDel('users','email=eq.'+encodeURIComponent(email));admPending();}catch(e){alert(e.message);}}
+  }else{
+    if(confirm('Отправить запрос на отклонение заявки '+email+' главному админу?')){
+      try{await sbPost('pending_actions',{action:'reject',target_email:email,target_name:name||email,requested_by:S.adminEmail});alert('Запрос отправлен главному админу на подтверждение.');}catch(e){alert(e.message);}
+    }
+  }
+}
 async function admStudents(){
   var el=document.getElementById('admStudents');el.innerHTML='<div style="color:var(--tx3);padding:10px">Загрузка...</div>';
   var rows=[];if(dbOK){try{rows=await sbGet('users','status=neq.pending&order=created_at.asc');}catch(e){}}
   if(!rows.length){el.innerHTML='<p style="color:var(--tx3);font-size:13px">Нет студентов</p>';return;}
-  el.innerHTML='<table class="tbl"><thead><tr><th>Имя</th><th>Группа</th><th>Email</th><th>Статус</th><th>Действие</th></tr></thead><tbody>'+rows.map(function(u){return '<tr><td style="font-weight:500">'+u.name+'</td><td>'+(u.group_name||'—')+'</td><td style="color:var(--tx2);font-size:11px">'+u.email+'</td><td><span class="bdg '+(u.status==='active'?'bgr2':'bre2')+'">'+(u.status==='active'?'Активен':'Заблокирован')+'</span></td><td style="display:flex;gap:4px">'+(u.status==='active'?'<button class="btn bre bsm" onclick="admBlock(\''+u.email+'\')"><i class="ti ti-ban"></i>Блок</button>':'<button class="btn bgr bsm" onclick="admUnblock(\''+u.email+'\')"><i class="ti ti-lock-open"></i>Разблок</button>')+'<button class="btn bgh bsm" style="margin-left:4px" onclick="admDelUser(\''+u.email+'\')"><i class="ti ti-trash"></i></button></td></tr>';}).join('')+'</tbody></table>';
+  el.innerHTML='<table class="tbl"><thead><tr><th>Имя</th><th>Email</th><th>Роль</th><th>Статус</th><th>Действие</th></tr></thead><tbody>'+rows.map(function(u){
+    var roleBdg=u.role==='admin'?'<span class="bdg bam2" style="font-size:9px">🛡️ Админ</span>':'<span style="color:var(--tx3);font-size:11px">студент</span>';
+    var actions='';
+    actions+=(u.status==='active'?'<button class="btn bre bsm" onclick="admBlock(\''+u.email+'\',\''+u.name+'\')"><i class="ti ti-ban"></i></button>':'<button class="btn bgr bsm" onclick="admUnblock(\''+u.email+'\')"><i class="ti ti-lock-open"></i></button>');
+    actions+='<button class="btn bgh bsm" style="margin-left:3px" onclick="admDelUser(\''+u.email+'\',\''+u.name+'\')"><i class="ti ti-trash"></i></button>';
+    // Кнопка Сделать/Убрать админом — только для главного
+    if(S.isSuper){
+      if(u.role==='admin')actions+='<button class="btn bgh bsm" style="margin-left:3px" title="Убрать админа" onclick="admRevokeAdmin(\''+u.email+'\')">⬇️</button>';
+      else actions+='<button class="btn bam bsm" style="margin-left:3px" title="Сделать админом" onclick="admMakeAdmin(\''+u.email+'\')">⭐</button>';
+    }
+    return '<tr><td style="font-weight:500">'+u.name+'</td><td style="color:var(--tx2);font-size:11px">'+u.email+'</td><td>'+roleBdg+'</td><td><span class="bdg '+(u.status==='active'?'bgr2':'bre2')+'">'+(u.status==='active'?'Активен':'Заблок.')+'</span></td><td style="display:flex;gap:2px;flex-wrap:wrap">'+actions+'</td></tr>';
+  }).join('')+'</tbody></table>';
 }
-async function admBlock(e){try{await sbPatch('users','email=eq.'+encodeURIComponent(e),{status:'blocked'});admStudents();}catch(err){alert(err.message);}}
+async function admMakeAdmin(email){
+  if(!S.isSuper)return;
+  if(confirm('Выдать админ-права пользователю '+email+'?\nОн сможет принимать заявки и добавлять вопросы.')){
+    try{await sbPatch('users','email=eq.'+encodeURIComponent(email),{role:'admin'});admStudents();}catch(e){alert(e.message);}
+  }
+}
+async function admRevokeAdmin(email){
+  if(!S.isSuper)return;
+  if(confirm('Забрать админ-права у '+email+'?')){
+    try{await sbPatch('users','email=eq.'+encodeURIComponent(email),{role:'student'});await sbDel('admin_sessions','email=eq.'+encodeURIComponent(email));admStudents();}catch(e){alert(e.message);}
+  }
+}
+async function admBlock(e,name){
+  if(S.isSuper){try{await sbPatch('users','email=eq.'+encodeURIComponent(e),{status:'blocked'});admStudents();}catch(err){alert(err.message);}}
+  else{if(confirm('Отправить запрос на блокировку '+e+' главному админу?')){try{await sbPost('pending_actions',{action:'block',target_email:e,target_name:name||e,requested_by:S.adminEmail});alert('Запрос отправлен на подтверждение.');}catch(err){alert(err.message);}}}
+}
 async function admUnblock(e){try{await sbPatch('users','email=eq.'+encodeURIComponent(e),{status:'active'});admStudents();}catch(err){alert(err.message);}}
-async function admDelUser(e){if(confirm('Удалить '+e+'?')){try{await sbDel('users','email=eq.'+encodeURIComponent(e));admStudents();}catch(err){alert(err.message);}}}
+async function admDelUser(e,name){
+  if(S.isSuper){if(confirm('Удалить '+e+'?')){try{await sbDel('users','email=eq.'+encodeURIComponent(e));admStudents();}catch(err){alert(err.message);}}}
+  else{if(confirm('Отправить запрос на удаление '+e+' главному админу?')){try{await sbPost('pending_actions',{action:'delete',target_email:e,target_name:name||e,requested_by:S.adminEmail});alert('Запрос отправлен на подтверждение.');}catch(err){alert(err.message);}}}
+}
+
+// ===== АДМИНЫ (только главный) =====
+async function admAdmins(){
+  var el=document.getElementById('admAdmins');
+  el.innerHTML='<div style="color:var(--tx3);padding:10px">Загрузка...</div>';
+  var admins=[],sessions=[];
+  if(dbOK){
+    try{admins=await sbGet('users','role=eq.admin&select=email,name,status');}catch(e){}
+    try{sessions=await sbGet('admin_sessions','select=email,name,device,last_seen');}catch(e){}
+  }
+  var sessByEmail={};
+  sessions.forEach(function(s){sessByEmail[s.email]=s;});
+  var now=Date.now();
+  var html='<div class="alert ali" style="margin-bottom:14px"><i class="ti ti-info-circle"></i> Чтобы выдать админку — откройте «Студенты» и нажмите ⭐ напротив нужного человека.</div>';
+  if(!admins.length){
+    html+='<p style="color:var(--tx3);font-size:13px">Пока нет назначенных админов</p>';
+  }else{
+    html+='<table class="tbl"><thead><tr><th>Имя</th><th>Email</th><th>Устройство</th><th>Онлайн</th><th></th></tr></thead><tbody>';
+    html+=admins.map(function(a){
+      var s=sessByEmail[a.email];
+      var online=false,dev='—',seen='не заходил';
+      if(s){
+        dev=s.device||'—';
+        var diff=now-new Date(s.last_seen).getTime();
+        online=diff<70000; // 70 сек
+        seen=online?'🟢 сейчас':('был '+Math.round(diff/60000)+' мин назад');
+      }
+      return '<tr><td style="font-weight:500">'+a.name+'</td><td style="color:var(--tx2);font-size:11px">'+a.email+'</td><td style="font-size:11px">'+dev+'</td><td style="font-size:11px;color:'+(online?'var(--gr)':'var(--tx3)')+'">'+seen+'</td><td><button class="btn bre bsm" onclick="admRevokeAdmin(\''+a.email+'\')">Забрать</button></td></tr>';
+    }).join('');
+    html+='</tbody></table>';
+  }
+  el.innerHTML=html;
+}
+
+// ===== ЗАПРОСЫ от обычных админов (только главный) =====
+async function admRequests(){
+  var el=document.getElementById('admRequests');
+  el.innerHTML='<div style="color:var(--tx3);padding:10px">Загрузка...</div>';
+  var rows=[];
+  if(dbOK){try{rows=await sbGet('pending_actions','order=created_at.asc');}catch(e){}}
+  if(!rows.length){el.innerHTML='<div class="alert alok"><i class="ti ti-check"></i> Нет запросов на подтверждение</div>';updReqBadge();return;}
+  var actNames={block:'🚫 Заблокировать',delete:'🗑️ Удалить',reject:'❌ Отклонить заявку'};
+  el.innerHTML='<p style="font-size:13px;color:var(--tx2);margin-bottom:12px">Запросов: '+rows.length+'</p>'+rows.map(function(r){
+    return '<div class="prow"><div style="flex:1"><div style="font-weight:600">'+(actNames[r.action]||r.action)+': '+r.target_name+'</div><div style="font-size:11px;color:var(--tx2)">'+r.target_email+' · от админа: '+r.requested_by+'</div></div><button class="btn bgr bsm" onclick="admApproveReq('+r.id+',\''+r.action+'\',\''+r.target_email+'\')"><i class="ti ti-check"></i>Одобрить</button><button class="btn bgh bsm" style="margin-left:6px" onclick="admDenyReq('+r.id+')"><i class="ti ti-x"></i>Отклонить</button></div>';
+  }).join('');
+  updReqBadge();
+}
+async function admApproveReq(id,action,email){
+  try{
+    if(action==='block')await sbPatch('users','email=eq.'+encodeURIComponent(email),{status:'blocked'});
+    else if(action==='delete')await sbDel('users','email=eq.'+encodeURIComponent(email));
+    else if(action==='reject')await sbDel('users','email=eq.'+encodeURIComponent(email));
+    await sbDel('pending_actions','id=eq.'+id);
+    admRequests();
+  }catch(e){alert(e.message);}
+}
+async function admDenyReq(id){
+  try{await sbDel('pending_actions','id=eq.'+id);admRequests();}catch(e){alert(e.message);}
+}
 async function admQuestions(){
   var QS=getQS();var cqs=[];if(dbOK){try{cqs=await sbGet('custom_questions','order=created_at.asc');}catch(e){}}
   document.getElementById('admQuestions').innerHTML='<div style="display:flex;gap:8px;margin-bottom:14px"><button class="btn bbl bsm" onclick="admAddQM()"><i class="ti ti-plus"></i>Добавить</button><span style="font-size:12px;color:var(--tx2);align-self:center">Всего: '+QS.length+' | Своих: '+cqs.length+'</span></div><div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap"><select id="qFs" onchange="admQF()" style="width:auto;min-width:140px"><option value="all">Все</option><option value="physics">Физика</option><option value="chemistry">Химия</option><option value="biology">Биология</option><option value="custom">Свои</option></select><input id="qSr" placeholder="Поиск..." onkeyup="admQF()" style="flex:1;min-width:160px"></div><div id="qCount" style="font-size:11px;color:var(--tx3);margin-bottom:6px"></div><div id="qTbl" style="max-height:55vh;overflow-y:auto;-webkit-overflow-scrolling:touch"></div>';
