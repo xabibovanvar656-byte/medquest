@@ -169,8 +169,8 @@ select option{background:var(--bg2)}
   </div>
   <div style="padding:4px 0">
     <div class="nlbl">Инфо</div>
-    <button class="nb" data-pg="news" onclick="go('news',this)"><i class="ti ti-news"></i><span>Новости</span></button>
-    <button class="nb" data-pg="schedule" onclick="go('schedule',this)"><i class="ti ti-calendar-event"></i><span>Расписание</span></button>
+    <button class="nb" data-pg="news" onclick="go('news',this)"><i class="ti ti-news"></i><span>Новости</span><span class="nbadge" id="newsBadge" style="display:none">!</span></button>
+    <button class="nb" data-pg="schedule" onclick="go('schedule',this)"><i class="ti ti-calendar-event"></i><span>Расписание</span><span class="nbadge" id="schedBadge" style="display:none">!</span></button>
   </div>
   <div class="nsp"></div>
   <div id="admNav" style="display:none;padding:4px 0">
@@ -255,7 +255,9 @@ select option{background:var(--bg2)}
     <div class="ph"><div class="pt">Экзамен</div><div class="ps">Таймер, без подсказок</div></div>
     <div class="card" style="max-width:460px">
       <div class="fg"><label class="fl">Предмет</label>
-        <select id="exS"><option value="all">Все предметы</option><option value="physics">🔬 Физика</option><option value="chemistry">⚗️ Химия</option><option value="biology">🧬 Биология</option></select></div>
+        <select id="exS" onchange="exTopics()"><option value="all">Все предметы</option><option value="physics">🔬 Физика</option><option value="chemistry">⚗️ Химия</option><option value="biology">🧬 Биология</option></select></div>
+      <div class="fg"><label class="fl">Тема</label>
+        <select id="exTopic"><option value="all">Все темы</option></select></div>
       <div class="fg"><label class="fl">Вопросов: <b id="exCL">25</b></label>
         <input type="range" min="10" max="80" step="5" value="25" id="exC" oninput="document.getElementById('exCL').textContent=this.value"></div>
       <div class="fg"><label class="fl">Время: <b id="exTL">30</b> мин</label>
@@ -967,6 +969,7 @@ async function init(){
     // Register any custom subjects not in SM
     var palette=['#e879a6','#38bdf8','#fb923c','#a78bfa','#34d399','#f472b6','#facc15'];
     CQS.forEach(function(q){if(!SM[q.s]){var col=palette[Object.keys(SM).length%palette.length];SM[q.s]={label:q.s,icon:'📘',color:col,dim:'#15171f'};}});
+    refreshSubjectDropdowns();
     dbOK=true;
     document.getElementById('dbst').innerHTML='<span style="color:#22d07a">● Supabase</span>';
   }catch(e){
@@ -975,6 +978,7 @@ async function init(){
   }
   hideLdg();
   renderHome();
+  updNotifBadges();
   if(S.user)loadProg();
 }
 
@@ -992,7 +996,7 @@ async function loadProg(){
       S.user=null;S.hist=[];S.prog={};sv();renderAuthHdr();renderHome();return;
     }
     var rows=await sbGet('progress','user_email=eq.'+encodeURIComponent(S.user.email));
-    rows.forEach(function(r){S.prog[r.question_id]={c:r.correct_count,a:r.attempt_count};});
+    rows.forEach(function(r){S.prog[r.question_id]={c:r.correct_count,a:r.attempt_count,streak:r.streak||0};});
     var hist=await sbGet('exam_history','user_email=eq.'+encodeURIComponent(S.user.email)+'&order=created_at.desc&limit=20');
     S.hist=hist.map(function(h){return{date:h.exam_date,score:h.score,total:h.total,subj:h.subject,mins:h.mins};});
     sv();
@@ -1000,10 +1004,13 @@ async function loadProg(){
 }
 
 async function saveProg(qid,ok){
-  var p=S.prog[qid]||{c:0,a:0};
-  p.c+=ok?1:0;p.a+=1;S.prog[qid]=p;sv();
+  var p=S.prog[qid]||{c:0,a:0,streak:0};
+  p.c+=ok?1:0;p.a+=1;
+  // streak: правильных подряд. Ошибка обнуляет.
+  p.streak=ok?((p.streak||0)+1):0;
+  S.prog[qid]=p;sv();
   if(!dbOK||!S.user)return;
-  try{await sbUps('progress',{user_email:S.user.email,question_id:qid,correct_count:p.c,attempt_count:p.a,updated_at:new Date().toISOString()},'user_email,question_id');}catch(e){}
+  try{await sbUps('progress',{user_email:S.user.email,question_id:qid,correct_count:p.c,attempt_count:p.a,streak:p.streak,updated_at:new Date().toISOString()},'user_email,question_id');}catch(e){}
 }
 
 async function saveExam(score,total,subj,mins){
@@ -1089,7 +1096,7 @@ function go(pg,btn){
   document.getElementById('mscroll').scrollTop=0;
   if(btn)btn.classList.add('on');
   else{var b=document.querySelector('[data-pg="'+pg+'"]');if(b)b.classList.add('on');}
-  var fns={home:renderHome,flashcards:fcInit,trainer:trTopics,progress:renderProg,leaderboard:renderLB,news:renderNews,schedule:renderSched,admin:renderAdm};
+  var fns={home:renderHome,flashcards:fcInit,trainer:trTopics,exam:exTopics,progress:renderProg,leaderboard:renderLB,news:renderNews,schedule:renderSched,admin:renderAdm};
   if(fns[pg])fns[pg]();
   if(S.user&&PAGE_LABELS[pg])pushActivity(PAGE_LABELS[pg]);
 }
@@ -1275,6 +1282,35 @@ function showAlert(containerId,cls,icon,msg,ms){
   if(ms)setTimeout(function(){ha.innerHTML='';},ms);
 }
 
+function updNotifBadges(){
+  // Красный значок если есть новости/расписание новее последнего просмотра
+  try{
+    var seenNews=parseInt(localStorage.getItem('mq_seen_news')||'0');
+    var seenSched=parseInt(localStorage.getItem('mq_seen_sched')||'0');
+    var nb=document.getElementById('newsBadge'),sb=document.getElementById('schedBadge');
+    if(nb)nb.style.display=(newsCache.length>seenNews)?'flex':'none';
+    if(sb)sb.style.display=(schedCache.length>seenSched)?'flex':'none';
+  }catch(e){}
+}
+function markSeen(type){
+  try{
+    if(type==='news')localStorage.setItem('mq_seen_news',String(newsCache.length));
+    if(type==='schedule')localStorage.setItem('mq_seen_sched',String(schedCache.length));
+    updNotifBadges();
+  }catch(e){}
+}
+function refreshSubjectDropdowns(){
+  // Обновляет селекторы предметов в карточках, тренажёре, экзамене из SM
+  var selectors=['fcS','trS','exS'];
+  selectors.forEach(function(id){
+    var el=document.getElementById(id);if(!el)return;
+    var cur=el.value;
+    var html='<option value="all">Все предметы</option>';
+    Object.keys(SM).forEach(function(k){html+='<option value="'+k+'">'+SM[k].icon+' '+SM[k].label+'</option>';});
+    el.innerHTML=html;
+    if(cur)el.value=cur;
+  });
+}
 function renderHome(){
   renderAuthHdr();
   document.getElementById('hTitle').textContent=S.user?'Привет, '+S.user.name+'! 👋':'Добро пожаловать в МедКвест 🏥';
@@ -1386,8 +1422,17 @@ function trNext(){
   var QS=getQS();
   var pool=QS.filter(function(q){return (s==='all'||q.s===s)&&(tp==='all'||q.t===tp);});
   if(!pool.length){document.getElementById('trQ').textContent='Нет вопросов в этой теме';document.getElementById('trOpts').innerHTML='';return;}
-  var weak=pool.filter(function(q){var p=S.prog[q.id];return !p||p.a<3||p.c/p.a<0.7;});
-  var arr=weak.length?weak:pool;
+  // Умное повторение по «уровню освоения» (streak = правильных подряд)
+  // Приоритет: 1) не освоенные (streak<3) 2) освоенные показываем реже
+  var notMastered=pool.filter(function(q){var p=S.prog[q.id];return !p||(p.streak||0)<3;});
+  var arr;
+  if(notMastered.length){
+    arr=notMastered; // пока есть не освоенные — показываем их
+  }else{
+    arr=pool; // всё освоено — обычный режим повторения
+  }
+  // не показывать тот же вопрос два раза подряд
+  if(arr.length>1&&TRC){arr=arr.filter(function(q){return q.id!==TRC.id;});}
   TRC=arr[Math.floor(Math.random()*arr.length)];TRrev=false;
   TRshuf=shuffleOpts(TRC);
   var m=SM[TRC.s];
@@ -1411,6 +1456,13 @@ async function trAns(idx){
   document.getElementById('trAiWrap').style.display='';
   document.getElementById('trNxt').style.display='';
   if(!ok)document.getElementById('trAi').textContent='Вы ошиблись. Нажмите Объяснить для разъяснения.';
+  // Показать прогресс освоения вопроса
+  var p=S.prog[TRC.id];var st=p?(p.streak||0):0;
+  var trTbdg=document.getElementById('trTbdg');
+  if(trTbdg){
+    if(st>=3)trTbdg.textContent=TRC.t+' · ✅ освоен';
+    else trTbdg.textContent=TRC.t+' · '+st+'/3 верных подряд';
+  }
 }
 async function trExplain(){
   var btn=document.getElementById('trExp');btn.disabled=true;btn.textContent='Загрузка...';
@@ -1428,12 +1480,22 @@ async function trExplain(){
 }
 
 var EXP=[],EXA={},EXI=0,EXtmr=null,EXsecs=0;
+function exTopics(){
+  var s=document.getElementById('exS').value;
+  var topEl=document.getElementById('exTopic');if(!topEl)return;
+  var topics=[];getQS().forEach(function(q){if((s==='all'||q.s===s)&&topics.indexOf(q.t)<0)topics.push(q.t);});
+  topics.sort();
+  topEl.innerHTML='<option value="all">Все темы</option>';
+  topics.forEach(function(t){var o=document.createElement('option');o.value=t;o.textContent=t;topEl.appendChild(o);});
+}
 function exStart(){
   var s=document.getElementById('exS').value;
+  var tp=document.getElementById('exTopic')?document.getElementById('exTopic').value:'all';
   var cnt=+document.getElementById('exC').value;
   var mins=+document.getElementById('exT').value;
   var QS=getQS();
-  var pool=QS.filter(function(q){return s==='all'||q.s===s;});
+  var pool=QS.filter(function(q){return (s==='all'||q.s===s)&&(tp==='all'||q.t===tp);});
+  if(!pool.length){alert('В выбранной теме нет вопросов');return;}
   EXP=pool.slice().sort(function(){return Math.random()-.5;}).slice(0,Math.min(cnt,pool.length));
   // Pre-shuffle options for each exam question
   EXP=EXP.map(function(q){
@@ -1532,36 +1594,59 @@ async function renderLB(){
       });
       var examCount={};
       exams.forEach(function(e){examCount[e.user_email]=(examCount[e.user_email]||0)+1;});
+      // Считаем сколько РАЗНЫХ вопросов решил каждый (для порога 50)
+      var solvedCount={};
+      prog.forEach(function(p){solvedCount[p.user_email]=(solvedCount[p.user_email]||0)+1;});
       users.forEach(function(u){
         var st=byUser[u.email]||{c:0,a:0};
         var acc=st.a?Math.round(st.c/st.a*100):0;
-        all.push({name:u.name,acc:acc,ex:examCount[u.email]||0,isMe:S.user&&u.email===S.user.email});
+        var solved=solvedCount[u.email]||0;
+        var score=Math.round(acc*(1+Math.log10(Math.max(solved,1))));
+        all.push({name:u.name,acc:acc,solved:solved,score:score,ex:examCount[u.email]||0,isMe:S.user&&u.email===S.user.email});
       });
     }catch(e){console.warn('LB error:',e.message);}
   }
-  // If no students yet or offline, show current user
-  if(!all.length){
+  if(!all.length&&S.user){
     var tA=0,tC=0;Object.values(S.prog).forEach(function(v){tA+=(v.a||0);tC+=(v.c||0);});
+    var solved=Object.keys(S.prog).length;
     var myAcc=tA?Math.round(tC/tA*100):0;
-    if(S.user)all.push({name:S.user.name,acc:myAcc,ex:S.hist.length,isMe:true});
+    all.push({name:S.user.name,acc:myAcc,solved:solved,score:Math.round(myAcc*(1+Math.log10(Math.max(solved,1)))),ex:S.hist.length,isMe:true});
   }
-  all.sort(function(a,b){return b.acc-a.acc;});
-  LB_CACHE=all;LB_TIME=Date.now();
-  renderLBList(all);
+  // Порог: в рейтинг попадают только решившие 50+
+  var MIN_SOLVED=50;
+  var ranked=all.filter(function(e){return e.solved>=MIN_SOLVED;});
+  var notYet=all.filter(function(e){return e.solved<MIN_SOLVED;});
+  ranked.sort(function(a,b){return b.score-a.score;});
+  LB_CACHE={ranked:ranked,notYet:notYet};LB_TIME=Date.now();
+  renderLBList(LB_CACHE);
 }
-function renderLBList(all){
+function renderLBList(data){
   var lb=document.getElementById('lbList');
-  if(!all.length){lb.innerHTML='<p style="color:var(--tx3);font-size:13px">Пока нет участников</p>';return;}
+  var ranked=data.ranked||[],notYet=data.notYet||[];
+  if(!ranked.length&&!notYet.length){lb.innerHTML='<p style="color:var(--tx3);font-size:13px">Пока нет участников</p>';return;}
   var medals=['🥇','🥈','🥉'];
-  lb.innerHTML=all.map(function(e,i){return '<div class="lr'+(e.isMe?' me':'')+'"><span style="min-width:28px;font-size:18px">'+(i<3?medals[i]:'<span style="font-family:var(--fm);font-size:13px;color:var(--tx3)">'+(i+1)+'</span>')+'</span><div style="flex:1;font-size:13px'+(e.isMe?';font-weight:700':'')+'">'+e.name+(e.isMe?' <span class="bdg bbl2">вы</span>':'')+'</div><span style="font-size:11px;color:var(--tx3);font-family:var(--fm);margin-right:8px">'+e.ex+' экз.</span><span style="font-size:20px;font-weight:700;font-family:var(--fm);color:'+(e.acc>=80?'var(--gr)':e.acc>=60?'var(--am)':'var(--re)')+'">'+e.acc+'%</span></div>';}).join('');
+  var html='<div class="alert ali" style="font-size:12px;margin-bottom:12px"><i class="ti ti-info-circle"></i> Балл = точность × объём. В рейтинг попадают решившие 50+ вопросов.</div>';
+  if(ranked.length){
+    html+=ranked.map(function(e,i){return '<div class="lr'+(e.isMe?' me':'')+'"><span style="min-width:28px;font-size:18px">'+(i<3?medals[i]:'<span style="font-family:var(--fm);font-size:13px;color:var(--tx3)">'+(i+1)+'</span>')+'</span><div style="flex:1"><div style="font-size:13px'+(e.isMe?';font-weight:700':'')+'">'+e.name+(e.isMe?' <span class="bdg bbl2">вы</span>':'')+'</div><div style="font-size:10px;color:var(--tx3);font-family:var(--fm)">'+e.solved+' решено · '+e.acc+'% точность</div></div><span style="font-size:22px;font-weight:700;font-family:var(--fm);color:var(--bl)">'+e.score+'</span></div>';}).join('');
+  }else{
+    html+='<p style="color:var(--tx3);font-size:13px;padding:10px">Пока никто не решил 50+ вопросов. Будьте первым!</p>';
+  }
+  // Показываем «вы» если ещё не в рейтинге
+  var me=notYet.filter(function(e){return e.isMe;})[0];
+  if(me){
+    html+='<div style="margin-top:14px;padding:12px;background:var(--amd);border:1px solid rgba(245,166,35,.3);border-radius:8px;font-size:13px;color:var(--am)"><b>Вы пока не в рейтинге.</b><br>Решено: '+me.solved+'/50. Решите ещё '+(50-me.solved)+' вопросов чтобы попасть в таблицу лидеров!</div>';
+  }
+  lb.innerHTML=html;
 }
 
 function renderNews(){
+  markSeen('news');
   if(!newsCache.length){document.getElementById('newsList').innerHTML='<p style="color:var(--tx3)">Нет новостей</p>';return;}
   document.getElementById('newsList').innerHTML=newsCache.map(function(n){return '<div class="nc">'+(n.pinned?'<div style="font-size:11px;color:var(--am);font-weight:600;margin-bottom:4px">📌 Закреплено</div>':'')+'<div class="nd">'+(n.news_date||'')+'</div><div class="nt">'+n.title+'</div><div class="nb2">'+n.body+'</div></div>';}).join('');
 }
 
 function renderSched(){
+  markSeen('schedule');
   var now=new Date();
   var sorted=schedCache.slice().sort(function(a,b){return new Date(a.exam_date)-new Date(b.exam_date);});
   document.getElementById('schedList').innerHTML=sorted.map(function(s){var d=new Date(s.exam_date);var days=Math.ceil((d-now)/(1000*60*60*24));var urg=days>=0&&days<=7;return '<div class="sr"><div class="db" style="'+(urg?'background:var(--amd);border-color:rgba(245,166,35,.2)':'')+'"><div class="dd" style="'+(urg?'color:var(--am)':'')+'">'+d.getDate()+'</div><div class="dm">'+d.toLocaleDateString('ru-RU',{month:'short'})+'</div></div><div style="flex:1"><div style="font-weight:600">'+s.subject+'</div><div style="font-size:12px;color:var(--tx2)">Ауд. '+s.room+' · '+s.exam_time+'</div></div><span class="bdg '+(urg?'bam2':'bbl2')+'">'+(days>0?'через '+days+' дн.':days===0?'Сегодня!':'Прошёл')+'</span></div>';}).join('');
@@ -1672,7 +1757,37 @@ async function admStudentCard(email,name){
   }else{
     html+='<div style="font-size:12px;color:var(--tx3)">Экзаменов ещё не было</div>';
   }
+  // Кнопки управления прогрессом (для админов)
+  html+='<div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--bor)"><div style="font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Управление прогрессом</div>';
+  html+='<div style="display:flex;gap:6px;flex-wrap:wrap">';
+  html+='<button class="btn bam bsm" onclick="admPenalize(\''+email+'\',\''+name.replace(/\x27/g,'')+'\',5)">−5% точность</button>';
+  html+='<button class="btn bam bsm" onclick="admPenalize(\''+email+'\',\''+name.replace(/\x27/g,'')+'\',10)">−10%</button>';
+  html+='<button class="btn bre bsm" onclick="admResetProgress(\''+email+'\',\''+name.replace(/\x27/g,'')+'\')">Сбросить весь прогресс</button>';
+  html+='</div><div style="font-size:10px;color:var(--tx3);margin-top:6px">Штраф уменьшает счётчик правильных ответов. Сброс удаляет весь прогресс студента (необратимо).</div></div>';
   b.innerHTML=html;
+}
+async function admPenalize(email,name,pct){
+  if(!confirm('Оштрафовать '+name+' на '+pct+'%?\nЭто уменьшит число правильных ответов на '+pct+'%.'))return;
+  try{
+    var rows=await sbGet('progress','user_email=eq.'+encodeURIComponent(email));
+    for(var i=0;i<rows.length;i++){
+      var newC=Math.floor(rows[i].correct_count*(1-pct/100));
+      await sbPatch('progress','user_email=eq.'+encodeURIComponent(email)+'&question_id=eq.'+encodeURIComponent(rows[i].question_id),{correct_count:newC});
+    }
+    LB_CACHE=null; // сбросить кеш рейтинга
+    alert('Студент '+name+' оштрафован на '+pct+'%');
+    admStudentCard(email,name);
+  }catch(e){alert('Ошибка: '+e.message);}
+}
+async function admResetProgress(email,name){
+  if(!confirm('СБРОСИТЬ ВЕСЬ ПРОГРЕСС студента '+name+'?\n\nВсе решённые вопросы и статистика будут удалены. Это НЕОБРАТИМО.'))return;
+  if(!confirm('Точно? Прогресс '+name+' нельзя будет восстановить.'))return;
+  try{
+    await sbDel('progress','user_email=eq.'+encodeURIComponent(email));
+    LB_CACHE=null;
+    alert('Прогресс студента '+name+' сброшен.');
+    admStudentCard(email,name);
+  }catch(e){alert('Ошибка: '+e.message);}
 }
 async function admMakeAdmin(email){
   if(!S.isSuper)return;
@@ -1962,7 +2077,7 @@ async function admBulkSave(){
       saved++;
     }catch(e){failed++;}
   }
-  closeModal();admQF();
+  closeModal();refreshSubjectDropdowns();admQF();
   var bad=qa._bad||[];
   var msg='Готово! Добавлено: '+saved;
   if(failed)msg+=', ошибок сохранения: '+failed;
@@ -2033,7 +2148,7 @@ async function admSaveNewQ(){
   var correct=opts[0];var shuffled=opts.slice().sort(function(){return Math.random()-.5;});var ci=shuffled.indexOf(correct);
   var id='cq_'+Date.now();
   var btn=document.querySelector('#mdBody .btn');btn.disabled=true;btn.textContent='Сохранение...';
-  try{if(dbOK)await sbPost('custom_questions',{id:id,subject:s,topic:t,question:q,options:shuffled,correct_index:ci});CQS.push({id:id,s:s,t:t,q:q,o:shuffled,a:ci});closeModal();admQF();}
+  try{if(dbOK)await sbPost('custom_questions',{id:id,subject:s,topic:t,question:q,options:shuffled,correct_index:ci});CQS.push({id:id,s:s,t:t,q:q,o:shuffled,a:ci});closeModal();refreshSubjectDropdowns();admQF();}
   catch(e){showErr('Ошибка: '+e.message);btn.disabled=false;btn.textContent='Сохранить';}
 }
 function admEditQM(qid){
@@ -2056,7 +2171,7 @@ async function admSaveEQ(qid,qs){
   if(!qt||!t||opts.some(function(o){return !o;})||!cr){showErr('Заполните все поля');return;}
   var ans=+cr.value;var btn=document.querySelector('#mdBody .btn');btn.disabled=true;btn.textContent='Сохранение...';
   try{if(dbOK){var ex=await sbGet('custom_questions','id=eq.'+qid);if(ex.length>0)await sbPatch('custom_questions','id=eq.'+qid,{subject:qs,topic:t,question:qt,options:opts,correct_index:ans});}
-  var idx=-1;for(var i=0;i<CQS.length;i++){if(CQS[i].id===qid){idx=i;break;}}var upd={id:qid,s:qs,t:t,q:qt,o:opts,a:ans};if(idx>=0)CQS[idx]=upd;else CQS.push(upd);closeModal();admQF();}
+  var idx=-1;for(var i=0;i<CQS.length;i++){if(CQS[i].id===qid){idx=i;break;}}var upd={id:qid,s:qs,t:t,q:qt,o:opts,a:ans};if(idx>=0)CQS[idx]=upd;else CQS.push(upd);closeModal();refreshSubjectDropdowns();admQF();}
   catch(e){showErr('Ошибка: '+e.message);btn.disabled=false;btn.textContent='Сохранить';}
 }
 async function admDelQ(id){if(confirm('Удалить?')){try{if(dbOK)await sbDel('custom_questions','id=eq.'+id);CQS=CQS.filter(function(q){return q.id!==id;});admQF();}catch(e){alert(e.message);}}}
