@@ -60,7 +60,11 @@ select option{background:var(--bg2)}
 .opt.bad{background:var(--red);border-color:var(--re);color:var(--re)}
 .ol{width:26px;height:26px;border-radius:50%;background:var(--bg4);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--fm)}
 .opt.sel .ol{background:var(--bl);color:#fff}.opt.ok .ol{background:var(--gr);color:#000}.opt.bad .ol{background:var(--re);color:#fff}
-.fcard{background:var(--bg2);border:1px solid var(--bor);border-radius:var(--r);padding:26px;min-height:230px;cursor:pointer;position:relative}
+.fcard{background:var(--bg2);border:1px solid var(--bor);border-radius:var(--r);padding:26px;min-height:230px;cursor:pointer;position:relative;transition:transform .25s ease,opacity .25s ease;touch-action:pan-y;user-select:none}
+.fcard.swiping{transition:none}
+.fcard .swipemark{position:absolute;top:18px;font-size:22px;font-weight:800;padding:6px 14px;border-radius:10px;opacity:0;transition:opacity .15s;pointer-events:none;border:3px solid;z-index:5}
+.fcard .swipemark.know{right:18px;color:var(--gr);border-color:var(--gr);transform:rotate(12deg)}
+.fcard .swipemark.dunno{left:18px;color:var(--re);border-color:var(--re);transform:rotate(-12deg)}
 .fcard:hover{border-color:var(--bor2)}
 .fcq{font-size:17px;font-weight:500;line-height:1.65}
 .fcdiv{height:1px;background:var(--bor);margin:16px 0}
@@ -109,11 +113,21 @@ select option{background:var(--bg2)}
 .prow{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg3);border:1px solid var(--bor);border-radius:var(--rs);margin-bottom:6px}
 .ldg{position:fixed;inset:0;background:rgba(8,12,20,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:400}
 .spin{animation:spin 1s linear infinite}
+.bottomnav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:300;
+  background:rgba(18,22,32,.72);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
+  border-top:1px solid rgba(255,255,255,.08);
+  padding:8px 6px calc(8px + env(safe-area-inset-bottom)) 6px;justify-content:space-around;align-items:center}
+body.light .bottomnav{background:rgba(245,247,251,.78);border-top:1px solid rgba(0,0,0,.06)}
+.bni{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;
+  color:var(--tx3);font-size:9px;font-family:var(--f);padding:5px 8px;border-radius:12px;position:relative;transition:all .2s;flex:1;max-width:72px}
+.bni i{font-size:21px}
+.bni.on{color:var(--bl)}
+.bni.on i{transform:translateY(-1px)}
+.bni .nbadge{position:absolute;top:2px;right:14px}
 @media(max-width:640px){
-.sidebar{width:48px}
-.sidebar .nb span,.sidebar .nlbl,.sidebar .nsep,.sidebar .nsp{display:none}
-.sidebar .nb{padding:11px 0;justify-content:center}
-.main{padding:12px;padding-bottom:80px}
+.sidebar{display:none}
+.bottomnav{display:flex}
+.main{padding:12px;padding-bottom:90px}
 .hdr{height:auto;min-height:52px;flex-wrap:wrap;padding:8px 12px;gap:6px}
 .hdr .logo{font-size:14px}
 .bdg{font-size:9px}
@@ -182,6 +196,13 @@ select option{background:var(--bg2)}
     </button>
   </div>
 </nav>
+<nav class="bottomnav" id="bottomNav">
+  <button class="bni on" data-pg="home" onclick="go('home',this)"><i class="ti ti-home"></i><span>Главная</span></button>
+  <button class="bni" data-pg="trainer" onclick="go('trainer',this)"><i class="ti ti-target"></i><span>Тренажёр</span></button>
+  <button class="bni" data-pg="duels" onclick="go('duels',this)"><i class="ti ti-swords"></i><span>Дуэли</span><span class="nbadge" id="duelBadgeM" style="display:none">!</span></button>
+  <button class="bni" data-pg="leaderboard" onclick="go('leaderboard',this)"><i class="ti ti-trophy"></i><span>Рейтинг</span></button>
+  <button class="bni" data-pg="profile" onclick="go('profile',this)"><i class="ti ti-user"></i><span>Профиль</span></button>
+</nav>
 <main class="main" id="mscroll">
 <div id="pg-home" class="page on">
   <div class="ph"><div class="pt" id="hTitle">Добро пожаловать 🏥</div><div class="ps" id="hSub">Учебная платформа</div></div>
@@ -204,19 +225,25 @@ select option{background:var(--bg2)}
     <span id="fcCnt" style="font-size:12px;color:var(--tx2);margin-left:auto"></span>
   </div>
   <div class="pdots" id="fcDots"></div>
-  <div class="fcard" id="fcCard" onclick="fcFlip()">
+  <div class="fcard" id="fcCard">
+    <div class="swipemark know" id="fcMarkKnow">ЗНАЮ</div>
+    <div class="swipemark dunno" id="fcMarkDunno">ПОВТОР</div>
     <div class="fcmeta" id="fcPos"></div><div class="fctp" id="fcTp"></div>
     <div class="fcq" id="fcQ">Загрузка...</div>
     <div id="fcBack" style="display:none">
       <div class="fcdiv"></div><div class="fcanslbl">Правильный ответ</div>
       <div class="fcans" id="fcAns"></div><div class="fcopts" id="fcOpts"></div>
     </div>
-    <div class="fchint" id="fcHint">↕ Нажмите чтобы увидеть ответ</div>
+    <div class="fchint" id="fcHint">Нажми — ответ · смахни ← повтор · знаю → вправо</div>
   </div>
-  <div style="display:flex;gap:7px;margin-top:10px">
-    <button class="btn bgh bsm" id="fcPrev" onclick="fcPrev()">← Назад</button>
-    <button class="btn bgh bsm" style="flex:1;justify-content:center" onclick="fcFlip()">↕ Перевернуть</button>
-    <button class="btn bgh bsm" id="fcNext" onclick="fcNext()">Далее →</button>
+  <div style="display:flex;gap:8px;margin-top:12px">
+    <button class="btn bre bsm" style="flex:1;justify-content:center" onclick="fcSwipe('dunno')"><i class="ti ti-rotate"></i> Повторить</button>
+    <button class="btn bgh bsm" onclick="fcFlip()">↕</button>
+    <button class="btn bgr bsm" style="flex:1;justify-content:center" onclick="fcSwipe('know')"><i class="ti ti-check"></i> Знаю</button>
+  </div>
+  <div style="display:flex;gap:7px;margin-top:8px">
+    <button class="btn bgh bsm" id="fcPrev" onclick="fcPrev()" style="flex:1;justify-content:center">← Назад</button>
+    <button class="btn bgh bsm" id="fcNext" onclick="fcNext()" style="flex:1;justify-content:center">Далее →</button>
   </div>
   <div style="margin-top:8px;font-size:11px;color:var(--tx3);font-family:var(--fm)" id="fcStat"></div>
 </div>
@@ -323,6 +350,10 @@ select option{background:var(--bg2)}
     <button class="btn bgh" onclick="duelShowHistory()"><i class="ti ti-history"></i> История дуэлей</button>
   </div>
   <div id="duelBody"></div>
+</div>
+<div id="pg-profile" class="page">
+  <div class="ph"><div class="pt">Профиль</div><div class="ps">Твоя страница</div></div>
+  <div id="profileBody"></div>
 </div>
 <div id="pg-news" class="page">
   <div class="ph"><div class="pt">Новости</div><div class="ps">Объявления платформы</div></div>
@@ -535,13 +566,14 @@ async function saveExam(score,total,subj,mins){
 function renderAuthHdr(){
   var el=document.getElementById('authhdr');
   if(S.user){
-    var sp=document.createElement('span');
-    sp.style.cssText='font-size:12px;color:var(--tx2);margin-right:8px';
-    sp.textContent='👤 '+S.user.name;
+    var av=document.createElement('span');
+    av.style.cssText='margin-right:8px;cursor:pointer;display:inline-flex;align-items:center;gap:7px';
+    av.innerHTML=renderAvatar(S.user,28)+'<span style="font-size:12px;color:var(--tx2)">'+S.user.name+'</span>';
+    av.addEventListener('click',function(){go('profile');});
     var btn=document.createElement('button');
     btn.className='bh';btn.textContent='Выйти';
     btn.addEventListener('click',doLogout);
-    el.innerHTML='';el.appendChild(sp);el.appendChild(btn);
+    el.innerHTML='';el.appendChild(av);el.appendChild(btn);
   }else{
     var b1=document.createElement('button');
     b1.className='bh';b1.textContent='Войти';
@@ -564,7 +596,7 @@ async function updPendBadge(){
   if(c)c.textContent=n>0?n:'';
 }
 
-var PROTECTED=['flashcards','trainer','exam','progress','leaderboard','duels'];
+var PROTECTED=['flashcards','trainer','exam','progress','leaderboard','duels','profile'];
 
 function showLoginWall(){
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('on');});
@@ -603,13 +635,13 @@ async function pushActivity(action){
 function go(pg,btn){
   if(PROTECTED.indexOf(pg)>=0&&!S.user&&!S.isAdm){showLoginWall();return;}
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('on');});
-  document.querySelectorAll('.nb').forEach(function(b){b.classList.remove('on');});
-  document.getElementById('pg-'+pg).classList.add('on');
+  document.querySelectorAll('.nb,.bni').forEach(function(b){b.classList.remove('on');});
+  var pgEl=document.getElementById('pg-'+pg);if(pgEl)pgEl.classList.add('on');
   if(pg!=='duels'&&!CUR_DUEL&&typeof duelStopPolling==='function')duelStopPolling();
   document.getElementById('mscroll').scrollTop=0;
-  if(btn)btn.classList.add('on');
-  else{var b=document.querySelector('[data-pg="'+pg+'"]');if(b)b.classList.add('on');}
-  var fns={home:renderHome,flashcards:fcInit,trainer:trTopics,exam:exTopics,progress:renderProg,leaderboard:renderLB,duels:renderDuels,news:renderNews,schedule:renderSched,admin:renderAdm};
+  // подсветка во ВСЕХ меню (сайдбар + нижнее)
+  document.querySelectorAll('[data-pg="'+pg+'"]').forEach(function(b){b.classList.add('on');});
+  var fns={home:renderHome,flashcards:fcInit,trainer:trTopics,exam:exTopics,progress:renderProg,leaderboard:renderLB,duels:renderDuels,news:renderNews,schedule:renderSched,admin:renderAdm,profile:renderProfile};
   if(fns[pg])fns[pg]();
   if(S.user&&PAGE_LABELS[pg])pushActivity(PAGE_LABELS[pg]);
 }
@@ -727,7 +759,7 @@ async function doAuth(){
         if(user.status==='pending'){showErr('Заявка ещё не одобрена');btn.disabled=false;btn.textContent='Войти';return;}
         if(user.status==='blocked'){showErr('Аккаунт заблокирован');btn.disabled=false;btn.textContent='Войти';return;}
       }
-      S.user={name:user?user.name:email,email:email,group:user?user.group_name:''};
+      S.user={name:user?user.name:email,email:email,group:user?user.group_name:'',avatar:user?(user.avatar||''):''};
       sv();closeModal();renderAuthHdr();
       pushActivity('вошёл');
       await loadProg();renderHome();
@@ -796,6 +828,8 @@ setInterval(async function(){
     inc=inc.filter(function(d){return new Date(d.expires_at)>now;});
     var badge=document.getElementById('duelBadge');
     if(badge)badge.style.display=inc.length?'flex':'none';
+    var badgeM=document.getElementById('duelBadgeM');
+    if(badgeM)badgeM.style.display=inc.length?'flex':'none';
   }catch(e){}
 },8000);
 function doLogout(){S.user=null;S.hist=[];S.prog={};sv();renderAuthHdr();renderHome();}
@@ -984,6 +1018,8 @@ async function duelPoll(){
     // обновить значок в меню
     var badge=document.getElementById('duelBadge');
     if(badge)badge.style.display=incoming.length?'flex':'none';
+    var badgeM=document.getElementById('duelBadgeM');
+    if(badgeM)badgeM.style.display=incoming.length?'flex':'none';
     // если на странице дуэлей — показать входящие
     var inEl=document.getElementById('duelIncoming');
     if(inEl&&document.getElementById('pg-duels').classList.contains('on')){
@@ -1024,18 +1060,25 @@ async function duelCheckState(){
   }catch(e){}
 }
 
-async function duelNewChallenge(){
+function duelChallengeTo(emailEnc,name){
+  go('duels');
+  setTimeout(function(){
+    duelNewChallenge(decodeURIComponent(emailEnc));
+  },150);
+}
+async function duelNewChallenge(preEmail){
   // выбрать соперника
   var users=[];
   try{users=await sbGet('users','status=eq.active&select=email,name,group_name&order=name.asc');}catch(e){}
   users=users.filter(function(u){return u.email!==S.user.email;});
   if(!users.length){alert('Нет других студентов для вызова');return;}
   var subjOpts=Object.keys(SM).map(function(k){return '<option value="'+k+'">'+SM[k].icon+' '+SM[k].label+'</option>';}).join('');
-  var userOpts=users.map(function(u){return '<option value="'+u.email+'|'+(u.name||u.email).replace(/\|/g,'')+'">'+(u.name||u.email)+(u.group_name?' ('+u.group_name+')':'')+'</option>';}).join('');
+  var userOpts=users.map(function(u){var sel=(preEmail&&u.email===preEmail)?' selected':'';return '<option value="'+u.email+'|'+(u.name||u.email).replace(/\|/g,'')+'"'+sel+'>'+(u.name||u.email)+(u.group_name?' ('+u.group_name+')':'')+'</option>';}).join('');
   var body='<div class="fg"><label class="fl">Соперник</label><select id="duelOpp">'+userOpts+'</select></div>'
     +'<div class="fg"><label class="fl">Предмет</label><select id="duelSubj" onchange="duelChTopics()">'+subjOpts+'</select></div>'
     +'<div class="fg"><label class="fl">Тема</label><select id="duelTopic"><option value="all">Все темы</option></select></div>'
     +'<div class="fg"><label class="fl">Вопросов: <b id="duelCntL">10</b></label><input type="range" min="10" max="80" step="5" value="10" id="duelCnt" oninput="duelCntUpd()"></div>'
+    +'<div class="fg"><label class="fl">Общее время: <b id="duelTimeL">10</b> мин</label><input type="range" min="5" max="60" step="5" value="10" id="duelTime" oninput="duelTimeUpd()"></div>'
     +'<button class="btn bbl" onclick="duelSendChallenge()" style="width:100%;margin-top:8px">Отправить вызов</button>';
   showModal('Бросить вызов ⚔️',body);
   duelChTopics();
@@ -1048,13 +1091,14 @@ function duelChTopics(){
   topEl.innerHTML='<option value="all">Все темы</option>'+topics.map(function(t){return '<option value="'+t+'">'+t+'</option>';}).join('');
 }
 function duelCntUpd(){document.getElementById('duelCntL').textContent=document.getElementById('duelCnt').value;}
+function duelTimeUpd(){document.getElementById('duelTimeL').textContent=document.getElementById('duelTime').value;}
 async function duelSendChallenge(){
   var oppVal=document.getElementById('duelOpp').value;
   var opp=oppVal.split('|');
   var subj=document.getElementById('duelSubj').value;
   var topic=document.getElementById('duelTopic').value;
   var cnt=+document.getElementById('duelCnt').value;
-  // подобрать вопросы
+  var timeLimit=+document.getElementById('duelTime').value;
   var pool=getQS().filter(function(q){return q.s===subj&&(topic==='all'||q.t===topic);});
   if(pool.length<cnt){alert('В этой теме только '+pool.length+' вопросов. Выберите меньше или другую тему.');return;}
   var picked=pool.slice().sort(function(){return Math.random()-.5;}).slice(0,cnt).map(function(q){return q.id;});
@@ -1063,6 +1107,7 @@ async function duelSendChallenge(){
       challenger_email:S.user.email,challenger_name:S.user.name,
       opponent_email:opp[0],opponent_name:opp[1],
       status:'pending',question_count:cnt,subject:subj,topic:topic==='all'?'':topic,
+      time_limit:timeLimit,
       questions_json:JSON.stringify(picked)
     });
     closeModal();
@@ -1261,6 +1306,191 @@ async function duelShowHistory(){
   }catch(e){if(body)body.innerHTML='<div style="color:var(--re);font-size:13px">Ошибка загрузки истории</div>';}
 }
 
+// ===== ПРОФИЛЬ СТУДЕНТА =====
+var AVATAR_EMOJIS=['😎','🧠','⚕️','🩺','🔬','🧬','💊','🦷','👨‍⚕️','👩‍⚕️','🤓','😼','🦊','🐺','🦁','🐯','🦉','🦅','🚀','⭐','🔥','💎','👑','🎯'];
+var AVATAR_COLORS=['#4f8ef7','#22d07a','#f5a623','#a78bfa','#ec4899','#2dd4bf','#fb923c','#60a5fa'];
+
+function avatarColorFor(email){
+  var sum=0;for(var i=0;i<(email||'').length;i++)sum+=email.charCodeAt(i);
+  return AVATAR_COLORS[sum%AVATAR_COLORS.length];
+}
+function renderAvatar(user,size){
+  size=size||64;
+  var av=user.avatar||'';
+  var fs=Math.round(size*0.5);
+  if(av&&av.indexOf('data:')===0||av.indexOf('http')===0){
+    // фото
+    return '<div style="width:'+size+'px;height:'+size+'px;border-radius:50%;overflow:hidden;flex-shrink:0;background:#222"><img src="'+av+'" style="width:100%;height:100%;object-fit:cover"></div>';
+  }
+  if(av&&AVATAR_EMOJIS.indexOf(av)>=0){
+    // эмодзи
+    var col=avatarColorFor(user.email);
+    return '<div style="width:'+size+'px;height:'+size+'px;border-radius:50%;background:linear-gradient(135deg,'+col+'33,'+col+'11);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:'+fs+'px;border:2px solid '+col+'55">'+av+'</div>';
+  }
+  // буква-аватар
+  var col2=avatarColorFor(user.email);
+  var letter=((user.name||user.email||'?')[0]||'?').toUpperCase();
+  return '<div style="width:'+size+'px;height:'+size+'px;border-radius:50%;background:linear-gradient(135deg,'+col2+','+col2+'aa);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:'+fs+'px;font-weight:700;color:#fff">'+letter+'</div>';
+}
+
+async function renderProfile(){
+  if(!S.user){showLoginWall();return;}
+  var b=document.getElementById('profileBody');
+  b.innerHTML='<div style="color:var(--tx3);padding:10px">Загрузка профиля...</div>';
+  // данные пользователя
+  var me={name:S.user.name,email:S.user.email,group_name:S.user.group||'',avatar:S.user.avatar||''};
+  // статистика
+  var st=getMyStats();
+  // дуэли
+  var dWins=0,dLoss=0,dTie=0;
+  if(dbOK){
+    try{
+      var duels=await sbGet('duels','or=(challenger_email.eq.'+encodeURIComponent(S.user.email)+',opponent_email.eq.'+encodeURIComponent(S.user.email)+')&status=eq.finished');
+      duels.forEach(function(d){
+        if(!d.winner_email)dTie++;
+        else if(d.winner_email===S.user.email)dWins++;
+        else dLoss++;
+      });
+    }catch(e){}
+  }
+  var html='<div class="card" style="text-align:center;padding:24px;margin-bottom:16px">'
+    +'<div style="display:flex;justify-content:center;margin-bottom:14px">'+renderAvatar(me,88)+'</div>'
+    +'<div style="font-size:22px;font-weight:700;margin-bottom:4px">'+me.name+'</div>'
+    +'<div style="font-size:13px;color:var(--tx3)">'+(me.group_name?'Группа '+me.group_name:me.email)+'</div>'
+    +'<div style="display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap">'
+    +'<button class="btn bgh bsm" onclick="profEditName()"><i class="ti ti-edit"></i> Изменить имя</button>'
+    +'<button class="btn bgh bsm" onclick="profEditAvatar()"><i class="ti ti-photo"></i> Аватар</button>'
+    +'</div></div>';
+  // Статистика
+  html+='<div class="cgrid" style="margin-bottom:16px">'
+    +'<div class="card" style="text-align:center;padding:16px"><div style="font-size:26px;font-weight:700;color:var(--bl)">'+st.solved+'</div><div style="font-size:11px;color:var(--tx3)">Решено</div></div>'
+    +'<div class="card" style="text-align:center;padding:16px"><div style="font-size:26px;font-weight:700;color:var(--gr)">'+st.acc+'%</div><div style="font-size:11px;color:var(--tx3)">Точность</div></div>'
+    +'<div class="card" style="text-align:center;padding:16px"><div style="font-size:26px;font-weight:700;color:var(--am)">'+st.mastered+'</div><div style="font-size:11px;color:var(--tx3)">Освоено</div></div>'
+    +'<div class="card" style="text-align:center;padding:16px"><div style="font-size:26px;font-weight:700;color:var(--pu)">'+st.exams+'</div><div style="font-size:11px;color:var(--tx3)">Экзаменов</div></div>'
+    +'</div>';
+  // Дуэли
+  html+='<div style="font-size:14px;font-weight:600;margin-bottom:10px">⚔️ Дуэли</div>'
+    +'<div style="display:flex;gap:10px;margin-bottom:16px">'
+    +'<div class="card" style="flex:1;text-align:center;padding:14px"><div style="font-size:22px;font-weight:700;color:var(--gr)">'+dWins+'</div><div style="font-size:11px;color:var(--tx3)">Побед</div></div>'
+    +'<div class="card" style="flex:1;text-align:center;padding:14px"><div style="font-size:22px;font-weight:700;color:var(--re)">'+dLoss+'</div><div style="font-size:11px;color:var(--tx3)">Поражений</div></div>'
+    +'<div class="card" style="flex:1;text-align:center;padding:14px"><div style="font-size:22px;font-weight:700;color:var(--am)">'+dTie+'</div><div style="font-size:11px;color:var(--tx3)">Ничьих</div></div>'
+    +'</div>';
+  // Достижения (компактно)
+  html+='<div style="font-size:14px;font-weight:600;margin-bottom:10px">🏆 Достижения</div><div id="profAch"></div>';
+  b.innerHTML=html;
+  // встроим достижения
+  var ag=document.getElementById('profAch');
+  if(ag&&typeof ACHIEVEMENTS!=='undefined'){
+    var earned=ACHIEVEMENTS.filter(function(a){return a.check(st);});
+    if(earned.length){
+      ag.innerHTML='<div style="display:flex;gap:8px;flex-wrap:wrap">'+earned.map(function(a){return '<div style="font-size:28px" title="'+a.name+'">'+a.icon+'</div>';}).join('')+'</div>';
+    }else{
+      ag.innerHTML='<div style="font-size:13px;color:var(--tx3)">Пока нет достижений — решай вопросы!</div>';
+    }
+  }
+}
+
+async function viewProfile(emailEnc){
+  var email=decodeURIComponent(emailEnc);
+  if(S.user&&email===S.user.email){go('profile');return;} // свой — на свою страницу
+  showModal('Профиль','<div style="color:var(--tx3);padding:10px">Загрузка...</div>');
+  try{
+    var u=await sbGet('users','email=eq.'+encodeURIComponent(email)+'&select=name,email,avatar,group_name');
+    if(!u.length){document.getElementById('mdBody').innerHTML='<p style="color:var(--tx3)">Профиль не найден</p>';return;}
+    u=u[0];
+    var prog=await sbGet('progress','user_email=eq.'+encodeURIComponent(email)+'&select=correct_count,attempt_count');
+    var tA=0,tC=0,mastered=0;
+    prog.forEach(function(p){tA+=p.attempt_count;tC+=p.correct_count;if(p.attempt_count>=2&&p.correct_count/p.attempt_count>=0.8)mastered++;});
+    var acc=tA?Math.round(tC/tA*100):0;
+    var solved=prog.length;
+    var exams=await sbGet('exam_history','user_email=eq.'+encodeURIComponent(email)+'&select=id');
+    // дуэли
+    var duels=await sbGet('duels','or=(challenger_email.eq.'+encodeURIComponent(email)+',opponent_email.eq.'+encodeURIComponent(email)+')&status=eq.finished');
+    var dW=0,dL=0,dT=0;
+    duels.forEach(function(d){if(!d.winner_email)dT++;else if(d.winner_email===email)dW++;else dL++;});
+    var html='<div style="text-align:center;margin-bottom:16px">'
+      +'<div style="display:flex;justify-content:center;margin-bottom:10px">'+renderAvatar(u,72)+'</div>'
+      +'<div style="font-size:18px;font-weight:700">'+u.name+'</div>'
+      +'<div style="font-size:12px;color:var(--tx3)">'+(u.group_name?'Группа '+u.group_name:'')+'</div></div>';
+    html+='<div class="cgrid" style="margin-bottom:14px">'
+      +'<div class="card" style="text-align:center;padding:12px"><div style="font-size:20px;font-weight:700;color:var(--bl)">'+solved+'</div><div style="font-size:10px;color:var(--tx3)">Решено</div></div>'
+      +'<div class="card" style="text-align:center;padding:12px"><div style="font-size:20px;font-weight:700;color:var(--gr)">'+acc+'%</div><div style="font-size:10px;color:var(--tx3)">Точность</div></div>'
+      +'<div class="card" style="text-align:center;padding:12px"><div style="font-size:20px;font-weight:700;color:var(--am)">'+mastered+'</div><div style="font-size:10px;color:var(--tx3)">Освоено</div></div>'
+      +'<div class="card" style="text-align:center;padding:12px"><div style="font-size:20px;font-weight:700;color:var(--pu)">'+exams.length+'</div><div style="font-size:10px;color:var(--tx3)">Экзаменов</div></div>'
+      +'</div>';
+    html+='<div style="font-size:13px;font-weight:600;margin-bottom:8px">⚔️ Дуэли</div>'
+      +'<div style="display:flex;gap:8px;margin-bottom:14px">'
+      +'<div class="card" style="flex:1;text-align:center;padding:10px"><div style="font-size:18px;font-weight:700;color:var(--gr)">'+dW+'</div><div style="font-size:10px;color:var(--tx3)">Побед</div></div>'
+      +'<div class="card" style="flex:1;text-align:center;padding:10px"><div style="font-size:18px;font-weight:700;color:var(--re)">'+dL+'</div><div style="font-size:10px;color:var(--tx3)">Поражений</div></div>'
+      +'<div class="card" style="flex:1;text-align:center;padding:10px"><div style="font-size:18px;font-weight:700;color:var(--am)">'+dT+'</div><div style="font-size:10px;color:var(--tx3)">Ничьих</div></div></div>';
+    // кнопка вызова на дуэль
+    if(S.user){
+      html+='<button class="btn bbl" style="width:100%" onclick="closeModal();duelChallengeTo(\''+encodeURIComponent(email)+'\',\''+(u.name||'').replace(/[\'"\\]/g,'')+'\')"><i class="ti ti-swords"></i> Вызвать на дуэль</button>';
+    }
+    document.getElementById('mdBody').innerHTML=html;
+  }catch(e){document.getElementById('mdBody').innerHTML='<p style="color:var(--re)">Ошибка загрузки</p>';}
+}
+function profEditName(){
+  var body='<div class="fg"><label class="fl">Новое имя</label><input id="profNameInp" value="'+(S.user.name||'').replace(/"/g,'&quot;')+'" maxlength="30"></div>'
+    +'<button class="btn bbl" onclick="profSaveName()" style="width:100%">Сохранить</button>';
+  showModal('Изменить имя',body);
+}
+async function profSaveName(){
+  var nn=document.getElementById('profNameInp').value.trim();
+  if(!nn){alert('Введите имя');return;}
+  S.user.name=nn;sv();
+  if(dbOK){try{await sbPatch('users','email=eq.'+encodeURIComponent(S.user.email),{name:nn});}catch(e){}}
+  closeModal();renderAuthHdr();renderProfile();
+}
+
+function profEditAvatar(){
+  var emojiGrid=AVATAR_EMOJIS.map(function(e){
+    return '<button class="avEmo" data-emo="'+e+'" style="font-size:28px;background:var(--bg3);border:1px solid var(--bor);border-radius:10px;padding:8px;cursor:pointer">'+e+'</button>';
+  }).join('');
+  var body='<div style="font-size:13px;color:var(--tx2);margin-bottom:10px">Выбери эмодзи-аватар:</div>'
+    +'<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:16px">'+emojiGrid+'</div>'
+    +'<div style="font-size:13px;color:var(--tx2);margin-bottom:8px">Или загрузи фото:</div>'
+    +'<input type="file" id="profPhotoInp" accept="image/*" style="font-size:12px">'
+    +'<div style="font-size:11px;color:var(--tx3);margin-top:8px">Буква-аватар по умолчанию, если ничего не выбрано.</div>'
+    +'<button class="btn bgh bsm" id="avResetBtn" style="margin-top:10px">Сбросить на букву</button>';
+  showModal('Выбрать аватар',body);
+  document.querySelectorAll('.avEmo').forEach(function(btn){
+    btn.addEventListener('click',function(){profSetAvatar(btn.getAttribute('data-emo'));});
+  });
+  var resetB=document.getElementById('avResetBtn');
+  if(resetB)resetB.addEventListener('click',function(){profSetAvatar('');});
+  var photoInp=document.getElementById('profPhotoInp');
+  if(photoInp)photoInp.addEventListener('change',profUploadPhoto);
+}
+async function profSetAvatar(av){
+  S.user.avatar=av;sv();
+  if(dbOK){try{await sbPatch('users','email=eq.'+encodeURIComponent(S.user.email),{avatar:av});}catch(e){}}
+  closeModal();renderAuthHdr();renderProfile();
+}
+function profUploadPhoto(ev){
+  var file=ev.target.files[0];
+  if(!file)return;
+  if(file.size>500000){alert('Фото слишком большое (макс 500 КБ). Выбери поменьше.');return;}
+  var reader=new FileReader();
+  reader.onload=function(e){
+    // сожмём через canvas до 200x200
+    var img=new Image();
+    img.onload=function(){
+      var canvas=document.createElement('canvas');
+      var sz=200;canvas.width=sz;canvas.height=sz;
+      var ctx=canvas.getContext('2d');
+      // обрезка по центру в квадрат
+      var min=Math.min(img.width,img.height);
+      var sx=(img.width-min)/2,sy=(img.height-min)/2;
+      ctx.drawImage(img,sx,sy,min,min,0,0,sz,sz);
+      var dataUrl=canvas.toDataURL('image/jpeg',0.8);
+      profSetAvatar(dataUrl);
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
 function renderHome(){
   renderAuthHdr();
   renderDaily();
@@ -1321,6 +1551,7 @@ function fcInit(){
   fcFilter();
 }
 function fcFilter(){
+  fcSetupSwipe();
   var s=document.getElementById('fcS').value,t=document.getElementById('fcT').value;
   FCP=getQS().filter(function(q){return(s==='all'||q.s===s)&&(t==='all'||q.t===t);});
   FCI=0;FCf=false;
@@ -1345,7 +1576,62 @@ function fcRender(){
 }
 function fcFlip(){FCf=!FCf;fcRender();}
 function fcPrev(){if(FCI>0){FCI--;FCf=false;fcRender();}}
-function fcNext(){if(FCI<FCP.length-1){FCI++;FCf=false;fcRender();}}
+function fcNext(){if(FCI<FCP.length-1){FCI++;FCf=false;fcRender();}else{document.getElementById('fcQ').textContent='Это была последняя карточка! 🎉';}}
+// Свайп вправо = знаю (освоено), влево = повтор
+async function fcSwipe(dir){
+  if(!FCP.length)return;
+  var q=FCP[FCI];
+  var card=document.getElementById('fcCard');
+  // анимация улёта
+  card.style.transform='translateX('+(dir==='know'?'120%':'-120%')+') rotate('+(dir==='know'?'15':'-15')+'deg)';
+  card.style.opacity='0';
+  // записываем результат: знаю = правильно, повтор = неправильно
+  await saveProg(q.id,dir==='know');
+  setTimeout(function(){
+    card.style.transition='none';
+    card.style.transform='';card.style.opacity='1';
+    if(FCI<FCP.length-1){FCI++;}
+    FCf=false;fcRender();
+    setTimeout(function(){card.style.transition='';},30);
+  },250);
+}
+// Жесты касания на карточке
+function fcSetupSwipe(){
+  var card=document.getElementById('fcCard');
+  if(!card||card._swipeSet)return;
+  card._swipeSet=true;
+  var startX=0,startY=0,dx=0,dy=0,dragging=false,moved=false;
+  function down(x,y){startX=x;startY=y;dx=0;dy=0;dragging=true;moved=false;card.classList.add('swiping');}
+  function move(x,y){
+    if(!dragging)return;
+    dx=x-startX;dy=y-startY;
+    if(Math.abs(dx)>8||Math.abs(dy)>8)moved=true;
+    // если вертикальный жест преобладает — не свайпаем (это скролл)
+    if(Math.abs(dy)>Math.abs(dx)&&Math.abs(dy)>20){return;}
+    card.style.transform='translateX('+dx+'px) rotate('+(dx/20)+'deg)';
+    var km=document.getElementById('fcMarkKnow'),dm=document.getElementById('fcMarkDunno');
+    if(km)km.style.opacity=dx>40?Math.min(1,dx/120):0;
+    if(dm)dm.style.opacity=dx<-40?Math.min(1,-dx/120):0;
+  }
+  function up(){
+    if(!dragging)return;dragging=false;card.classList.remove('swiping');
+    var km=document.getElementById('fcMarkKnow'),dm=document.getElementById('fcMarkDunno');
+    if(km)km.style.opacity=0;if(dm)dm.style.opacity=0;
+    if(dx>100){fcSwipe('know');}
+    else if(dx<-100){fcSwipe('dunno');}
+    else{
+      card.style.transform='';
+      if(!moved){fcFlip();} // просто тап — переворот
+    }
+  }
+  card.addEventListener('touchstart',function(e){down(e.touches[0].clientX,e.touches[0].clientY);},{passive:true});
+  card.addEventListener('touchmove',function(e){move(e.touches[0].clientX,e.touches[0].clientY);},{passive:true});
+  card.addEventListener('touchend',up);
+  // мышь (для компа)
+  card.addEventListener('mousedown',function(e){down(e.clientX,e.clientY);});
+  window.addEventListener('mousemove',function(e){if(dragging)move(e.clientX,e.clientY);});
+  window.addEventListener('mouseup',function(){if(dragging)up();});
+}
 
 var TRC=null,TRrev=false,TRss={c:0,w:0},TR_MODE='all';
 function trTopics(){
@@ -1590,7 +1876,7 @@ async function renderLB(){
   var all=[];
   if(dbOK){
     try{
-      var users=await sbGet('users','status=eq.active&select=email,name');
+      var users=await sbGet('users','status=eq.active&select=email,name,avatar,group_name');
       var prog=await sbGet('progress','select=user_email,correct_count,attempt_count');
       var exams=await sbGet('exam_history','select=user_email');
       var byUser={};
@@ -1620,7 +1906,7 @@ async function renderLB(){
         var examBonus=exCount*5;
         var duelBonus=dWins*10;
         var score=baseScore+examBonus+duelBonus;
-        all.push({name:u.name,acc:acc,solved:solved,score:score,ex:exCount,examBonus:examBonus,duelWins:dWins,duelBonus:duelBonus,isMe:S.user&&u.email===S.user.email});
+        all.push({name:u.name,email:u.email,avatar:u.avatar||'',acc:acc,solved:solved,score:score,ex:exCount,examBonus:examBonus,duelWins:dWins,duelBonus:duelBonus,isMe:S.user&&u.email===S.user.email});
       });
     }catch(e){console.warn('LB error:',e.message);}
   }
@@ -1645,7 +1931,7 @@ function renderLBList(data){
   var medals=['🥇','🥈','🥉'];
   var html='<div class="alert ali" style="font-size:12px;margin-bottom:12px"><i class="ti ti-info-circle"></i> Балл = точность × объём. В рейтинг попадают решившие 50+ вопросов.</div>';
   if(ranked.length){
-    html+=ranked.map(function(e,i){return '<div class="lr'+(e.isMe?' me':'')+'"><span style="min-width:28px;font-size:18px">'+(i<3?medals[i]:'<span style="font-family:var(--fm);font-size:13px;color:var(--tx3)">'+(i+1)+'</span>')+'</span><div style="flex:1"><div style="font-size:13px'+(e.isMe?';font-weight:700':'')+'">'+e.name+(e.isMe?' <span class="bdg bbl2">вы</span>':'')+'</div><div style="font-size:10px;color:var(--tx3);font-family:var(--fm)">'+e.solved+' решено · '+e.acc+'% · '+(e.ex||0)+' экз.'+(e.duelWins?' · ⚔️'+e.duelWins:'')+'</div></div><span style="font-size:22px;font-weight:700;font-family:var(--fm);color:var(--bl)">'+e.score+'</span></div>';}).join('');
+    html+=ranked.map(function(e,i){return '<div class="lr'+(e.isMe?' me':'')+'" style="cursor:pointer" onclick="viewProfile(\''+encodeURIComponent(e.email)+'\')"><span style="min-width:28px;font-size:18px">'+(i<3?medals[i]:'<span style="font-family:var(--fm);font-size:13px;color:var(--tx3)">'+(i+1)+'</span>')+'</span>'+renderAvatar(e,36)+'<div style="flex:1;margin-left:10px"><div style="font-size:13px'+(e.isMe?';font-weight:700':'')+'">'+e.name+(e.isMe?' <span class="bdg bbl2">вы</span>':'')+'</div><div style="font-size:10px;color:var(--tx3);font-family:var(--fm)">'+e.solved+' решено · '+e.acc+'% · '+(e.ex||0)+' экз.'+(e.duelWins?' · ⚔️'+e.duelWins:'')+'</div></div><span style="font-size:22px;font-weight:700;font-family:var(--fm);color:var(--bl)">'+e.score+'</span></div>';}).join('');
   }else{
     html+='<p style="color:var(--tx3);font-size:13px;padding:10px">Пока никто не решил 50+ вопросов. Будьте первым!</p>';
   }
