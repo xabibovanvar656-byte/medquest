@@ -455,7 +455,7 @@ async function init(){
   ];
   try{
     var r=await Promise.race([
-      Promise.all([sbGet('news','order=created_at.desc&limit=20'),sbGet('schedule','order=exam_date.asc&limit=20'),sbGet('custom_questions','order=created_at.asc&limit=500')]),
+      Promise.all([sbGet('news','order=created_at.desc&limit=20'),sbGet('schedule','order=exam_date.asc&limit=20'),sbGet('custom_questions','order=created_at.asc&limit=5000')]),
       new Promise(function(_,rej){setTimeout(function(){rej(new Error('timeout'));},5000);})
     ]);
     if(r[0]&&r[0].length)newsCache=r[0];
@@ -687,6 +687,11 @@ function addBtn(parent,cls,txt,fn){
   btn.addEventListener('click',fn);parent.appendChild(btn);
 }
 
+function showModal(title,htmlBody){
+  document.getElementById('modal').style.display='flex';
+  document.getElementById('mdT').textContent=title;
+  document.getElementById('mdBody').innerHTML=htmlBody;
+}
 function closeModal(){document.getElementById('modal').style.display='none';}
 function showErr(msg){var e=document.getElementById('mErr');if(e){e.textContent=msg;e.style.display='';}}
 var mmode='login';
@@ -2136,17 +2141,17 @@ async function admBulkSave(){
       shuffled=allOpts.slice().sort(function(){return Math.random()-.5;});
       ci=shuffled.indexOf(correct);
     }
-    var id='cq_'+Date.now()+'_'+i;
+    var id='cq_'+Date.now()+'_'+i+'_'+Math.random().toString(36).slice(2,8);
     try{
       if(dbOK)await sbPost('custom_questions',{id:id,subject:s,topic:t,question:qa[i].q,options:shuffled,correct_index:ci,batch:BATCH_ID});
       CQS.push({id:id,s:s,t:t,q:qa[i].q,o:shuffled,a:ci,batch:BATCH_ID});
       saved++;
-    }catch(e){failed++;}
+    }catch(e){failed++;if(!window._bulkErr)window._bulkErr=e.message;}
   }
   closeModal();refreshSubjectDropdowns();admQF();
   var bad=qa._bad||[];
   var msg='Готово! Добавлено: '+saved;
-  if(failed)msg+=', ошибок сохранения: '+failed;
+  if(failed){msg+=', ошибок сохранения: '+failed;if(window._bulkErr){msg+='\nПричина: '+window._bulkErr.slice(0,150);window._bulkErr=null;}}
   if(bad.length)msg+='\n\n⚠ НЕ распознано ('+bad.length+'): №'+bad.map(function(x){return x.num;}).join(', №')+'\nЭти вопросы НЕ добавлены — проверьте формат (нужен ? или :).';
   alert(msg);
 }
@@ -2212,7 +2217,7 @@ async function admSaveNewQ(){
   var opts=[val('aqA0'),val('aqA1'),val('aqA2'),val('aqA3')];
   if(!t||!q||opts.some(function(o){return !o;})){showErr('Заполните все поля');return;}
   var correct=opts[0];var shuffled=opts.slice().sort(function(){return Math.random()-.5;});var ci=shuffled.indexOf(correct);
-  var id='cq_'+Date.now();
+  var id='cq_'+Date.now()+'_'+Math.random().toString(36).slice(2,8);
   var btn=document.querySelector('#mdBody .btn');btn.disabled=true;btn.textContent='Сохранение...';
   try{if(dbOK)await sbPost('custom_questions',{id:id,subject:s,topic:t,question:q,options:shuffled,correct_index:ci});CQS.push({id:id,s:s,t:t,q:q,o:shuffled,a:ci});closeModal();refreshSubjectDropdowns();admQF();}
   catch(e){showErr('Ошибка: '+e.message);btn.disabled=false;btn.textContent='Сохранить';}
