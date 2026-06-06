@@ -166,6 +166,7 @@ select option{background:var(--bg2)}
     <div class="nlbl">Аналитика</div>
     <button class="nb" data-pg="progress" onclick="go('progress',this)"><i class="ti ti-chart-line"></i><span>Прогресс</span></button>
     <button class="nb" data-pg="leaderboard" onclick="go('leaderboard',this)"><i class="ti ti-trophy"></i><span>Рейтинг</span></button>
+    <button class="nb" data-pg="duels" onclick="go('duels',this)"><i class="ti ti-swords"></i><span>Дуэли</span><span class="nbadge" id="duelBadge" style="display:none">!</span></button>
   </div>
   <div style="padding:4px 0">
     <div class="nlbl">Инфо</div>
@@ -312,6 +313,16 @@ select option{background:var(--bg2)}
 <div id="pg-leaderboard" class="page">
   <div class="ph"><div class="pt">Таблица лидеров 🏆</div><div class="ps">Рейтинг по точности</div></div>
   <div id="lbList"></div>
+</div>
+<div id="pg-duels" class="page">
+  <div class="ph"><div class="pt">Дуэли ⚔️</div><div class="ps">Брось вызов другому студенту</div></div>
+  <div id="duelActive"></div>
+  <div id="duelIncoming"></div>
+  <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+    <button class="btn bbl" onclick="duelNewChallenge()"><i class="ti ti-swords"></i> Бросить вызов</button>
+    <button class="btn bgh" onclick="duelShowHistory()"><i class="ti ti-history"></i> История дуэлей</button>
+  </div>
+  <div id="duelBody"></div>
 </div>
 <div id="pg-news" class="page">
   <div class="ph"><div class="pt">Новости</div><div class="ps">Объявления платформы</div></div>
@@ -929,7 +940,6 @@ var BASE_QS=[
 {id:"c268",s:"chemistry",t:"Тема 16: Жиры",q:"Бурый жир в организме человека:",o:["Генерирует тепло (термогенез)","Синтезирует гормоны","Транспортирует жиры","Хранит энергию"],a:0},
 {id:"c269",s:"chemistry",t:"Тема 16: Жиры",q:"ЛПВП (высокой плотности) транспортируют холестерин:",o:["В мозг","В ткани","В мышцы","Из тканей в печень"],a:3},
 {id:"c270",s:"chemistry",t:"Тема 16: Жиры",q:"Витамин A (ретинол) относится к группе:",o:["Жирорастворимых витаминов","Коферментов","Антиоксидантов","Водорастворимых витаминов"],a:0},
-
 ];
 
 var CQS=[];
@@ -1080,7 +1090,7 @@ async function updPendBadge(){
   if(c)c.textContent=n>0?n:'';
 }
 
-var PROTECTED=['flashcards','trainer','exam','progress','leaderboard'];
+var PROTECTED=['flashcards','trainer','exam','progress','leaderboard','duels'];
 
 function showLoginWall(){
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('on');});
@@ -1121,10 +1131,11 @@ function go(pg,btn){
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('on');});
   document.querySelectorAll('.nb').forEach(function(b){b.classList.remove('on');});
   document.getElementById('pg-'+pg).classList.add('on');
+  if(pg!=='duels'&&!CUR_DUEL&&typeof duelStopPolling==='function')duelStopPolling();
   document.getElementById('mscroll').scrollTop=0;
   if(btn)btn.classList.add('on');
   else{var b=document.querySelector('[data-pg="'+pg+'"]');if(b)b.classList.add('on');}
-  var fns={home:renderHome,flashcards:fcInit,trainer:trTopics,exam:exTopics,progress:renderProg,leaderboard:renderLB,news:renderNews,schedule:renderSched,admin:renderAdm};
+  var fns={home:renderHome,flashcards:fcInit,trainer:trTopics,exam:exTopics,progress:renderProg,leaderboard:renderLB,duels:renderDuels,news:renderNews,schedule:renderSched,admin:renderAdm};
   if(fns[pg])fns[pg]();
   if(S.user&&PAGE_LABELS[pg])pushActivity(PAGE_LABELS[pg]);
 }
@@ -1297,6 +1308,17 @@ async function registerAdminSession(name,email){
 // Обновляем «онлайн» каждые 30 сек
 setInterval(function(){if(S.isAdm&&!S.isSuper&&S.adminEmail)registerAdminSession(S.user?S.user.name:'',S.adminEmail);},30000);
 setInterval(function(){if(S.user)pushActivity('в сети');},20000);
+// Фоновый опрос входящих вызовов на дуэль (значок в меню)
+setInterval(async function(){
+  if(!dbOK||!S.user||CUR_DUEL)return;
+  try{
+    var inc=await sbGet('duels','opponent_email=eq.'+encodeURIComponent(S.user.email)+'&status=eq.pending');
+    var now=new Date();
+    inc=inc.filter(function(d){return new Date(d.expires_at)>now;});
+    var badge=document.getElementById('duelBadge');
+    if(badge)badge.style.display=inc.length?'flex':'none';
+  }catch(e){}
+},8000);
 function doLogout(){S.user=null;S.hist=[];S.prog={};sv();renderAuthHdr();renderHome();}
 async function admOut(){if(!S.isSuper&&S.adminEmail&&dbOK){try{await sbDel('admin_sessions','email=eq.'+encodeURIComponent(S.adminEmail));}catch(e){}}S.isAdm=false;S.isSuper=false;S.adminEmail=null;sv();renderAuthHdr();renderAdm();}
 
@@ -1444,6 +1466,322 @@ function renderAchievements(){
   var hdr=document.getElementById('achHdr');
   if(hdr)hdr.textContent='Достижения ('+earned+'/'+ACHIEVEMENTS.length+')';
 }
+// ===== ДУЭЛИ =====
+var DUEL_POLL=null;      // интервал опроса
+var CUR_DUEL=null;       // текущая активная дуэль
+var DUEL_Q=null;         // вопросы текущей дуэли
+var DUEL_QI=0;           // индекс вопроса
+var DUEL_SCORE=0;        // счёт
+var DUEL_START=0;        // время старта вопроса
+var DUEL_TOTALTIME=0;    // суммарное время
+
+function renderDuels(){
+  if(!S.user){showLoginWall();return;}
+  document.getElementById('duelActive').innerHTML='';
+  document.getElementById('duelIncoming').innerHTML='';
+  document.getElementById('duelBody').innerHTML='<div style="color:var(--tx3);padding:10px">Загрузка...</div>';
+  duelCheckState();
+  // запустить опрос входящих вызовов
+  duelStartPolling();
+  duelShowHistory();
+}
+
+function duelStartPolling(){
+  if(DUEL_POLL)clearInterval(DUEL_POLL);
+  DUEL_POLL=setInterval(duelPoll,2500);
+  duelPoll();
+}
+function duelStopPolling(){
+  if(DUEL_POLL){clearInterval(DUEL_POLL);DUEL_POLL=null;}
+}
+
+async function duelPoll(){
+  if(!dbOK||!S.user)return;
+  try{
+    // входящие вызовы (я соперник, статус pending, не истёк)
+    var incoming=await sbGet('duels','opponent_email=eq.'+encodeURIComponent(S.user.email)+'&status=eq.pending&order=created_at.desc');
+    var now=new Date();
+    incoming=incoming.filter(function(d){return new Date(d.expires_at)>now;});
+    // обновить значок в меню
+    var badge=document.getElementById('duelBadge');
+    if(badge)badge.style.display=incoming.length?'flex':'none';
+    // если на странице дуэлей — показать входящие
+    var inEl=document.getElementById('duelIncoming');
+    if(inEl&&document.getElementById('pg-duels').classList.contains('on')){
+      if(incoming.length){
+        inEl.innerHTML=incoming.map(function(d){
+          var secs=Math.max(0,Math.round((new Date(d.expires_at)-now)/1000));
+          var mm=Math.floor(secs/60),ss=secs%60;
+          return '<div class="card" style="border-color:var(--bl);margin-bottom:10px"><div style="display:flex;align-items:center;gap:10px"><div style="font-size:28px">⚔️</div><div style="flex:1"><div style="font-weight:600">'+d.challenger_name+' вызывает на дуэль!</div><div style="font-size:12px;color:var(--tx2)">'+d.question_count+' вопросов · '+(d.topic||d.subject||"все темы")+' · истекает через '+mm+":"+(ss<10?"0":"")+ss+'</div></div></div><div style="display:flex;gap:8px;margin-top:12px"><button class="btn bbl bsm" onclick="duelAccept('+d.id+')">Принять</button><button class="btn bgh bsm" onclick="duelDecline('+d.id+')">Отказаться</button></div></div>';
+        }).join('');
+      }else{
+        inEl.innerHTML='';
+      }
+    }
+    // проверить мои активные дуэли (принятые, идущие)
+    if(!CUR_DUEL){
+      var active=await sbGet('duels','or=(challenger_email.eq.'+encodeURIComponent(S.user.email)+',opponent_email.eq.'+encodeURIComponent(S.user.email)+')&status=eq.accepted&order=created_at.desc');
+      if(active.length){
+        duelEnterMatch(active[0]);
+      }
+    }
+  }catch(e){console.warn('duel poll',e.message);}
+}
+
+async function duelCheckState(){
+  // проверка: есть ли вызов который я отправил и жду ответа
+  if(!dbOK||!S.user)return;
+  try{
+    var mine=await sbGet('duels','challenger_email=eq.'+encodeURIComponent(S.user.email)+'&status=eq.pending&order=created_at.desc');
+    var now=new Date();
+    mine=mine.filter(function(d){return new Date(d.expires_at)>now;});
+    var aEl=document.getElementById('duelActive');
+    if(mine.length&&aEl){
+      var d=mine[0];
+      var secs=Math.max(0,Math.round((new Date(d.expires_at)-now)/1000));
+      var mm=Math.floor(secs/60),ss=secs%60;
+      aEl.innerHTML='<div class="card" style="border-color:var(--am);margin-bottom:14px"><div style="display:flex;align-items:center;gap:10px"><div style="font-size:24px">⏳</div><div style="flex:1"><div style="font-weight:600">Ожидание ответа от '+d.opponent_name+'...</div><div style="font-size:12px;color:var(--tx2)">Вызов истекает через '+mm+":"+(ss<10?"0":"")+ss+'</div></div><button class="btn bgh bsm" onclick="duelCancel('+d.id+')">Отменить</button></div></div>';
+    }
+  }catch(e){}
+}
+
+async function duelNewChallenge(){
+  // выбрать соперника
+  var users=[];
+  try{users=await sbGet('users','status=eq.active&select=email,name,group_name&order=name.asc');}catch(e){}
+  users=users.filter(function(u){return u.email!==S.user.email;});
+  if(!users.length){alert('Нет других студентов для вызова');return;}
+  var subjOpts=Object.keys(SM).map(function(k){return '<option value="'+k+'">'+SM[k].icon+' '+SM[k].label+'</option>';}).join('');
+  var userOpts=users.map(function(u){return '<option value="'+u.email+'|'+(u.name||u.email).replace(/\|/g,'')+'">'+(u.name||u.email)+(u.group_name?' ('+u.group_name+')':'')+'</option>';}).join('');
+  var body='<div class="fg"><label class="fl">Соперник</label><select id="duelOpp">'+userOpts+'</select></div>'
+    +'<div class="fg"><label class="fl">Предмет</label><select id="duelSubj" onchange="duelChTopics()">'+subjOpts+'</select></div>'
+    +'<div class="fg"><label class="fl">Тема</label><select id="duelTopic"><option value="all">Все темы</option></select></div>'
+    +'<div class="fg"><label class="fl">Вопросов: <b id="duelCntL">10</b></label><input type="range" min="10" max="80" step="5" value="10" id="duelCnt" oninput="duelCntUpd()"></div>'
+    +'<button class="btn bbl" onclick="duelSendChallenge()" style="width:100%;margin-top:8px">Отправить вызов</button>';
+  showModal('Бросить вызов ⚔️',body);
+  duelChTopics();
+}
+function duelChTopics(){
+  var s=document.getElementById('duelSubj').value;
+  var topEl=document.getElementById('duelTopic');
+  var topics=[];getQS().forEach(function(q){if(q.s===s&&topics.indexOf(q.t)<0)topics.push(q.t);});
+  topics.sort();
+  topEl.innerHTML='<option value="all">Все темы</option>'+topics.map(function(t){return '<option value="'+t+'">'+t+'</option>';}).join('');
+}
+function duelCntUpd(){document.getElementById('duelCntL').textContent=document.getElementById('duelCnt').value;}
+async function duelSendChallenge(){
+  var oppVal=document.getElementById('duelOpp').value;
+  var opp=oppVal.split('|');
+  var subj=document.getElementById('duelSubj').value;
+  var topic=document.getElementById('duelTopic').value;
+  var cnt=+document.getElementById('duelCnt').value;
+  // подобрать вопросы
+  var pool=getQS().filter(function(q){return q.s===subj&&(topic==='all'||q.t===topic);});
+  if(pool.length<cnt){alert('В этой теме только '+pool.length+' вопросов. Выберите меньше или другую тему.');return;}
+  var picked=pool.slice().sort(function(){return Math.random()-.5;}).slice(0,cnt).map(function(q){return q.id;});
+  try{
+    await sbPost('duels',{
+      challenger_email:S.user.email,challenger_name:S.user.name,
+      opponent_email:opp[0],opponent_name:opp[1],
+      status:'pending',question_count:cnt,subject:subj,topic:topic==='all'?'':topic,
+      questions_json:JSON.stringify(picked)
+    });
+    closeModal();
+    alert('Вызов отправлен! У соперника 5 минут чтобы принять.');
+    duelCheckState();
+  }catch(e){alert('Ошибка: '+e.message);}
+}
+async function duelCancel(id){
+  try{await sbPatch('duels','id=eq.'+id,{status:'expired'});document.getElementById('duelActive').innerHTML='';}catch(e){}
+}
+async function duelAccept(id){
+  try{
+    await sbPatch('duels','id=eq.'+id,{status:'accepted'});
+    var d=await sbGet('duels','id=eq.'+id);
+    if(d.length)duelEnterMatch(d[0]);
+  }catch(e){alert('Ошибка: '+e.message);}
+}
+async function duelDecline(id){
+  try{await sbPatch('duels','id=eq.'+id,{status:'declined'});duelPoll();}catch(e){}
+}
+
+function duelEnterMatch(d){
+  CUR_DUEL=d;
+  DUEL_Q=JSON.parse(d.questions_json);
+  DUEL_QI=0;DUEL_SCORE=0;DUEL_TOTALTIME=0;
+  go('duels');
+  duelStopPolling(); // остановим общий опрос, запустим матч-опрос
+  duelRenderQuestion();
+}
+
+function duelRenderQuestion(){
+  var inEl=document.getElementById('duelIncoming');if(inEl)inEl.innerHTML='';
+  var aEl=document.getElementById('duelActive');if(aEl)aEl.innerHTML='';
+  var body=document.getElementById('duelBody');
+  if(DUEL_QI>=DUEL_Q.length){duelFinishMine();return;}
+  var qid=DUEL_Q[DUEL_QI];
+  var q=getQS().filter(function(x){return x.id===qid;})[0];
+  if(!q){DUEL_QI++;duelRenderQuestion();return;}
+  var opts=shuffleOpts(q);
+  DUEL_START=Date.now();
+  var amChal=CUR_DUEL.challenger_email===S.user.email;
+  var oppName=amChal?CUR_DUEL.opponent_name:CUR_DUEL.challenger_name;
+  body.innerHTML='<div class="card">'
+    +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">'
+    +'<span class="bdg bbl2">Вопрос '+(DUEL_QI+1)+'/'+DUEL_Q.length+'</span>'
+    +'<span style="font-size:13px;color:var(--tx2)">⚔️ против '+oppName+'</span>'
+    +'<span class="bdg" id="duelTimer" style="font-family:var(--fm)">0с</span></div>'
+    +'<div id="duelOppProg" style="font-size:11px;color:var(--tx3);margin-bottom:10px"></div>'
+    +'<div style="font-size:16px;font-weight:600;margin-bottom:16px">'+q.q+'</div>'
+    +'<div id="duelOpts"></div></div>';
+  var od=document.getElementById('duelOpts');
+  opts.opts.forEach(function(opt,i){
+    var btn=document.createElement('button');
+    btn.className='opt';btn.textContent=opt;
+    btn.onclick=function(){duelAnswer(i,opts.correctIdx,btn);};
+    od.appendChild(btn);
+  });
+  // таймер вопроса
+  if(window._duelTmr)clearInterval(window._duelTmr);
+  window._duelTmr=setInterval(function(){
+    var el=document.getElementById('duelTimer');
+    if(el)el.textContent=Math.round((Date.now()-DUEL_START)/1000)+'с';
+  },500);
+  // опрос прогресса соперника
+  duelMatchPoll();
+}
+
+async function duelAnswer(chosen,correct,btn){
+  if(window._duelTmr)clearInterval(window._duelTmr);
+  var spent=(Date.now()-DUEL_START)/1000;
+  DUEL_TOTALTIME+=spent;
+  var ok=chosen===correct;
+  if(ok)DUEL_SCORE++;
+  // записать прогресс в БД + прогресс по вопросу в общую статистику
+  var qid=DUEL_Q[DUEL_QI];
+  await saveProg(qid,ok);
+  // подсветка
+  document.querySelectorAll('#duelOpts .opt').forEach(function(b,i){
+    b.style.pointerEvents='none';
+    if(i===correct)b.classList.add('correct');
+    else if(b===btn)b.classList.add('wrong');
+  });
+  // обновить прогресс в БД
+  var amChal=CUR_DUEL.challenger_email===S.user.email;
+  var patch=amChal?{challenger_progress:DUEL_QI+1}:{opponent_progress:DUEL_QI+1};
+  try{if(dbOK)await sbPatch('duels','id=eq.'+CUR_DUEL.id,patch);}catch(e){}
+  DUEL_QI++;
+  setTimeout(duelRenderQuestion,800);
+}
+
+async function duelMatchPoll(){
+  // показываем прогресс соперника
+  if(!CUR_DUEL||!dbOK)return;
+  try{
+    var d=await sbGet('duels','id=eq.'+CUR_DUEL.id);
+    if(!d.length)return;
+    d=d[0];CUR_DUEL=d;
+    var amChal=d.challenger_email===S.user.email;
+    var oppProg=amChal?d.opponent_progress:d.challenger_progress;
+    var oppDone=amChal?d.opponent_done:d.challenger_done;
+    var el=document.getElementById('duelOppProg');
+    if(el)el.textContent=oppDone?'Соперник закончил ✓':'Соперник: '+(oppProg||0)+'/'+DUEL_Q.length;
+    // если оба закончили — показать результат
+    if(d.status==='finished'){duelShowResult(d);}
+  }catch(e){}
+}
+
+async function duelFinishMine(){
+  if(window._duelTmr)clearInterval(window._duelTmr);
+  var amChal=CUR_DUEL.challenger_email===S.user.email;
+  var patch=amChal?
+    {challenger_score:DUEL_SCORE,challenger_time:Math.round(DUEL_TOTALTIME),challenger_done:true}:
+    {opponent_score:DUEL_SCORE,opponent_time:Math.round(DUEL_TOTALTIME),opponent_done:true};
+  try{await sbPatch('duels','id=eq.'+CUR_DUEL.id,patch);}catch(e){}
+  // проверить закончил ли соперник
+  var body=document.getElementById('duelBody');
+  body.innerHTML='<div class="card" style="text-align:center"><div style="font-size:40px;margin-bottom:10px">⏳</div><div style="font-weight:600;font-size:16px">Ты закончил! Счёт: '+DUEL_SCORE+'/'+DUEL_Q.length+'</div><div style="font-size:13px;color:var(--tx2);margin-top:6px">Ждём пока соперник завершит...</div></div>';
+  // опрос ожидания соперника
+  if(window._duelWait)clearInterval(window._duelWait);
+  window._duelWait=setInterval(async function(){
+    try{
+      var d=await sbGet('duels','id=eq.'+CUR_DUEL.id);
+      if(!d.length)return;d=d[0];
+      if(d.challenger_done&&d.opponent_done){
+        clearInterval(window._duelWait);
+        await duelComputeWinner(d);
+      }
+    }catch(e){}
+  },2500);
+}
+
+async function duelComputeWinner(d){
+  // победитель: больше правильных, при равенстве — меньше время
+  var winner=null;
+  if(d.challenger_score>d.opponent_score)winner=d.challenger_email;
+  else if(d.opponent_score>d.challenger_score)winner=d.opponent_email;
+  else{ // равный счёт — по времени
+    if(d.challenger_time<d.opponent_time)winner=d.challenger_email;
+    else if(d.opponent_time<d.challenger_time)winner=d.opponent_email;
+    // иначе ничья (winner=null)
+  }
+  try{
+    await sbPatch('duels','id=eq.'+d.id,{status:'finished',winner_email:winner,finished_at:new Date().toISOString()});
+    d.winner_email=winner;d.status='finished';
+  }catch(e){}
+  duelShowResult(d);
+}
+
+function duelShowResult(d){
+  if(window._duelWait)clearInterval(window._duelWait);
+  var amChal=d.challenger_email===S.user.email;
+  var myScore=amChal?d.challenger_score:d.opponent_score;
+  var oppScore=amChal?d.opponent_score:d.challenger_score;
+  var oppName=amChal?d.opponent_name:d.challenger_name;
+  var iWon=d.winner_email===S.user.email;
+  var tie=!d.winner_email;
+  var emoji=tie?'🤝':(iWon?'🏆':'😔');
+  var title=tie?'Ничья!':(iWon?'Победа!':'Поражение');
+  var col=tie?'var(--am)':(iWon?'var(--gr)':'var(--re)');
+  var body=document.getElementById('duelBody');
+  body.innerHTML='<div class="card" style="text-align:center;border-color:'+col+'">'
+    +'<div style="font-size:56px;margin-bottom:10px">'+emoji+'</div>'
+    +'<div style="font-size:22px;font-weight:700;color:'+col+';margin-bottom:6px">'+title+'</div>'
+    +'<div style="font-size:32px;font-weight:700;font-family:var(--fm);margin:12px 0">'+myScore+' : '+oppScore+'</div>'
+    +'<div style="font-size:13px;color:var(--tx2)">против '+oppName+'</div>'
+    +(iWon?'<div style="margin-top:12px;color:var(--gr);font-size:13px">+бонус к рейтингу!</div>':'')
+    +'<button class="btn bbl" onclick="CUR_DUEL=null;renderDuels()" style="margin-top:16px">К дуэлям</button></div>';
+  CUR_DUEL=null;
+  LB_CACHE=null; // обновить рейтинг
+}
+
+async function duelShowHistory(){
+  if(CUR_DUEL)return; // в матче не показываем
+  var body=document.getElementById('duelBody');
+  if(!dbOK||!S.user){if(body)body.innerHTML='';return;}
+  try{
+    var hist=await sbGet('duels','or=(challenger_email.eq.'+encodeURIComponent(S.user.email)+',opponent_email.eq.'+encodeURIComponent(S.user.email)+')&status=eq.finished&order=finished_at.desc');
+    if(!hist.length){body.innerHTML='<div style="color:var(--tx3);padding:10px;font-size:13px">Дуэлей ещё не было. Брось вызов!</div>';return;}
+    var wins=hist.filter(function(d){return d.winner_email===S.user.email;}).length;
+    var losses=hist.filter(function(d){return d.winner_email&&d.winner_email!==S.user.email;}).length;
+    var ties=hist.filter(function(d){return !d.winner_email;}).length;
+    var html='<div style="display:flex;gap:10px;margin-bottom:14px"><div class="card" style="flex:1;text-align:center;padding:12px"><div style="font-size:22px;font-weight:700;color:var(--gr)">'+wins+'</div><div style="font-size:11px;color:var(--tx3)">Побед</div></div><div class="card" style="flex:1;text-align:center;padding:12px"><div style="font-size:22px;font-weight:700;color:var(--re)">'+losses+'</div><div style="font-size:11px;color:var(--tx3)">Поражений</div></div><div class="card" style="flex:1;text-align:center;padding:12px"><div style="font-size:22px;font-weight:700;color:var(--am)">'+ties+'</div><div style="font-size:11px;color:var(--tx3)">Ничьих</div></div></div>';
+    html+='<div style="font-size:14px;font-weight:600;margin-bottom:10px">История</div>';
+    html+=hist.map(function(d){
+      var amChal=d.challenger_email===S.user.email;
+      var myScore=amChal?d.challenger_score:d.opponent_score;
+      var oppScore=amChal?d.opponent_score:d.challenger_score;
+      var oppName=amChal?d.opponent_name:d.challenger_name;
+      var iWon=d.winner_email===S.user.email;
+      var tie=!d.winner_email;
+      var col=tie?'var(--am)':(iWon?'var(--gr)':'var(--re)');
+      var res=tie?'Ничья':(iWon?'Победа':'Поражение');
+      return '<div class="card" style="display:flex;align-items:center;gap:12px;margin-bottom:8px;padding:12px"><div style="font-size:20px">'+(tie?'🤝':(iWon?'🏆':'😔'))+'</div><div style="flex:1"><div style="font-weight:600;font-size:13px">vs '+oppName+'</div><div style="font-size:11px;color:var(--tx3)">'+(d.topic||d.subject||"")+'</div></div><div style="text-align:right"><div style="font-family:var(--fm);font-weight:700;color:'+col+'">'+myScore+':'+oppScore+'</div><div style="font-size:10px;color:var(--tx3)">'+res+'</div></div></div>';
+    }).join('');
+    body.innerHTML=html;
+  }catch(e){if(body)body.innerHTML='<div style="color:var(--re);font-size:13px">Ошибка загрузки истории</div>';}
+}
+
 function renderHome(){
   renderAuthHdr();
   renderDaily();
@@ -1784,19 +2122,26 @@ async function renderLB(){
       });
       var examCount={};
       exams.forEach(function(e){examCount[e.user_email]=(examCount[e.user_email]||0)+1;});
-      // Считаем сколько РАЗНЫХ вопросов решил каждый (для порога 50)
       var solvedCount={};
       prog.forEach(function(p){solvedCount[p.user_email]=(solvedCount[p.user_email]||0)+1;});
+      // Победы в дуэлях — бонус к рейтингу
+      var duelWins={};
+      try{
+        var fduels=await sbGet('duels','status=eq.finished&select=winner_email');
+        fduels.forEach(function(d){if(d.winner_email)duelWins[d.winner_email]=(duelWins[d.winner_email]||0)+1;});
+      }catch(e){}
       users.forEach(function(u){
         var st=byUser[u.email]||{c:0,a:0};
         var acc=st.a?Math.round(st.c/st.a*100):0;
         var solved=solvedCount[u.email]||0;
         var exCount=examCount[u.email]||0;
-        // Балл = точность × объём + бонус за экзамены (по 5 баллов за каждый сданный)
+        var dWins=duelWins[u.email]||0;
+        // Балл = точность × объём + экзамены×5 + победы в дуэлях×10
         var baseScore=Math.round(acc*(1+Math.log10(Math.max(solved,1))));
         var examBonus=exCount*5;
-        var score=baseScore+examBonus;
-        all.push({name:u.name,acc:acc,solved:solved,score:score,ex:exCount,examBonus:examBonus,isMe:S.user&&u.email===S.user.email});
+        var duelBonus=dWins*10;
+        var score=baseScore+examBonus+duelBonus;
+        all.push({name:u.name,acc:acc,solved:solved,score:score,ex:exCount,examBonus:examBonus,duelWins:dWins,duelBonus:duelBonus,isMe:S.user&&u.email===S.user.email});
       });
     }catch(e){console.warn('LB error:',e.message);}
   }
@@ -1821,7 +2166,7 @@ function renderLBList(data){
   var medals=['🥇','🥈','🥉'];
   var html='<div class="alert ali" style="font-size:12px;margin-bottom:12px"><i class="ti ti-info-circle"></i> Балл = точность × объём. В рейтинг попадают решившие 50+ вопросов.</div>';
   if(ranked.length){
-    html+=ranked.map(function(e,i){return '<div class="lr'+(e.isMe?' me':'')+'"><span style="min-width:28px;font-size:18px">'+(i<3?medals[i]:'<span style="font-family:var(--fm);font-size:13px;color:var(--tx3)">'+(i+1)+'</span>')+'</span><div style="flex:1"><div style="font-size:13px'+(e.isMe?';font-weight:700':'')+'">'+e.name+(e.isMe?' <span class="bdg bbl2">вы</span>':'')+'</div><div style="font-size:10px;color:var(--tx3);font-family:var(--fm)">'+e.solved+' решено · '+e.acc+'% · '+(e.ex||0)+' экз.'+(e.examBonus?' (+'+e.examBonus+')':'')+'</div></div><span style="font-size:22px;font-weight:700;font-family:var(--fm);color:var(--bl)">'+e.score+'</span></div>';}).join('');
+    html+=ranked.map(function(e,i){return '<div class="lr'+(e.isMe?' me':'')+'"><span style="min-width:28px;font-size:18px">'+(i<3?medals[i]:'<span style="font-family:var(--fm);font-size:13px;color:var(--tx3)">'+(i+1)+'</span>')+'</span><div style="flex:1"><div style="font-size:13px'+(e.isMe?';font-weight:700':'')+'">'+e.name+(e.isMe?' <span class="bdg bbl2">вы</span>':'')+'</div><div style="font-size:10px;color:var(--tx3);font-family:var(--fm)">'+e.solved+' решено · '+e.acc+'% · '+(e.ex||0)+' экз.'+(e.duelWins?' · ⚔️'+e.duelWins:'')+'</div></div><span style="font-size:22px;font-weight:700;font-family:var(--fm);color:var(--bl)">'+e.score+'</span></div>';}).join('');
   }else{
     html+='<p style="color:var(--tx3);font-size:13px;padding:10px">Пока никто не решил 50+ вопросов. Будьте первым!</p>';
   }
