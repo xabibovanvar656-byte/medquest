@@ -159,24 +159,37 @@ select option{background:var(--bg2)}
 }
 ::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--bor2);border-radius:3px}
 
-/* ===== АНИМИРОВАННЫЕ РАМКИ АВАТАРА ===== */
+/* ===== АНИМИРОВАННЫЕ РАМКИ АВАТАРА (улучшенные, как Steam) ===== */
 .avframe{position:relative;display:inline-flex;align-items:center;justify-content:center;border-radius:50%}
-.avframe::before{content:'';position:absolute;inset:-4px;border-radius:50%;z-index:0;padding:4px}
-.avframe>*{position:relative;z-index:1}
+.avframe>*{position:relative;z-index:2}
+/* вращающееся кольцо-градиент */
+.avframe::before{content:'';position:absolute;inset:-4px;border-radius:50%;z-index:0;padding:4px;
+  -webkit-mask:radial-gradient(circle, transparent calc(50% - 4px), #000 calc(50% - 3px));mask:radial-gradient(circle, transparent calc(50% - 4px), #000 calc(50% - 3px))}
+/* пульсирующее свечение-ореол */
+.avframe::after{content:'';position:absolute;inset:-4px;border-radius:50%;z-index:0;pointer-events:none}
 @keyframes frot{to{transform:rotate(360deg)}}
-@keyframes fglow{0%,100%{filter:brightness(1)}50%{filter:brightness(1.4)}}
-/* Мистика — фиолетовое вращение */
-.fr-mystic::before{background:conic-gradient(from 0deg,#a78bfa,#ec4899,#6366f1,#a78bfa);animation:frot 3s linear infinite;box-shadow:0 0 16px #a78bfa88}
-/* Неон */
-.fr-neon::before{background:conic-gradient(from 0deg,#00d4c8,#4f8ef7,#2dd4bf,#00d4c8);animation:frot 2.5s linear infinite;box-shadow:0 0 16px #00d4c888}
-/* Огонь */
-.fr-fire::before{background:conic-gradient(from 0deg,#f5a623,#f04060,#ff6b00,#f5a623);animation:frot 2s linear infinite;box-shadow:0 0 16px #f0406088}
-/* Золото */
-.fr-gold::before{background:conic-gradient(from 0deg,#d4af37,#f4e4a1,#b8860b,#d4af37);animation:frot 4s linear infinite;box-shadow:0 0 18px #d4af3799}
-/* Радуга */
-.fr-rainbow::before{background:conic-gradient(from 0deg,#ff0080,#ff8c00,#ffd400,#00d400,#00d4ff,#8000ff,#ff0080);animation:frot 3.5s linear infinite}
-/* маска чтобы видна была только рамка-кольцо */
-.avframe::before{-webkit-mask:radial-gradient(circle, transparent calc(50% - 4px), #000 calc(50% - 3px));mask:radial-gradient(circle, transparent calc(50% - 4px), #000 calc(50% - 3px))}
+@keyframes fpulse{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}
+@keyframes fflick{0%,100%{opacity:.5}25%{opacity:.95}50%{opacity:.35}75%{opacity:.85}}
+
+/* Мистика — фиолетовое вращение + пульс */
+.fr-mystic::before{background:conic-gradient(from 0deg,#a78bfa,#ec4899,#8b5cf6,#6366f1,#a78bfa);animation:frot 3s linear infinite}
+.fr-mystic::after{box-shadow:0 0 14px 2px #a78bfaaa,0 0 28px 4px #8b5cf655;animation:fpulse 2.2s ease-in-out infinite}
+
+/* Неон — яркое бирюзовое */
+.fr-neon::before{background:conic-gradient(from 0deg,#00d4c8,#4f8ef7,#00fff0,#2dd4bf,#00d4c8);animation:frot 2.5s linear infinite}
+.fr-neon::after{box-shadow:0 0 14px 2px #00fff0aa,0 0 26px 4px #4f8ef755;animation:fpulse 1.8s ease-in-out infinite}
+
+/* Огонь — ЖИВОЙ: мерцание + пульсация + тёплое свечение */
+.fr-fire::before{background:conic-gradient(from 0deg,#ff3d00,#ff8c00,#ffd000,#ff6b00,#ff1500,#ff8c00,#ff3d00);animation:frot 1.4s linear infinite}
+.fr-fire::after{box-shadow:0 0 12px 2px #ff6b00,0 0 24px 6px #ff3d00aa,0 0 40px 10px #ff150055;animation:fflick .4s ease-in-out infinite}
+
+/* Золото — благородное мерцание */
+.fr-gold::before{background:conic-gradient(from 0deg,#d4af37,#fff3b0,#f4e4a1,#b8860b,#ffd700,#d4af37);animation:frot 4s linear infinite}
+.fr-gold::after{box-shadow:0 0 14px 2px #ffd700aa,0 0 28px 5px #d4af3766;animation:fpulse 2.6s ease-in-out infinite}
+
+/* Радуга — переливы */
+.fr-rainbow::before{background:conic-gradient(from 0deg,#ff0080,#ff8c00,#ffd400,#00d400,#00d4ff,#8000ff,#ff0080);animation:frot 3s linear infinite}
+.fr-rainbow::after{box-shadow:0 0 14px 2px #ff008066,0 0 24px 4px #00d4ff55;animation:fpulse 2s ease-in-out infinite}
 
 /* ===== ФОНЫ ПРОФИЛЯ (баннеры как Steam) ===== */
 .pbg{position:relative;border-radius:18px;overflow:hidden;margin-bottom:16px}
@@ -637,8 +650,8 @@ async function saveProg(qid,ok){
   }
   S.prog[qid]=p;
   bumpDaily();
-  // +1 монета за правильный ответ
-  if(ok)addCoins(1);
+  // +1 монета ТОЛЬКО за первое верное решение вопроса (защита от фарма повторами)
+  if(ok&&p.c===1&&p.a<=2)addCoins(1);
   sv();
   if(!dbOK||!S.user)return;
   try{await sbUps('progress',{user_email:S.user.email,question_id:qid,correct_count:p.c,attempt_count:p.a,streak:p.streak,due_date:p.due,interval_days:p.interval,updated_at:new Date().toISOString()},'user_email,question_id');}catch(e){}
@@ -647,7 +660,15 @@ async function saveProg(qid,ok){
 async function saveExam(score,total,subj,mins){
   var d=new Date().toLocaleDateString('ru-RU');
   S.hist.unshift({date:d,score:score,total:total,subj:subj,mins:mins});sv();
-  addCoins(10); // +10 монет за сданный экзамен
+  // Монеты за экзамен: только при результате 70%+, и максимум 2 раза в день (защита от фарма пересдачами)
+  var pct=Math.round(score/total*100);
+  var today=new Date().toISOString().slice(0,10);
+  var examCoinKey='examcoins_'+today;
+  var earnedToday=parseInt(localStorage.getItem(examCoinKey)||'0');
+  if(pct>=70&&earnedToday<2){
+    addCoins(10);
+    localStorage.setItem(examCoinKey,(earnedToday+1).toString());
+  }
   if(!dbOK||!S.user)return;
   try{await sbPost('exam_history',{user_email:S.user.email,score:score,total:total,subject:subj,mins:mins,exam_date:d});}catch(e){}
 }
@@ -812,7 +833,10 @@ function showModal(title,htmlBody){
   document.getElementById('mdT').textContent=title;
   document.getElementById('mdBody').innerHTML=htmlBody;
 }
-function closeModal(){document.getElementById('modal').style.display='none';}
+function closeModal(){
+  document.getElementById('modal').style.display='none';
+  var mb=document.querySelector('#modal .modalBg');if(mb)mb.remove();
+}
 function showErr(msg){var e=document.getElementById('mErr');if(e){e.textContent=msg;e.style.display='';}}
 var mmode='login';
 
@@ -1635,12 +1659,11 @@ async function viewProfile(emailEnc){
     var ubgDef=BACKGROUNDS.filter(function(x){return x.id===ubg;})[0];
     var ubgOwned=(u.owned_items||'').split(',').indexOf('bg:'+ubg)>=0||(u.email&&u.email.toLowerCase()===OWNER_EMAIL);
     var ubgCls=(ubgDef&&ubgOwned)?ubgDef.cls:'';
-    var html='<div class="pbg" style="margin-bottom:16px;border-radius:16px">'
-      +(ubgCls?'<div class="pbg-banner '+ubgCls+'"></div>':'')
-      +'<div class="pbg-inner" style="text-align:center;padding:20px">'
-      +'<div style="display:flex;justify-content:center;margin-bottom:10px">'+renderAvatar(u,72)+'</div>'
-      +'<div style="font-size:18px;font-weight:700'+(ubgCls?';color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.6)':'')+'">'+u.name+'</div>'
-      +'<div style="font-size:12px'+(ubgCls?';color:rgba(255,255,255,.85)':';color:var(--tx3)')+'">'+(u.group_name?'Группа '+u.group_name:'')+'</div></div></div>';
+    var txtShadow=ubgCls?';color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.7)':'';
+    var html='<div style="text-align:center;margin-bottom:16px;position:relative;z-index:2">'
+      +'<div style="display:flex;justify-content:center;margin-bottom:10px">'+renderAvatar(u,80)+'</div>'
+      +'<div style="font-size:20px;font-weight:700'+txtShadow+'">'+u.name+'</div>'
+      +'<div style="font-size:12px'+(ubgCls?';color:rgba(255,255,255,.9);text-shadow:0 1px 4px rgba(0,0,0,.7)':';color:var(--tx3)')+'">'+(u.group_name?'Группа '+u.group_name:'')+'</div></div>';
     html+='<div class="cgrid" style="margin-bottom:14px">'
       +'<div class="card" style="text-align:center;padding:12px"><div style="font-size:20px;font-weight:700;color:var(--bl)">'+solved+'</div><div style="font-size:10px;color:var(--tx3)">Решено</div></div>'
       +'<div class="card" style="text-align:center;padding:12px"><div style="font-size:20px;font-weight:700;color:var(--gr)">'+acc+'%</div><div style="font-size:10px;color:var(--tx3)">Точность</div></div>'
@@ -1657,6 +1680,21 @@ async function viewProfile(emailEnc){
       html+='<button class="btn bbl" style="width:100%" onclick="closeModal();duelChallengeTo(\''+encodeURIComponent(email)+'\',\''+(u.name||'').replace(/[\'"\\]/g,'')+'\')"><i class="ti ti-swords"></i> Вызвать на дуэль</button>';
     }
     document.getElementById('mdBody').innerHTML=html;
+    // фон за ВСЕЙ модалкой профиля
+    var mdl=document.querySelector('#modal .mdl');
+    if(mdl){
+      var oldB=mdl.querySelector('.modalBg');if(oldB)oldB.remove();
+      if(ubgCls){
+        mdl.style.position='relative';mdl.style.overflow='hidden';
+        var mb=document.createElement('div');
+        mb.className='modalBg '+ubgCls;
+        mb.style.cssText='position:absolute;inset:0;z-index:0;opacity:.45;border-radius:inherit;pointer-events:none';
+        mdl.insertBefore(mb,mdl.firstChild);
+        // поднять контент над фоном
+        var hdr=mdl.querySelector('.mdhdr');if(hdr){hdr.style.position='relative';hdr.style.zIndex='2';}
+        var bodyEl=document.getElementById('mdBody');if(bodyEl){bodyEl.style.position='relative';bodyEl.style.zIndex='2';}
+      }
+    }
   }catch(e){document.getElementById('mdBody').innerHTML='<p style="color:var(--re)">Ошибка загрузки</p>';}
 }
 function profEditName(){
