@@ -135,7 +135,7 @@ select option{background:var(--bg2)}
 @media(max-width:640px){
 .sidebar{display:none}
 .bottomnav{display:flex}
-.main{padding:12px;padding-bottom:160px}
+.main{padding:12px;padding-bottom:175px}
 .hdr{height:auto;min-height:52px;flex-wrap:wrap;padding:8px 12px;gap:6px}
 .hdr .logo{font-size:14px}
 .bdg{font-size:9px}
@@ -237,9 +237,9 @@ select option{background:var(--bg2)}
   <button class="bni" data-pg="leaderboard" onclick="go('leaderboard',this)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0z"/><path d="M5 5H3v2a3 3 0 003 3M19 5h2v2a3 3 0 01-3 3"/></svg>
     <span>Рейтинг</span></button>
-  <button class="bni" data-pg="profile" onclick="go('profile',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6"/></svg>
-    <span>Профиль</span></button>
+  <button class="bni" onclick="openMoreMenu()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="19" cy="12" r="1.5" fill="currentColor"/></svg>
+    <span>Ещё</span></button>
 </nav>
 <main class="main" id="mscroll">
 <div id="pg-home" class="page on">
@@ -481,11 +481,7 @@ function sbUps(t,b,c){
     return r.json();
   });
 }
-var BASE_QS=[
 
-];
-
-var CQS=[];
 function getQS(){return BASE_QS.concat(CQS);}
 var SM={
   physics:{label:'Физика',icon:'🔬',color:'#22d07a',dim:'#061a10'},
@@ -1393,14 +1389,27 @@ async function renderProfile(){
   if(!S.user){showLoginWall();return;}
   var b=document.getElementById('profileBody');
   b.innerHTML='<div style="color:var(--tx3);padding:10px">Загрузка профиля...</div>';
-  // данные пользователя
-  var me={name:S.user.name,email:S.user.email,group_name:S.user.group||'',avatar:S.user.avatar||''};
-  // статистика
-  var st=getMyStats();
-  // дуэли
+  // данные пользователя (включая рамку для отображения)
+  var me={name:S.user.name,email:S.user.email,group_name:S.user.group||'',avatar:S.user.avatar||'',frame:S.user.frame||'',frames:S.user.frames||''};
+  // статистика — СЧИТАЕМ ИЗ БАЗЫ (чтобы совпадало с рейтингом)
+  var st=getMyStats(); // запасной вариант (локальный)
   var dWins=0,dLoss=0,dTie=0;
   if(dbOK){
     try{
+      var prog=await sbGet('progress','user_email=eq.'+encodeURIComponent(S.user.email)+'&select=correct_count,attempt_count');
+      var tA=0,tC=0,mast=0;
+      prog.forEach(function(p){tA+=p.attempt_count;tC+=p.correct_count;if(p.attempt_count>=2&&p.correct_count/p.attempt_count>=0.8)mast++;});
+      var exams=await sbGet('exam_history','user_email=eq.'+encodeURIComponent(S.user.email)+'&select=id');
+      // перезаписываем статистику данными из базы
+      st={
+        solved:prog.length,
+        acc:tA?Math.round(tC/tA*100):0,
+        mastered:mast,
+        exams:exams.length,
+        streakDays:st.streakDays,
+        totalAttempts:tA,
+        bestExam:st.bestExam
+      };
       var duels=await sbGet('duels','or=(challenger_email.eq.'+encodeURIComponent(S.user.email)+',opponent_email.eq.'+encodeURIComponent(S.user.email)+')&status=eq.finished');
       duels.forEach(function(d){
         if(!d.winner_email)dTie++;
@@ -1455,7 +1464,7 @@ async function viewProfile(emailEnc){
   if(S.user&&email===S.user.email){go('profile');return;} // свой — на свою страницу
   showModal('Профиль','<div style="color:var(--tx3);padding:10px">Загрузка...</div>');
   try{
-    var u=await sbGet('users','email=eq.'+encodeURIComponent(email)+'&select=name,email,avatar,group_name');
+    var u=await sbGet('users','email=eq.'+encodeURIComponent(email)+'&select=name,email,avatar,group_name,frame,frames');
     if(!u.length){document.getElementById('mdBody').innerHTML='<p style="color:var(--tx3)">Профиль не найден</p>';return;}
     u=u[0];
     var prog=await sbGet('progress','user_email=eq.'+encodeURIComponent(email)+'&select=correct_count,attempt_count');
@@ -1580,6 +1589,26 @@ function profUploadPhoto(ev){
   reader.readAsDataURL(file);
 }
 
+function openMoreMenu(){
+  if(navigator.vibrate)navigator.vibrate(8);
+  var items=[
+    {pg:'profile',icon:'👤',name:'Профиль'},
+    {pg:'flashcards',icon:'🃏',name:'Флеш-карточки'},
+    {pg:'exam',icon:'📝',name:'Экзамен'},
+    {pg:'progress',icon:'📊',name:'Прогресс'},
+    {pg:'news',icon:'📰',name:'Новости'},
+    {pg:'schedule',icon:'📅',name:'Расписание'}
+  ];
+  if(S.isAdm)items.push({pg:'admin',icon:'🛡️',name:'Админ-панель'});
+  var grid=items.map(function(it){
+    return '<button class="moreItem" data-pg="'+it.pg+'" style="display:flex;flex-direction:column;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--bor);border-radius:16px;padding:18px 10px;cursor:pointer;color:var(--tx)"><span style="font-size:30px">'+it.icon+'</span><span style="font-size:12px;font-weight:500">'+it.name+'</span></button>';
+  }).join('');
+  var body='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">'+grid+'</div>';
+  showModal('Меню',body);
+  document.querySelectorAll('.moreItem').forEach(function(b){
+    b.addEventListener('click',function(){closeModal();go(b.getAttribute('data-pg'));});
+  });
+}
 function renderHome(){
   renderAuthHdr();
   renderDaily();
@@ -1974,7 +2003,7 @@ async function renderLB(){
   var all=[];
   if(dbOK){
     try{
-      var users=await sbGet('users','status=eq.active&select=email,name,avatar,group_name');
+      var users=await sbGet('users','status=eq.active&select=email,name,avatar,group_name,frame,frames');
       var prog=await sbGet('progress','select=user_email,correct_count,attempt_count');
       var exams=await sbGet('exam_history','select=user_email');
       var byUser={};
@@ -2004,7 +2033,7 @@ async function renderLB(){
         var examBonus=exCount*5;
         var duelBonus=dWins*10;
         var score=baseScore+examBonus+duelBonus;
-        all.push({name:u.name,email:u.email,avatar:u.avatar||'',acc:acc,solved:solved,score:score,ex:exCount,examBonus:examBonus,duelWins:dWins,duelBonus:duelBonus,isMe:S.user&&u.email===S.user.email});
+        all.push({name:u.name,email:u.email,avatar:u.avatar||'',frame:u.frame||'',frames:u.frames||'',acc:acc,solved:solved,score:score,ex:exCount,examBonus:examBonus,duelWins:dWins,duelBonus:duelBonus,isMe:S.user&&u.email===S.user.email});
       });
     }catch(e){console.warn('LB error:',e.message);}
   }
