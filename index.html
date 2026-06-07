@@ -204,11 +204,13 @@ select option{background:var(--bg2)}
 .bg-cyber{background:linear-gradient(120deg,#0a0a2e,#ff00ea,#00fff0,#0a0a2e);background-size:300% 300%;animation:bgshift 6s ease infinite}
 .bg-rose{background:linear-gradient(120deg,#3d0a1f,#8a1538,#e63956,#ffb3c6,#3d0a1f);background-size:300% 300%;animation:bgshift 9s ease infinite}
 /* Фон на всю страницу профиля */
-.pageBg{position:fixed;inset:0;z-index:0;opacity:.18;pointer-events:none}
+.pageBg{position:fixed;inset:0;z-index:0;opacity:.32;pointer-events:none}
+.pageBg::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent,var(--bg) 92%)}
 .page.on{position:relative;z-index:1}
 </style>
 </head>
 <body>
+<div id="globalBg" class="pageBg" style="display:none"></div>
 <div class="app">
 <div class="ldg" id="ldg">
   <div style="font-size:48px;margin-bottom:16px;animation:spin 2s linear infinite">⚡</div>
@@ -723,6 +725,7 @@ function go(pg,btn){
   document.querySelectorAll('.nb,.bni').forEach(function(b){b.classList.remove('on');});
   var pgEl=document.getElementById('pg-'+pg);if(pgEl)pgEl.classList.add('on');
   if(pg!=='duels'&&!CUR_DUEL&&typeof duelStopPolling==='function')duelStopPolling();
+  if(pg!=='profile'){var gb=document.getElementById('globalBg');if(gb)gb.style.display='none';}
   document.getElementById('mscroll').scrollTop=0;
   // подсветка во ВСЕХ меню (сайдбар + нижнее)
   document.querySelectorAll('[data-pg="'+pg+'"]').forEach(function(b){b.classList.add('on');});
@@ -1557,12 +1560,11 @@ async function renderProfile(){
   var bgId=S.user.profile_bg||'';
   var bgDef=BACKGROUNDS.filter(function(x){return x.id===bgId;})[0];
   var bannerCls=(bgDef&&userBackgrounds(S.user).indexOf(bgId)>=0)?bgDef.cls:'';
-  // фон на всю страницу профиля
-  var pageEl=document.getElementById('pg-profile');
-  var oldBg=pageEl.querySelector('.pageBg');if(oldBg)oldBg.remove();
-  if(bannerCls){
-    var pb=document.createElement('div');pb.className='pageBg '+bannerCls;
-    pageEl.insertBefore(pb,pageEl.firstChild);
+  // фон на весь экран (глобальный слой)
+  var gb=document.getElementById('globalBg');
+  if(gb){
+    if(bannerCls){gb.className='pageBg '+bannerCls;gb.style.display='';}
+    else{gb.style.display='none';}
   }
   var html='<div class="card pbg" style="padding:0;margin-bottom:16px">'
     +(bannerCls?'<div class="pbg-banner '+bannerCls+'"></div>':'')
