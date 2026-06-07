@@ -177,6 +177,23 @@ select option{background:var(--bg2)}
 .fr-rainbow::before{background:conic-gradient(from 0deg,#ff0080,#ff8c00,#ffd400,#00d400,#00d4ff,#8000ff,#ff0080);animation:frot 3.5s linear infinite}
 /* маска чтобы видна была только рамка-кольцо */
 .avframe::before{-webkit-mask:radial-gradient(circle, transparent calc(50% - 4px), #000 calc(50% - 3px));mask:radial-gradient(circle, transparent calc(50% - 4px), #000 calc(50% - 3px))}
+
+/* ===== ФОНЫ ПРОФИЛЯ (баннеры как Steam) ===== */
+.pbg{position:relative;border-radius:18px;overflow:hidden;margin-bottom:16px}
+.pbg-inner{position:relative;z-index:2}
+.pbg-banner{position:absolute;inset:0;z-index:0;opacity:.9}
+@keyframes bgshift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes bgfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.bg-aurora{background:linear-gradient(120deg,#1a1040,#3b1d6e,#6d28d9,#1a1040);background-size:300% 300%;animation:bgshift 8s ease infinite}
+.bg-ocean{background:linear-gradient(120deg,#042f49,#0a5e7a,#00b4d8,#042f49);background-size:300% 300%;animation:bgshift 8s ease infinite}
+.bg-fire{background:linear-gradient(120deg,#3d0a00,#7a1f00,#ff6b00,#3d0a00);background-size:300% 300%;animation:bgshift 7s ease infinite}
+.bg-galaxy{background:radial-gradient(circle at 30% 40%,#4c1d95,transparent 60%),radial-gradient(circle at 70% 60%,#1e3a8a,transparent 60%),#0a0a1a}
+.bg-emerald{background:linear-gradient(120deg,#022c22,#064e3b,#10b981,#022c22);background-size:300% 300%;animation:bgshift 8s ease infinite}
+.bg-sunset{background:linear-gradient(120deg,#4a0e4e,#81267a,#ff6b9d,#feca57,#4a0e4e);background-size:300% 300%;animation:bgshift 10s ease infinite}
+.bg-matrix{background:linear-gradient(120deg,#001a00,#003300,#00ff41,#001a00);background-size:300% 300%;animation:bgshift 6s ease infinite}
+.bg-gold{background:linear-gradient(120deg,#2a1f00,#5c4400,#d4af37,#f4e4a1,#2a1f00);background-size:300% 300%;animation:bgshift 9s ease infinite}
+/* звёздочки для galaxy */
+.bg-galaxy::after{content:'';position:absolute;inset:0;background-image:radial-gradient(1px 1px at 20% 30%,#fff,transparent),radial-gradient(1px 1px at 60% 70%,#fff,transparent),radial-gradient(1px 1px at 80% 20%,#fff,transparent),radial-gradient(1px 1px at 40% 80%,#fff,transparent),radial-gradient(1px 1px at 90% 50%,#fff,transparent);opacity:.6}
 </style>
 </head>
 <body>
@@ -393,6 +410,10 @@ select option{background:var(--bg2)}
   <div class="ph"><div class="pt">Профиль</div><div class="ps">Твоя страница</div></div>
   <div id="profileBody"></div>
 </div>
+<div id="pg-shop" class="page">
+  <div class="ph"><div class="pt">Магазин 🛒</div><div class="ps">Трать монеты на рамки, фоны и аватары</div></div>
+  <div id="shopBody"></div>
+</div>
 <div id="pg-news" class="page">
   <div class="ph"><div class="pt">Новости</div><div class="ps">Объявления платформы</div></div>
   <div id="newsList"></div>
@@ -422,6 +443,7 @@ select option{background:var(--bg2)}
       <button class="tab" onclick="admTab('pending',this)">Заявки <span id="pendCnt" class="bdg bre2" style="font-size:10px;margin-left:3px"></span></button>
       <button class="tab" onclick="admTab('students',this)">Студенты</button>
       <button class="tab" onclick="admTab('analytics',this)">📊 Аналитика</button>
+      <button class="tab" id="tabPrices" onclick="admTab('prices',this)" style="display:none">🪙 Цены</button>
       <button class="tab" id="tabAdmins" onclick="admTab('admins',this)" style="display:none">Админы</button>
       <button class="tab" id="tabReq" onclick="admTab('requests',this)" style="display:none">Запросы <span id="reqCnt" class="bdg bre2" style="font-size:10px;margin-left:3px"></span></button>
       <button class="tab" onclick="admTab('questions',this)">Вопросы</button>
@@ -435,6 +457,7 @@ select option{background:var(--bg2)}
     <div id="admPending" style="display:none"></div>
     <div id="admStudents" style="display:none"></div>
     <div id="admAnalytics" style="display:none"></div>
+    <div id="admPrices" style="display:none"></div>
     <div id="admQuestions" style="display:none"></div>
     <div id="admNewsEdit" style="display:none"></div>
     <div id="admSchedEdit" style="display:none"></div>
@@ -481,7 +504,11 @@ function sbUps(t,b,c){
     return r.json();
   });
 }
+var BASE_QS=[
 
+];
+
+var CQS=[];
 function getQS(){return BASE_QS.concat(CQS);}
 var SM={
   physics:{label:'Физика',icon:'🔬',color:'#22d07a',dim:'#061a10'},
@@ -585,6 +612,8 @@ async function saveProg(qid,ok){
   }
   S.prog[qid]=p;
   bumpDaily();
+  // +1 монета за правильный ответ
+  if(ok)addCoins(1);
   sv();
   if(!dbOK||!S.user)return;
   try{await sbUps('progress',{user_email:S.user.email,question_id:qid,correct_count:p.c,attempt_count:p.a,streak:p.streak,due_date:p.due,interval_days:p.interval,updated_at:new Date().toISOString()},'user_email,question_id');}catch(e){}
@@ -593,6 +622,7 @@ async function saveProg(qid,ok){
 async function saveExam(score,total,subj,mins){
   var d=new Date().toLocaleDateString('ru-RU');
   S.hist.unshift({date:d,score:score,total:total,subj:subj,mins:mins});sv();
+  addCoins(10); // +10 монет за сданный экзамен
   if(!dbOK||!S.user)return;
   try{await sbPost('exam_history',{user_email:S.user.email,score:score,total:total,subject:subj,mins:mins,exam_date:d});}catch(e){}
 }
@@ -627,7 +657,7 @@ async function updPendBadge(){
   if(c)c.textContent=n>0?n:'';
 }
 
-var PROTECTED=['flashcards','trainer','exam','progress','leaderboard','duels','profile'];
+var PROTECTED=['flashcards','trainer','exam','progress','leaderboard','duels','profile','shop'];
 
 function showLoginWall(){
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('on');});
@@ -673,7 +703,7 @@ function go(pg,btn){
   document.getElementById('mscroll').scrollTop=0;
   // подсветка во ВСЕХ меню (сайдбар + нижнее)
   document.querySelectorAll('[data-pg="'+pg+'"]').forEach(function(b){b.classList.add('on');});
-  var fns={home:renderHome,flashcards:fcInit,trainer:trTopics,exam:exTopics,progress:renderProg,leaderboard:renderLB,duels:renderDuels,news:renderNews,schedule:renderSched,admin:renderAdm,profile:renderProfile};
+  var fns={home:renderHome,flashcards:fcInit,trainer:trTopics,exam:exTopics,progress:renderProg,leaderboard:renderLB,duels:renderDuels,news:renderNews,schedule:renderSched,admin:renderAdm,profile:renderProfile,shop:renderShop};
   if(fns[pg])fns[pg]();
   if(S.user&&PAGE_LABELS[pg])pushActivity(PAGE_LABELS[pg]);
 }
@@ -791,7 +821,7 @@ async function doAuth(){
         if(user.status==='pending'){showErr('Заявка ещё не одобрена');btn.disabled=false;btn.textContent='Войти';return;}
         if(user.status==='blocked'){showErr('Аккаунт заблокирован');btn.disabled=false;btn.textContent='Войти';return;}
       }
-      S.user={name:user?user.name:email,email:email,group:user?user.group_name:'',avatar:user?(user.avatar||''):'',frames:user?(user.frames||''):'',frame:user?(user.frame||''):''};
+      S.user={name:user?user.name:email,email:email,group:user?user.group_name:'',avatar:user?(user.avatar||''):'',frames:user?(user.frames||''):'',frame:user?(user.frame||''):'',coins:user?(user.coins||0):0,owned_items:user?(user.owned_items||''):'',profile_bg:user?(user.profile_bg||''):''};
       sv();closeModal();renderAuthHdr();
       pushActivity('вошёл');
       await loadProg();renderHome();
@@ -1299,13 +1329,21 @@ function duelShowResult(d){
   var emoji=tie?'🤝':(iWon?'🏆':'😔');
   var title=tie?'Ничья!':(iWon?'Победа!':'Поражение');
   var col=tie?'var(--am)':(iWon?'var(--gr)':'var(--re)');
+  // +15 монет за победу (только раз — отмечаем в localStorage по id дуэли)
+  if(iWon){
+    var paidKey='duelpaid_'+d.id;
+    if(!localStorage.getItem(paidKey)){
+      localStorage.setItem(paidKey,'1');
+      addCoins(15);
+    }
+  }
   var body=document.getElementById('duelBody');
   body.innerHTML='<div class="card" style="text-align:center;border-color:'+col+'">'
     +'<div style="font-size:56px;margin-bottom:10px">'+emoji+'</div>'
     +'<div style="font-size:22px;font-weight:700;color:'+col+';margin-bottom:6px">'+title+'</div>'
     +'<div style="font-size:32px;font-weight:700;font-family:var(--fm);margin:12px 0">'+myScore+' : '+oppScore+'</div>'
     +'<div style="font-size:13px;color:var(--tx2)">против '+oppName+'</div>'
-    +(iWon?'<div style="margin-top:12px;color:var(--gr);font-size:13px">+бонус к рейтингу!</div>':'')
+    +(iWon?'<div style="margin-top:12px;color:var(--gr);font-size:13px">+бонус к рейтингу · +15 🪙</div>':'')
     +'<button class="btn bbl" onclick="CUR_DUEL=null;renderDuels()" style="margin-top:16px">К дуэлям</button></div>';
   CUR_DUEL=null;
   LB_CACHE=null; // обновить рейтинг
@@ -1349,16 +1387,82 @@ var FRAMES=[
   {id:'gold',name:'Золото',cls:'fr-gold',icon:'👑'},
   {id:'rainbow',name:'Радуга',cls:'fr-rainbow',icon:'🌈'}
 ];
-var OWNER_EMAIL='x656an@gmail.com'; // владелец — все рамки
+var OWNER_EMAIL='x656an@gmail.com'; // владелец — всё открыто
+// Фоны профиля (баннеры)
+var BACKGROUNDS=[
+  {id:'aurora',name:'Аврора',cls:'bg-aurora',rarity:'rare'},
+  {id:'ocean',name:'Океан',cls:'bg-ocean',rarity:'common'},
+  {id:'fire',name:'Пламя',cls:'bg-fire',rarity:'rare'},
+  {id:'galaxy',name:'Галактика',cls:'bg-galaxy',rarity:'legendary'},
+  {id:'emerald',name:'Изумруд',cls:'bg-emerald',rarity:'common'},
+  {id:'sunset',name:'Закат',cls:'bg-sunset',rarity:'rare'},
+  {id:'matrix',name:'Матрица',cls:'bg-matrix',rarity:'legendary'},
+  {id:'gold',name:'Золото',cls:'bg-gold',rarity:'legendary'}
+];
+// Особые аватары (платные)
+var SHOP_AVATARS=['🐉','🦄','👽','🤖','🧛','🧙','🥷','🦸','⚡','🌟','💀','🎭'];
+// Цены по умолчанию по редкости (главный админ может переопределить)
+var RARITY_PRICE={common:50,rare:150,legendary:400};
+var SHOP_PRICES={}; // загружается из БД, переопределяет дефолт
+function frameRarity(id){
+  // рамки тоже по редкости
+  var map={mystic:'rare',neon:'common',fire:'rare',gold:'legendary',rainbow:'legendary'};
+  return map[id]||'common';
+}
+function itemPrice(type,id){
+  var key=type+':'+id;
+  if(SHOP_PRICES[key]!==undefined)return SHOP_PRICES[key];
+  var rarity='common';
+  if(type==='frame')rarity=frameRarity(id);
+  else if(type==='bg'){var b=BACKGROUNDS.filter(function(x){return x.id===id;})[0];if(b)rarity=b.rarity;}
+  else if(type==='avatar')rarity='rare';
+  return RARITY_PRICE[rarity]||100;
+}
+// ===== МОНЕТЫ =====
+function myCoins(){return (S.user&&S.user.coins)||0;}
+async function addCoins(n){
+  if(!S.user)return;
+  S.user.coins=(S.user.coins||0)+n;sv();
+  if(dbOK){try{await sbPatch('users','email=eq.'+encodeURIComponent(S.user.email),{coins:S.user.coins});}catch(e){}}
+  updateCoinDisplay();
+}
+function updateCoinDisplay(){
+  var els=document.querySelectorAll('.coinDisp');
+  els.forEach(function(el){el.textContent=myCoins();});
+}
+function ownedItems(user){
+  if(user.email&&user.email.toLowerCase()===OWNER_EMAIL){
+    // владельцу всё
+    var all=[];
+    FRAMES.forEach(function(f){all.push('frame:'+f.id);});
+    BACKGROUNDS.forEach(function(b){all.push('bg:'+b.id);});
+    SHOP_AVATARS.forEach(function(a){all.push('avatar:'+a);});
+    return all;
+  }
+  return (user.owned_items||'').split(',').filter(function(x){return x;});
+}
+function ownsItem(type,id){
+  return ownedItems(S.user).indexOf(type+':'+id)>=0;
+}
 
 function avatarColorFor(email){
   var sum=0;for(var i=0;i<(email||'').length;i++)sum+=email.charCodeAt(i);
   return AVATAR_COLORS[sum%AVATAR_COLORS.length];
 }
 function userFrames(user){
-  // владельцу — все рамки
   if(user.email&&user.email.toLowerCase()===OWNER_EMAIL)return FRAMES.map(function(f){return f.id;});
-  return (user.frames||'').split(',').filter(function(x){return x;});
+  var fromGift=(user.frames||'').split(',').filter(function(x){return x;});
+  // купленные в магазине
+  var fromShop=(user.owned_items||'').split(',').filter(function(x){return x.indexOf('frame:')===0;}).map(function(x){return x.slice(6);});
+  return fromGift.concat(fromShop).filter(function(v,i,a){return a.indexOf(v)===i;});
+}
+function userBackgrounds(user){
+  if(user.email&&user.email.toLowerCase()===OWNER_EMAIL)return BACKGROUNDS.map(function(b){return b.id;});
+  return (user.owned_items||'').split(',').filter(function(x){return x.indexOf('bg:')===0;}).map(function(x){return x.slice(3);});
+}
+function userAvatars(user){
+  if(user.email&&user.email.toLowerCase()===OWNER_EMAIL)return SHOP_AVATARS.slice();
+  return (user.owned_items||'').split(',').filter(function(x){return x.indexOf('avatar:')===0;}).map(function(x){return x.slice(7);});
 }
 function renderAvatar(user,size){
   size=size||64;
@@ -1418,18 +1522,27 @@ async function renderProfile(){
       });
     }catch(e){}
   }
-  var html='<div class="card" style="text-align:center;padding:24px;margin-bottom:16px">'
+  // фон профиля (баннер)
+  var bgId=S.user.profile_bg||'';
+  var bgDef=BACKGROUNDS.filter(function(x){return x.id===bgId;})[0];
+  var bannerCls=(bgDef&&userBackgrounds(S.user).indexOf(bgId)>=0)?bgDef.cls:'';
+  var html='<div class="card pbg" style="padding:0;margin-bottom:16px">'
+    +(bannerCls?'<div class="pbg-banner '+bannerCls+'"></div>':'')
+    +'<div class="pbg-inner" style="text-align:center;padding:24px">'
     +'<div style="display:flex;justify-content:center;margin-bottom:14px">'+renderAvatar(me,88)+'</div>'
-    +'<div style="font-size:22px;font-weight:700;margin-bottom:4px">'+me.name+'</div>'
-    +'<div style="font-size:13px;color:var(--tx3)">'+(me.group_name?'Группа '+me.group_name:me.email)+'</div>'
+    +'<div style="font-size:22px;font-weight:700;margin-bottom:4px'+(bannerCls?';color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.6)':'')+'">'+me.name+'</div>'
+    +'<div style="font-size:13px'+(bannerCls?';color:rgba(255,255,255,.85);text-shadow:0 1px 4px rgba(0,0,0,.6)':';color:var(--tx3)')+'">'+(me.group_name?'Группа '+me.group_name:me.email)+'</div>'
+    +'<div style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;background:var(--amd);padding:5px 12px;border-radius:20px"><span style="font-size:16px">🪙</span><span style="font-weight:700;color:var(--am)" class="coinDisp">'+myCoins()+'</span></div>'
     +'<div style="display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap">'
-    +'<button class="btn bgh bsm" onclick="profEditName()"><i class="ti ti-edit"></i> Изменить имя</button>'
+    +'<button class="btn bgh bsm" onclick="profEditName()"><i class="ti ti-edit"></i> Имя</button>'
     +'<button class="btn bgh bsm" onclick="profEditAvatar()"><i class="ti ti-photo"></i> Аватар</button>'
     +'<button class="btn bgh bsm" onclick="profEditFrame()"><i class="ti ti-sparkles"></i> Рамка</button>'
+    +'<button class="btn bgh bsm" onclick="profEditBg()"><i class="ti ti-photo-scan"></i> Фон</button>'
     +'</div>'
-    +(S.isAdm?'<button class="btn bbl bsm" onclick="go(\'admin\')" style="margin-top:10px"><i class="ti ti-shield-lock"></i> Панель администратора</button>':'')
+    +'<div style="margin-top:10px"><button class="btn bbl bsm" onclick="go(\'shop\')"><i class="ti ti-shopping-cart"></i> Магазин</button></div>'
+    +(S.isAdm?'<button class="btn bgh bsm" onclick="go(\'admin\')" style="margin-top:10px"><i class="ti ti-shield-lock"></i> Панель администратора</button>':'')
     +'<div style="margin-top:10px"><button class="btn bgh bsm" onclick="doLogout()" style="color:var(--re)"><i class="ti ti-logout"></i> Выйти</button></div>'
-    +'</div>';
+    +'</div></div>';
   // Статистика
   html+='<div class="cgrid" style="margin-bottom:16px">'
     +'<div class="card" style="text-align:center;padding:16px"><div style="font-size:26px;font-weight:700;color:var(--bl)">'+st.solved+'</div><div style="font-size:11px;color:var(--tx3)">Решено</div></div>'
@@ -1464,7 +1577,7 @@ async function viewProfile(emailEnc){
   if(S.user&&email===S.user.email){go('profile');return;} // свой — на свою страницу
   showModal('Профиль','<div style="color:var(--tx3);padding:10px">Загрузка...</div>');
   try{
-    var u=await sbGet('users','email=eq.'+encodeURIComponent(email)+'&select=name,email,avatar,group_name,frame,frames');
+    var u=await sbGet('users','email=eq.'+encodeURIComponent(email)+'&select=name,email,avatar,group_name,frame,frames,profile_bg,owned_items');
     if(!u.length){document.getElementById('mdBody').innerHTML='<p style="color:var(--tx3)">Профиль не найден</p>';return;}
     u=u[0];
     var prog=await sbGet('progress','user_email=eq.'+encodeURIComponent(email)+'&select=correct_count,attempt_count');
@@ -1477,10 +1590,17 @@ async function viewProfile(emailEnc){
     var duels=await sbGet('duels','or=(challenger_email.eq.'+encodeURIComponent(email)+',opponent_email.eq.'+encodeURIComponent(email)+')&status=eq.finished');
     var dW=0,dL=0,dT=0;
     duels.forEach(function(d){if(!d.winner_email)dT++;else if(d.winner_email===email)dW++;else dL++;});
-    var html='<div style="text-align:center;margin-bottom:16px">'
+    // фон профиля студента
+    var ubg=u.profile_bg||'';
+    var ubgDef=BACKGROUNDS.filter(function(x){return x.id===ubg;})[0];
+    var ubgOwned=(u.owned_items||'').split(',').indexOf('bg:'+ubg)>=0||(u.email&&u.email.toLowerCase()===OWNER_EMAIL);
+    var ubgCls=(ubgDef&&ubgOwned)?ubgDef.cls:'';
+    var html='<div class="pbg" style="margin-bottom:16px;border-radius:16px">'
+      +(ubgCls?'<div class="pbg-banner '+ubgCls+'"></div>':'')
+      +'<div class="pbg-inner" style="text-align:center;padding:20px">'
       +'<div style="display:flex;justify-content:center;margin-bottom:10px">'+renderAvatar(u,72)+'</div>'
-      +'<div style="font-size:18px;font-weight:700">'+u.name+'</div>'
-      +'<div style="font-size:12px;color:var(--tx3)">'+(u.group_name?'Группа '+u.group_name:'')+'</div></div>';
+      +'<div style="font-size:18px;font-weight:700'+(ubgCls?';color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.6)':'')+'">'+u.name+'</div>'
+      +'<div style="font-size:12px'+(ubgCls?';color:rgba(255,255,255,.85)':';color:var(--tx3)')+'">'+(u.group_name?'Группа '+u.group_name:'')+'</div></div></div>';
     html+='<div class="cgrid" style="margin-bottom:14px">'
       +'<div class="card" style="text-align:center;padding:12px"><div style="font-size:20px;font-weight:700;color:var(--bl)">'+solved+'</div><div style="font-size:10px;color:var(--tx3)">Решено</div></div>'
       +'<div class="card" style="text-align:center;padding:12px"><div style="font-size:20px;font-weight:700;color:var(--gr)">'+acc+'%</div><div style="font-size:10px;color:var(--tx3)">Точность</div></div>'
@@ -1516,8 +1636,18 @@ function profEditAvatar(){
   var emojiGrid=AVATAR_EMOJIS.map(function(e){
     return '<button class="avEmo" data-emo="'+e+'" style="font-size:28px;background:var(--bg3);border:1px solid var(--bor);border-radius:10px;padding:8px;cursor:pointer">'+e+'</button>';
   }).join('');
+  // купленные особые аватары
+  var bought=userAvatars(S.user);
+  var specialGrid='';
+  if(bought.length){
+    specialGrid='<div style="font-size:13px;color:var(--tx2);margin-bottom:8px">✨ Особые (куплены):</div>'
+      +'<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:16px">'
+      +bought.map(function(e){return '<button class="avEmo" data-emo="'+e+'" style="font-size:28px;background:var(--amd);border:1px solid var(--am);border-radius:10px;padding:8px;cursor:pointer">'+e+'</button>';}).join('')
+      +'</div>';
+  }
   var body='<div style="font-size:13px;color:var(--tx2);margin-bottom:10px">Выбери эмодзи-аватар:</div>'
     +'<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:16px">'+emojiGrid+'</div>'
+    +specialGrid
     +'<div style="font-size:13px;color:var(--tx2);margin-bottom:8px">Или загрузи фото:</div>'
     +'<input type="file" id="profPhotoInp" accept="image/*" style="font-size:12px">'
     +'<div style="font-size:11px;color:var(--tx3);margin-top:8px">Буква-аватар по умолчанию, если ничего не выбрано.</div>'
@@ -1565,6 +1695,33 @@ async function profSetFrame(fid){
   if(dbOK){try{await sbPatch('users','email=eq.'+encodeURIComponent(S.user.email),{frame:fid});}catch(e){}}
   closeModal();renderAuthHdr();renderProfile();
 }
+function profEditBg(){
+  var owned=userBackgrounds(S.user);
+  if(!owned.length){
+    showModal('Фоны профиля','<div style="text-align:center;padding:20px"><div style="font-size:40px;margin-bottom:12px">🖼️</div><div style="font-size:14px;color:var(--tx2);margin-bottom:14px">У тебя пока нет фонов.<br>Купи в магазине за монеты!</div><button class="btn bbl" onclick="closeModal();go(\'shop\')">Открыть магазин</button></div>');
+    return;
+  }
+  var grid=owned.map(function(bid){
+    var bg=BACKGROUNDS.filter(function(x){return x.id===bid;})[0];
+    if(!bg)return '';
+    var sel=S.user.profile_bg===bid;
+    return '<div class="bgpick" data-bg="'+bid+'" style="cursor:pointer;border-radius:12px;overflow:hidden;border:2px solid '+(sel?'var(--bl)':'transparent')+'"><div class="'+bg.cls+'" style="height:60px"></div><div style="font-size:11px;text-align:center;padding:6px">'+bg.name+'</div></div>';
+  }).join('');
+  var body='<div style="font-size:13px;color:var(--tx2);margin-bottom:12px">Выбери фон профиля:</div>'
+    +'<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px">'+grid+'</div>'
+    +'<button class="btn bgh bsm" id="bgNone" style="width:100%">Без фона</button>';
+  showModal('Фоны профиля 🖼️',body);
+  document.querySelectorAll('.bgpick').forEach(function(el){
+    el.addEventListener('click',function(){profSetBg(el.getAttribute('data-bg'));});
+  });
+  var bn=document.getElementById('bgNone');
+  if(bn)bn.addEventListener('click',function(){profSetBg('');});
+}
+async function profSetBg(bid){
+  S.user.profile_bg=bid;sv();
+  if(dbOK){try{await sbPatch('users','email=eq.'+encodeURIComponent(S.user.email),{profile_bg:bid});}catch(e){}}
+  closeModal();renderProfile();
+}
 function profUploadPhoto(ev){
   var file=ev.target.files[0];
   if(!file)return;
@@ -1589,10 +1746,117 @@ function profUploadPhoto(ev){
   reader.readAsDataURL(file);
 }
 
+// ===== МАГАЗИН =====
+async function loadShopPrices(){
+  if(!dbOK)return;
+  try{
+    var rows=await sbGet('shop_prices','select=item_id,price');
+    SHOP_PRICES={};
+    rows.forEach(function(r){SHOP_PRICES[r.item_id]=r.price;});
+  }catch(e){}
+}
+var SHOP_TAB='frames';
+async function renderShop(){
+  if(!S.user){showLoginWall();return;}
+  await loadShopPrices();
+  var b=document.getElementById('shopBody');
+  var html='<div class="card" style="display:flex;align-items:center;gap:12px;margin-bottom:16px;background:linear-gradient(135deg,var(--amd),var(--bg3))">'
+    +'<div style="font-size:34px">🪙</div><div><div style="font-size:12px;color:var(--tx3)">Твои монеты</div>'
+    +'<div style="font-size:28px;font-weight:700;color:var(--am)" class="coinDisp">'+myCoins()+'</div></div>'
+    +'<div style="margin-left:auto;font-size:11px;color:var(--tx3);text-align:right;max-width:140px">Зарабатывай: ответ +1 · экзамен +10 · победа +15</div></div>';
+  // вкладки
+  html+='<div style="display:flex;gap:6px;margin-bottom:16px">'
+    +'<button class="btn '+(SHOP_TAB==='frames'?'bbl':'bgh')+' bsm" onclick="shopTab(\'frames\')">✨ Рамки</button>'
+    +'<button class="btn '+(SHOP_TAB==='bg'?'bbl':'bgh')+' bsm" onclick="shopTab(\'bg\')">🖼️ Фоны</button>'
+    +'<button class="btn '+(SHOP_TAB==='avatars'?'bbl':'bgh')+' bsm" onclick="shopTab(\'avatars\')">😎 Аватары</button>'
+    +'</div>';
+  html+='<div id="shopItems"></div>';
+  b.innerHTML=html;
+  shopRenderItems();
+}
+function shopTab(t){SHOP_TAB=t;renderShop();}
+function rarityBadge(rarity){
+  var map={common:{t:'Обычная',c:'#9aabc4'},rare:{t:'Редкая',c:'#4f8ef7'},legendary:{t:'Легенда',c:'#f5a623'}};
+  var r=map[rarity]||map.common;
+  return '<span style="font-size:9px;padding:2px 7px;border-radius:6px;background:'+r.c+'22;color:'+r.c+';font-weight:600">'+r.t+'</span>';
+}
+function shopRenderItems(){
+  var el=document.getElementById('shopItems');
+  var html='';
+  if(SHOP_TAB==='frames'){
+    html='<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">';
+    FRAMES.forEach(function(f){
+      var owned=ownsItem('frame',f.id)||userFrames(S.user).indexOf(f.id)>=0;
+      var price=itemPrice('frame',f.id);
+      var rarity=frameRarity(f.id);
+      html+='<div class="card" style="text-align:center;padding:16px">'
+        +'<div style="display:flex;justify-content:center;margin-bottom:10px"><span class="avframe '+f.cls+'"><span style="width:60px;height:60px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:28px">'+f.icon+'</span></span></div>'
+        +'<div style="font-weight:600;margin-bottom:4px">'+f.name+'</div>'
+        +'<div style="margin-bottom:10px">'+rarityBadge(rarity)+'</div>'
+        +(owned
+          ?'<button class="btn bgh bsm" style="width:100%" disabled>✓ Куплено</button>'
+          :'<button class="btn bbl bsm" style="width:100%" onclick="shopBuy(\'frame\',\''+f.id+'\','+price+')">🪙 '+price+'</button>')
+        +'</div>';
+    });
+    html+='</div>';
+  }else if(SHOP_TAB==='bg'){
+    html='<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">';
+    BACKGROUNDS.forEach(function(bg){
+      var owned=ownsItem('bg',bg.id);
+      var price=itemPrice('bg',bg.id);
+      html+='<div class="card" style="padding:0;overflow:hidden">'
+        +'<div class="'+bg.cls+'" style="height:80px;position:relative"></div>'
+        +'<div style="padding:12px;text-align:center">'
+        +'<div style="font-weight:600;margin-bottom:4px">'+bg.name+'</div>'
+        +'<div style="margin-bottom:10px">'+rarityBadge(bg.rarity)+'</div>'
+        +(owned
+          ?'<button class="btn bgh bsm" style="width:100%" disabled>✓ Куплено</button>'
+          :'<button class="btn bbl bsm" style="width:100%" onclick="shopBuy(\'bg\',\''+bg.id+'\','+price+')">🪙 '+price+'</button>')
+        +'</div></div>';
+    });
+    html+='</div>';
+  }else if(SHOP_TAB==='avatars'){
+    html='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">';
+    SHOP_AVATARS.forEach(function(a){
+      var owned=ownsItem('avatar',a);
+      var price=itemPrice('avatar',a);
+      html+='<div class="card" style="text-align:center;padding:14px">'
+        +'<div style="font-size:38px;margin-bottom:8px">'+a+'</div>'
+        +(owned
+          ?'<button class="btn bgh bsm" style="width:100%;font-size:11px" disabled>✓</button>'
+          :'<button class="btn bbl bsm" style="width:100%;font-size:11px" onclick="shopBuy(\'avatar\',\''+a+'\','+price+')">🪙 '+price+'</button>')
+        +'</div>';
+    });
+    html+='</div>';
+  }
+  el.innerHTML=html;
+}
+async function shopBuy(type,id,price){
+  if(myCoins()<price){
+    alert('Не хватает монет! Нужно '+price+' 🪙, у тебя '+myCoins()+'.\\nРешай вопросы и побеждай в дуэлях, чтобы заработать.');
+    return;
+  }
+  if(!confirm('Купить за '+price+' 🪙?'))return;
+  // списываем монеты
+  S.user.coins=myCoins()-price;
+  // добавляем предмет
+  var owned=(S.user.owned_items||'').split(',').filter(function(x){return x;});
+  var key=type+':'+id;
+  if(owned.indexOf(key)<0)owned.push(key);
+  S.user.owned_items=owned.join(',');
+  sv();
+  if(dbOK){
+    try{await sbPatch('users','email=eq.'+encodeURIComponent(S.user.email),{coins:S.user.coins,owned_items:S.user.owned_items});}catch(e){}
+  }
+  alert('Куплено! 🎉 Выбери в профиле.');
+  renderShop();
+}
+
 function openMoreMenu(){
   if(navigator.vibrate)navigator.vibrate(8);
   var items=[
     {pg:'profile',icon:'👤',name:'Профиль'},
+    {pg:'shop',icon:'🛒',name:'Магазин'},
     {pg:'flashcards',icon:'🃏',name:'Флеш-карточки'},
     {pg:'exam',icon:'📝',name:'Экзамен'},
     {pg:'progress',icon:'📊',name:'Прогресс'},
@@ -2091,6 +2355,7 @@ function renderAdm(){
     document.getElementById('admDbSt').textContent=role+' · '+(dbOK?'Supabase ✅':'Локально ⚠');
     // Вкладки Админы/Запросы только для главного
     document.getElementById('tabAdmins').style.display=S.isSuper?'':'none';
+  var tp=document.getElementById('tabPrices');if(tp)tp.style.display=S.isSuper?'':'none';
     document.getElementById('tabReq').style.display=S.isSuper?'':'none';
     if(S.isSuper)updReqBadge();
     admTab('stats',document.querySelector('.tab'));
@@ -2103,10 +2368,51 @@ async function updReqBadge(){
 function admTab(t,btn){
   document.querySelectorAll('.tab').forEach(function(b){b.classList.remove('on');});
   if(btn)btn.classList.add('on');
-  ['admStats','admAdmins','admRequests','admPending','admStudents','admAnalytics','admQuestions','admNewsEdit','admSchedEdit','admAi'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});
-  var tabMap={stats:'admStats',admins:'admAdmins',requests:'admRequests',pending:'admPending',students:'admStudents',analytics:'admAnalytics',questions:'admQuestions',newsEdit:'admNewsEdit',schedEdit:'admSchedEdit',ai:'admAi'};
+  ['admStats','admAdmins','admRequests','admPending','admStudents','admAnalytics','admPrices','admQuestions','admNewsEdit','admSchedEdit','admAi'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});
+  var tabMap={stats:'admStats',admins:'admAdmins',requests:'admRequests',pending:'admPending',students:'admStudents',analytics:'admAnalytics',prices:'admPrices',questions:'admQuestions',newsEdit:'admNewsEdit',schedEdit:'admSchedEdit',ai:'admAi'};
   if(tabMap[t]){var el=document.getElementById(tabMap[t]);if(el)el.style.display='';}
-  if(t==='stats')admStats();if(t==='admins')admAdmins();if(t==='requests')admRequests();if(t==='pending')admPending();if(t==='students')admStudents();if(t==='analytics')admAnalytics();if(t==='questions')admQuestions();if(t==='newsEdit')admNewsEdit();if(t==='schedEdit')admSchedEdit();
+  if(t==='stats')admStats();if(t==='admins')admAdmins();if(t==='requests')admRequests();if(t==='pending')admPending();if(t==='students')admStudents();if(t==='analytics')admAnalytics();if(t==='prices')admPrices();if(t==='questions')admQuestions();if(t==='newsEdit')admNewsEdit();if(t==='schedEdit')admSchedEdit();
+}
+async function admPrices(){
+  var el=document.getElementById('admPrices');
+  await loadShopPrices();
+  var html='<div class="alert ali" style="margin-bottom:14px;font-size:12px"><i class="ti ti-info-circle"></i> Установи цены на предметы магазина. Оставь пустым — цена по умолчанию (обычные 50, редкие 150, легендарные 400).</div>';
+  function row(type,id,name,icon){
+    var key=type+':'+id;
+    var price=SHOP_PRICES[key]!==undefined?SHOP_PRICES[key]:'';
+    var def=itemPrice(type,id);
+    return '<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg3);border-radius:8px;margin-bottom:6px">'
+      +'<span style="font-size:20px">'+icon+'</span>'
+      +'<span style="flex:1;font-size:13px">'+name+'</span>'
+      +'<input type="number" id="price_'+key.replace(/[^a-zA-Z0-9]/g,'_')+'" value="'+price+'" placeholder="'+def+'" style="width:80px;padding:6px;font-size:13px;text-align:right">'
+      +'<span style="font-size:13px">🪙</span></div>';
+  }
+  html+='<div style="font-size:13px;font-weight:600;margin:14px 0 8px">✨ Рамки</div>';
+  FRAMES.forEach(function(f){html+=row('frame',f.id,f.name,f.icon);});
+  html+='<div style="font-size:13px;font-weight:600;margin:14px 0 8px">🖼️ Фоны</div>';
+  BACKGROUNDS.forEach(function(b){html+=row('bg',b.id,b.name,'🖼️');});
+  html+='<div style="font-size:13px;font-weight:600;margin:14px 0 8px">😎 Аватары</div>';
+  SHOP_AVATARS.forEach(function(a){html+=row('avatar',a,a,a);});
+  html+='<button class="btn bbl" onclick="admSavePrices()" style="width:100%;margin-top:14px">Сохранить цены</button>';
+  el.innerHTML=html;
+}
+async function admSavePrices(){
+  var updates=[];
+  function collect(type,id){
+    var key=type+':'+id;
+    var inp=document.getElementById('price_'+key.replace(/[^a-zA-Z0-9]/g,'_'));
+    if(inp&&inp.value!==''){updates.push({item_id:key,price:+inp.value});}
+  }
+  FRAMES.forEach(function(f){collect('frame',f.id);});
+  BACKGROUNDS.forEach(function(b){collect('bg',b.id);});
+  SHOP_AVATARS.forEach(function(a){collect('avatar',a);});
+  try{
+    for(var i=0;i<updates.length;i++){
+      await sbUps('shop_prices',updates[i],'item_id');
+    }
+    alert('Цены сохранены! ('+updates.length+' предметов)');
+    loadShopPrices();
+  }catch(e){alert('Ошибка: '+e.message);}
 }
 async function admAnalytics(){
   var el=document.getElementById('admAnalytics');
@@ -2250,15 +2556,50 @@ async function admStudentCard(email,name){
   html+='</div><div style="font-size:10px;color:var(--tx3);margin-top:6px">Штраф уменьшает счётчик правильных ответов. Сброс удаляет весь прогресс студента (необратимо).</div></div>';
   // Выдача анимированных рамок (только главный админ)
   if(S.isSuper){
-    html+='<div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--bor)"><div style="font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">✨ Анимированные рамки</div>';
-    html+='<div style="display:flex;gap:6px;flex-wrap:wrap">';
+    // Подарки: рамки
+    html+='<div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--bor)"><div style="font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">🎁 Подарить рамку</div><div style="display:flex;gap:6px;flex-wrap:wrap">';
     FRAMES.forEach(function(f){
-      html+='<button class="btn bgh bsm" onclick="admGiveFrame(\''+email+'\',\''+f.id+'\')">'+f.icon+' '+f.name+'</button>';
+      html+='<button class="btn bgh bsm" onclick="admGift(\''+email+'\',\'frame\',\''+f.id+'\')">'+f.icon+' '+f.name+'</button>';
     });
-    html+='</div><button class="btn bre bsm" onclick="admClearFrames(\''+email+'\')" style="margin-top:6px">Забрать все рамки</button>';
-    html+='<div style="font-size:10px;color:var(--tx3);margin-top:6px">Студент сможет выбрать выданную рамку в своём профиле.</div></div>';
+    html+='</div></div>';
+    // Подарки: фоны
+    html+='<div style="margin-top:12px"><div style="font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">🎁 Подарить фон</div><div style="display:flex;gap:6px;flex-wrap:wrap">';
+    BACKGROUNDS.forEach(function(bg){
+      html+='<button class="btn bgh bsm" onclick="admGift(\''+email+'\',\'bg\',\''+bg.id+'\')">'+bg.name+'</button>';
+    });
+    html+='</div></div>';
+    // Подарки: аватары
+    html+='<div style="margin-top:12px"><div style="font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">🎁 Подарить аватар</div><div style="display:flex;gap:6px;flex-wrap:wrap">';
+    SHOP_AVATARS.forEach(function(a){
+      html+='<button class="btn bgh bsm" onclick="admGift(\''+email+'\',\'avatar\',\''+a+'\')">'+a+'</button>';
+    });
+    html+='</div></div>';
+    // Монеты
+    html+='<div style="margin-top:12px"><div style="font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">🪙 Монеты</div><div style="display:flex;gap:6px;flex-wrap:wrap">';
+    html+='<button class="btn bam bsm" onclick="admGiveCoins(\''+email+'\',100)">+100</button>';
+    html+='<button class="btn bam bsm" onclick="admGiveCoins(\''+email+'\',500)">+500</button>';
+    html+='<button class="btn bre bsm" onclick="admClearFrames(\''+email+'\')">Забрать все предметы</button>';
+    html+='</div></div>';
   }
   b.innerHTML=html;
+}
+async function admGift(email,type,id){
+  try{
+    var u=await sbGet('users','email=eq.'+encodeURIComponent(email)+'&select=owned_items');
+    var cur=(u.length&&u[0].owned_items)?u[0].owned_items.split(',').filter(function(x){return x;}):[];
+    var key=type+':'+id;
+    if(cur.indexOf(key)<0)cur.push(key);
+    await sbPatch('users','email=eq.'+encodeURIComponent(email),{owned_items:cur.join(',')});
+    alert('Подарено! 🎁');
+  }catch(e){alert('Ошибка: '+e.message);}
+}
+async function admGiveCoins(email,n){
+  try{
+    var u=await sbGet('users','email=eq.'+encodeURIComponent(email)+'&select=coins');
+    var cur=(u.length&&u[0].coins)?u[0].coins:0;
+    await sbPatch('users','email=eq.'+encodeURIComponent(email),{coins:cur+n});
+    alert('Выдано '+n+' 🪙');
+  }catch(e){alert('Ошибка: '+e.message);}
 }
 async function admGiveFrame(email,frameId){
   try{
@@ -2270,10 +2611,10 @@ async function admGiveFrame(email,frameId){
   }catch(e){alert('Ошибка: '+e.message);}
 }
 async function admClearFrames(email){
-  if(!confirm('Забрать все рамки у студента?'))return;
+  if(!confirm('Забрать ВСЕ предметы (рамки, фоны, аватары) у студента?'))return;
   try{
-    await sbPatch('users','email=eq.'+encodeURIComponent(email),{frames:'',frame:''});
-    alert('Рамки убраны');
+    await sbPatch('users','email=eq.'+encodeURIComponent(email),{frames:'',frame:'',owned_items:'',profile_bg:''});
+    alert('Предметы убраны');
   }catch(e){alert('Ошибка: '+e.message);}
 }
 async function admPenalize(email,name,pct){
