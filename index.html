@@ -159,35 +159,38 @@ select option{background:var(--bg2)}
 }
 ::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--bor2);border-radius:3px}
 
-/* ===== АНИМИРОВАННЫЕ РАМКИ АВАТАРА (улучшенные, как Steam) ===== */
-.avframe{position:relative;display:inline-flex;align-items:center;justify-content:center;border-radius:50%}
+/* ===== АНИМИРОВАННЫЕ РАМКИ АВАТАРА (надёжное толстое кольцо) ===== */
+.avframe{position:relative;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;padding:3px}
 .avframe>*{position:relative;z-index:2}
-/* вращающееся кольцо-градиент */
-.avframe::before{content:'';position:absolute;inset:-4px;border-radius:50%;z-index:0;padding:4px;
-  -webkit-mask:radial-gradient(circle, transparent calc(50% - 4px), #000 calc(50% - 3px));mask:radial-gradient(circle, transparent calc(50% - 4px), #000 calc(50% - 3px))}
-/* пульсирующее свечение-ореол */
-.avframe::after{content:'';position:absolute;inset:-4px;border-radius:50%;z-index:0;pointer-events:none}
+/* КОЛЬЦО: вращающийся градиент виден как толстая рамка (через border-box trick) */
+.avframe::before{content:'';position:absolute;inset:0;border-radius:50%;z-index:1;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude}
+/* свечение-ореол */
+.avframe::after{content:'';position:absolute;inset:0;border-radius:50%;z-index:0;pointer-events:none}
 @keyframes frot{to{transform:rotate(360deg)}}
-@keyframes fpulse{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}
-@keyframes fflick{0%,100%{opacity:.5}25%{opacity:.95}50%{opacity:.35}75%{opacity:.85}}
+@keyframes fpulse{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.1)}}
+@keyframes fflick{0%,100%{opacity:.7}50%{opacity:1}}
+@keyframes firedance{to{transform:rotate(360deg)}}
 
-/* Мистика — фиолетовое вращение + пульс */
+/* Мистика */
 .fr-mystic::before{background:conic-gradient(from 0deg,#a78bfa,#ec4899,#8b5cf6,#6366f1,#a78bfa);animation:frot 3s linear infinite}
 .fr-mystic::after{box-shadow:0 0 14px 2px #a78bfaaa,0 0 28px 4px #8b5cf655;animation:fpulse 2.2s ease-in-out infinite}
 
-/* Неон — яркое бирюзовое */
+/* Неон */
 .fr-neon::before{background:conic-gradient(from 0deg,#00d4c8,#4f8ef7,#00fff0,#2dd4bf,#00d4c8);animation:frot 2.5s linear infinite}
 .fr-neon::after{box-shadow:0 0 14px 2px #00fff0aa,0 0 26px 4px #4f8ef755;animation:fpulse 1.8s ease-in-out infinite}
 
-/* Огонь — ЖИВОЙ: мерцание + пульсация + тёплое свечение */
-.fr-fire::before{background:conic-gradient(from 0deg,#ff3d00,#ff8c00,#ffd000,#ff6b00,#ff1500,#ff8c00,#ff3d00);animation:frot 1.4s linear infinite}
-.fr-fire::after{box-shadow:0 0 12px 2px #ff6b00,0 0 24px 6px #ff3d00aa,0 0 40px 10px #ff150055;animation:fflick .4s ease-in-out infinite}
+/* ОГОНЬ — настоящие языки пламени: рваный градиент + бешеное вращение + дрожащее свечение */
+.fr-fire{padding:4px}
+.fr-fire::before{background:conic-gradient(from 0deg,#ff3d00,#ff8c00,#ffd000,#ff6b00,#ff3d00);animation:firedance 2.5s linear infinite}
+.fr-fire::after{box-shadow:0 0 14px 2px #ff6b0099,0 0 26px 5px #ff3d0055;animation:fflick 2.5s ease-in-out infinite}
 
-/* Золото — благородное мерцание */
+/* Золото */
 .fr-gold::before{background:conic-gradient(from 0deg,#d4af37,#fff3b0,#f4e4a1,#b8860b,#ffd700,#d4af37);animation:frot 4s linear infinite}
 .fr-gold::after{box-shadow:0 0 14px 2px #ffd700aa,0 0 28px 5px #d4af3766;animation:fpulse 2.6s ease-in-out infinite}
 
-/* Радуга — переливы */
+/* Радуга */
 .fr-rainbow::before{background:conic-gradient(from 0deg,#ff0080,#ff8c00,#ffd400,#00d400,#00d4ff,#8000ff,#ff0080);animation:frot 3s linear infinite}
 .fr-rainbow::after{box-shadow:0 0 14px 2px #ff008066,0 0 24px 4px #00d4ff55;animation:fpulse 2s ease-in-out infinite}
 
@@ -471,6 +474,7 @@ select option{background:var(--bg2)}
       <button class="tab" onclick="admTab('students',this)">Студенты</button>
       <button class="tab" onclick="admTab('analytics',this)">📊 Аналитика</button>
       <button class="tab" id="tabPrices" onclick="admTab('prices',this)" style="display:none">🪙 Цены</button>
+      <button class="tab" id="tabItems" onclick="admTab('items',this)" style="display:none">📦 Товары</button>
       <button class="tab" id="tabAdmins" onclick="admTab('admins',this)" style="display:none">Админы</button>
       <button class="tab" id="tabReq" onclick="admTab('requests',this)" style="display:none">Запросы <span id="reqCnt" class="bdg bre2" style="font-size:10px;margin-left:3px"></span></button>
       <button class="tab" onclick="admTab('questions',this)">Вопросы</button>
@@ -485,6 +489,7 @@ select option{background:var(--bg2)}
     <div id="admStudents" style="display:none"></div>
     <div id="admAnalytics" style="display:none"></div>
     <div id="admPrices" style="display:none"></div>
+    <div id="admItems" style="display:none"></div>
     <div id="admQuestions" style="display:none"></div>
     <div id="admNewsEdit" style="display:none"></div>
     <div id="admSchedEdit" style="display:none"></div>
@@ -622,6 +627,7 @@ async function loadProg(){
     sv();renderAuthHdr();
     await loadFavs();
     await loadDaily();
+    await loadCustomItems();
     var rows=await sbGet('progress','user_email=eq.'+encodeURIComponent(S.user.email));
     rows.forEach(function(r){S.prog[r.question_id]={c:r.correct_count,a:r.attempt_count,streak:r.streak||0,interval:r.interval_days||0,due:r.due_date||''};});
     var hist=await sbGet('exam_history','user_email=eq.'+encodeURIComponent(S.user.email)+'&order=created_at.desc&limit=20');
@@ -1462,6 +1468,14 @@ var SHOP_AVATARS=['🐉','🦄','👽','🤖','🧛','🧙','🥷','🦸','⚡',
 // Цены по умолчанию по редкости (главный админ может переопределить)
 var RARITY_PRICE={common:50,rare:150,legendary:400};
 var SHOP_PRICES={}; // загружается из БД, переопределяет дефолт
+var CUSTOM_ITEMS=[]; // кастомные товары (рамки/фоны/аватары по ссылке)
+async function loadCustomItems(){
+  if(!dbOK)return;
+  try{
+    CUSTOM_ITEMS=await sbGet('custom_items','order=created_at.desc');
+  }catch(e){CUSTOM_ITEMS=[];}
+}
+function customItemById(id){return CUSTOM_ITEMS.filter(function(x){return x.id===id;})[0];}
 function frameRarity(id){
   // рамки тоже по редкости
   var map={mystic:'rare',neon:'common',fire:'rare',gold:'legendary',rainbow:'legendary'};
@@ -1490,11 +1504,12 @@ function updateCoinDisplay(){
 }
 function ownedItems(user){
   if(user.email&&user.email.toLowerCase()===OWNER_EMAIL){
-    // владельцу всё
     var all=[];
     FRAMES.forEach(function(f){all.push('frame:'+f.id);});
     BACKGROUNDS.forEach(function(b){all.push('bg:'+b.id);});
     SHOP_AVATARS.forEach(function(a){all.push('avatar:'+a);});
+    // кастомные товары тоже
+    CUSTOM_ITEMS.forEach(function(c){all.push(c.type+':custom:'+c.id);});
     return all;
   }
   return (user.owned_items||'').split(',').filter(function(x){return x;});
@@ -1508,18 +1523,29 @@ function avatarColorFor(email){
   return AVATAR_COLORS[sum%AVATAR_COLORS.length];
 }
 function userFrames(user){
-  if(user.email&&user.email.toLowerCase()===OWNER_EMAIL)return FRAMES.map(function(f){return f.id;});
+  if(user.email&&user.email.toLowerCase()===OWNER_EMAIL){
+    var all=FRAMES.map(function(f){return f.id;});
+    CUSTOM_ITEMS.filter(function(c){return c.type==='frame';}).forEach(function(c){all.push('custom:'+c.id);});
+    return all;
+  }
   var fromGift=(user.frames||'').split(',').filter(function(x){return x;});
-  // купленные в магазине
   var fromShop=(user.owned_items||'').split(',').filter(function(x){return x.indexOf('frame:')===0;}).map(function(x){return x.slice(6);});
   return fromGift.concat(fromShop).filter(function(v,i,a){return a.indexOf(v)===i;});
 }
 function userBackgrounds(user){
-  if(user.email&&user.email.toLowerCase()===OWNER_EMAIL)return BACKGROUNDS.map(function(b){return b.id;});
+  if(user.email&&user.email.toLowerCase()===OWNER_EMAIL){
+    var all=BACKGROUNDS.map(function(b){return b.id;});
+    CUSTOM_ITEMS.filter(function(c){return c.type==='bg';}).forEach(function(c){all.push('custom:'+c.id);});
+    return all;
+  }
   return (user.owned_items||'').split(',').filter(function(x){return x.indexOf('bg:')===0;}).map(function(x){return x.slice(3);});
 }
 function userAvatars(user){
-  if(user.email&&user.email.toLowerCase()===OWNER_EMAIL)return SHOP_AVATARS.slice();
+  if(user.email&&user.email.toLowerCase()===OWNER_EMAIL){
+    var all=SHOP_AVATARS.slice();
+    CUSTOM_ITEMS.filter(function(c){return c.type==='avatar';}).forEach(function(c){all.push('custom:'+c.id);});
+    return all;
+  }
   return (user.owned_items||'').split(',').filter(function(x){return x.indexOf('avatar:')===0;}).map(function(x){return x.slice(7);});
 }
 function renderAvatar(user,size){
@@ -1529,6 +1555,15 @@ function renderAvatar(user,size){
   var inner;
   if(av&&(av.indexOf('data:')===0||av.indexOf('http')===0)){
     inner='<div style="width:'+size+'px;height:'+size+'px;border-radius:50%;overflow:hidden;flex-shrink:0;background:#222"><img src="'+av+'" style="width:100%;height:100%;object-fit:cover"></div>';
+  }else if(av&&av.indexOf('custom:')===0){
+    // кастомный аватар по ссылке
+    var ci=customItemById(av.slice(7));
+    if(ci&&ci.image_url){
+      inner='<div style="width:'+size+'px;height:'+size+'px;border-radius:50%;overflow:hidden;flex-shrink:0;background:#222"><img src="'+ci.image_url+'" style="width:100%;height:100%;object-fit:cover"></div>';
+    }else{
+      var colc=avatarColorFor(user.email);var lc=((user.name||'?')[0]||'?').toUpperCase();
+      inner='<div style="width:'+size+'px;height:'+size+'px;border-radius:50%;background:'+colc+';display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:'+fs+'px;font-weight:700;color:#fff">'+lc+'</div>';
+    }
   }else if(av&&(AVATAR_EMOJIS.indexOf(av)>=0||SHOP_AVATARS.indexOf(av)>=0)){
     var col=avatarColorFor(user.email);
     inner='<div style="width:'+size+'px;height:'+size+'px;border-radius:50%;background:linear-gradient(135deg,'+col+'33,'+col+'11);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:'+fs+'px;border:2px solid '+col+'55">'+av+'</div>';
@@ -1541,8 +1576,19 @@ function renderAvatar(user,size){
   var fr=user.frame||'';
   var owned=userFrames(user);
   if(fr&&owned.indexOf(fr)>=0){
+    // встроенная CSS-рамка
     var fdef=FRAMES.filter(function(f){return f.id===fr;})[0];
     if(fdef)return '<span class="avframe '+fdef.cls+'">'+inner+'</span>';
+    // кастомная рамка-картинка (оверлей)
+    if(fr.indexOf('custom:')===0){
+      var cif=customItemById(fr.slice(7));
+      if(cif&&cif.image_url){
+        var pad=Math.round(size*0.28);
+        return '<span style="position:relative;display:inline-flex;align-items:center;justify-content:center">'+inner
+          +'<img src="'+cif.image_url+'" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:'+(size+pad)+'px;height:'+(size+pad)+'px;pointer-events:none;z-index:3">'
+          +'</span>';
+      }
+    }
   }
   return inner;
 }
@@ -1580,22 +1626,29 @@ async function renderProfile(){
       });
     }catch(e){}
   }
-  // фон профиля
+  // фон профиля (встроенный класс ИЛИ кастомная картинка)
   var bgId=S.user.profile_bg||'';
   var bgDef=BACKGROUNDS.filter(function(x){return x.id===bgId;})[0];
-  var bannerCls=(bgDef&&userBackgrounds(S.user).indexOf(bgId)>=0)?bgDef.cls:'';
+  var ownsBg=userBackgrounds(S.user).indexOf(bgId)>=0;
+  var bannerCls='';var bannerImg='';
+  if(ownsBg){
+    if(bgDef)bannerCls=bgDef.cls;
+    else if(bgId.indexOf('custom:')===0){var cb=customItemById(bgId.slice(7));if(cb)bannerImg=cb.image_url;}
+  }
+  var hasBanner=bannerCls||bannerImg;
   // фон на весь экран (глобальный слой)
   var gb=document.getElementById('globalBg');
   if(gb){
-    if(bannerCls){gb.className='pageBg '+bannerCls;gb.style.display='';}
+    if(bannerCls){gb.className='pageBg '+bannerCls;gb.style.backgroundImage='';gb.style.display='';}
+    else if(bannerImg){gb.className='pageBg';gb.style.backgroundImage='url('+bannerImg+')';gb.style.backgroundSize='cover';gb.style.backgroundPosition='center';gb.style.display='';}
     else{gb.style.display='none';}
   }
   var html='<div class="card pbg" style="padding:0;margin-bottom:16px">'
-    +(bannerCls?'<div class="pbg-banner '+bannerCls+'"></div>':'')
+    +(bannerCls?'<div class="pbg-banner '+bannerCls+'"></div>':(bannerImg?'<div class="pbg-banner" style="background-image:url('+bannerImg+');background-size:cover;background-position:center"></div>':''))
     +'<div class="pbg-inner" style="text-align:center;padding:24px">'
     +'<div style="display:flex;justify-content:center;margin-bottom:14px">'+renderAvatar(me,88)+'</div>'
-    +'<div style="font-size:22px;font-weight:700;margin-bottom:4px'+(bannerCls?';color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.6)':'')+'">'+me.name+'</div>'
-    +'<div style="font-size:13px'+(bannerCls?';color:rgba(255,255,255,.85);text-shadow:0 1px 4px rgba(0,0,0,.6)':';color:var(--tx3)')+'">'+(me.group_name?'Группа '+me.group_name:me.email)+'</div>'
+    +'<div style="font-size:22px;font-weight:700;margin-bottom:4px'+(hasBanner?';color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.6)':'')+'">'+me.name+'</div>'
+    +'<div style="font-size:13px'+(hasBanner?';color:rgba(255,255,255,.85);text-shadow:0 1px 4px rgba(0,0,0,.6)':';color:var(--tx3)')+'">'+(me.group_name?'Группа '+me.group_name:me.email)+'</div>'
     +'<div style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;background:var(--amd);padding:5px 12px;border-radius:20px"><span style="font-size:16px">🪙</span><span style="font-weight:700;color:var(--am)" class="coinDisp">'+myCoins()+'</span></div>'
     +'<div style="display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap">'
     +'<button class="btn bgh bsm" onclick="profEditName()"><i class="ti ti-edit"></i> Имя</button>'
@@ -1751,12 +1804,24 @@ function profEditFrame(){
     return;
   }
   var grid=owned.map(function(fid){
-    var f=FRAMES.filter(function(x){return x.id===fid;})[0];
-    if(!f)return '';
     var sel=S.user.frame===fid;
-    return '<div class="frpick" data-fr="'+fid+'" style="text-align:center;cursor:pointer;padding:10px;border-radius:12px;border:2px solid '+(sel?'var(--bl)':'transparent')+'">'
-      +'<span class="avframe '+f.cls+'"><span style="width:54px;height:54px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:24px">'+f.icon+'</span></span>'
-      +'<div style="font-size:11px;margin-top:6px">'+f.name+'</div></div>';
+    // встроенная рамка
+    var f=FRAMES.filter(function(x){return x.id===fid;})[0];
+    if(f){
+      return '<div class="frpick" data-fr="'+fid+'" style="text-align:center;cursor:pointer;padding:10px;border-radius:12px;border:2px solid '+(sel?'var(--bl)':'transparent')+'">'
+        +'<span class="avframe '+f.cls+'"><span style="width:54px;height:54px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:24px">'+f.icon+'</span></span>'
+        +'<div style="font-size:11px;margin-top:6px">'+f.name+'</div></div>';
+    }
+    // кастомная рамка-картинка
+    if(fid.indexOf('custom:')===0){
+      var c=customItemById(fid.slice(7));
+      if(c){
+        return '<div class="frpick" data-fr="'+fid+'" style="text-align:center;cursor:pointer;padding:10px;border-radius:12px;border:2px solid '+(sel?'var(--bl)':'transparent')+'">'
+          +'<span style="position:relative;display:inline-flex"><span style="width:54px;height:54px;border-radius:50%;background:var(--bg3)"></span><img src="'+c.image_url+'" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:70px;height:70px"></span>'
+          +'<div style="font-size:11px;margin-top:6px">'+c.name+'</div></div>';
+      }
+    }
+    return '';
   }).join('');
   var body='<div style="font-size:13px;color:var(--tx2);margin-bottom:12px">Выбери рамку для аватара:</div>'
     +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px">'+grid+'</div>'
@@ -1780,10 +1845,16 @@ function profEditBg(){
     return;
   }
   var grid=owned.map(function(bid){
-    var bg=BACKGROUNDS.filter(function(x){return x.id===bid;})[0];
-    if(!bg)return '';
     var sel=S.user.profile_bg===bid;
-    return '<div class="bgpick" data-bg="'+bid+'" style="cursor:pointer;border-radius:12px;overflow:hidden;border:2px solid '+(sel?'var(--bl)':'transparent')+'"><div class="'+bg.cls+'" style="height:60px"></div><div style="font-size:11px;text-align:center;padding:6px">'+bg.name+'</div></div>';
+    var bg=BACKGROUNDS.filter(function(x){return x.id===bid;})[0];
+    if(bg){
+      return '<div class="bgpick" data-bg="'+bid+'" style="cursor:pointer;border-radius:12px;overflow:hidden;border:2px solid '+(sel?'var(--bl)':'transparent')+'"><div class="'+bg.cls+'" style="height:60px"></div><div style="font-size:11px;text-align:center;padding:6px">'+bg.name+'</div></div>';
+    }
+    if(bid.indexOf('custom:')===0){
+      var c=customItemById(bid.slice(7));
+      if(c)return '<div class="bgpick" data-bg="'+bid+'" style="cursor:pointer;border-radius:12px;overflow:hidden;border:2px solid '+(sel?'var(--bl)':'transparent')+'"><div style="height:60px;background-image:url('+c.image_url+');background-size:cover;background-position:center"></div><div style="font-size:11px;text-align:center;padding:6px">'+c.name+'</div></div>';
+    }
+    return '';
   }).join('');
   var body='<div style="font-size:13px;color:var(--tx2);margin-bottom:12px">Выбери фон профиля:</div>'
     +'<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px">'+grid+'</div>'
@@ -1876,6 +1947,18 @@ function shopRenderItems(){
           :'<button class="btn bbl bsm" style="width:100%" onclick="shopBuy(\'frame\',\''+f.id+'\','+price+')">🪙 '+price+'</button>')
         +'</div>';
     });
+    // кастомные рамки
+    CUSTOM_ITEMS.filter(function(c){return c.type==='frame';}).forEach(function(c){
+      var owned=ownsItem('frame','custom:'+c.id);
+      html+='<div class="card" style="text-align:center;padding:16px">'
+        +'<div style="display:flex;justify-content:center;margin-bottom:10px;position:relative"><span style="position:relative;display:inline-flex"><span style="width:60px;height:60px;border-radius:50%;background:var(--bg3)"></span><img src="'+c.image_url+'" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:78px;height:78px"></span></div>'
+        +'<div style="font-weight:600;margin-bottom:4px">'+c.name+'</div>'
+        +'<div style="margin-bottom:10px">'+rarityBadge(c.rarity)+'</div>'
+        +(owned
+          ?'<button class="btn bgh bsm" style="width:100%" disabled>✓ Куплено</button>'
+          :'<button class="btn bbl bsm" style="width:100%" onclick="shopBuy(\'frame\',\'custom:'+c.id+'\','+c.price+')">🪙 '+c.price+'</button>')
+        +'</div>';
+    });
     html+='</div>';
   }else if(SHOP_TAB==='bg'){
     html='<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">';
@@ -1892,6 +1975,19 @@ function shopRenderItems(){
           :'<button class="btn bbl bsm" style="width:100%" onclick="shopBuy(\'bg\',\''+bg.id+'\','+price+')">🪙 '+price+'</button>')
         +'</div></div>';
     });
+    // кастомные фоны
+    CUSTOM_ITEMS.filter(function(c){return c.type==='bg';}).forEach(function(c){
+      var owned=ownsItem('bg','custom:'+c.id);
+      html+='<div class="card" style="padding:0;overflow:hidden">'
+        +'<div style="height:80px;background-image:url('+c.image_url+');background-size:cover;background-position:center"></div>'
+        +'<div style="padding:12px;text-align:center">'
+        +'<div style="font-weight:600;margin-bottom:4px">'+c.name+'</div>'
+        +'<div style="margin-bottom:10px">'+rarityBadge(c.rarity)+'</div>'
+        +(owned
+          ?'<button class="btn bgh bsm" style="width:100%" disabled>✓ Куплено</button>'
+          :'<button class="btn bbl bsm" style="width:100%" onclick="shopBuy(\'bg\',\'custom:'+c.id+'\','+c.price+')">🪙 '+c.price+'</button>')
+        +'</div></div>';
+    });
     html+='</div>';
   }else if(SHOP_TAB==='avatars'){
     html='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">';
@@ -1903,6 +1999,17 @@ function shopRenderItems(){
         +(owned
           ?'<button class="btn bgh bsm" style="width:100%;font-size:11px" disabled>✓</button>'
           :'<button class="btn bbl bsm" style="width:100%;font-size:11px" onclick="shopBuy(\'avatar\',\''+a+'\','+price+')">🪙 '+price+'</button>')
+        +'</div>';
+    });
+    // кастомные аватары
+    CUSTOM_ITEMS.filter(function(c){return c.type==='avatar';}).forEach(function(c){
+      var owned=ownsItem('avatar','custom:'+c.id);
+      html+='<div class="card" style="text-align:center;padding:14px">'
+        +'<img src="'+c.image_url+'" style="width:48px;height:48px;object-fit:cover;border-radius:50%;margin-bottom:8px">'
+        +'<div style="font-size:11px;margin-bottom:6px">'+c.name+'</div>'
+        +(owned
+          ?'<button class="btn bgh bsm" style="width:100%;font-size:11px" disabled>✓</button>'
+          :'<button class="btn bbl bsm" style="width:100%;font-size:11px" onclick="shopBuy(\'avatar\',\'custom:'+c.id+'\','+c.price+')">🪙 '+c.price+'</button>')
         +'</div>';
     });
     html+='</div>';
@@ -2338,6 +2445,7 @@ function renderProg(){
 
 var LB_CACHE=null,LB_TIME=0;
 async function renderLB(){
+  if(!CUSTOM_ITEMS.length&&dbOK)await loadCustomItems();
   var lb=document.getElementById('lbList');
   // Кеш 30 сек — чтобы не тормозило
   if(LB_CACHE&&Date.now()-LB_TIME<30000){renderLBList(LB_CACHE);return;}
@@ -2345,7 +2453,7 @@ async function renderLB(){
   var all=[];
   if(dbOK){
     try{
-      var users=await sbGet('users','status=eq.active&select=email,name,avatar,group_name,frame,frames');
+      var users=await sbGet('users','status=eq.active&select=email,name,avatar,group_name,frame,frames,owned_items');
       var prog=await sbGet('progress','select=user_email,correct_count,attempt_count');
       var exams=await sbGet('exam_history','select=user_email');
       var byUser={};
@@ -2375,7 +2483,7 @@ async function renderLB(){
         var examBonus=exCount*5;
         var duelBonus=dWins*10;
         var score=baseScore+examBonus+duelBonus;
-        all.push({name:u.name,email:u.email,avatar:u.avatar||'',frame:u.frame||'',frames:u.frames||'',acc:acc,solved:solved,score:score,ex:exCount,examBonus:examBonus,duelWins:dWins,duelBonus:duelBonus,isMe:S.user&&u.email===S.user.email});
+        all.push({name:u.name,email:u.email,avatar:u.avatar||'',frame:u.frame||'',frames:u.frames||'',owned_items:u.owned_items||'',acc:acc,solved:solved,score:score,ex:exCount,examBonus:examBonus,duelWins:dWins,duelBonus:duelBonus,isMe:S.user&&u.email===S.user.email});
       });
     }catch(e){console.warn('LB error:',e.message);}
   }
@@ -2434,6 +2542,7 @@ function renderAdm(){
     // Вкладки Админы/Запросы только для главного
     document.getElementById('tabAdmins').style.display=S.isSuper?'':'none';
   var tp=document.getElementById('tabPrices');if(tp)tp.style.display=S.isSuper?'':'none';
+  var ti=document.getElementById('tabItems');if(ti)ti.style.display=S.isSuper?'':'none';
     document.getElementById('tabReq').style.display=S.isSuper?'':'none';
     if(S.isSuper)updReqBadge();
     admTab('stats',document.querySelector('.tab'));
@@ -2446,10 +2555,10 @@ async function updReqBadge(){
 function admTab(t,btn){
   document.querySelectorAll('.tab').forEach(function(b){b.classList.remove('on');});
   if(btn)btn.classList.add('on');
-  ['admStats','admAdmins','admRequests','admPending','admStudents','admAnalytics','admPrices','admQuestions','admNewsEdit','admSchedEdit','admAi'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});
-  var tabMap={stats:'admStats',admins:'admAdmins',requests:'admRequests',pending:'admPending',students:'admStudents',analytics:'admAnalytics',prices:'admPrices',questions:'admQuestions',newsEdit:'admNewsEdit',schedEdit:'admSchedEdit',ai:'admAi'};
+  ['admStats','admAdmins','admRequests','admPending','admStudents','admAnalytics','admPrices','admItems','admQuestions','admNewsEdit','admSchedEdit','admAi'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});
+  var tabMap={stats:'admStats',admins:'admAdmins',requests:'admRequests',pending:'admPending',students:'admStudents',analytics:'admAnalytics',prices:'admPrices',items:'admItems',questions:'admQuestions',newsEdit:'admNewsEdit',schedEdit:'admSchedEdit',ai:'admAi'};
   if(tabMap[t]){var el=document.getElementById(tabMap[t]);if(el)el.style.display='';}
-  if(t==='stats')admStats();if(t==='admins')admAdmins();if(t==='requests')admRequests();if(t==='pending')admPending();if(t==='students')admStudents();if(t==='analytics')admAnalytics();if(t==='prices')admPrices();if(t==='questions')admQuestions();if(t==='newsEdit')admNewsEdit();if(t==='schedEdit')admSchedEdit();
+  if(t==='stats')admStats();if(t==='admins')admAdmins();if(t==='requests')admRequests();if(t==='pending')admPending();if(t==='students')admStudents();if(t==='analytics')admAnalytics();if(t==='prices')admPrices();if(t==='items')admItems();if(t==='questions')admQuestions();if(t==='newsEdit')admNewsEdit();if(t==='schedEdit')admSchedEdit();
 }
 async function admPrices(){
   var el=document.getElementById('admPrices');
@@ -2492,6 +2601,69 @@ async function admSavePrices(){
     loadShopPrices();
   }catch(e){alert('Ошибка: '+e.message);}
 }
+async function admItems(){
+  var el=document.getElementById('admItems');
+  await loadCustomItems();
+  var html='<div class="alert ali" style="margin-bottom:14px;font-size:12px"><i class="ti ti-info-circle"></i> Добавь свой товар по ссылке на картинку или GIF. Сначала загрузи картинку на postimages.org или imgur.com, скопируй прямую ссылку (заканчивается на .png/.jpg/.gif) и вставь сюда.</div>';
+  // форма
+  html+='<div class="card" style="margin-bottom:16px">'
+    +'<div style="font-size:13px;font-weight:600;margin-bottom:10px">Новый товар</div>'
+    +'<div class="fg"><label class="fl">Тип</label><select id="ciType"><option value="frame">Рамка (вокруг аватара)</option><option value="bg">Фон профиля</option><option value="avatar">Аватар</option></select></div>'
+    +'<div class="fg"><label class="fl">Название</label><input id="ciName" placeholder="Например: Дракон" maxlength="30"></div>'
+    +'<div class="fg"><label class="fl">Ссылка на картинку/GIF</label><input id="ciUrl" placeholder="https://i.postimg.cc/.../image.png"></div>'
+    +'<div class="fg"><label class="fl">Цена (монеты)</label><input id="ciPrice" type="number" value="200"></div>'
+    +'<div class="fg"><label class="fl">Редкость</label><select id="ciRarity"><option value="common">Обычная</option><option value="rare">Редкая</option><option value="legendary">Легендарная</option></select></div>'
+    +'<button class="btn bbl" onclick="admAddItem()" style="width:100%">Добавить в магазин</button>'
+    +'<div id="ciPreview" style="margin-top:12px;text-align:center"></div>'
+    +'</div>';
+  // список существующих
+  html+='<div style="font-size:13px;font-weight:600;margin-bottom:10px">Мои товары ('+CUSTOM_ITEMS.length+')</div>';
+  if(CUSTOM_ITEMS.length){
+    html+='<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px">';
+    CUSTOM_ITEMS.forEach(function(c){
+      var typeName={frame:'Рамка',bg:'Фон',avatar:'Аватар'}[c.type]||c.type;
+      html+='<div class="card" style="text-align:center;padding:12px">'
+        +'<img src="'+c.image_url+'" style="width:60px;height:60px;object-fit:cover;border-radius:'+(c.type==='bg'?'8px':'50%')+';margin-bottom:6px" onerror="this.style.opacity=0.2">'
+        +'<div style="font-weight:600;font-size:13px">'+c.name+'</div>'
+        +'<div style="font-size:11px;color:var(--tx3)">'+typeName+' · '+c.price+' 🪙</div>'
+        +'<button class="btn bre bsm" onclick="admDelItem(\''+c.id+'\')" style="margin-top:8px;width:100%">Удалить</button>'
+        +'</div>';
+    });
+    html+='</div>';
+  }else{
+    html+='<div style="color:var(--tx3);font-size:13px">Пока нет своих товаров.</div>';
+  }
+  el.innerHTML=html;
+  // превью при вводе ссылки
+  var urlInp=document.getElementById('ciUrl');
+  if(urlInp)urlInp.addEventListener('input',function(){
+    var pv=document.getElementById('ciPreview');
+    if(urlInp.value)pv.innerHTML='<img src="'+urlInp.value+'" style="max-width:100px;max-height:100px;border-radius:8px" onerror="this.style.display=\'none\'">';
+    else pv.innerHTML='';
+  });
+}
+async function admAddItem(){
+  var type=document.getElementById('ciType').value;
+  var name=document.getElementById('ciName').value.trim();
+  var url=document.getElementById('ciUrl').value.trim();
+  var price=+document.getElementById('ciPrice').value;
+  var rarity=document.getElementById('ciRarity').value;
+  if(!name||!url){alert('Заполни название и ссылку');return;}
+  var id='ci_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
+  try{
+    await sbPost('custom_items',{id:id,type:type,name:name,image_url:url,price:price,rarity:rarity});
+    alert('Товар добавлен в магазин! 🎉');
+    admItems();
+  }catch(e){alert('Ошибка: '+e.message);}
+}
+async function admDelItem(id){
+  if(!confirm('Удалить товар из магазина?'))return;
+  try{
+    await sbDel('custom_items','id=eq.'+id);
+    admItems();
+  }catch(e){alert('Ошибка: '+e.message);}
+}
+
 async function admAnalytics(){
   var el=document.getElementById('admAnalytics');
   el.innerHTML='<div style="color:var(--tx3);padding:10px">Анализирую ответы студентов...</div>';
