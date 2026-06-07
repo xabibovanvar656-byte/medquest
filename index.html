@@ -12,7 +12,8 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;font-family:var(--f);background:var(--bg);color:var(--tx);font-size:14px;line-height:1.6;overflow:hidden}
 .app{display:flex;flex-direction:column;height:100vh}
-.hdr{height:52px;background:var(--bg2);border-bottom:1px solid var(--bor);display:flex;align-items:center;padding:0 16px;gap:10px;flex-shrink:0;z-index:100}
+.hdr{height:52px;background:rgba(28,34,48,.72);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;padding:0 16px;gap:10px;flex-shrink:0;z-index:100}
+[data-light] .hdr{background:rgba(255,255,255,.78);border-bottom:1px solid rgba(0,0,0,.06)}
 .logo{font-size:15px;font-weight:700;background:linear-gradient(135deg,var(--bl),var(--te));-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:flex;align-items:center;gap:7px}
 .hsp{flex:1}
 .hib{width:32px;height:32px;border-radius:var(--rs);border:1px solid var(--bor);background:none;color:var(--tx2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px}
@@ -118,7 +119,7 @@ select option{background:var(--bg2)}
   border:1px solid rgba(255,255,255,.1);border-radius:26px;
   box-shadow:0 8px 32px rgba(0,0,0,.45),0 2px 8px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.08);
   padding:9px 8px;justify-content:space-around;align-items:center}
-body.light .bottomnav{background:rgba(255,255,255,.82);border:1px solid rgba(0,0,0,.06);box-shadow:0 8px 32px rgba(80,110,160,.18),0 2px 8px rgba(80,110,160,.1)}
+[data-light] .bottomnav{background:rgba(255,255,255,.82);border:1px solid rgba(0,0,0,.06);box-shadow:0 8px 32px rgba(80,110,160,.18),0 2px 8px rgba(80,110,160,.1)}
 .bni{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:none;cursor:pointer;
   color:var(--tx3);font-size:10px;font-weight:500;font-family:var(--f);padding:6px 4px;border-radius:14px;position:relative;transition:color .25s;flex:1;max-width:80px}
 .bni svg{width:25px;height:25px;position:relative;z-index:2;transition:transform .25s}
@@ -134,11 +135,12 @@ body.light .bottomnav{background:rgba(255,255,255,.82);border:1px solid rgba(0,0
 @media(max-width:640px){
 .sidebar{display:none}
 .bottomnav{display:flex}
-.main{padding:12px;padding-bottom:130px}
+.main{padding:12px;padding-bottom:160px}
 .hdr{height:auto;min-height:52px;flex-wrap:wrap;padding:8px 12px;gap:6px}
 .hdr .logo{font-size:14px}
 .bdg{font-size:9px}
 #dbst{font-size:10px;order:5}
+@media(max-width:640px){#dbst{display:none}.hideMob{display:none}}
 #authhdr{display:flex;flex-wrap:wrap;gap:4px}
 .bh{padding:5px 10px;font-size:11px;margin-left:0!important}
 .pt{font-size:18px}
@@ -156,6 +158,25 @@ body.light .bottomnav{background:rgba(255,255,255,.82);border:1px solid rgba(0,0
 .hdr .logo span{display:none}
 }
 ::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--bor2);border-radius:3px}
+
+/* ===== АНИМИРОВАННЫЕ РАМКИ АВАТАРА ===== */
+.avframe{position:relative;display:inline-flex;align-items:center;justify-content:center;border-radius:50%}
+.avframe::before{content:'';position:absolute;inset:-4px;border-radius:50%;z-index:0;padding:4px}
+.avframe>*{position:relative;z-index:1}
+@keyframes frot{to{transform:rotate(360deg)}}
+@keyframes fglow{0%,100%{filter:brightness(1)}50%{filter:brightness(1.4)}}
+/* Мистика — фиолетовое вращение */
+.fr-mystic::before{background:conic-gradient(from 0deg,#a78bfa,#ec4899,#6366f1,#a78bfa);animation:frot 3s linear infinite;box-shadow:0 0 16px #a78bfa88}
+/* Неон */
+.fr-neon::before{background:conic-gradient(from 0deg,#00d4c8,#4f8ef7,#2dd4bf,#00d4c8);animation:frot 2.5s linear infinite;box-shadow:0 0 16px #00d4c888}
+/* Огонь */
+.fr-fire::before{background:conic-gradient(from 0deg,#f5a623,#f04060,#ff6b00,#f5a623);animation:frot 2s linear infinite;box-shadow:0 0 16px #f0406088}
+/* Золото */
+.fr-gold::before{background:conic-gradient(from 0deg,#d4af37,#f4e4a1,#b8860b,#d4af37);animation:frot 4s linear infinite;box-shadow:0 0 18px #d4af3799}
+/* Радуга */
+.fr-rainbow::before{background:conic-gradient(from 0deg,#ff0080,#ff8c00,#ffd400,#00d400,#00d4ff,#8000ff,#ff0080);animation:frot 3.5s linear infinite}
+/* маска чтобы видна была только рамка-кольцо */
+.avframe::before{-webkit-mask:radial-gradient(circle, transparent calc(50% - 4px), #000 calc(50% - 3px));mask:radial-gradient(circle, transparent calc(50% - 4px), #000 calc(50% - 3px))}
 </style>
 </head>
 <body>
@@ -226,10 +247,10 @@ body.light .bottomnav{background:rgba(255,255,255,.82);border:1px solid rgba(0,0
   <div id="hAlert"></div>
   <div id="hDaily"></div>
   <div class="cgrid" id="hStats"></div>
-  <div class="nlbl" style="margin-bottom:10px">Предметы</div>
-  <div id="hSubjs" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:20px"></div>
   <div class="nlbl" style="margin-bottom:10px">Режимы</div>
-  <div id="hModes" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px"></div>
+  <div id="hModes" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:20px"></div>
+  <div class="nlbl" style="margin-bottom:10px">Предметы</div>
+  <div id="hSubjs" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px"></div>
 </div>
 <div id="pg-flashcards" class="page">
   <div class="ph"><div class="pt">Флеш-карточки</div><div class="ps">Вопрос → переворот → ответ</div></div>
@@ -584,13 +605,10 @@ function renderAuthHdr(){
   var el=document.getElementById('authhdr');
   if(S.user){
     var av=document.createElement('span');
-    av.style.cssText='margin-right:8px;cursor:pointer;display:inline-flex;align-items:center;gap:7px';
-    av.innerHTML=renderAvatar(S.user,28)+'<span style="font-size:12px;color:var(--tx2)">'+S.user.name+'</span>';
+    av.style.cssText='cursor:pointer;display:inline-flex;align-items:center;gap:7px';
+    av.innerHTML=renderAvatar(S.user,30)+'<span style="font-size:12px;color:var(--tx2)" class="hideMob">'+S.user.name+'</span>';
     av.addEventListener('click',function(){go('profile');});
-    var btn=document.createElement('button');
-    btn.className='bh';btn.textContent='Выйти';
-    btn.addEventListener('click',doLogout);
-    el.innerHTML='';el.appendChild(av);el.appendChild(btn);
+    el.innerHTML='';el.appendChild(av);
   }else{
     var b1=document.createElement('button');
     b1.className='bh';b1.textContent='Войти';
@@ -777,7 +795,7 @@ async function doAuth(){
         if(user.status==='pending'){showErr('Заявка ещё не одобрена');btn.disabled=false;btn.textContent='Войти';return;}
         if(user.status==='blocked'){showErr('Аккаунт заблокирован');btn.disabled=false;btn.textContent='Войти';return;}
       }
-      S.user={name:user?user.name:email,email:email,group:user?user.group_name:'',avatar:user?(user.avatar||''):''};
+      S.user={name:user?user.name:email,email:email,group:user?user.group_name:'',avatar:user?(user.avatar||''):'',frames:user?(user.frames||''):'',frame:user?(user.frame||''):''};
       sv();closeModal();renderAuthHdr();
       pushActivity('вошёл');
       await loadProg();renderHome();
@@ -1327,28 +1345,48 @@ async function duelShowHistory(){
 // ===== ПРОФИЛЬ СТУДЕНТА =====
 var AVATAR_EMOJIS=['😎','🧠','⚕️','🩺','🔬','🧬','💊','🦷','👨‍⚕️','👩‍⚕️','🤓','😼','🦊','🐺','🦁','🐯','🦉','🦅','🚀','⭐','🔥','💎','👑','🎯'];
 var AVATAR_COLORS=['#4f8ef7','#22d07a','#f5a623','#a78bfa','#ec4899','#2dd4bf','#fb923c','#60a5fa'];
+// Анимированные рамки (награды)
+var FRAMES=[
+  {id:'mystic',name:'Мистика',cls:'fr-mystic',icon:'🔮'},
+  {id:'neon',name:'Неон',cls:'fr-neon',icon:'💠'},
+  {id:'fire',name:'Огонь',cls:'fr-fire',icon:'🔥'},
+  {id:'gold',name:'Золото',cls:'fr-gold',icon:'👑'},
+  {id:'rainbow',name:'Радуга',cls:'fr-rainbow',icon:'🌈'}
+];
+var OWNER_EMAIL='x656an@gmail.com'; // владелец — все рамки
 
 function avatarColorFor(email){
   var sum=0;for(var i=0;i<(email||'').length;i++)sum+=email.charCodeAt(i);
   return AVATAR_COLORS[sum%AVATAR_COLORS.length];
 }
+function userFrames(user){
+  // владельцу — все рамки
+  if(user.email&&user.email.toLowerCase()===OWNER_EMAIL)return FRAMES.map(function(f){return f.id;});
+  return (user.frames||'').split(',').filter(function(x){return x;});
+}
 function renderAvatar(user,size){
   size=size||64;
   var av=user.avatar||'';
   var fs=Math.round(size*0.5);
-  if(av&&av.indexOf('data:')===0||av.indexOf('http')===0){
-    // фото
-    return '<div style="width:'+size+'px;height:'+size+'px;border-radius:50%;overflow:hidden;flex-shrink:0;background:#222"><img src="'+av+'" style="width:100%;height:100%;object-fit:cover"></div>';
-  }
-  if(av&&AVATAR_EMOJIS.indexOf(av)>=0){
-    // эмодзи
+  var inner;
+  if(av&&(av.indexOf('data:')===0||av.indexOf('http')===0)){
+    inner='<div style="width:'+size+'px;height:'+size+'px;border-radius:50%;overflow:hidden;flex-shrink:0;background:#222"><img src="'+av+'" style="width:100%;height:100%;object-fit:cover"></div>';
+  }else if(av&&AVATAR_EMOJIS.indexOf(av)>=0){
     var col=avatarColorFor(user.email);
-    return '<div style="width:'+size+'px;height:'+size+'px;border-radius:50%;background:linear-gradient(135deg,'+col+'33,'+col+'11);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:'+fs+'px;border:2px solid '+col+'55">'+av+'</div>';
+    inner='<div style="width:'+size+'px;height:'+size+'px;border-radius:50%;background:linear-gradient(135deg,'+col+'33,'+col+'11);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:'+fs+'px;border:2px solid '+col+'55">'+av+'</div>';
+  }else{
+    var col2=avatarColorFor(user.email);
+    var letter=((user.name||user.email||'?')[0]||'?').toUpperCase();
+    inner='<div style="width:'+size+'px;height:'+size+'px;border-radius:50%;background:linear-gradient(135deg,'+col2+','+col2+'aa);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:'+fs+'px;font-weight:700;color:#fff">'+letter+'</div>';
   }
-  // буква-аватар
-  var col2=avatarColorFor(user.email);
-  var letter=((user.name||user.email||'?')[0]||'?').toUpperCase();
-  return '<div style="width:'+size+'px;height:'+size+'px;border-radius:50%;background:linear-gradient(135deg,'+col2+','+col2+'aa);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:'+fs+'px;font-weight:700;color:#fff">'+letter+'</div>';
+  // рамка
+  var fr=user.frame||'';
+  var owned=userFrames(user);
+  if(fr&&owned.indexOf(fr)>=0){
+    var fdef=FRAMES.filter(function(f){return f.id===fr;})[0];
+    if(fdef)return '<span class="avframe '+fdef.cls+'">'+inner+'</span>';
+  }
+  return inner;
 }
 
 async function renderProfile(){
@@ -1378,7 +1416,11 @@ async function renderProfile(){
     +'<div style="display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap">'
     +'<button class="btn bgh bsm" onclick="profEditName()"><i class="ti ti-edit"></i> Изменить имя</button>'
     +'<button class="btn bgh bsm" onclick="profEditAvatar()"><i class="ti ti-photo"></i> Аватар</button>'
-    +'</div></div>';
+    +'<button class="btn bgh bsm" onclick="profEditFrame()"><i class="ti ti-sparkles"></i> Рамка</button>'
+    +'</div>'
+    +(S.isAdm?'<button class="btn bbl bsm" onclick="go(\'admin\')" style="margin-top:10px"><i class="ti ti-shield-lock"></i> Панель администратора</button>':'')
+    +'<div style="margin-top:10px"><button class="btn bgh bsm" onclick="doLogout()" style="color:var(--re)"><i class="ti ti-logout"></i> Выйти</button></div>'
+    +'</div>';
   // Статистика
   html+='<div class="cgrid" style="margin-bottom:16px">'
     +'<div class="card" style="text-align:center;padding:16px"><div style="font-size:26px;font-weight:700;color:var(--bl)">'+st.solved+'</div><div style="font-size:11px;color:var(--tx3)">Решено</div></div>'
@@ -1483,6 +1525,35 @@ function profEditAvatar(){
 async function profSetAvatar(av){
   S.user.avatar=av;sv();
   if(dbOK){try{await sbPatch('users','email=eq.'+encodeURIComponent(S.user.email),{avatar:av});}catch(e){}}
+  closeModal();renderAuthHdr();renderProfile();
+}
+function profEditFrame(){
+  var owned=userFrames(S.user);
+  if(!owned.length){
+    showModal('Рамки','<div style="text-align:center;padding:20px"><div style="font-size:40px;margin-bottom:12px">🔒</div><div style="font-size:14px;color:var(--tx2)">У тебя пока нет рамок.<br>Анимированные рамки выдаёт администратор за достижения!</div></div>');
+    return;
+  }
+  var grid=owned.map(function(fid){
+    var f=FRAMES.filter(function(x){return x.id===fid;})[0];
+    if(!f)return '';
+    var sel=S.user.frame===fid;
+    return '<div class="frpick" data-fr="'+fid+'" style="text-align:center;cursor:pointer;padding:10px;border-radius:12px;border:2px solid '+(sel?'var(--bl)':'transparent')+'">'
+      +'<span class="avframe '+f.cls+'"><span style="width:54px;height:54px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:24px">'+f.icon+'</span></span>'
+      +'<div style="font-size:11px;margin-top:6px">'+f.name+'</div></div>';
+  }).join('');
+  var body='<div style="font-size:13px;color:var(--tx2);margin-bottom:12px">Выбери рамку для аватара:</div>'
+    +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px">'+grid+'</div>'
+    +'<button class="btn bgh bsm" id="frNone" style="width:100%">Без рамки</button>';
+  showModal('Анимированные рамки ✨',body);
+  document.querySelectorAll('.frpick').forEach(function(el){
+    el.addEventListener('click',function(){profSetFrame(el.getAttribute('data-fr'));});
+  });
+  var fn=document.getElementById('frNone');
+  if(fn)fn.addEventListener('click',function(){profSetFrame('');});
+}
+async function profSetFrame(fid){
+  S.user.frame=fid;sv();
+  if(dbOK){try{await sbPatch('users','email=eq.'+encodeURIComponent(S.user.email),{frame:fid});}catch(e){}}
   closeModal();renderAuthHdr();renderProfile();
 }
 function profUploadPhoto(ev){
@@ -2148,7 +2219,33 @@ async function admStudentCard(email,name){
   html+='<button class="btn bam bsm" onclick="admPenalize(\''+email+'\',\''+name.replace(/\x27/g,'')+'\',10)">−10%</button>';
   html+='<button class="btn bre bsm" onclick="admResetProgress(\''+email+'\',\''+name.replace(/\x27/g,'')+'\')">Сбросить весь прогресс</button>';
   html+='</div><div style="font-size:10px;color:var(--tx3);margin-top:6px">Штраф уменьшает счётчик правильных ответов. Сброс удаляет весь прогресс студента (необратимо).</div></div>';
+  // Выдача анимированных рамок (только главный админ)
+  if(S.isSuper){
+    html+='<div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--bor)"><div style="font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">✨ Анимированные рамки</div>';
+    html+='<div style="display:flex;gap:6px;flex-wrap:wrap">';
+    FRAMES.forEach(function(f){
+      html+='<button class="btn bgh bsm" onclick="admGiveFrame(\''+email+'\',\''+f.id+'\')">'+f.icon+' '+f.name+'</button>';
+    });
+    html+='</div><button class="btn bre bsm" onclick="admClearFrames(\''+email+'\')" style="margin-top:6px">Забрать все рамки</button>';
+    html+='<div style="font-size:10px;color:var(--tx3);margin-top:6px">Студент сможет выбрать выданную рамку в своём профиле.</div></div>';
+  }
   b.innerHTML=html;
+}
+async function admGiveFrame(email,frameId){
+  try{
+    var u=await sbGet('users','email=eq.'+encodeURIComponent(email)+'&select=frames');
+    var cur=(u.length&&u[0].frames)?u[0].frames.split(',').filter(function(x){return x;}):[];
+    if(cur.indexOf(frameId)<0)cur.push(frameId);
+    await sbPatch('users','email=eq.'+encodeURIComponent(email),{frames:cur.join(',')});
+    alert('Рамка выдана!');
+  }catch(e){alert('Ошибка: '+e.message);}
+}
+async function admClearFrames(email){
+  if(!confirm('Забрать все рамки у студента?'))return;
+  try{
+    await sbPatch('users','email=eq.'+encodeURIComponent(email),{frames:'',frame:''});
+    alert('Рамки убраны');
+  }catch(e){alert('Ошибка: '+e.message);}
 }
 async function admPenalize(email,name,pct){
   if(!confirm('Оштрафовать '+name+' на '+pct+'%?\nЭто уменьшит число правильных ответов на '+pct+'%.'))return;
