@@ -120,13 +120,13 @@ select option{background:var(--bg2)}
   box-shadow:0 8px 32px rgba(0,0,0,.45),0 2px 8px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.08);
   padding:9px 8px;justify-content:space-around;align-items:center}
 [data-light] .bottomnav{background:rgba(255,255,255,.82);border:1px solid rgba(0,0,0,.06);box-shadow:0 8px 32px rgba(80,110,160,.18),0 2px 8px rgba(80,110,160,.1)}
-.bni{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:none;cursor:pointer;
-  color:var(--tx3);font-size:10px;font-weight:500;font-family:var(--f);padding:6px 4px;border-radius:14px;position:relative;transition:color .25s;flex:1;max-width:80px}
-.bni svg{width:25px;height:25px;position:relative;z-index:2;transition:transform .25s}
+.bni{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;
+  color:var(--tx3);font-size:9px;font-weight:500;font-family:var(--f);padding:5px 2px;border-radius:12px;position:relative;transition:color .25s;flex:1;max-width:70px}
+.bni svg{width:23px;height:23px;position:relative;z-index:2;transition:transform .25s}
 .bni span{position:relative;z-index:2;transition:transform .25s}
 /* подложка-пилюля у иконки (как в Telegram) */
 .bni::before{content:'';position:absolute;top:3px;left:50%;transform:translateX(-50%) scale(.6);
-  width:54px;height:30px;border-radius:16px;background:var(--bl);opacity:0;transition:opacity .25s,transform .25s;z-index:1}
+  width:44px;height:28px;border-radius:14px;background:var(--bl);opacity:0;transition:opacity .25s,transform .25s;z-index:1}
 .bni.on{color:var(--bl)}
 .bni.on::before{opacity:.15;transform:translateX(-50%) scale(1)}
 .bni.on svg{transform:translateY(-1px) scale(1.05)}
@@ -284,6 +284,9 @@ select option{background:var(--bg2)}
   <button class="bni" data-pg="leaderboard" onclick="go('leaderboard',this)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0z"/><path d="M5 5H3v2a3 3 0 003 3M19 5h2v2a3 3 0 01-3 3"/></svg>
     <span>Рейтинг</span></button>
+  <button class="bni" data-pg="profile" onclick="go('profile',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6"/></svg>
+    <span>Профиль</span></button>
   <button class="bni" onclick="openMoreMenu()">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="19" cy="12" r="1.5" fill="currentColor"/></svg>
     <span>Ещё</span></button>
@@ -522,6 +525,20 @@ function sbFetch(method,table,filter,body){
   });
 }
 function sbGet(t,f){return sbFetch('GET',t,f,null);}
+// Загрузка ВСЕХ строк постранично (обходит лимит Supabase 1000 строк за запрос)
+async function sbGetAll(t,f){
+  var all=[],offset=0,page=1000;
+  while(true){
+    var sep=f?'&':'';
+    var rows=await sbFetch('GET',t,(f||'')+sep+'limit='+page+'&offset='+offset,null);
+    if(!rows||!rows.length)break;
+    all=all.concat(rows);
+    if(rows.length<page)break;
+    offset+=page;
+    if(offset>200000)break; // предохранитель
+  }
+  return all;
+}
 function sbPost(t,b){return sbFetch('POST',t,null,b);}
 function sbPatch(t,f,b){return sbFetch('PATCH',t,f,b);}
 function sbDel(t,f){
@@ -1690,6 +1707,7 @@ async function renderProfile(){
 }
 
 async function viewProfile(emailEnc){
+  if(!CUSTOM_ITEMS.length&&dbOK)await loadCustomItems();
   var email=decodeURIComponent(emailEnc);
   if(S.user&&email===S.user.email){go('profile');return;} // свой — на свою страницу
   showModal('Профиль','<div style="color:var(--tx3);padding:10px">Загрузка...</div>');
@@ -1712,11 +1730,17 @@ async function viewProfile(emailEnc){
     var ubgDef=BACKGROUNDS.filter(function(x){return x.id===ubg;})[0];
     var ubgOwned=(u.owned_items||'').split(',').indexOf('bg:'+ubg)>=0||(u.email&&u.email.toLowerCase()===OWNER_EMAIL);
     var ubgCls=(ubgDef&&ubgOwned)?ubgDef.cls:'';
-    var txtShadow=ubgCls?';color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.7)':'';
+    var ubgImg='';
+    if(!ubgCls&&ubg.indexOf('custom:')===0){
+      var ubgCustomOwned=(u.owned_items||'').split(',').indexOf('bg:'+ubg)>=0||(u.email&&u.email.toLowerCase()===OWNER_EMAIL);
+      if(ubgCustomOwned){var ubc=customItemById(ubg.slice(7));if(ubc)ubgImg=ubc.image_url;}
+    }
+    var hasUbg=ubgCls||ubgImg;
+    var txtShadow=hasUbg?';color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.7)':'';
     var html='<div style="text-align:center;margin-bottom:16px;position:relative;z-index:2">'
       +'<div style="display:flex;justify-content:center;margin-bottom:10px">'+renderAvatar(u,80)+'</div>'
       +'<div style="font-size:20px;font-weight:700'+txtShadow+'">'+u.name+'</div>'
-      +'<div style="font-size:12px'+(ubgCls?';color:rgba(255,255,255,.9);text-shadow:0 1px 4px rgba(0,0,0,.7)':';color:var(--tx3)')+'">'+(u.group_name?'Группа '+u.group_name:'')+'</div></div>';
+      +'<div style="font-size:12px'+(hasUbg?';color:rgba(255,255,255,.9);text-shadow:0 1px 4px rgba(0,0,0,.7)':';color:var(--tx3)')+'">'+(u.group_name?'Группа '+u.group_name:'')+'</div></div>';
     html+='<div class="cgrid" style="margin-bottom:14px">'
       +'<div class="card" style="text-align:center;padding:12px"><div style="font-size:20px;font-weight:700;color:var(--bl)">'+solved+'</div><div style="font-size:10px;color:var(--tx3)">Решено</div></div>'
       +'<div class="card" style="text-align:center;padding:12px"><div style="font-size:20px;font-weight:700;color:var(--gr)">'+acc+'%</div><div style="font-size:10px;color:var(--tx3)">Точность</div></div>'
@@ -1737,11 +1761,12 @@ async function viewProfile(emailEnc){
     var mdl=document.querySelector('#modal .mdl');
     if(mdl){
       var oldB=mdl.querySelector('.modalBg');if(oldB)oldB.remove();
-      if(ubgCls){
+      if(hasUbg){
         mdl.style.position='relative';mdl.style.overflow='hidden';
         var mb=document.createElement('div');
-        mb.className='modalBg '+ubgCls;
+        mb.className='modalBg '+(ubgCls||'');
         mb.style.cssText='position:absolute;inset:0;z-index:0;opacity:.45;border-radius:inherit;pointer-events:none';
+        if(ubgImg){mb.style.backgroundImage='url('+ubgImg+')';mb.style.backgroundSize='cover';mb.style.backgroundPosition='center';}
         mdl.insertBefore(mb,mdl.firstChild);
         // поднять контент над фоном
         var hdr=mdl.querySelector('.mdhdr');if(hdr){hdr.style.position='relative';hdr.style.zIndex='2';}
@@ -2040,9 +2065,8 @@ async function shopBuy(type,id,price){
 function openMoreMenu(){
   if(navigator.vibrate)navigator.vibrate(8);
   var items=[
-    {pg:'profile',icon:'👤',name:'Профиль'},
     {pg:'shop',icon:'🛒',name:'Магазин'},
-    {pg:'flashcards',icon:'🃏',name:'Флеш-карточки'},
+    {pg:'flashcards',icon:'🃏',name:'Карточки'},
     {pg:'exam',icon:'📝',name:'Экзамен'},
     {pg:'progress',icon:'📊',name:'Прогресс'},
     {pg:'news',icon:'📰',name:'Новости'},
@@ -2454,8 +2478,8 @@ async function renderLB(){
   if(dbOK){
     try{
       var users=await sbGet('users','status=eq.active&select=email,name,avatar,group_name,frame,frames,owned_items');
-      var prog=await sbGet('progress','select=user_email,correct_count,attempt_count');
-      var exams=await sbGet('exam_history','select=user_email');
+      var prog=await sbGetAll('progress','select=user_email,correct_count,attempt_count');
+      var exams=await sbGetAll('exam_history','select=user_email');
       var byUser={};
       prog.forEach(function(p){
         if(!byUser[p.user_email])byUser[p.user_email]={c:0,a:0};
