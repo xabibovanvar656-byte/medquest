@@ -194,6 +194,18 @@ select option{background:var(--bg2)}
 .bg-gold{background:linear-gradient(120deg,#2a1f00,#5c4400,#d4af37,#f4e4a1,#2a1f00);background-size:300% 300%;animation:bgshift 9s ease infinite}
 /* звёздочки для galaxy */
 .bg-galaxy::after{content:'';position:absolute;inset:0;background-image:radial-gradient(1px 1px at 20% 30%,#fff,transparent),radial-gradient(1px 1px at 60% 70%,#fff,transparent),radial-gradient(1px 1px at 80% 20%,#fff,transparent),radial-gradient(1px 1px at 40% 80%,#fff,transparent),radial-gradient(1px 1px at 90% 50%,#fff,transparent);opacity:.6}
+/* Новые фоны */
+.bg-sakura{background:linear-gradient(120deg,#4a1530,#7a2956,#ff8fb1,#ffc9de,#4a1530);background-size:300% 300%;animation:bgshift 9s ease infinite}
+.bg-mint{background:linear-gradient(120deg,#0a3d2e,#1a7a5e,#6ee7b7,#a7f3d0,#0a3d2e);background-size:300% 300%;animation:bgshift 8s ease infinite}
+.bg-candy{background:linear-gradient(120deg,#ff6b9d,#c44eff,#6b9dff,#4ecdc4,#ff6b9d);background-size:300% 300%;animation:bgshift 7s ease infinite}
+.bg-medical{background:linear-gradient(120deg,#0a2540,#0e7490,#22d3ee,#e0f7ff,#0a2540);background-size:300% 300%;animation:bgshift 8s ease infinite}
+.bg-lavender{background:linear-gradient(120deg,#2e1a47,#6b4ba3,#b794f6,#e9d8fd,#2e1a47);background-size:300% 300%;animation:bgshift 9s ease infinite}
+.bg-coral{background:linear-gradient(120deg,#7a2020,#c0392b,#ff7f50,#ffd3a5,#7a2020);background-size:300% 300%;animation:bgshift 8s ease infinite}
+.bg-cyber{background:linear-gradient(120deg,#0a0a2e,#ff00ea,#00fff0,#0a0a2e);background-size:300% 300%;animation:bgshift 6s ease infinite}
+.bg-rose{background:linear-gradient(120deg,#3d0a1f,#8a1538,#e63956,#ffb3c6,#3d0a1f);background-size:300% 300%;animation:bgshift 9s ease infinite}
+/* Фон на всю страницу профиля */
+.pageBg{position:fixed;inset:0;z-index:0;opacity:.18;pointer-events:none}
+.page.on{position:relative;z-index:1}
 </style>
 </head>
 <body>
@@ -572,8 +584,8 @@ async function init(){
 async function loadProg(){
   if(!dbOK||!S.user)return;
   try{
-    // Verify account still active (not blocked/deleted by admin)
-    var chk=await sbGet('users','email=eq.'+encodeURIComponent(S.user.email)+'&select=status');
+    // Подтягиваем СВЕЖИЕ данные пользователя из базы (монеты, предметы, рамки — могли измениться)
+    var chk=await sbGet('users','email=eq.'+encodeURIComponent(S.user.email)+'&select=*');
     if(!chk.length){
       alert('Ваш аккаунт был удалён администратором.');
       S.user=null;S.hist=[];S.prog={};sv();renderAuthHdr();renderHome();return;
@@ -582,6 +594,17 @@ async function loadProg(){
       alert('Ваш аккаунт заблокирован администратором.');
       S.user=null;S.hist=[];S.prog={};sv();renderAuthHdr();renderHome();return;
     }
+    // обновляем профиль из базы
+    var fresh=chk[0];
+    S.user.name=fresh.name||S.user.name;
+    S.user.group=fresh.group_name||S.user.group;
+    S.user.avatar=fresh.avatar||'';
+    S.user.frames=fresh.frames||'';
+    S.user.frame=fresh.frame||'';
+    S.user.coins=fresh.coins||0;
+    S.user.owned_items=fresh.owned_items||'';
+    S.user.profile_bg=fresh.profile_bg||'';
+    sv();renderAuthHdr();
     await loadFavs();
     await loadDaily();
     var rows=await sbGet('progress','user_email=eq.'+encodeURIComponent(S.user.email));
@@ -1397,7 +1420,15 @@ var BACKGROUNDS=[
   {id:'emerald',name:'Изумруд',cls:'bg-emerald',rarity:'common'},
   {id:'sunset',name:'Закат',cls:'bg-sunset',rarity:'rare'},
   {id:'matrix',name:'Матрица',cls:'bg-matrix',rarity:'legendary'},
-  {id:'gold',name:'Золото',cls:'bg-gold',rarity:'legendary'}
+  {id:'gold',name:'Золото',cls:'bg-gold',rarity:'legendary'},
+  {id:'sakura',name:'Сакура 🌸',cls:'bg-sakura',rarity:'rare'},
+  {id:'mint',name:'Мята',cls:'bg-mint',rarity:'common'},
+  {id:'candy',name:'Карамель 🍬',cls:'bg-candy',rarity:'rare'},
+  {id:'medical',name:'Медицина ⚕️',cls:'bg-medical',rarity:'common'},
+  {id:'lavender',name:'Лаванда',cls:'bg-lavender',rarity:'rare'},
+  {id:'coral',name:'Коралл',cls:'bg-coral',rarity:'common'},
+  {id:'cyber',name:'Кибер 💜',cls:'bg-cyber',rarity:'legendary'},
+  {id:'rose',name:'Роза 🌹',cls:'bg-rose',rarity:'rare'}
 ];
 // Особые аватары (платные)
 var SHOP_AVATARS=['🐉','🦄','👽','🤖','🧛','🧙','🥷','🦸','⚡','🌟','💀','🎭'];
@@ -1471,7 +1502,7 @@ function renderAvatar(user,size){
   var inner;
   if(av&&(av.indexOf('data:')===0||av.indexOf('http')===0)){
     inner='<div style="width:'+size+'px;height:'+size+'px;border-radius:50%;overflow:hidden;flex-shrink:0;background:#222"><img src="'+av+'" style="width:100%;height:100%;object-fit:cover"></div>';
-  }else if(av&&AVATAR_EMOJIS.indexOf(av)>=0){
+  }else if(av&&(AVATAR_EMOJIS.indexOf(av)>=0||SHOP_AVATARS.indexOf(av)>=0)){
     var col=avatarColorFor(user.email);
     inner='<div style="width:'+size+'px;height:'+size+'px;border-radius:50%;background:linear-gradient(135deg,'+col+'33,'+col+'11);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:'+fs+'px;border:2px solid '+col+'55">'+av+'</div>';
   }else{
@@ -1522,10 +1553,17 @@ async function renderProfile(){
       });
     }catch(e){}
   }
-  // фон профиля (баннер)
+  // фон профиля
   var bgId=S.user.profile_bg||'';
   var bgDef=BACKGROUNDS.filter(function(x){return x.id===bgId;})[0];
   var bannerCls=(bgDef&&userBackgrounds(S.user).indexOf(bgId)>=0)?bgDef.cls:'';
+  // фон на всю страницу профиля
+  var pageEl=document.getElementById('pg-profile');
+  var oldBg=pageEl.querySelector('.pageBg');if(oldBg)oldBg.remove();
+  if(bannerCls){
+    var pb=document.createElement('div');pb.className='pageBg '+bannerCls;
+    pageEl.insertBefore(pb,pageEl.firstChild);
+  }
   var html='<div class="card pbg" style="padding:0;margin-bottom:16px">'
     +(bannerCls?'<div class="pbg-banner '+bannerCls+'"></div>':'')
     +'<div class="pbg-inner" style="text-align:center;padding:24px">'
