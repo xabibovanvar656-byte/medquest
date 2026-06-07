@@ -769,7 +769,7 @@ function go(pg,btn){
   document.querySelectorAll('.nb,.bni').forEach(function(b){b.classList.remove('on');});
   var pgEl=document.getElementById('pg-'+pg);if(pgEl)pgEl.classList.add('on');
   if(pg!=='duels'&&!CUR_DUEL&&typeof duelStopPolling==='function')duelStopPolling();
-  if(pg!=='profile'){var gb=document.getElementById('globalBg');if(gb)gb.style.display='none';}
+  if(typeof applyGlobalBg==='function')applyGlobalBg(pg);
   document.getElementById('mscroll').scrollTop=0;
   // подсветка во ВСЕХ меню (сайдбар + нижнее)
   document.querySelectorAll('[data-pg="'+pg+'"]').forEach(function(b){b.classList.add('on');});
@@ -1460,7 +1460,7 @@ var FRAMES=[
   {id:'gold',name:'Золото',cls:'fr-gold',icon:'👑'},
   {id:'rainbow',name:'Радуга',cls:'fr-rainbow',icon:'🌈'}
 ];
-var OWNER_EMAIL='x65an@gmail.com'; // владелец — всё открыто
+var OWNER_EMAIL='x66an@gmail.com'; // владелец — всё открыто
 // Фоны профиля (баннеры)
 var BACKGROUNDS=[
   {id:'aurora',name:'Аврора',cls:'bg-aurora',rarity:'rare'},
@@ -1610,6 +1610,26 @@ function renderAvatar(user,size){
   return inner;
 }
 
+async // Применить фон пользователя глобально (вызывается на каждой странице)
+var STUDY_PAGES=['trainer','exam','flashcards'];
+function applyGlobalBg(pg){
+  var gb=document.getElementById('globalBg');
+  if(!gb||!S.user){if(gb)gb.style.display='none';return;}
+  // на учебных страницах — только если включена галочка
+  var bgInStudy=localStorage.getItem('bgInStudy')==='1';
+  if(STUDY_PAGES.indexOf(pg)>=0&&!bgInStudy){gb.style.display='none';return;}
+  var bgId=S.user.profile_bg||'';
+  if(!bgId){gb.style.display='none';return;}
+  var bgDef=BACKGROUNDS.filter(function(x){return x.id===bgId;})[0];
+  var owns=userBackgrounds(S.user).indexOf(bgId)>=0;
+  if(!owns){gb.style.display='none';return;}
+  if(bgDef){gb.className='pageBg '+bgDef.cls;gb.style.backgroundImage='';gb.style.display='';}
+  else if(bgId.indexOf('custom:')===0){
+    var c=customItemById(bgId.slice(7));
+    if(c){gb.className='pageBg';gb.style.backgroundImage='url('+c.image_url+')';gb.style.backgroundSize='cover';gb.style.backgroundPosition='center';gb.style.display='';}
+    else gb.style.display='none';
+  }else gb.style.display='none';
+}
 async function renderProfile(){
   if(!S.user){showLoginWall();return;}
   var b=document.getElementById('profileBody');
@@ -1653,13 +1673,8 @@ async function renderProfile(){
     else if(bgId.indexOf('custom:')===0){var cb=customItemById(bgId.slice(7));if(cb)bannerImg=cb.image_url;}
   }
   var hasBanner=bannerCls||bannerImg;
-  // фон на весь экран (глобальный слой)
-  var gb=document.getElementById('globalBg');
-  if(gb){
-    if(bannerCls){gb.className='pageBg '+bannerCls;gb.style.backgroundImage='';gb.style.display='';}
-    else if(bannerImg){gb.className='pageBg';gb.style.backgroundImage='url('+bannerImg+')';gb.style.backgroundSize='cover';gb.style.backgroundPosition='center';gb.style.display='';}
-    else{gb.style.display='none';}
-  }
+  // фон на весь экран — через общую функцию
+  applyGlobalBg('profile');
   var html='<div class="card pbg" style="padding:0;margin-bottom:16px">'
     +(bannerCls?'<div class="pbg-banner '+bannerCls+'"></div>':(bannerImg?'<div class="pbg-banner" style="background-image:url('+bannerImg+');background-size:cover;background-position:center"></div>':''))
     +'<div class="pbg-inner" style="text-align:center;padding:24px">'
@@ -1881,10 +1896,20 @@ function profEditBg(){
     }
     return '';
   }).join('');
-  var body='<div style="font-size:13px;color:var(--tx2);margin-bottom:12px">Выбери фон профиля:</div>'
+  var bgStudyOn=localStorage.getItem('bgInStudy')==='1';
+  var body='<div style="font-size:13px;color:var(--tx2);margin-bottom:12px">Выбери фон. Он будет на всех страницах и в твоей строке рейтинга:</div>'
     +'<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px">'+grid+'</div>'
-    +'<button class="btn bgh bsm" id="bgNone" style="width:100%">Без фона</button>';
+    +'<button class="btn bgh bsm" id="bgNone" style="width:100%;margin-bottom:12px">Без фона</button>'
+    +'<div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--bg3);border-radius:10px;cursor:pointer" id="bgStudyToggle">'
+    +'<div style="width:44px;height:26px;border-radius:13px;background:'+(bgStudyOn?'var(--bl)':'var(--bor2)')+';position:relative;transition:background .2s;flex-shrink:0"><div style="width:20px;height:20px;border-radius:50%;background:#fff;position:absolute;top:3px;left:'+(bgStudyOn?'21px':'3px')+';transition:left .2s"></div></div>'
+    +'<div><div style="font-size:13px;font-weight:600">Фон в режимах учёбы</div><div style="font-size:11px;color:var(--tx3)">Тренажёр, экзамен, карточки</div></div></div>';
   showModal('Фоны профиля 🖼️',body);
+  var tgl=document.getElementById('bgStudyToggle');
+  if(tgl)tgl.addEventListener('click',function(){
+    var now=localStorage.getItem('bgInStudy')==='1';
+    localStorage.setItem('bgInStudy',now?'0':'1');
+    profEditBg(); // перерисовать
+  });
   document.querySelectorAll('.bgpick').forEach(function(el){
     el.addEventListener('click',function(){profSetBg(el.getAttribute('data-bg'));});
   });
@@ -2477,7 +2502,7 @@ async function renderLB(){
   var all=[];
   if(dbOK){
     try{
-      var users=await sbGet('users','status=eq.active&select=email,name,avatar,group_name,frame,frames,owned_items');
+      var users=await sbGet('users','status=eq.active&select=email,name,avatar,group_name,frame,frames,owned_items,profile_bg');
       var prog=await sbGetAll('progress','select=user_email,correct_count,attempt_count');
       var exams=await sbGetAll('exam_history','select=user_email');
       var byUser={};
@@ -2507,7 +2532,7 @@ async function renderLB(){
         var examBonus=exCount*5;
         var duelBonus=dWins*10;
         var score=baseScore+examBonus+duelBonus;
-        all.push({name:u.name,email:u.email,avatar:u.avatar||'',frame:u.frame||'',frames:u.frames||'',owned_items:u.owned_items||'',acc:acc,solved:solved,score:score,ex:exCount,examBonus:examBonus,duelWins:dWins,duelBonus:duelBonus,isMe:S.user&&u.email===S.user.email});
+        all.push({name:u.name,email:u.email,avatar:u.avatar||'',frame:u.frame||'',frames:u.frames||'',owned_items:u.owned_items||'',profile_bg:u.profile_bg||'',acc:acc,solved:solved,score:score,ex:exCount,examBonus:examBonus,duelWins:dWins,duelBonus:duelBonus,isMe:S.user&&u.email===S.user.email});
       });
     }catch(e){console.warn('LB error:',e.message);}
   }
@@ -2525,6 +2550,21 @@ async function renderLB(){
   LB_CACHE={ranked:ranked,notYet:notYet};LB_TIME=Date.now();
   renderLBList(LB_CACHE);
 }
+// Фон для строки рейтинга (возвращает HTML слоя или '')
+function lbRowBg(e){
+  var bgId=e.profile_bg||'';
+  if(!bgId)return {layer:'',hasBg:false};
+  // владеет ли (по owned_items или владелец)
+  var owns=(e.owned_items||'').split(',').indexOf('bg:'+bgId)>=0||(e.email&&e.email.toLowerCase()===OWNER_EMAIL);
+  if(!owns)return {layer:'',hasBg:false};
+  var bgDef=BACKGROUNDS.filter(function(x){return x.id===bgId;})[0];
+  if(bgDef)return {layer:'<div class="'+bgDef.cls+'" style="position:absolute;inset:0;z-index:0;opacity:.55;pointer-events:none"></div>',hasBg:true};
+  if(bgId.indexOf('custom:')===0){
+    var c=customItemById(bgId.slice(7));
+    if(c)return {layer:'<div style="position:absolute;inset:0;z-index:0;opacity:.55;background-image:url('+c.image_url+');background-size:cover;background-position:center;pointer-events:none"></div>',hasBg:true};
+  }
+  return {layer:'',hasBg:false};
+}
 function renderLBList(data){
   var lb=document.getElementById('lbList');
   var ranked=data.ranked||[],notYet=data.notYet||[];
@@ -2532,7 +2572,20 @@ function renderLBList(data){
   var medals=['🥇','🥈','🥉'];
   var html='<div class="alert ali" style="font-size:12px;margin-bottom:12px"><i class="ti ti-info-circle"></i> Балл = точность × объём. В рейтинг попадают решившие 50+ вопросов.</div>';
   if(ranked.length){
-    html+=ranked.map(function(e,i){return '<div class="lr'+(e.isMe?' me':'')+'" style="cursor:pointer" onclick="viewProfile(\''+encodeURIComponent(e.email)+'\')"><span style="min-width:28px;font-size:18px">'+(i<3?medals[i]:'<span style="font-family:var(--fm);font-size:13px;color:var(--tx3)">'+(i+1)+'</span>')+'</span>'+renderAvatar(e,36)+'<div style="flex:1;margin-left:10px"><div style="font-size:13px'+(e.isMe?';font-weight:700':'')+'">'+e.name+(e.isMe?' <span class="bdg bbl2">вы</span>':'')+'</div><div style="font-size:10px;color:var(--tx3);font-family:var(--fm)">'+e.solved+' решено · '+e.acc+'% · '+(e.ex||0)+' экз.'+(e.duelWins?' · ⚔️'+e.duelWins:'')+'</div></div><span style="font-size:22px;font-weight:700;font-family:var(--fm);color:var(--bl)">'+e.score+'</span></div>';}).join('');
+    html+=ranked.map(function(e,i){
+      var bg=lbRowBg(e);
+      var txtCol=bg.hasBg?'#fff':'var(--tx)';
+      var subCol=bg.hasBg?'rgba(255,255,255,.85)':'var(--tx3)';
+      var sh=bg.hasBg?';text-shadow:0 1px 4px rgba(0,0,0,.8)':'';
+      var scoreCol=bg.hasBg?'#fff':'var(--bl)';
+      return '<div class="lr'+(e.isMe?' me':'')+'" style="cursor:pointer;position:relative;overflow:hidden" onclick="viewProfile(\''+encodeURIComponent(e.email)+'\')">'
+        +bg.layer
+        +'<span style="min-width:28px;font-size:18px;position:relative;z-index:1">'+(i<3?medals[i]:'<span style="font-family:var(--fm);font-size:13px;color:'+subCol+sh+'">'+(i+1)+'</span>')+'</span>'
+        +'<span style="position:relative;z-index:1">'+renderAvatar(e,36)+'</span>'
+        +'<div style="flex:1;margin-left:10px;position:relative;z-index:1"><div style="font-size:13px;color:'+txtCol+sh+(e.isMe?';font-weight:700':'')+'">'+e.name+(e.isMe?' <span class="bdg bbl2">вы</span>':'')+'</div>'
+        +'<div style="font-size:10px;color:'+subCol+sh+';font-family:var(--fm)">'+e.solved+' решено · '+e.acc+'% · '+(e.ex||0)+' экз.'+(e.duelWins?' · ⚔️'+e.duelWins:'')+'</div></div>'
+        +'<span style="font-size:22px;font-weight:700;font-family:var(--fm);color:'+scoreCol+sh+';position:relative;z-index:1">'+e.score+'</span></div>';
+    }).join('');
   }else{
     html+='<p style="color:var(--tx3);font-size:13px;padding:10px">Пока никто не решил 50+ вопросов. Будьте первым!</p>';
   }
