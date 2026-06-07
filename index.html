@@ -613,8 +613,9 @@ async function init(){
     document.getElementById('dbst').innerHTML='<span style="color:#f5a623">● Локально</span>';
   }
   hideLdg();
-  renderHome();
-  updNotifBadges();
+  try{renderHome();}catch(e){console.error('renderHome:',e);}
+  try{renderAuthHdr();}catch(e){console.error('renderAuthHdr:',e);}
+  try{updNotifBadges();}catch(e){}
   if(S.user)loadProg();
 }
 
@@ -769,7 +770,7 @@ function go(pg,btn){
   document.querySelectorAll('.nb,.bni').forEach(function(b){b.classList.remove('on');});
   var pgEl=document.getElementById('pg-'+pg);if(pgEl)pgEl.classList.add('on');
   if(pg!=='duels'&&!CUR_DUEL&&typeof duelStopPolling==='function')duelStopPolling();
-  if(typeof applyGlobalBg==='function')applyGlobalBg(pg);
+  if(typeof applyGlobalBg==='function'){try{applyGlobalBg(pg);}catch(e){}}
   document.getElementById('mscroll').scrollTop=0;
   // подсветка во ВСЕХ меню (сайдбар + нижнее)
   document.querySelectorAll('[data-pg="'+pg+'"]').forEach(function(b){b.classList.add('on');});
@@ -1610,7 +1611,7 @@ function renderAvatar(user,size){
   return inner;
 }
 
-async // Применить фон пользователя глобально (вызывается на каждой странице)
+// Применить фон пользователя глобально (вызывается на каждой странице)
 var STUDY_PAGES=['trainer','exam','flashcards'];
 function applyGlobalBg(pg){
   var gb=document.getElementById('globalBg');
