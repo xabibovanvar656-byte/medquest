@@ -289,7 +289,7 @@ select option{background:var(--bg2)}
     <span>Профиль</span></button>
   <button class="bni" onclick="openMoreMenu()">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="19" cy="12" r="1.5" fill="currentColor"/></svg>
-    <span>Ещё</span></button>
+    <span>Ещё</span><span class="nbadge" id="moreBadge" style="display:none">!</span></button>
 </nav>
 <main class="main" id="mscroll">
 <div id="pg-home" class="page on">
@@ -309,7 +309,7 @@ select option{background:var(--bg2)}
       <option value="all">Все предметы</option><option value="physics">🔬 Физика</option>
       <option value="chemistry">⚗️ Химия</option><option value="biology">🧬 Биология</option>
     </select>
-    <select id="fcT" onchange="fcFilter()" style="min-width:180px;width:auto"><option value="all">Все темы</option></select>
+    <button id="fcTbtn" class="btn bgh bsm" onclick="fcPickTopics()" style="min-width:180px"><i class="ti ti-list-check"></i> <span id="fcTbtnLbl">Все темы</span></button>
     <span id="fcCnt" style="font-size:12px;color:var(--tx2);margin-left:auto"></span>
   </div>
   <div class="pdots" id="fcDots"></div>
@@ -349,7 +349,7 @@ select option{background:var(--bg2)}
       <option value="all">Все предметы</option><option value="physics">🔬 Физика</option>
       <option value="chemistry">⚗️ Химия</option><option value="biology">🧬 Биология</option>
     </select>
-    <select id="trT" onchange="trInit()" style="min-width:170px;width:auto"><option value="all">Все темы</option></select>
+    <button id="trTbtn" class="btn bgh bsm" onclick="trPickTopics()" style="min-width:170px"><i class="ti ti-list-check"></i> <span id="trTbtnLbl">Все темы</span></button>
   </div>
   <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
     <button class="btn bgh bsm" id="trModeAll" onclick="trSetMode('all')">📚 Все вопросы</button>
@@ -380,7 +380,7 @@ select option{background:var(--bg2)}
       <div class="fg"><label class="fl">Предмет</label>
         <select id="exS" onchange="exTopics()"><option value="all">Все предметы</option><option value="physics">🔬 Физика</option><option value="chemistry">⚗️ Химия</option><option value="biology">🧬 Биология</option></select></div>
       <div class="fg"><label class="fl">Тема</label>
-        <select id="exTopic"><option value="all">Все темы</option></select></div>
+        <button id="exTbtn" class="btn bgh bsm" onclick="exPickTopics()" style="width:100%;justify-content:flex-start"><i class="ti ti-list-check"></i> <span id="exTbtnLbl">Все темы</span></button></div>
       <div class="fg"><label class="fl">Вопросов: <b id="exCL">25</b></label>
         <input type="range" min="10" max="80" step="5" value="25" id="exC" oninput="document.getElementById('exCL').textContent=this.value"></div>
       <div class="fg"><label class="fl">Время: <b id="exTL">30</b> мин</label>
@@ -449,6 +449,7 @@ select option{background:var(--bg2)}
 </div>
 <div id="pg-news" class="page">
   <div class="ph"><div class="pt">Новости</div><div class="ps">Объявления платформы</div></div>
+  <div id="newsPolls"></div>
   <div id="newsList"></div>
 </div>
 <div id="pg-schedule" class="page">
@@ -570,6 +571,7 @@ var DEVICE=(function(){try{var d=localStorage.getItem('mq_dev');if(!d){d=(naviga
 try{var _d=localStorage.getItem(KEY);if(_d)S=Object.assign({},S,JSON.parse(_d));}catch(e){}
 function sv(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 var dbOK=false,newsCache=[],schedCache=[];
+var POLLS=[],MY_VOTES={};
 
 function applyTheme(d){
   if(d)document.documentElement.removeAttribute('data-light');
@@ -617,6 +619,30 @@ async function init(){
   try{renderAuthHdr();}catch(e){console.error('renderAuthHdr:',e);}
   try{updNotifBadges();}catch(e){}
   if(S.user)loadProg();
+  // фоновая подгрузка новостей/расписания для значков
+  loadNotifData();
+}
+async function loadPolls(){
+  if(!dbOK)return;
+  try{
+    POLLS=await sbGet('polls','order=created_at.desc');
+    // мои голоса
+    if(S.user){
+      var mine=await sbGet('poll_votes','user_email=eq.'+encodeURIComponent(S.user.email)+'&select=poll_id,choices');
+      MY_VOTES={};mine.forEach(function(v){MY_VOTES[v.poll_id]=v.choices;});
+    }
+  }catch(e){POLLS=[];}
+}
+async function loadNotifData(){
+  if(!dbOK)return;
+  try{
+    newsCache=await sbGet('news','order=created_at.desc');
+    schedCache=await sbGet('schedule','order=exam_date.asc');
+    await loadCustomItems();
+    await loadShopPrices();
+    await loadPolls();
+    updNotifBadges();
+  }catch(e){}
 }
 
 async function loadProg(){
@@ -981,20 +1007,34 @@ function showAlert(containerId,cls,icon,msg,ms){
   if(ms)setTimeout(function(){ha.innerHTML='';},ms);
 }
 
+function hasUnseenNews(){try{return newsCache.length>parseInt(localStorage.getItem('mq_seen_news')||'0');}catch(e){return false;}}
+function hasUnseenSched(){try{return schedCache.length>parseInt(localStorage.getItem('mq_seen_sched')||'0');}catch(e){return false;}}
+function shopSignature(){
+  // строка-отпечаток магазина: кол-во кастомных + сумма всех цен
+  var sig=CUSTOM_ITEMS.length+'|';
+  var prices=Object.keys(SHOP_PRICES).sort().map(function(k){return k+'='+SHOP_PRICES[k];}).join(',');
+  CUSTOM_ITEMS.forEach(function(c){sig+=c.id+':'+c.price+';';});
+  return sig+'|'+prices;
+}
+function hasUnseenShop(){
+  try{return localStorage.getItem('mq_seen_shop')!==shopSignature();}catch(e){return false;}
+}
+function hasUnseenPolls(){try{return POLLS.length>parseInt(localStorage.getItem('mq_seen_polls')||'0');}catch(e){return false;}}
 function updNotifBadges(){
-  // Красный значок если есть новости/расписание новее последнего просмотра
   try{
-    var seenNews=parseInt(localStorage.getItem('mq_seen_news')||'0');
-    var seenSched=parseInt(localStorage.getItem('mq_seen_sched')||'0');
     var nb=document.getElementById('newsBadge'),sb=document.getElementById('schedBadge');
-    if(nb)nb.style.display=(newsCache.length>seenNews)?'flex':'none';
-    if(sb)sb.style.display=(schedCache.length>seenSched)?'flex':'none';
+    if(nb)nb.style.display=(hasUnseenNews()||hasUnseenPolls())?'flex':'none';
+    if(sb)sb.style.display=hasUnseenSched()?'flex':'none';
+    // значок на кнопке "Ещё" в нижнем меню (новости/расписание/магазин)
+    var mb=document.getElementById('moreBadge');
+    if(mb)mb.style.display=(hasUnseenNews()||hasUnseenSched()||hasUnseenShop()||hasUnseenPolls())?'flex':'none';
   }catch(e){}
 }
 function markSeen(type){
   try{
-    if(type==='news')localStorage.setItem('mq_seen_news',String(newsCache.length));
+    if(type==='news'){localStorage.setItem('mq_seen_news',String(newsCache.length));localStorage.setItem('mq_seen_polls',String(POLLS.length));}
     if(type==='schedule')localStorage.setItem('mq_seen_sched',String(schedCache.length));
+    if(type==='shop')localStorage.setItem('mq_seen_shop',shopSignature());
     updNotifBadges();
   }catch(e){}
 }
@@ -1959,6 +1999,8 @@ var SHOP_TAB='frames';
 async function renderShop(){
   if(!S.user){showLoginWall();return;}
   await loadShopPrices();
+  if(dbOK)await loadCustomItems();
+  markSeen('shop'); // отметить магазин просмотренным
   var b=document.getElementById('shopBody');
   var html='<div class="card" style="display:flex;align-items:center;gap:12px;margin-bottom:16px;background:linear-gradient(135deg,var(--amd),var(--bg3))">'
     +'<div style="font-size:34px">🪙</div><div><div style="font-size:12px;color:var(--tx3)">Твои монеты</div>'
@@ -2100,7 +2142,11 @@ function openMoreMenu(){
   ];
   if(S.isAdm)items.push({pg:'admin',icon:'🛡️',name:'Админ-панель'});
   var grid=items.map(function(it){
-    return '<button class="moreItem" data-pg="'+it.pg+'" style="display:flex;flex-direction:column;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--bor);border-radius:16px;padding:18px 10px;cursor:pointer;color:var(--tx)"><span style="font-size:30px">'+it.icon+'</span><span style="font-size:12px;font-weight:500">'+it.name+'</span></button>';
+    var dot='';
+    if(it.pg==='news'&&(hasUnseenNews()||hasUnseenPolls()))dot='<span style="position:absolute;top:10px;right:10px;width:9px;height:9px;border-radius:50%;background:var(--re)"></span>';
+    if(it.pg==='schedule'&&hasUnseenSched())dot='<span style="position:absolute;top:10px;right:10px;width:9px;height:9px;border-radius:50%;background:var(--re)"></span>';
+    if(it.pg==='shop'&&hasUnseenShop())dot='<span style="position:absolute;top:10px;right:10px;width:9px;height:9px;border-radius:50%;background:var(--re)"></span>';
+    return '<button class="moreItem" data-pg="'+it.pg+'" style="position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--bor);border-radius:16px;padding:18px 10px;cursor:pointer;color:var(--tx)">'+dot+'<span style="font-size:30px">'+it.icon+'</span><span style="font-size:12px;font-weight:500">'+it.name+'</span></button>';
   }).join('');
   var body='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">'+grid+'</div>';
   showModal('Меню',body);
@@ -2158,19 +2204,22 @@ function renderHome(){
 
 var FCP=[],FCI=0,FCf=false;
 function fcInit(){
-  var s=document.getElementById('fcS').value;
-  var topEl=document.getElementById('fcT');var curT=topEl.value;
-  var QS=getQS();
-  var topics=[];QS.forEach(function(q){if((s==='all'||q.s===s)&&topics.indexOf(q.t)<0)topics.push(q.t);});
-  topics.sort();
-  topEl.innerHTML='<option value="all">Все темы</option>';
-  topics.forEach(function(t){var o=document.createElement('option');o.value=t;o.textContent=t;if(t===curT)o.selected=true;topEl.appendChild(o);});
+  SELECTED_TOPICS.flashcards=[];
+  var lbl=document.getElementById('fcTbtnLbl');if(lbl)lbl.textContent='Все темы';
   fcFilter();
+}
+function fcPickTopics(){
+  var s=document.getElementById('fcS')?document.getElementById('fcS').value:'all';
+  openTopicPicker('flashcards',s,function(){
+    var lbl=document.getElementById('fcTbtnLbl');if(lbl)lbl.textContent=topicBtnLabel('flashcards');
+    fcFilter();
+  });
 }
 function fcFilter(){
   fcSetupSwipe();
-  var s=document.getElementById('fcS').value,t=document.getElementById('fcT').value;
-  FCP=getQS().filter(function(q){return(s==='all'||q.s===s)&&(t==='all'||q.t===t);});
+  var s=document.getElementById('fcS').value;
+  var selT=SELECTED_TOPICS.flashcards||[];
+  FCP=getQS().filter(function(q){return(s==='all'||q.s===s)&&(selT.length===0||selT.indexOf(q.t)>=0);});
   FCI=0;FCf=false;
   document.getElementById('fcCnt').textContent=FCP.length+' карточек';
   fcRender();
@@ -2260,15 +2309,86 @@ function fcSetupSwipe(){
 }
 
 var TRC=null,TRrev=false,TRss={c:0,w:0},TR_MODE='all';
+// Мультивыбор тем: для каждого режима свой набор (пусто = все темы)
+var SELECTED_TOPICS={trainer:[],exam:[],flashcards:[]};
+// Открыть модалку выбора тем. mode: 'trainer'|'exam'|'flashcards'. subjVal — текущий предмет фильтр. onDone — callback
+function openTopicPicker(mode,subjVal,onDone){
+  var QS=getQS();
+  var topics=[];
+  QS.forEach(function(q){if((subjVal==='all'||q.s===subjVal)&&topics.indexOf(q.t)<0)topics.push(q.t);});
+  topics.sort();
+  if(!topics.length){alert('Нет тем для этого предмета');return;}
+  var sel=SELECTED_TOPICS[mode]||[];
+  var rows=topics.map(function(t){
+    var on=sel.indexOf(t)>=0;
+    var cnt=QS.filter(function(q){return q.t===t&&(subjVal==='all'||q.s===subjVal);}).length;
+    return '<div class="topItem" data-t="'+t.replace(/"/g,'&quot;')+'" style="display:flex;align-items:center;gap:10px;padding:11px 12px;background:var(--bg3);border-radius:10px;margin-bottom:6px;cursor:pointer;border:2px solid '+(on?'var(--bl)':'transparent')+'">'
+      +'<div class="tchk" style="width:22px;height:22px;border-radius:6px;border:2px solid '+(on?'var(--bl)':'var(--bor2)')+';background:'+(on?'var(--bl)':'transparent')+';display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;font-size:14px">'+(on?'✓':'')+'</div>'
+      +'<div style="flex:1"><div style="font-size:13px;font-weight:500">'+t+'</div><div style="font-size:10px;color:var(--tx3)">'+cnt+' вопросов</div></div></div>';
+  }).join('');
+  var body='<div style="display:flex;gap:6px;margin-bottom:12px">'
+    +'<button class="btn bgh bsm" onclick="topicPickAll(true)" style="flex:1">Выбрать все</button>'
+    +'<button class="btn bgh bsm" onclick="topicPickAll(false)" style="flex:1">Снять все</button></div>'
+    +'<div id="topicList" style="max-height:50vh;overflow-y:auto">'+rows+'</div>'
+    +'<button class="btn bbl" onclick="topicPickDone()" style="width:100%;margin-top:14px">Готово</button>';
+  showModal('Выбор тем',body);
+  TOPIC_PICK={mode:mode,onDone:onDone,temp:sel.slice()};
+  document.querySelectorAll('.topItem').forEach(function(el){
+    el.addEventListener('click',function(){
+      var t=el.getAttribute('data-t');
+      var i=TOPIC_PICK.temp.indexOf(t);
+      if(i>=0)TOPIC_PICK.temp.splice(i,1);else TOPIC_PICK.temp.push(t);
+      var on=TOPIC_PICK.temp.indexOf(t)>=0;
+      el.style.borderColor=on?'var(--bl)':'transparent';
+      var chk=el.querySelector('.tchk');
+      chk.style.borderColor=on?'var(--bl)':'var(--bor2)';
+      chk.style.background=on?'var(--bl)':'transparent';
+      chk.textContent=on?'✓':'';
+    });
+  });
+}
+var TOPIC_PICK=null;
+function topicPickAll(on){
+  if(!TOPIC_PICK)return;
+  if(on){
+    TOPIC_PICK.temp=[];
+    document.querySelectorAll('.topItem').forEach(function(el){TOPIC_PICK.temp.push(el.getAttribute('data-t'));});
+  }else{
+    TOPIC_PICK.temp=[];
+  }
+  document.querySelectorAll('.topItem').forEach(function(el){
+    var t=el.getAttribute('data-t');var onn=TOPIC_PICK.temp.indexOf(t)>=0;
+    el.style.borderColor=onn?'var(--bl)':'transparent';
+    var chk=el.querySelector('.tchk');chk.style.borderColor=onn?'var(--bl)':'var(--bor2)';chk.style.background=onn?'var(--bl)':'transparent';chk.textContent=onn?'✓':'';
+  });
+}
+function topicPickDone(){
+  if(!TOPIC_PICK)return;
+  SELECTED_TOPICS[TOPIC_PICK.mode]=TOPIC_PICK.temp.slice();
+  var cb=TOPIC_PICK.onDone;
+  closeModal();
+  if(cb)cb();
+}
+// Текст кнопки выбора тем
+function topicBtnLabel(mode){
+  var sel=SELECTED_TOPICS[mode]||[];
+  if(!sel.length)return 'Все темы';
+  if(sel.length===1)return sel[0];
+  return 'Тем: '+sel.length;
+}
 function trTopics(){
   var ab=document.getElementById('trModeAll');if(ab&&TR_MODE==='all')ab.className='btn bbl bsm';
-  var s=document.getElementById('trS').value;
-  var topEl=document.getElementById('trT');var curT=topEl.value;
-  var topics=[];getQS().forEach(function(q){if((s==='all'||q.s===s)&&topics.indexOf(q.t)<0)topics.push(q.t);});
-  topics.sort();
-  topEl.innerHTML='<option value="all">Все темы</option>';
-  topics.forEach(function(t){var o=document.createElement('option');o.value=t;o.textContent=t;if(t===curT)o.selected=true;topEl.appendChild(o);});
+  // при смене предмета сбрасываем выбранные темы
+  SELECTED_TOPICS.trainer=[];
+  var lbl=document.getElementById('trTbtnLbl');if(lbl)lbl.textContent='Все темы';
   trInit();
+}
+function trPickTopics(){
+  var s=document.getElementById('trS')?document.getElementById('trS').value:'all';
+  openTopicPicker('trainer',s,function(){
+    var lbl=document.getElementById('trTbtnLbl');if(lbl)lbl.textContent=topicBtnLabel('trainer');
+    trInit();
+  });
 }
 function trInit(){TRss={c:0,w:0};trNext();}
 function shuffleOpts(q){
@@ -2313,9 +2433,9 @@ async function loadFavs(){
 }
 function trNext(){
   var s=document.getElementById('trS')?document.getElementById('trS').value:'all';
-  var tp=document.getElementById('trT')?document.getElementById('trT').value:'all';
+  var selT=SELECTED_TOPICS.trainer||[];
   var QS=getQS();
-  var pool=QS.filter(function(q){return (s==='all'||q.s===s)&&(tp==='all'||q.t===tp);});
+  var pool=QS.filter(function(q){return (s==='all'||q.s===s)&&(selT.length===0||selT.indexOf(q.t)>=0);});
   // Режим: errors = где ошибался (точность<100% или streak сброшен), fav = закладки
   if(TR_MODE==='errors'){
     pool=pool.filter(function(q){var p=S.prog[q.id];return p&&p.a>0&&(p.c<p.a);});
@@ -2390,20 +2510,22 @@ async function trExplain(){
 
 var EXP=[],EXA={},EXI=0,EXtmr=null,EXsecs=0;
 function exTopics(){
-  var s=document.getElementById('exS').value;
-  var topEl=document.getElementById('exTopic');if(!topEl)return;
-  var topics=[];getQS().forEach(function(q){if((s==='all'||q.s===s)&&topics.indexOf(q.t)<0)topics.push(q.t);});
-  topics.sort();
-  topEl.innerHTML='<option value="all">Все темы</option>';
-  topics.forEach(function(t){var o=document.createElement('option');o.value=t;o.textContent=t;topEl.appendChild(o);});
+  SELECTED_TOPICS.exam=[];
+  var lbl=document.getElementById('exTbtnLbl');if(lbl)lbl.textContent='Все темы';
+}
+function exPickTopics(){
+  var s=document.getElementById('exS')?document.getElementById('exS').value:'all';
+  openTopicPicker('exam',s,function(){
+    var lbl=document.getElementById('exTbtnLbl');if(lbl)lbl.textContent=topicBtnLabel('exam');
+  });
 }
 function exStart(){
   var s=document.getElementById('exS').value;
-  var tp=document.getElementById('exTopic')?document.getElementById('exTopic').value:'all';
+  var selT=SELECTED_TOPICS.exam||[];
   var cnt=+document.getElementById('exC').value;
   var mins=+document.getElementById('exT').value;
   var QS=getQS();
-  var pool=QS.filter(function(q){return (s==='all'||q.s===s)&&(tp==='all'||q.t===tp);});
+  var pool=QS.filter(function(q){return (s==='all'||q.s===s)&&(selT.length===0||selT.indexOf(q.t)>=0);});
   if(!pool.length){alert('В выбранной теме нет вопросов');return;}
   EXP=pool.slice().sort(function(){return Math.random()-.5;}).slice(0,Math.min(cnt,pool.length));
   // Pre-shuffle options for each exam question
@@ -2598,13 +2720,138 @@ function renderLBList(data){
   lb.innerHTML=html;
 }
 
-function renderNews(){
+// ===== ОПРОСЫ =====
+function renderPolls(containerId){
+  var el=document.getElementById(containerId);
+  if(!el)return;
+  if(!POLLS.length){el.innerHTML='';return;}
+  el.innerHTML=POLLS.map(function(p){return pollCard(p);}).join('');
+}
+function pollCard(p){
+  var opts=(p.options||'').split('|');
+  var myChoice=MY_VOTES[p.id];
+  var voted=myChoice!==undefined;
+  // подсчёт голосов делаем асинхронно — пока заглушка, заполнится pollFillResults
+  var html='<div class="card" style="margin-bottom:12px" data-poll="'+p.id+'">'
+    +'<div style="font-weight:600;font-size:14px;margin-bottom:4px">📊 '+p.question+'</div>'
+    +'<div style="font-size:10px;color:var(--tx3);margin-bottom:10px">'+(p.multi?'Можно выбрать несколько':'Выбери один вариант')+'</div>';
+  if(voted){
+    // показываем результаты
+    html+='<div class="pollResults" data-poll="'+p.id+'">'+opts.map(function(o,i){
+      return '<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>'+o+'</span><span class="pollPct" data-i="'+i+'">…</span></div>'
+        +'<div style="height:8px;background:var(--bg4);border-radius:4px;overflow:hidden"><div class="pollBar" data-i="'+i+'" style="height:100%;width:0%;background:var(--bl);transition:width .5s"></div></div></div>';
+    }).join('')+'</div>'
+    +'<div style="font-size:11px;color:var(--tx3);margin-top:8px" class="pollTotal" data-poll="'+p.id+'">…</div>';
+    if(S.isSuper)html+='<button class="btn bgh bsm" style="margin-top:8px" onclick="pollWhoVoted(\''+p.id+'\')">👁 Кто голосовал</button>';
+  }else{
+    // форма голосования
+    html+='<div class="pollForm" data-poll="'+p.id+'">'+opts.map(function(o,i){
+      return '<button class="pollOpt" data-poll="'+p.id+'" data-i="'+i+'" style="display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:11px 12px;background:var(--bg3);border:2px solid var(--bor);border-radius:10px;margin-bottom:6px;cursor:pointer;color:var(--tx)">'
+        +'<span class="pollChk" style="width:20px;height:20px;border-radius:'+(p.multi?'5px':'50%')+';border:2px solid var(--bor2);flex-shrink:0"></span>'
+        +'<span style="font-size:13px">'+o+'</span></button>';
+    }).join('')+'</div>'
+    +'<button class="btn bbl bsm" style="width:100%;margin-top:6px" onclick="pollSubmit(\''+p.id+'\','+(p.multi?'true':'false')+')">Проголосовать</button>';
+  }
+  html+='</div>';
+  return html;
+}
+// выбор вариантов (для multi/single)
+var POLL_SEL={};
+function pollSetupClicks(){
+  document.querySelectorAll('.pollOpt').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var pid=btn.getAttribute('data-poll'),i=btn.getAttribute('data-i');
+      var poll=POLLS.filter(function(x){return x.id===pid;})[0];
+      if(!poll)return;
+      if(!POLL_SEL[pid])POLL_SEL[pid]=[];
+      var sel=POLL_SEL[pid];
+      if(poll.multi){
+        var idx=sel.indexOf(i);
+        if(idx>=0)sel.splice(idx,1);else sel.push(i);
+      }else{
+        POLL_SEL[pid]=[i];
+      }
+      // перерисовать чекбоксы
+      document.querySelectorAll('.pollOpt[data-poll="'+pid+'"]').forEach(function(b){
+        var bi=b.getAttribute('data-i');var on=POLL_SEL[pid].indexOf(bi)>=0;
+        b.style.borderColor=on?'var(--bl)':'var(--bor)';
+        var chk=b.querySelector('.pollChk');
+        chk.style.background=on?'var(--bl)':'transparent';chk.style.borderColor=on?'var(--bl)':'var(--bor2)';
+      });
+    });
+  });
+}
+async function pollSubmit(pid,multi){
+  var sel=POLL_SEL[pid]||[];
+  if(!sel.length){alert('Выбери вариант');return;}
+  try{
+    await sbPost('poll_votes',{poll_id:pid,user_email:S.user.email,user_name:S.user.name,choices:sel.join(',')});
+    MY_VOTES[pid]=sel.join(',');
+    // обновить отображение
+    var cont=document.getElementById('newsPolls')?'newsPolls':null;
+    renderPolls('newsPolls');pollSetupClicks();pollFillAllResults();
+  }catch(e){
+    if((e.message||'').indexOf('duplicate')>=0||(e.message||'').indexOf('unique')>=0){alert('Ты уже голосовал');MY_VOTES[pid]='voted';}
+    else alert('Ошибка: '+e.message);
+  }
+}
+// заполнить результаты всех опросов (подсчёт голосов из базы)
+async function pollFillAllResults(){
+  for(var i=0;i<POLLS.length;i++){
+    var p=POLLS[i];
+    if(MY_VOTES[p.id]===undefined)continue;
+    try{
+      var votes=await sbGet('poll_votes','poll_id=eq.'+encodeURIComponent(p.id)+'&select=choices');
+      var opts=(p.options||'').split('|');
+      var counts=opts.map(function(){return 0;});
+      votes.forEach(function(v){(v.choices||'').split(',').forEach(function(c){var ci=+c;if(ci>=0&&ci<counts.length)counts[ci]++;});});
+      var total=votes.length;
+      var card=document.querySelector('.pollResults[data-poll="'+p.id+'"]');
+      if(card){
+        opts.forEach(function(o,idx){
+          var pct=total?Math.round(counts[idx]/total*100):0;
+          var bar=card.querySelector('.pollBar[data-i="'+idx+'"]');
+          var pctEl=card.querySelector('.pollPct[data-i="'+idx+'"]');
+          if(bar)bar.style.width=pct+'%';
+          if(pctEl)pctEl.textContent=pct+'% ('+counts[idx]+')';
+        });
+      }
+      var totEl=document.querySelector('.pollTotal[data-poll="'+p.id+'"]');
+      if(totEl)totEl.textContent='Всего голосов: '+total;
+    }catch(e){}
+  }
+}
+// админ: кто голосовал
+async function pollWhoVoted(pid){
+  var p=POLLS.filter(function(x){return x.id===pid;})[0];
+  if(!p)return;
+  showModal('Кто голосовал','<div style="color:var(--tx3);padding:10px">Загрузка...</div>');
+  try{
+    var votes=await sbGet('poll_votes','poll_id=eq.'+encodeURIComponent(pid)+'&select=user_name,user_email,choices&order=created_at.asc');
+    var opts=(p.options||'').split('|');
+    if(!votes.length){document.getElementById('mdBody').innerHTML='<p style="color:var(--tx3)">Пока никто не голосовал</p>';return;}
+    var html='<div style="font-size:13px;font-weight:600;margin-bottom:10px">'+p.question+'</div>';
+    html+=votes.map(function(v){
+      var chosen=(v.choices||'').split(',').map(function(c){return opts[+c]||'?';}).join(', ');
+      return '<div style="padding:9px 12px;background:var(--bg3);border-radius:8px;margin-bottom:6px"><div style="font-size:13px;font-weight:500">'+(v.user_name||v.user_email)+'</div><div style="font-size:11px;color:var(--bl)">'+chosen+'</div></div>';
+    }).join('');
+    html+='<div style="font-size:11px;color:var(--tx3);margin-top:8px">Всего: '+votes.length+'</div>';
+    document.getElementById('mdBody').innerHTML=html;
+  }catch(e){document.getElementById('mdBody').innerHTML='<p style="color:var(--re)">Ошибка</p>';}
+}
+
+async function renderNews(){
+  if(dbOK){try{newsCache=await sbGet('news','order=created_at.desc');}catch(e){}}
+  await loadPolls();
+  renderPolls('newsPolls');
+  setTimeout(function(){pollSetupClicks();pollFillAllResults();},50);
   markSeen('news');
   if(!newsCache.length){document.getElementById('newsList').innerHTML='<p style="color:var(--tx3)">Нет новостей</p>';return;}
   document.getElementById('newsList').innerHTML=newsCache.map(function(n){return '<div class="nc">'+(n.pinned?'<div style="font-size:11px;color:var(--am);font-weight:600;margin-bottom:4px">📌 Закреплено</div>':'')+'<div class="nd">'+(n.news_date||'')+'</div><div class="nt">'+n.title+'</div><div class="nb2">'+n.body+'</div></div>';}).join('');
 }
 
-function renderSched(){
+async function renderSched(){
+  if(dbOK){try{schedCache=await sbGet('schedule','order=exam_date.asc');}catch(e){}}
   markSeen('schedule');
   var now=new Date();
   var sorted=schedCache.slice().sort(function(a,b){return new Date(a.exam_date)-new Date(b.exam_date);});
@@ -3357,8 +3604,40 @@ async function admDelQ(id){if(confirm('Удалить?')){try{if(dbOK)await sbDe
 async function admNewsEdit(){
   var el=document.getElementById('admNewsEdit');el.innerHTML='<div style="color:var(--tx3);padding:10px">Загрузка...</div>';
   if(dbOK){try{newsCache=await sbGet('news','order=created_at.desc');}catch(e){}}
-  el.innerHTML='<div style="display:flex;gap:8px;margin-bottom:14px"><button class="btn bbl bsm" onclick="admAddNewsM()"><i class="ti ti-plus"></i>Добавить</button></div>'+(!newsCache.length?'<p style="color:var(--tx3)">Нет новостей</p>':newsCache.map(function(n){return '<div class="nc"><div style="display:flex;justify-content:space-between;margin-bottom:7px"><div>'+(n.pinned?'<span class="bdg bam2" style="margin-right:5px">📌</span>':'')+'<span class="nd">'+(n.news_date||'')+'</span></div><div style="display:flex;gap:4px"><button class="btn bgh bsm" onclick="admEditNewsM('+n.id+')" style="padding:4px 7px"><i class="ti ti-edit" style="font-size:12px"></i></button><button class="btn bre bsm" onclick="admDelNews('+n.id+')" style="padding:4px 7px"><i class="ti ti-trash" style="font-size:12px"></i></button></div></div><div class="nt">'+n.title+'</div><div class="nb2" style="margin-top:5px">'+n.body+'</div></div>';}).join(''));
+  await loadPolls();
+  var pollsHtml=POLLS.length?('<div style="font-size:12px;font-weight:600;margin:14px 0 8px;color:var(--tx2)">📊 Опросы</div>'+POLLS.map(function(p){return '<div class="nc" style="display:flex;justify-content:space-between;align-items:center"><div><div class="nt" style="font-size:13px">'+p.question+'</div><div style="font-size:10px;color:var(--tx3)">'+(p.options||'').split('|').length+' вариантов'+(p.multi?' · мультивыбор':'')+'</div></div><div style="display:flex;gap:4px"><button class="btn bgh bsm" onclick="pollWhoVoted(\''+p.id+'\')" style="padding:4px 7px">👁</button><button class="btn bre bsm" onclick="admDelPoll(\''+p.id+'\')" style="padding:4px 7px"><i class="ti ti-trash" style="font-size:12px"></i></button></div></div>';}).join('')):'';
+  el.innerHTML='<div style="display:flex;gap:8px;margin-bottom:14px"><button class="btn bbl bsm" onclick="admAddNewsM()"><i class="ti ti-plus"></i>Новость</button><button class="btn bgh bsm" onclick="admAddPoll()"><i class="ti ti-chart-bar"></i>Опрос</button></div>'+pollsHtml+(!newsCache.length?'<p style="color:var(--tx3);margin-top:10px">Нет новостей</p>':newsCache.map(function(n){return '<div class="nc"><div style="display:flex;justify-content:space-between;margin-bottom:7px"><div>'+(n.pinned?'<span class="bdg bam2" style="margin-right:5px">📌</span>':'')+'<span class="nd">'+(n.news_date||'')+'</span></div><div style="display:flex;gap:4px"><button class="btn bgh bsm" onclick="admEditNewsM('+n.id+')" style="padding:4px 7px"><i class="ti ti-edit" style="font-size:12px"></i></button><button class="btn bre bsm" onclick="admDelNews('+n.id+')" style="padding:4px 7px"><i class="ti ti-trash" style="font-size:12px"></i></button></div></div><div class="nt">'+n.title+'</div><div class="nb2" style="margin-top:5px">'+n.body+'</div></div>';}).join(''));
 }
+function admAddPoll(){
+  var body='<div class="fg"><label class="fl">Вопрос опроса</label><input id="pqQ" placeholder="Например: Какая тема сложнее?"></div>'
+    +'<div class="fg"><label class="fl">Варианты ответов (каждый с новой строки)</label><textarea id="pqOpts" rows="5" placeholder="Анатомия\nФизиология\nБиохимия"></textarea></div>'
+    +'<div class="fg"><label style="display:flex;align-items:center;gap:10px;cursor:pointer"><input type="checkbox" id="pqMulti" style="width:auto"> Разрешить выбрать несколько вариантов</label></div>'
+    +'<button class="btn bbl" onclick="admSavePoll()" style="width:100%">Создать опрос</button>';
+  showModal('Новый опрос 📊',body);
+}
+async function admSavePoll(){
+  var q=document.getElementById('pqQ').value.trim();
+  var optsRaw=document.getElementById('pqOpts').value.trim();
+  var multi=document.getElementById('pqMulti').checked;
+  var opts=optsRaw.split('\n').map(function(x){return x.trim();}).filter(function(x){return x;});
+  if(!q||opts.length<2){alert('Нужен вопрос и минимум 2 варианта');return;}
+  var id='poll_'+Date.now();
+  try{
+    await sbPost('polls',{id:id,question:q,options:opts.join('|'),multi:multi});
+    alert('Опрос создан! 📊');
+    closeModal();
+    admNewsEdit();
+  }catch(e){alert('Ошибка: '+e.message);}
+}
+async function admDelPoll(pid){
+  if(!confirm('Удалить опрос и все голоса?'))return;
+  try{
+    await sbDel('poll_votes','poll_id=eq.'+encodeURIComponent(pid));
+    await sbDel('polls','id=eq.'+encodeURIComponent(pid));
+    admNewsEdit();
+  }catch(e){alert('Ошибка: '+e.message);}
+}
+
 function admAddNewsM(){
   document.getElementById('mdT').textContent='Новая новость';
   var b=document.getElementById('mdBody');b.innerHTML='';
