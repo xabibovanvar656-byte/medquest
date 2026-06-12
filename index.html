@@ -623,8 +623,8 @@ async function init(){
   ];
   try{
     var r=await Promise.race([
-      Promise.all([sbGet('news','order=created_at.desc&limit=20'),sbGet('schedule','order=exam_date.asc&limit=20'),sbGet('custom_questions','order=created_at.asc&limit=5000')]),
-      new Promise(function(_,rej){setTimeout(function(){rej(new Error('timeout'));},5000);})
+      Promise.all([sbGet('news','order=created_at.desc&limit=20'),sbGet('schedule','order=exam_date.asc&limit=20'),sbGetAll('custom_questions','order=created_at.asc')]),
+      new Promise(function(_,rej){setTimeout(function(){rej(new Error('timeout'));},15000);})
     ]);
     if(r[0]&&r[0].length)newsCache=r[0];
     if(r[1]&&r[1].length)schedCache=r[1];
@@ -3507,7 +3507,7 @@ async function admDenyReq(id){
   try{await sbDel('pending_actions','id=eq.'+id);admRequests();}catch(e){alert(e.message);}
 }
 async function admQuestions(){
-  var QS=getQS();var cqs=[];if(dbOK){try{cqs=await sbGet('custom_questions','order=created_at.asc');}catch(e){}}
+  var QS=getQS();var cqs=[];if(dbOK){try{cqs=await sbGetAll('custom_questions','order=created_at.asc');}catch(e){}}
   // Список партий
   var batches=[];CQS.forEach(function(q){if(q.batch&&batches.indexOf(q.batch)<0)batches.push(q.batch);});
   var batchOpts='<option value="all">— партия (массовые) —</option>';
