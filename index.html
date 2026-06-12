@@ -243,6 +243,21 @@ select option{background:var(--bg2)}
 .bnr .bnr-title{font-size:16px;font-weight:800;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.5);margin-bottom:3px}
 .bnr .bnr-body{font-size:13px;color:rgba(255,255,255,.95);text-shadow:0 1px 4px rgba(0,0,0,.5);line-height:1.5}
 .bnr .bnr-x{position:absolute;top:12px;right:12px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.25);border:none;color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+
+/* ===== ОКНО НАГРАДЫ ===== */
+.giftOverlay{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);z-index:9999;display:flex;align-items:center;justify-content:center;animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.giftBox{background:linear-gradient(160deg,var(--bg2),var(--bg3));border:2px solid var(--am);border-radius:24px;padding:32px 26px;max-width:340px;width:90%;text-align:center;position:relative;animation:giftPop .5s cubic-bezier(.34,1.56,.64,1);box-shadow:0 0 60px rgba(245,166,35,.4)}
+@keyframes giftPop{0%{transform:scale(.5);opacity:0}100%{transform:scale(1);opacity:1}}
+.giftBox .gEmoji{font-size:64px;margin-bottom:8px;animation:giftBounce 1s ease infinite;display:inline-block}
+@keyframes giftBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.giftBox .gTitle{font-size:22px;font-weight:800;color:var(--am);margin-bottom:6px}
+.giftBox .gItem{font-size:17px;font-weight:600;color:var(--tx);margin-bottom:4px}
+.giftBox .gSub{font-size:13px;color:var(--tx3);margin-bottom:20px}
+.giftBox .gPreview{display:flex;justify-content:center;margin:14px 0}
+/* конфетти */
+.confetti{position:fixed;width:10px;height:10px;z-index:10000;pointer-events:none;animation:confFall linear forwards}
+@keyframes confFall{to{transform:translateY(100vh) rotate(720deg);opacity:0}}
 </style>
 </head>
 <body>
@@ -579,6 +594,7 @@ function sbUps(t,b,c){
   });
 }
 var BASE_QS=[
+
 ];
 
 var CQS=[];
@@ -668,6 +684,7 @@ async function loadNotifData(){
     await loadBanners();
     renderBanners();
     updNotifBadges();
+    setTimeout(checkGifts,800); // показать награды через секунду после загрузки
   }catch(e){}
 }
 
@@ -1529,7 +1546,7 @@ var FRAMES=[
   {id:'champion',name:'Чемпион',cls:'fr-champion',icon:'🏆'},
   {id:'scholar',name:'Отличник',cls:'fr-scholar',icon:'🎓'}
 ];
-var OWNER_EMAIL='x66an@gmail.com'; // владелец — всё открыто
+var OWNER_EMAIL='x65an@gmail.com'; // владелец — всё открыто
 // Фоны профиля (баннеры)
 var BACKGROUNDS=[
   {id:'aurora',name:'Аврора',cls:'bg-aurora',rarity:'rare'},
@@ -2748,6 +2765,80 @@ function renderLBList(data){
   lb.innerHTML=html;
 }
 
+// ===== УВЕДОМЛЕНИЯ О НАГРАДАХ =====
+var GIFT_QUEUE=[];
+async function checkGifts(){
+  if(!dbOK||!S.user)return;
+  try{
+    var gifts=await sbGet('gift_notifications','user_email=eq.'+encodeURIComponent(S.user.email)+'&delivered=eq.false&order=created_at.asc');
+    if(gifts&&gifts.length){
+      GIFT_QUEUE=gifts.slice();
+      showNextGift();
+    }
+  }catch(e){}
+}
+function showNextGift(){
+  if(!GIFT_QUEUE.length)return;
+  var g=GIFT_QUEUE.shift();
+  showGiftBox(g);
+}
+function giftPreviewHtml(g){
+  // превью награды
+  if(g.type==='frame'){
+    var fid=g.item_id;
+    var fdef=FRAMES.filter(function(f){return f.id===fid;})[0];
+    if(fdef)return '<span class="avframe '+fdef.cls+'"><span style="width:64px;height:64px;border-radius:50%;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:30px">'+fdef.icon+'</span></span>';
+    if(fid&&fid.indexOf('custom:')===0){var c=customItemById(fid.slice(7));if(c)return '<img src="'+c.image_url+'" style="width:80px;height:80px">';}
+  }
+  if(g.type==='bg'){
+    var bid=g.item_id;
+    var bdef=BACKGROUNDS.filter(function(b){return b.id===bid;})[0];
+    if(bdef)return '<div class="'+bdef.cls+'" style="width:120px;height:64px;border-radius:12px"></div>';
+    if(bid&&bid.indexOf('custom:')===0){var cb=customItemById(bid.slice(7));if(cb)return '<div style="width:120px;height:64px;border-radius:12px;background-image:url('+cb.image_url+');background-size:cover"></div>';}
+  }
+  if(g.type==='coins')return '<div style="font-size:54px">🪙</div>';
+  return '<div style="font-size:54px">'+(g.emoji||'🎁')+'</div>';
+}
+function showGiftBox(g){
+  var prev=giftPreviewHtml(g);
+  var ov=document.createElement('div');
+  ov.className='giftOverlay';
+  ov.innerHTML='<div class="giftBox">'
+    +'<span class="gEmoji">'+(g.emoji||'🎁')+'</span>'
+    +'<div class="gTitle">Поздравляем!</div>'
+    +'<div class="gSub">Вы получили награду</div>'
+    +(prev?'<div class="gPreview">'+prev+'</div>':'')
+    +'<div class="gItem">'+(g.title||'Награда')+(g.type==='coins'&&g.amount?' '+g.amount+' 🪙':'')+'</div>'
+    +'<button class="btn bbl" style="width:100%;margin-top:18px" id="giftOkBtn">Забрать 🎉</button>'
+    +'</div>';
+  document.body.appendChild(ov);
+  launchConfetti();
+  document.getElementById('giftOkBtn').addEventListener('click',function(){
+    ov.remove();
+    // пометить доставленным
+    if(dbOK&&g.id){try{sbPatch('gift_notifications','id=eq.'+g.id,{delivered:true});}catch(e){}}
+    // следующий подарок если есть
+    setTimeout(showNextGift,300);
+  });
+}
+function launchConfetti(){
+  var colors=['#f5a623','#4f8ef7','#22d07a','#f04060','#a78bfa','#ffd700'];
+  for(var i=0;i<40;i++){
+    (function(){
+      var c=document.createElement('div');
+      c.className='confetti';
+      c.style.left=Math.random()*100+'vw';
+      c.style.top='-20px';
+      c.style.background=colors[Math.floor(Math.random()*colors.length)];
+      c.style.animationDuration=(2+Math.random()*2)+'s';
+      c.style.animationDelay=(Math.random()*0.5)+'s';
+      if(Math.random()>0.5)c.style.borderRadius='50%';
+      document.body.appendChild(c);
+      setTimeout(function(){c.remove();},4500);
+    })();
+  }
+}
+
 // ===== МАССОВЫЕ НАГРАДЫ =====
 var REWARD_SEL=[]; // выбранные email
 async function admRewards(){
@@ -2844,6 +2935,10 @@ async function admGiveRewards(){
         upd.owned_items=oi.join(',');
       }
       await sbPatch('users','email=eq.'+encodeURIComponent(email),upd);
+      // уведомления о наградах
+      if(coins)await createGift(email,'coins','',coins);
+      if(frame)await createGift(email,'frame',frame,0);
+      if(bg)await createGift(email,'bg',bg,0);
       ok++;
     }catch(e){fail++;}
   }
@@ -3392,6 +3487,24 @@ async function admStudentCard(email,name){
   }
   b.innerHTML=html;
 }
+// Создать уведомление о награде
+async function createGift(email,type,itemId,amount){
+  if(!dbOK)return;
+  var title='',emoji='🎁';
+  if(type==='coins'){title='Монеты';emoji='🪙';}
+  else if(type==='frame'){
+    var f=FRAMES.filter(function(x){return x.id===itemId;})[0];
+    if(f){title='Рамка «'+f.name+'»';emoji=f.icon;}
+    else{var cf=customItemById((itemId||'').replace('custom:',''));title='Рамка'+(cf?' «'+cf.name+'»':'');emoji='✨';}
+  }
+  else if(type==='bg'){
+    var b=BACKGROUNDS.filter(function(x){return x.id===itemId;})[0];
+    if(b){title='Фон «'+b.name+'»';emoji='🖼️';}
+    else{var cb=customItemById((itemId||'').replace('custom:',''));title='Фон'+(cb?' «'+cb.name+'»':'');emoji='🖼️';}
+  }
+  else if(type==='avatar'){title='Особый аватар';emoji='😎';}
+  try{await sbPost('gift_notifications',{user_email:email,type:type,item_id:itemId||'',title:title,emoji:emoji,amount:amount||0,delivered:false});}catch(e){}
+}
 async function admGift(email,type,id){
   try{
     var u=await sbGet('users','email=eq.'+encodeURIComponent(email)+'&select=owned_items');
@@ -3399,6 +3512,7 @@ async function admGift(email,type,id){
     var key=type+':'+id;
     if(cur.indexOf(key)<0)cur.push(key);
     await sbPatch('users','email=eq.'+encodeURIComponent(email),{owned_items:cur.join(',')});
+    await createGift(email,type,id,0);
     alert('Подарено! 🎁');
   }catch(e){alert('Ошибка: '+e.message);}
 }
@@ -3407,6 +3521,7 @@ async function admGiveCoins(email,n){
     var u=await sbGet('users','email=eq.'+encodeURIComponent(email)+'&select=coins');
     var cur=(u.length&&u[0].coins)?u[0].coins:0;
     await sbPatch('users','email=eq.'+encodeURIComponent(email),{coins:cur+n});
+    await createGift(email,'coins','',n);
     alert('Выдано '+n+' 🪙');
   }catch(e){alert('Ошибка: '+e.message);}
 }
@@ -3416,6 +3531,7 @@ async function admGiveFrame(email,frameId){
     var cur=(u.length&&u[0].frames)?u[0].frames.split(',').filter(function(x){return x;}):[];
     if(cur.indexOf(frameId)<0)cur.push(frameId);
     await sbPatch('users','email=eq.'+encodeURIComponent(email),{frames:cur.join(',')});
+    await createGift(email,'frame',frameId,0);
     alert('Рамка выдана!');
   }catch(e){alert('Ошибка: '+e.message);}
 }
