@@ -579,7 +579,6 @@ function sbUps(t,b,c){
   });
 }
 var BASE_QS=[
-
 ];
 
 var CQS=[];
@@ -2861,9 +2860,17 @@ async function loadBanners(){
 function renderBanners(){
   var z=document.getElementById('bannerZone');
   if(!z)return;
-  // скрытые баннеры (студент закрыл) — в localStorage
   var hidden=[];try{hidden=JSON.parse(localStorage.getItem('mq_hidden_banners')||'[]');}catch(e){}
-  var show=BANNERS.filter(function(b){return hidden.indexOf(b.id)<0;});
+  var now=Date.now();
+  var myGroup=(S.user&&S.user.group)||'';
+  var show=BANNERS.filter(function(b){
+    if(hidden.indexOf(b.id)>=0)return false;
+    // срок истёк?
+    if(b.expires_at&&new Date(b.expires_at).getTime()<now)return false;
+    // целевая группа?
+    if(b.target_group&&b.target_group!==myGroup)return false;
+    return true;
+  });
   if(!show.length){z.innerHTML='';return;}
   z.innerHTML=show.map(function(b){
     return '<div class="bnr bnr-'+(b.color||'gold')+'">'
@@ -2881,11 +2888,18 @@ function hideBanner(id){
   renderBanners();
 }
 // ===== АДМИН: управление баннерами =====
-function admAddBanner(){
+async function admAddBanner(){
+  // собрать список групп
+  var groups=[];
+  try{var us=await sbGet('users','status=eq.active&select=group_name');us.forEach(function(u){if(u.group_name&&groups.indexOf(u.group_name)<0)groups.push(u.group_name);});}catch(e){}
+  groups.sort();
+  var grpOpts='<option value="">Всем студентам</option>'+groups.map(function(g){return '<option value="'+g+'">Только группа '+g+'</option>';}).join('');
   var body='<div class="fg"><label class="fl">Заголовок</label><input id="bnT" placeholder="Поздравляем с экзаменом по биологии! 🎉" maxlength="80"></div>'
     +'<div class="fg"><label class="fl">Текст (необязательно)</label><textarea id="bnB" rows="3" placeholder="Молодцы все, кто сдал! Так держать 💪"></textarea></div>'
     +'<div class="fg"><label class="fl">Эмодзи</label><input id="bnE" value="🎉" maxlength="4" style="width:80px;text-align:center;font-size:20px"></div>'
     +'<div class="fg"><label class="fl">Цвет</label><select id="bnC"><option value="gold">Золото</option><option value="blue">Синий</option><option value="green">Зелёный</option><option value="purple">Фиолетовый</option><option value="fire">Огонь</option></select></div>'
+    +'<div class="fg"><label class="fl">Кому показывать</label><select id="bnG">'+grpOpts+'</select></div>'
+    +'<div class="fg"><label class="fl">Убрать через (дней) — 0 = бессрочно</label><input id="bnDays" type="number" value="0" min="0" style="width:120px"></div>'
     +'<button class="btn bbl" onclick="admSaveBanner()" style="width:100%">Опубликовать баннер</button>';
   showModal('Новый баннер 🎉',body);
 }
@@ -2894,40 +2908,49 @@ async function admSaveBanner(){
   var b=document.getElementById('bnB').value.trim();
   var e=document.getElementById('bnE').value.trim()||'🎉';
   var c=document.getElementById('bnC').value;
+  var grp=document.getElementById('bnG')?document.getElementById('bnG').value:'';
+  var days=+(document.getElementById('bnDays')?document.getElementById('bnDays').value:0)||0;
   if(!t){alert('Введите заголовок');return;}
   var id='bnr_'+Date.now();
+  var expires=null;
+  if(days>0){var d=new Date();d.setDate(d.getDate()+days);expires=d.toISOString();}
   try{
-    await sbPost('banners',{id:id,title:t,body:b,emoji:e,color:c,active:true});
-    alert('Баннер опубликован! 🎉');
+    await sbPost('banners',{id:id,title:t,body:b,emoji:e,color:c,active:true,target_group:grp,expires_at:expires});
     closeModal();
-    admBanners();
-    await loadBanners();renderBanners();
+    await loadBanners();
+    renderBanners(); // обновить баннеры на сайте
+    alert('Баннер опубликован! 🎉');
+    admBanners(); // показать список снова
   }catch(err){alert('Ошибка: '+err.message);}
 }
 async function admDelBanner(id){
   if(!confirm('Удалить баннер?'))return;
   try{
     await sbDel('banners','id=eq.'+encodeURIComponent(id));
-    admBanners();
-    await loadBanners();renderBanners();
+    await loadBanners();
+    renderBanners(); // обновить на сайте
+    admBanners(); // обновить список
   }catch(e){alert('Ошибка: '+e.message);}
 }
 async function admBanners(){
-  var el=document.getElementById('admBannersBody');
-  if(!el)return;
+  showModal('Баннеры 🎉','<div style="color:var(--tx3);padding:10px">Загрузка...</div>');
   await loadBanners();
-  var html='<button class="btn bbl bsm" onclick="admAddBanner()" style="margin-bottom:14px"><i class="ti ti-plus"></i> Создать баннер</button>';
+  var html='<button class="btn bbl bsm" onclick="admAddBanner()" style="margin-bottom:14px;width:100%"><i class="ti ti-plus"></i> Создать баннер</button>';
   if(!BANNERS.length){html+='<p style="color:var(--tx3)">Нет активных баннеров</p>';}
   else{
     html+=BANNERS.map(function(b){
+      var meta=[];
+      if(b.target_group)meta.push('👥 группа '+b.target_group);else meta.push('👥 всем');
+      if(b.expires_at){var dd=new Date(b.expires_at);meta.push('⏳ до '+dd.toLocaleDateString('ru-RU'));}else meta.push('⏳ бессрочно');
       return '<div class="bnr bnr-'+(b.color||'gold')+'" style="margin-bottom:10px">'
         +'<span class="bnr-emoji">'+(b.emoji||'🎉')+'</span>'
         +'<div class="bnr-title">'+b.title+'</div>'
         +(b.body?'<div class="bnr-body">'+b.body+'</div>':'')
+        +'<div class="bnr-body" style="font-size:11px;opacity:.85;margin-top:4px">'+meta.join(' · ')+'</div>'
         +'<div style="clear:both;margin-top:8px"><button class="btn bre bsm" onclick="admDelBanner(\''+b.id+'\')">Удалить</button></div></div>';
     }).join('');
   }
-  el.innerHTML=html;
+  var mb=document.getElementById('mdBody');if(mb)mb.innerHTML=html;
 }
 
 // ===== ОПРОСЫ =====
