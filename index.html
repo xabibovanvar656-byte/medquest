@@ -1252,7 +1252,6 @@ async function addToJackpot(n){
 var ROOM_TOPICS=[]; // выбранные темы для комнаты
 function roomCreate(){
   if(!S.user){showLoginWall();return;}
-  // предметы из реальных вопросов
   var QS=getQS();
   var subjs=[];
   QS.forEach(function(q){if(q.s&&subjs.indexOf(q.s)<0)subjs.push(q.s);});
@@ -1262,75 +1261,34 @@ function roomCreate(){
     subjOpts+='<option value="'+s+'">'+nm+'</option>';
   });
   ROOM_TOPICS=[];
-  var body='<div class="fg"><label class="fl">Предмет</label><select id="rcSubj" onchange="ROOM_TOPICS=[];document.getElementById(\'rcTopLbl\').textContent=\'Все темы\'">'+subjOpts+'</select></div>'
-    +'<div class="fg"><label class="fl">Темы</label><button class="btn bgh bsm" onclick="roomPickTopics()" style="width:100%"><i class="ti ti-list-check"></i> <span id="rcTopLbl">Все темы</span></button></div>'
+  var body='<div class="fg"><label class="fl">Предмет</label><select id="rcSubj" onchange="roomRenderTopics()">'+subjOpts+'</select></div>'
+    +'<div class="fg"><label class="fl">Темы (отметь нужные, пусто = все)</label><div id="rcTopics" style="max-height:160px;overflow-y:auto;border:1px solid var(--bor);border-radius:10px;padding:6px"></div></div>'
     +'<div class="fg"><label class="fl">Количество вопросов</label><select id="rcCount"><option value="5">5</option><option value="10">10</option><option value="15">15</option><option value="20">20</option></select></div>'
     +'<div class="fg"><label class="fl">Время на вопрос (сек)</label><select id="rcTime"><option value="0">Без лимита</option><option value="15">15 сек</option><option value="30" selected>30 сек</option><option value="60">60 сек</option></select></div>'
     +'<div class="fg"><label class="fl">Ставка (монеты) — 0 без ставки</label><input id="rcStake" type="number" value="20" min="0"></div>'
-    +'<div style="font-size:11px;color:var(--tx3);margin-bottom:12px">У тебя: '+myCoins()+' 🪙. Каждый игрок вносит ставку. Последний по очкам теряет ставку, призовые делят банк. 10% идёт в джекпот.</div>'
+    +'<div style="font-size:11px;color:var(--tx3);margin-bottom:12px">У тебя: '+myCoins()+' 🪙. Каждый вносит ставку. Последний теряет ставку, призовые делят банк. 10% в джекпот.</div>'
     +'<button class="btn bbl" onclick="roomDoCreate()" style="width:100%">Создать комнату</button>';
   showModal('Новая комната ⚔️',body);
+  roomRenderTopics();
 }
-var ROOM_FORM={};
-function roomSaveForm(){
-  ROOM_FORM={
-    subj:document.getElementById('rcSubj')?document.getElementById('rcSubj').value:'all',
-    count:document.getElementById('rcCount')?document.getElementById('rcCount').value:'5',
-    time:document.getElementById('rcTime')?document.getElementById('rcTime').value:'30',
-    stake:document.getElementById('rcStake')?document.getElementById('rcStake').value:'20'
-  };
-}
-function roomPickTopics(){
-  roomSaveForm();
+function roomRenderTopics(){
+  var cont=document.getElementById('rcTopics');
+  if(!cont)return;
   var s=document.getElementById('rcSubj')?document.getElementById('rcSubj').value:'all';
   var QS=getQS();
   var topics=[];
-  QS.forEach(function(q){if((s==='all'||q.s===s)&&topics.indexOf(q.t)<0)topics.push(q.t);});
+  QS.forEach(function(q){if(q.t&&(s==='all'||q.s===s)&&topics.indexOf(q.t)<0)topics.push(q.t);});
   topics.sort();
-  if(!topics.length){alert('Нет тем');return;}
-  var rows=topics.map(function(t){
-    var on=ROOM_TOPICS.indexOf(t)>=0;
+  ROOM_TOPICS=[]; // сброс при смене предмета
+  if(!topics.length){cont.innerHTML='<div style="font-size:12px;color:var(--tx3);padding:6px">Нет тем — будут все вопросы предмета</div>';return;}
+  cont.innerHTML=topics.map(function(t){
     var cnt=QS.filter(function(q){return q.t===t&&(s==='all'||q.s===s);}).length;
-    return '<div class="rtItem" data-t="'+t.replace(/"/g,'&quot;')+'" style="display:flex;align-items:center;gap:10px;padding:11px 12px;background:var(--bg3);border-radius:10px;margin-bottom:6px;cursor:pointer;border:2px solid '+(on?'var(--bl)':'transparent')+'">'
-      +'<div class="rtChk" style="width:22px;height:22px;border-radius:6px;border:2px solid '+(on?'var(--bl)':'var(--bor2)')+';background:'+(on?'var(--bl)':'transparent')+';display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px">'+(on?'✓':'')+'</div>'
-      +'<div style="flex:1"><div style="font-size:13px">'+t+'</div><div style="font-size:10px;color:var(--tx3)">'+cnt+' вопросов</div></div></div>';
+    return '<label class="rtRow" style="display:flex;align-items:center;gap:8px;padding:7px 8px;cursor:pointer;border-radius:6px"><input type="checkbox" class="rtCb" value="'+t.replace(/"/g,'&quot;')+'" onchange="roomTopChange()" style="width:auto;margin:0"><span style="font-size:13px;flex:1">'+t+'</span><span style="font-size:10px;color:var(--tx3)">'+cnt+'</span></label>';
   }).join('');
-  var body='<div style="display:flex;gap:6px;margin-bottom:12px"><button class="btn bgh bsm" onclick="roomTopAll(true)" style="flex:1">Все</button><button class="btn bgh bsm" onclick="roomTopAll(false)" style="flex:1">Снять</button></div>'
-    +'<div id="rtList" style="max-height:50vh;overflow-y:auto">'+rows+'</div>'
-    +'<button class="btn bbl" onclick="roomTopDone()" style="width:100%;margin-top:12px">Готово</button>';
-  showModal('Выбор тем',body);
-  document.querySelectorAll('.rtItem').forEach(function(el){
-    el.addEventListener('click',function(){
-      var t=el.getAttribute('data-t');
-      var i=ROOM_TOPICS.indexOf(t);
-      if(i>=0)ROOM_TOPICS.splice(i,1);else ROOM_TOPICS.push(t);
-      var on=ROOM_TOPICS.indexOf(t)>=0;
-      el.style.borderColor=on?'var(--bl)':'transparent';
-      var chk=el.querySelector('.rtChk');chk.style.borderColor=on?'var(--bl)':'var(--bor2)';chk.style.background=on?'var(--bl)':'transparent';chk.textContent=on?'✓':'';
-    });
-  });
 }
-function roomTopAll(on){
+function roomTopChange(){
   ROOM_TOPICS=[];
-  if(on)document.querySelectorAll('.rtItem').forEach(function(el){ROOM_TOPICS.push(el.getAttribute('data-t'));});
-  document.querySelectorAll('.rtItem').forEach(function(el){
-    var t=el.getAttribute('data-t');var onn=ROOM_TOPICS.indexOf(t)>=0;
-    el.style.borderColor=onn?'var(--bl)':'transparent';
-    var chk=el.querySelector('.rtChk');chk.style.borderColor=onn?'var(--bl)':'var(--bor2)';chk.style.background=onn?'var(--bl)':'transparent';chk.textContent=onn?'✓':'';
-  });
-}
-function roomTopDone(){
-  closeModal();
-  roomCreate();
-  setTimeout(function(){
-    // восстановить значения формы
-    if(ROOM_FORM.subj&&document.getElementById('rcSubj'))document.getElementById('rcSubj').value=ROOM_FORM.subj;
-    if(ROOM_FORM.count&&document.getElementById('rcCount'))document.getElementById('rcCount').value=ROOM_FORM.count;
-    if(ROOM_FORM.time&&document.getElementById('rcTime'))document.getElementById('rcTime').value=ROOM_FORM.time;
-    if(ROOM_FORM.stake&&document.getElementById('rcStake'))document.getElementById('rcStake').value=ROOM_FORM.stake;
-    var lbl=document.getElementById('rcTopLbl');
-    if(lbl)lbl.textContent=ROOM_TOPICS.length?('Тем: '+ROOM_TOPICS.length):'Все темы';
-  },60);
+  document.querySelectorAll('#rcTopics .rtCb:checked').forEach(function(cb){ROOM_TOPICS.push(cb.value);});
 }
 async function roomDoCreate(){
   var subj=document.getElementById('rcSubj').value;
