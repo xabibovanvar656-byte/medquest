@@ -467,11 +467,17 @@ select option{background:var(--bg2)}
 </div>
 <div id="pg-duels" class="page">
   <div class="ph"><div class="pt">Дуэли ⚔️</div><div class="ps">Брось вызов другому студенту</div></div>
+  <div id="jackpotZone"></div>
   <div id="duelActive"></div>
   <div id="duelIncoming"></div>
+  <div id="roomActive"></div>
+  <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+    <button class="btn bbl" onclick="duelNewChallenge()"><i class="ti ti-swords"></i> Дуэль 1 на 1</button>
+    <button class="btn bgh" onclick="duelShowHistory()"><i class="ti ti-history"></i> История</button>
+  </div>
   <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
-    <button class="btn bbl" onclick="duelNewChallenge()"><i class="ti ti-swords"></i> Бросить вызов</button>
-    <button class="btn bgh" onclick="duelShowHistory()"><i class="ti ti-history"></i> История дуэлей</button>
+    <button class="btn bam" onclick="roomCreate()"><i class="ti ti-users"></i> Создать комнату (ставка)</button>
+    <button class="btn bgh" onclick="roomJoinPrompt()"><i class="ti ti-login"></i> Войти по коду</button>
   </div>
   <div id="duelBody"></div>
 </div>
@@ -1210,13 +1216,363 @@ var DUEL_SCORE=0;        // счёт
 var DUEL_START=0;        // время старта вопроса
 var DUEL_TOTALTIME=0;    // суммарное время
 
+// ===== МНОГОПОЛЬЗОВАТЕЛЬСКИЕ ДУЭЛИ (КОМНАТЫ) =====
+var ROOM=null;        // текущая комната {id,...}
+var ROOM_POLL=null;   // таймер опроса
+var ROOM_Q=[];        // вопросы текущей игры
+var ROOM_IDX=0;       // индекс вопроса
+var ROOM_SCORE=0;
+var ROOM_T0=0;        // время начала вопроса
+
+// Джекпот
+async function loadJackpot(){
+  if(!dbOK)return 0;
+  try{var r=await sbGet('jackpot','id=eq.1&select=amount');return (r.length&&r[0].amount)||0;}catch(e){return 0;}
+}
+async function renderJackpot(){
+  var z=document.getElementById('jackpotZone');
+  if(!z)return;
+  var amt=await loadJackpot();
+  if(amt<=0){z.innerHTML='';return;}
+  z.innerHTML='<div class="card" style="background:linear-gradient(120deg,#5c4400,#d4af37,#fff3b0,#d4af37,#5c4400);background-size:300% 300%;animation:bgshift 8s ease infinite;text-align:center;padding:14px;margin-bottom:14px">'
+    +'<div style="font-size:11px;color:rgba(0,0,0,.7);font-weight:600">🎰 ДЖЕКПОТ МЕДКВЕСТА</div>'
+    +'<div style="font-size:28px;font-weight:800;color:#3a2800;text-shadow:0 1px 2px rgba(255,255,255,.3)">'+amt+' 🪙</div>'
+    +'<div style="font-size:10px;color:rgba(0,0,0,.6)">Растёт с каждой игры · разыгрывает админ</div></div>';
+}
+async function addToJackpot(n){
+  if(!dbOK||n<=0)return;
+  try{
+    var cur=await loadJackpot();
+    await sbPatch('jackpot','id=eq.1',{amount:cur+n});
+  }catch(e){}
+}
+
+// Создание комнаты
+function roomCreate(){
+  if(!S.user){showLoginWall();return;}
+  var subjOpts='<option value="all">Все предметы</option>';
+  Object.keys(SM).forEach(function(k){subjOpts+='<option value="'+k+'">'+SM[k].name+'</option>';});
+  var body='<div class="fg"><label class="fl">Предмет</label><select id="rcSubj">'+subjOpts+'</select></div>'
+    +'<div class="fg"><label class="fl">Количество вопросов</label><select id="rcCount"><option value="5">5</option><option value="10">10</option><option value="15">15</option></select></div>'
+    +'<div class="fg"><label class="fl">Ставка (монеты) — 0 без ставки</label><input id="rcStake" type="number" value="20" min="0"></div>'
+    +'<div style="font-size:11px;color:var(--tx3);margin-bottom:12px">У тебя: '+myCoins()+' 🪙. Каждый игрок вносит ставку. Последний по очкам теряет ставку, призовые делят банк. 10% идёт в джекпот.</div>'
+    +'<button class="btn bbl" onclick="roomDoCreate()" style="width:100%">Создать комнату</button>';
+  showModal('Новая комната ⚔️',body);
+}
+async function roomDoCreate(){
+  var subj=document.getElementById('rcSubj').value;
+  var cnt=+document.getElementById('rcCount').value;
+  var stake=+document.getElementById('rcStake').value||0;
+  if(stake>myCoins()){alert('Недостаточно монет для своей ставки');return;}
+  var code=String(Math.floor(100000+Math.random()*900000)); // 6 цифр
+  var id='room_'+Date.now();
+  try{
+    await sbPost('duel_rooms',{id:id,code:code,host_email:S.user.email,host_name:S.user.name,subject:subj,topic:'',question_count:cnt,stake:stake,status:'lobby'});
+    // создатель вступает (ставку спишем при старте)
+    await sbPost('duel_room_players',{room_id:id,user_email:S.user.email,user_name:S.user.name,score:0,finished:false});
+    ROOM={id:id,code:code,host_email:S.user.email,stake:stake,subject:subj,question_count:cnt,status:'lobby'};
+    closeModal();
+    roomEnterLobby();
+  }catch(e){alert('Ошибка: '+e.message);}
+}
+
+// Вход по коду
+function roomJoinPrompt(){
+  if(!S.user){showLoginWall();return;}
+  var body='<div class="fg"><label class="fl">Код комнаты (6 цифр)</label><input id="rjCode" type="number" placeholder="123456" style="font-size:22px;text-align:center;letter-spacing:4px"></div>'
+    +'<button class="btn bbl" onclick="roomDoJoin()" style="width:100%">Войти</button>';
+  showModal('Войти в комнату',body);
+}
+async function roomDoJoin(){
+  var code=document.getElementById('rjCode').value.trim();
+  if(code.length!==6){alert('Код состоит из 6 цифр');return;}
+  try{
+    var rooms=await sbGet('duel_rooms','code=eq.'+encodeURIComponent(code)+'&order=created_at.desc&limit=1');
+    if(!rooms.length){alert('Комната не найдена');return;}
+    var room=rooms[0];
+    if(room.status!=='lobby'){alert('Игра уже началась или завершена');return;}
+    if(room.stake>myCoins()){alert('Недостаточно монет для ставки '+room.stake+' 🪙');return;}
+    // вступаем
+    try{
+      await sbPost('duel_room_players',{room_id:room.id,user_email:S.user.email,user_name:S.user.name,score:0,finished:false});
+    }catch(e){ /* уже в комнате — ок */ }
+    ROOM={id:room.id,code:room.code,host_email:room.host_email,stake:room.stake,subject:room.subject,question_count:room.question_count,status:'lobby'};
+    closeModal();
+    roomEnterLobby();
+  }catch(e){alert('Ошибка: '+e.message);}
+}
+
+// Лобби — ожидание игроков
+function roomEnterLobby(){
+  go('duels');
+  roomPollStart();
+  roomRenderLobby();
+}
+async function roomRenderLobby(){
+  if(!ROOM)return;
+  var z=document.getElementById('roomActive');
+  if(!z)return;
+  var players=[],room=null;
+  try{
+    var rr=await sbGet('duel_rooms','id=eq.'+encodeURIComponent(ROOM.id)+'&limit=1');
+    room=rr.length?rr[0]:null;
+    players=await sbGet('duel_room_players','room_id=eq.'+encodeURIComponent(ROOM.id)+'&order=joined_at.asc');
+  }catch(e){}
+  if(!room){z.innerHTML='';ROOM=null;roomPollStop();return;}
+  ROOM.status=room.status;
+  // если игра пошла — переключаемся
+  if(room.status==='playing'){roomStartPlaying(room);return;}
+  if(room.status==='finished'){roomShowResults(room);return;}
+  var isHost=room.host_email===S.user.email;
+  var html='<div class="card" style="margin-bottom:14px;border:2px solid var(--bl)">'
+    +'<div style="text-align:center;margin-bottom:12px"><div style="font-size:12px;color:var(--tx3)">Код комнаты</div>'
+    +'<div style="font-size:32px;font-weight:800;letter-spacing:6px;color:var(--bl)">'+room.code+'</div>'
+    +'<div style="font-size:11px;color:var(--tx3)">Скажи код друзьям чтобы они вошли</div></div>'
+    +'<div style="font-size:12px;color:var(--tx2);margin-bottom:8px">Ставка: '+room.stake+' 🪙 · '+room.question_count+' вопросов · '+(SM[room.subject]?SM[room.subject].name:'Все предметы')+'</div>'
+    +'<div style="font-size:11px;color:var(--tx3);text-transform:uppercase;margin-bottom:6px">Игроки ('+players.length+')</div>';
+  html+=players.map(function(p){
+    return '<div style="display:flex;align-items:center;gap:8px;padding:8px;background:var(--bg3);border-radius:8px;margin-bottom:5px"><div style="font-size:14px">'+(p.user_email===room.host_email?'👑':'👤')+'</div><div style="font-size:13px">'+p.user_name+(p.user_email===S.user.email?' (ты)':'')+'</div></div>';
+  }).join('');
+  html+='<div style="display:flex;gap:8px;margin-top:12px">';
+  if(isHost){
+    html+='<button class="btn bbl" style="flex:1" onclick="roomStartGame()"'+(players.length<2?' disabled':'')+'>Начать игру'+(players.length<2?' (нужно 2+)':'')+'</button>';
+  }else{
+    html+='<div style="flex:1;text-align:center;color:var(--tx3);font-size:13px;padding:8px">Ждём, пока хост начнёт...</div>';
+  }
+  html+='<button class="btn bre bsm" onclick="roomLeave()">Выйти</button>';
+  html+='</div></div>';
+  z.innerHTML=html;
+}
+
+// Хост начинает игру — фиксируем вопросы, списываем ставки
+async function roomStartGame(){
+  if(!ROOM)return;
+  try{
+    var players=await sbGet('duel_room_players','room_id=eq.'+encodeURIComponent(ROOM.id));
+    if(players.length<2){alert('Нужно минимум 2 игрока');return;}
+    // выбрать вопросы
+    var QS=getQS().filter(function(q){return ROOM.subject==='all'||q.s===ROOM.subject;});
+    if(QS.length<ROOM.question_count){alert('Недостаточно вопросов по предмету');return;}
+    var shuffled=QS.slice().sort(function(){return Math.random()-0.5;}).slice(0,ROOM.question_count);
+    var qids=shuffled.map(function(q){return q.id;});
+    // списать ставки со всех
+    for(var i=0;i<players.length;i++){
+      if(ROOM.stake>0){
+        var u=await sbGet('users','email=eq.'+encodeURIComponent(players[i].user_email)+'&select=coins');
+        var c=(u.length&&u[0].coins)||0;
+        await sbPatch('users','email=eq.'+encodeURIComponent(players[i].user_email),{coins:Math.max(0,c-ROOM.stake)});
+      }
+    }
+    await sbPatch('duel_rooms','id=eq.'+encodeURIComponent(ROOM.id),{status:'playing',questions:JSON.stringify(qids),started_at:new Date().toISOString()});
+    // обновим свои монеты локально
+    if(ROOM.stake>0){S.user.coins=Math.max(0,myCoins()-ROOM.stake);sv();}
+  }catch(e){alert('Ошибка старта: '+e.message);}
+}
+
+// Игра началась
+function roomStartPlaying(room){
+  if(ROOM_Q.length)return; // уже играем
+  var qids=[];try{qids=JSON.parse(room.questions||'[]');}catch(e){}
+  var QS=getQS();
+  ROOM_Q=qids.map(function(id){return QS.filter(function(q){return q.id===id;})[0];}).filter(function(x){return x;});
+  ROOM_IDX=0;ROOM_SCORE=0;
+  roomShowQuestion();
+}
+function roomShowQuestion(){
+  var z=document.getElementById('roomActive');
+  if(!z||!ROOM_Q.length)return;
+  if(ROOM_IDX>=ROOM_Q.length){roomFinish();return;}
+  var q=ROOM_Q[ROOM_IDX];
+  ROOM_T0=Date.now();
+  var opts=q.o.map(function(opt,i){
+    return '<button class="btn bgh" style="width:100%;text-align:left;margin-bottom:8px;white-space:normal;height:auto;padding:12px" onclick="roomAnswer('+i+')">'+opt+'</button>';
+  }).join('');
+  z.innerHTML='<div class="card" style="border:2px solid var(--am)">'
+    +'<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--tx3);margin-bottom:10px"><span>Вопрос '+(ROOM_IDX+1)+' из '+ROOM_Q.length+'</span><span>Очки: '+ROOM_SCORE+'</span></div>'
+    +'<div style="font-size:15px;font-weight:600;margin-bottom:14px">'+q.q+'</div>'
+    +opts+'</div>';
+}
+async function roomAnswer(i){
+  var q=ROOM_Q[ROOM_IDX];
+  var correct=(i===q.a);
+  if(correct){
+    // очки за правильность + бонус за скорость (макс 10, чем быстрее тем больше)
+    var sec=(Date.now()-ROOM_T0)/1000;
+    var speedBonus=Math.max(0,10-Math.floor(sec));
+    ROOM_SCORE+=10+speedBonus;
+  }
+  ROOM_IDX++;
+  // сохраняем прогресс
+  if(ROOM){try{await sbPatch('duel_room_players','room_id=eq.'+encodeURIComponent(ROOM.id)+'&user_email=eq.'+encodeURIComponent(S.user.email),{score:ROOM_SCORE});}catch(e){}}
+  roomShowQuestion();
+}
+async function roomFinish(){
+  var z=document.getElementById('roomActive');
+  if(z)z.innerHTML='<div class="card" style="text-align:center;padding:24px"><div style="font-size:40px;margin-bottom:10px">🏁</div><div style="font-size:16px;font-weight:600">Ты закончил!</div><div style="font-size:13px;color:var(--tx3);margin-top:6px">Очки: '+ROOM_SCORE+'<br>Ждём остальных игроков...</div></div>';
+  if(ROOM){
+    try{
+      await sbPatch('duel_room_players','room_id=eq.'+encodeURIComponent(ROOM.id)+'&user_email=eq.'+encodeURIComponent(S.user.email),{score:ROOM_SCORE,finished:true});
+    }catch(e){}
+  }
+}
+
+// Хост завершает: когда все finished — распределяем банк
+async function roomCheckFinish(room){
+  if(room.host_email!==S.user.email)return; // только хост считает
+  if(room.status==='finished')return;
+  try{
+    var players=await sbGet('duel_room_players','room_id=eq.'+encodeURIComponent(room.id)+'&order=score.desc');
+    var allDone=players.every(function(p){return p.finished;});
+    if(!allDone)return;
+    // распределение банка
+    var stake=room.stake||0;
+    var bank=stake*players.length;
+    var commission=Math.floor(bank*0.1); // 10% в джекпот
+    var prize=bank-commission;
+    // сортировка по очкам (уже desc)
+    var n=players.length;
+    // последний теряет всё (уже списано). Призовые делят prize: 1-е 50%, 2-е 30%, 3-е 20% (или меньше мест)
+    var shares=[];
+    if(n>=4){shares=[0.5,0.3,0.2];}
+    else if(n===3){shares=[0.6,0.4];}
+    else{shares=[1.0];} // 2 игрока: победитель забирает приз
+    // начислить призы
+    var payouts={};
+    for(var i=0;i<shares.length&&i<players.length;i++){
+      payouts[players[i].user_email]=Math.floor(prize*shares[i]);
+    }
+    for(var j=0;j<players.length;j++){
+      var em=players[j].user_email;
+      var pay=payouts[em]||0;
+      if(pay>0){
+        var u=await sbGet('users','email=eq.'+encodeURIComponent(em)+'&select=coins,bonus_score');
+        var c=(u.length&&u[0].coins)||0;
+        var bs=(u.length&&u[0].bonus_score)||0;
+        // победителю (1 место) ещё +5 к рейтингу
+        var rbonus=(j===0)?5:0;
+        await sbPatch('users','email=eq.'+encodeURIComponent(em),{coins:c+pay,bonus_score:bs+rbonus});
+      }
+    }
+    // комиссия в джекпот
+    await addToJackpot(commission);
+    await sbPatch('duel_rooms','id=eq.'+encodeURIComponent(room.id),{status:'finished'});
+    LB_CACHE=null;
+  }catch(e){}
+}
+// Показ результатов
+async function roomShowResults(room){
+  roomPollStop();
+  var z=document.getElementById('roomActive');
+  if(!z)return;
+  var players=[];
+  try{players=await sbGet('duel_room_players','room_id=eq.'+encodeURIComponent(room.id)+'&order=score.desc');}catch(e){}
+  var stake=room.stake||0;
+  var bank=stake*players.length;
+  var commission=Math.floor(bank*0.1);
+  var prize=bank-commission;
+  var n=players.length;
+  var shares=n>=4?[0.5,0.3,0.2]:(n===3?[0.6,0.4]:[1.0]);
+  var medals=['🥇','🥈','🥉'];
+  var html='<div class="card" style="border:2px solid var(--am)"><div style="text-align:center;font-size:18px;font-weight:700;margin-bottom:4px">🏁 Результаты</div>'
+    +'<div style="text-align:center;font-size:12px;color:var(--tx3);margin-bottom:14px">Банк: '+bank+' 🪙 · комиссия в джекпот: '+commission+' 🪙</div>';
+  html+=players.map(function(p,i){
+    var pay=(i<shares.length)?Math.floor(prize*shares[i]):0;
+    var isLast=(i===players.length-1);
+    var payTxt=pay>0?('+'+pay+' 🪙'):(isLast&&stake>0?'−'+stake+' 🪙':'0');
+    var me=p.user_email===S.user.email;
+    return '<div style="display:flex;align-items:center;gap:10px;padding:11px;background:'+(me?'var(--amd)':'var(--bg3)')+';border-radius:10px;margin-bottom:6px">'
+      +'<div style="font-size:20px;min-width:30px">'+(i<3?medals[i]:(i+1))+'</div>'
+      +'<div style="flex:1"><div style="font-size:14px;font-weight:'+(me?'700':'500')+'">'+p.user_name+(me?' (ты)':'')+'</div><div style="font-size:11px;color:var(--tx3)">'+p.score+' очков</div></div>'
+      +'<div style="font-size:14px;font-weight:700;color:'+(pay>0?'var(--gr)':(isLast&&stake>0?'var(--re)':'var(--tx3)'))+'">'+payTxt+'</div></div>';
+  }).join('');
+  html+='<button class="btn bbl" style="width:100%;margin-top:12px" onclick="roomLeave()">Закрыть</button></div>';
+  z.innerHTML=html;
+  // обновить монеты локально
+  loadProg();
+}
+
+// Опрос состояния комнаты
+function roomPollStart(){
+  roomPollStop();
+  ROOM_POLL=setInterval(roomTick,2500);
+}
+function roomPollStop(){if(ROOM_POLL){clearInterval(ROOM_POLL);ROOM_POLL=null;}}
+async function roomTick(){
+  if(!ROOM){roomPollStop();return;}
+  try{
+    var rr=await sbGet('duel_rooms','id=eq.'+encodeURIComponent(ROOM.id)+'&limit=1');
+    if(!rr.length){roomPollStop();ROOM=null;document.getElementById('roomActive').innerHTML='';return;}
+    var room=rr[0];
+    ROOM.status=room.status;
+    if(room.status==='lobby'){roomRenderLobby();}
+    else if(room.status==='playing'){
+      if(!ROOM_Q.length)roomStartPlaying(room);
+      // хост проверяет завершение
+      roomCheckFinish(room);
+    }
+    else if(room.status==='finished'){roomShowResults(room);}
+  }catch(e){}
+}
+async function roomLeave(){
+  roomPollStop();
+  if(ROOM){
+    try{
+      // если в лобби — удаляем себя из игроков
+      if(ROOM.status==='lobby'){
+        await sbDel('duel_room_players','room_id=eq.'+encodeURIComponent(ROOM.id)+'&user_email=eq.'+encodeURIComponent(S.user.email));
+        // если хост вышел — удаляем комнату
+        if(ROOM.host_email===S.user.email){await sbDel('duel_rooms','id=eq.'+encodeURIComponent(ROOM.id));}
+      }
+    }catch(e){}
+  }
+  ROOM=null;ROOM_Q=[];ROOM_IDX=0;ROOM_SCORE=0;
+  var z=document.getElementById('roomActive');if(z)z.innerHTML='';
+  renderJackpot();
+}
+
+// ===== РОЗЫГРЫШ ДЖЕКПОТА (АДМИН) =====
+async function admJackpot(){
+  var amt=await loadJackpot();
+  var students=[];
+  try{students=await sbGet('users','status=eq.active&select=email,name&order=name.asc');}catch(e){}
+  var opts=students.map(function(s){return '<option value="'+s.email+'">'+s.name+'</option>';}).join('');
+  var body='<div style="text-align:center;margin-bottom:16px"><div style="font-size:12px;color:var(--tx3)">Текущий джекпот</div><div style="font-size:32px;font-weight:800;color:var(--am)">'+amt+' 🪙</div></div>'
+    +'<div class="fg"><label class="fl">Кому отдать джекпот</label><select id="jpWinner">'+opts+'</select></div>'
+    +'<button class="btn bbl" onclick="admGiveJackpot()" style="width:100%;margin-bottom:8px">🎉 Разыграть джекпот</button>'
+    +'<button class="btn bre bsm" onclick="admResetJackpot()" style="width:100%">Обнулить джекпот</button>';
+  showModal('Розыгрыш джекпота 🎰',body);
+}
+async function admGiveJackpot(){
+  var email=document.getElementById('jpWinner').value;
+  var amt=await loadJackpot();
+  if(amt<=0){alert('Джекпот пуст');return;}
+  if(!confirm('Отдать '+amt+' 🪙 этому студенту?'))return;
+  try{
+    var u=await sbGet('users','email=eq.'+encodeURIComponent(email)+'&select=coins,name');
+    var c=(u.length&&u[0].coins)||0;
+    await sbPatch('users','email=eq.'+encodeURIComponent(email),{coins:c+amt});
+    await sbPatch('jackpot','id=eq.1',{amount:0});
+    await createGift(email,'coins','',amt);
+    alert('Джекпот '+amt+' 🪙 разыгран!');
+    closeModal();
+    renderJackpot();
+  }catch(e){alert('Ошибка: '+e.message);}
+}
+async function admResetJackpot(){
+  if(!confirm('Обнулить джекпот без выплаты?'))return;
+  try{await sbPatch('jackpot','id=eq.1',{amount:0});closeModal();renderJackpot();}catch(e){alert(e.message);}
+}
+
+
 function renderDuels(){
   if(!S.user){showLoginWall();return;}
   document.getElementById('duelActive').innerHTML='';
   document.getElementById('duelIncoming').innerHTML='';
   document.getElementById('duelBody').innerHTML='<div style="color:var(--tx3);padding:10px">Загрузка...</div>';
+  renderJackpot(); // показать джекпот
+  // если уже в комнате — возобновить
+  if(ROOM){roomPollStart();roomRenderLobby();}
   duelCheckState();
-  // запустить опрос входящих вызовов
   duelStartPolling();
   duelShowHistory();
 }
@@ -2881,6 +3237,9 @@ async function admRewards(){
   // Баннер
   html+='<div class="card" style="margin-bottom:14px"><div style="font-size:13px;font-weight:600;margin-bottom:8px">🎉 Баннер-поздравление на сайте</div>'
     +'<button class="btn bbl bsm" onclick="admBanners()">Управление баннерами</button></div>';
+  // Джекпот
+  html+='<div class="card" style="margin-bottom:14px"><div style="font-size:13px;font-weight:600;margin-bottom:8px">🎰 Джекпот</div>'
+    +'<button class="btn bam bsm" onclick="admJackpot()">Разыграть джекпот</button></div>';
   // быстрый выбор
   html+='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">'
     +'<button class="btn bgh bsm" onclick="rewardSelAll(true)">Выбрать всех</button>'
