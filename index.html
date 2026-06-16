@@ -1234,10 +1234,11 @@ async function renderJackpot(){
   if(!z)return;
   var amt=await loadJackpot();
   if(amt<=0){z.innerHTML='';return;}
-  z.innerHTML='<div class="card" style="background:linear-gradient(120deg,#5c4400,#d4af37,#fff3b0,#d4af37,#5c4400);background-size:300% 300%;animation:bgshift 8s ease infinite;text-align:center;padding:14px;margin-bottom:14px">'
-    +'<div style="font-size:11px;color:rgba(0,0,0,.7);font-weight:600">🎰 ДЖЕКПОТ МЕДКВЕСТА</div>'
-    +'<div style="font-size:28px;font-weight:800;color:#3a2800;text-shadow:0 1px 2px rgba(255,255,255,.3)">'+amt+' 🪙</div>'
-    +'<div style="font-size:10px;color:rgba(0,0,0,.6)">Растёт с каждой игры · разыгрывает админ</div></div>';
+  z.innerHTML='<div class="card" style="background:linear-gradient(120deg,#5c4400,#d4af37,#fff3b0,#d4af37,#5c4400);background-size:300% 300%;animation:bgshift 6s ease infinite;text-align:center;padding:16px;margin-bottom:14px;box-shadow:0 0 24px rgba(212,175,55,.4);position:relative;overflow:hidden">'
+    +'<div style="font-size:40px;margin-bottom:2px;animation:giftBounce 1.5s ease infinite;display:inline-block">🐷</div>'
+    +'<div style="font-size:11px;color:rgba(0,0,0,.75);font-weight:700;letter-spacing:1px">КОПИЛКА ДЖЕКПОТА</div>'
+    +'<div style="font-size:32px;font-weight:800;color:#3a2800;text-shadow:0 1px 2px rgba(255,255,255,.4)">'+amt+' 🪙</div>'
+    +'<div style="font-size:10px;color:rgba(0,0,0,.65)">Копится с каждой игры · разыгрывает админ</div></div>';
 }
 async function addToJackpot(n){
   if(!dbOK||n<=0)return;
@@ -1248,29 +1249,103 @@ async function addToJackpot(n){
 }
 
 // Создание комнаты
+var ROOM_TOPICS=[]; // выбранные темы для комнаты
 function roomCreate(){
   if(!S.user){showLoginWall();return;}
+  // предметы из реальных вопросов
+  var QS=getQS();
+  var subjs=[];
+  QS.forEach(function(q){if(q.s&&subjs.indexOf(q.s)<0)subjs.push(q.s);});
   var subjOpts='<option value="all">Все предметы</option>';
-  Object.keys(SM).forEach(function(k){subjOpts+='<option value="'+k+'">'+SM[k].name+'</option>';});
-  var body='<div class="fg"><label class="fl">Предмет</label><select id="rcSubj">'+subjOpts+'</select></div>'
-    +'<div class="fg"><label class="fl">Количество вопросов</label><select id="rcCount"><option value="5">5</option><option value="10">10</option><option value="15">15</option></select></div>'
+  subjs.forEach(function(s){
+    var nm=(SM[s]&&SM[s].label)?SM[s].label:s;
+    subjOpts+='<option value="'+s+'">'+nm+'</option>';
+  });
+  ROOM_TOPICS=[];
+  var body='<div class="fg"><label class="fl">Предмет</label><select id="rcSubj" onchange="ROOM_TOPICS=[];document.getElementById(\'rcTopLbl\').textContent=\'Все темы\'">'+subjOpts+'</select></div>'
+    +'<div class="fg"><label class="fl">Темы</label><button class="btn bgh bsm" onclick="roomPickTopics()" style="width:100%"><i class="ti ti-list-check"></i> <span id="rcTopLbl">Все темы</span></button></div>'
+    +'<div class="fg"><label class="fl">Количество вопросов</label><select id="rcCount"><option value="5">5</option><option value="10">10</option><option value="15">15</option><option value="20">20</option></select></div>'
+    +'<div class="fg"><label class="fl">Время на вопрос (сек)</label><select id="rcTime"><option value="0">Без лимита</option><option value="15">15 сек</option><option value="30" selected>30 сек</option><option value="60">60 сек</option></select></div>'
     +'<div class="fg"><label class="fl">Ставка (монеты) — 0 без ставки</label><input id="rcStake" type="number" value="20" min="0"></div>'
     +'<div style="font-size:11px;color:var(--tx3);margin-bottom:12px">У тебя: '+myCoins()+' 🪙. Каждый игрок вносит ставку. Последний по очкам теряет ставку, призовые делят банк. 10% идёт в джекпот.</div>'
     +'<button class="btn bbl" onclick="roomDoCreate()" style="width:100%">Создать комнату</button>';
   showModal('Новая комната ⚔️',body);
 }
+var ROOM_FORM={};
+function roomSaveForm(){
+  ROOM_FORM={
+    subj:document.getElementById('rcSubj')?document.getElementById('rcSubj').value:'all',
+    count:document.getElementById('rcCount')?document.getElementById('rcCount').value:'5',
+    time:document.getElementById('rcTime')?document.getElementById('rcTime').value:'30',
+    stake:document.getElementById('rcStake')?document.getElementById('rcStake').value:'20'
+  };
+}
+function roomPickTopics(){
+  roomSaveForm();
+  var s=document.getElementById('rcSubj')?document.getElementById('rcSubj').value:'all';
+  var QS=getQS();
+  var topics=[];
+  QS.forEach(function(q){if((s==='all'||q.s===s)&&topics.indexOf(q.t)<0)topics.push(q.t);});
+  topics.sort();
+  if(!topics.length){alert('Нет тем');return;}
+  var rows=topics.map(function(t){
+    var on=ROOM_TOPICS.indexOf(t)>=0;
+    var cnt=QS.filter(function(q){return q.t===t&&(s==='all'||q.s===s);}).length;
+    return '<div class="rtItem" data-t="'+t.replace(/"/g,'&quot;')+'" style="display:flex;align-items:center;gap:10px;padding:11px 12px;background:var(--bg3);border-radius:10px;margin-bottom:6px;cursor:pointer;border:2px solid '+(on?'var(--bl)':'transparent')+'">'
+      +'<div class="rtChk" style="width:22px;height:22px;border-radius:6px;border:2px solid '+(on?'var(--bl)':'var(--bor2)')+';background:'+(on?'var(--bl)':'transparent')+';display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px">'+(on?'✓':'')+'</div>'
+      +'<div style="flex:1"><div style="font-size:13px">'+t+'</div><div style="font-size:10px;color:var(--tx3)">'+cnt+' вопросов</div></div></div>';
+  }).join('');
+  var body='<div style="display:flex;gap:6px;margin-bottom:12px"><button class="btn bgh bsm" onclick="roomTopAll(true)" style="flex:1">Все</button><button class="btn bgh bsm" onclick="roomTopAll(false)" style="flex:1">Снять</button></div>'
+    +'<div id="rtList" style="max-height:50vh;overflow-y:auto">'+rows+'</div>'
+    +'<button class="btn bbl" onclick="roomTopDone()" style="width:100%;margin-top:12px">Готово</button>';
+  showModal('Выбор тем',body);
+  document.querySelectorAll('.rtItem').forEach(function(el){
+    el.addEventListener('click',function(){
+      var t=el.getAttribute('data-t');
+      var i=ROOM_TOPICS.indexOf(t);
+      if(i>=0)ROOM_TOPICS.splice(i,1);else ROOM_TOPICS.push(t);
+      var on=ROOM_TOPICS.indexOf(t)>=0;
+      el.style.borderColor=on?'var(--bl)':'transparent';
+      var chk=el.querySelector('.rtChk');chk.style.borderColor=on?'var(--bl)':'var(--bor2)';chk.style.background=on?'var(--bl)':'transparent';chk.textContent=on?'✓':'';
+    });
+  });
+}
+function roomTopAll(on){
+  ROOM_TOPICS=[];
+  if(on)document.querySelectorAll('.rtItem').forEach(function(el){ROOM_TOPICS.push(el.getAttribute('data-t'));});
+  document.querySelectorAll('.rtItem').forEach(function(el){
+    var t=el.getAttribute('data-t');var onn=ROOM_TOPICS.indexOf(t)>=0;
+    el.style.borderColor=onn?'var(--bl)':'transparent';
+    var chk=el.querySelector('.rtChk');chk.style.borderColor=onn?'var(--bl)':'var(--bor2)';chk.style.background=onn?'var(--bl)':'transparent';chk.textContent=onn?'✓':'';
+  });
+}
+function roomTopDone(){
+  closeModal();
+  roomCreate();
+  setTimeout(function(){
+    // восстановить значения формы
+    if(ROOM_FORM.subj&&document.getElementById('rcSubj'))document.getElementById('rcSubj').value=ROOM_FORM.subj;
+    if(ROOM_FORM.count&&document.getElementById('rcCount'))document.getElementById('rcCount').value=ROOM_FORM.count;
+    if(ROOM_FORM.time&&document.getElementById('rcTime'))document.getElementById('rcTime').value=ROOM_FORM.time;
+    if(ROOM_FORM.stake&&document.getElementById('rcStake'))document.getElementById('rcStake').value=ROOM_FORM.stake;
+    var lbl=document.getElementById('rcTopLbl');
+    if(lbl)lbl.textContent=ROOM_TOPICS.length?('Тем: '+ROOM_TOPICS.length):'Все темы';
+  },60);
+}
 async function roomDoCreate(){
   var subj=document.getElementById('rcSubj').value;
   var cnt=+document.getElementById('rcCount').value;
+  var tlimit=+document.getElementById('rcTime').value||0;
   var stake=+document.getElementById('rcStake').value||0;
   if(stake>myCoins()){alert('Недостаточно монет для своей ставки');return;}
   var code=String(Math.floor(100000+Math.random()*900000)); // 6 цифр
   var id='room_'+Date.now();
+  var topicStr=ROOM_TOPICS.join('|');
   try{
-    await sbPost('duel_rooms',{id:id,code:code,host_email:S.user.email,host_name:S.user.name,subject:subj,topic:'',question_count:cnt,stake:stake,status:'lobby'});
+    await sbPost('duel_rooms',{id:id,code:code,host_email:S.user.email,host_name:S.user.name,subject:subj,topic:topicStr,question_count:cnt,stake:stake,status:'lobby',time_limit:tlimit});
     // создатель вступает (ставку спишем при старте)
     await sbPost('duel_room_players',{room_id:id,user_email:S.user.email,user_name:S.user.name,score:0,finished:false});
-    ROOM={id:id,code:code,host_email:S.user.email,stake:stake,subject:subj,question_count:cnt,status:'lobby'};
+    ROOM={id:id,code:code,host_email:S.user.email,stake:stake,subject:subj,topic:topicStr,question_count:cnt,status:'lobby',time_limit:tlimit};
     closeModal();
     roomEnterLobby();
   }catch(e){alert('Ошибка: '+e.message);}
@@ -1350,9 +1425,14 @@ async function roomStartGame(){
   try{
     var players=await sbGet('duel_room_players','room_id=eq.'+encodeURIComponent(ROOM.id));
     if(players.length<2){alert('Нужно минимум 2 игрока');return;}
-    // выбрать вопросы
-    var QS=getQS().filter(function(q){return ROOM.subject==='all'||q.s===ROOM.subject;});
-    if(QS.length<ROOM.question_count){alert('Недостаточно вопросов по предмету');return;}
+    // выбрать вопросы (с учётом тем)
+    var selTopics=(ROOM.topic||'').split('|').filter(function(x){return x;});
+    var QS=getQS().filter(function(q){
+      var okSubj=(ROOM.subject==='all'||q.s===ROOM.subject);
+      var okTopic=(selTopics.length===0||selTopics.indexOf(q.t)>=0);
+      return okSubj&&okTopic;
+    });
+    if(QS.length<ROOM.question_count){alert('Недостаточно вопросов ('+QS.length+') для выбранных тем. Уменьши количество или выбери больше тем.');return;}
     var shuffled=QS.slice().sort(function(){return Math.random()-0.5;}).slice(0,ROOM.question_count);
     var qids=shuffled.map(function(q){return q.id;});
     // списать ставки со всех
@@ -1370,8 +1450,10 @@ async function roomStartGame(){
 }
 
 // Игра началась
+var ROOM_TIMER=null;
 function roomStartPlaying(room){
   if(ROOM_Q.length)return; // уже играем
+  if(ROOM)ROOM.time_limit=room.time_limit||0;
   var qids=[];try{qids=JSON.parse(room.questions||'[]');}catch(e){}
   var QS=getQS();
   ROOM_Q=qids.map(function(id){return QS.filter(function(q){return q.id===id;})[0];}).filter(function(x){return x;});
@@ -1381,18 +1463,32 @@ function roomStartPlaying(room){
 function roomShowQuestion(){
   var z=document.getElementById('roomActive');
   if(!z||!ROOM_Q.length)return;
+  if(ROOM_TIMER){clearInterval(ROOM_TIMER);ROOM_TIMER=null;}
   if(ROOM_IDX>=ROOM_Q.length){roomFinish();return;}
   var q=ROOM_Q[ROOM_IDX];
   ROOM_T0=Date.now();
   var opts=q.o.map(function(opt,i){
-    return '<button class="btn bgh" style="width:100%;text-align:left;margin-bottom:8px;white-space:normal;height:auto;padding:12px" onclick="roomAnswer('+i+')">'+opt+'</button>';
+    return '<button class="btn bgh roomOpt" style="width:100%;text-align:left;margin-bottom:8px;white-space:normal;height:auto;padding:12px" onclick="roomAnswer('+i+')">'+opt+'</button>';
   }).join('');
+  var tl=(ROOM&&ROOM.time_limit)||0;
+  var timerHtml=tl>0?'<div id="roomTimer" style="font-weight:700;color:var(--am)">'+tl+'с</div>':'';
   z.innerHTML='<div class="card" style="border:2px solid var(--am)">'
-    +'<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--tx3);margin-bottom:10px"><span>Вопрос '+(ROOM_IDX+1)+' из '+ROOM_Q.length+'</span><span>Очки: '+ROOM_SCORE+'</span></div>'
+    +'<div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--tx3);margin-bottom:10px"><span>Вопрос '+(ROOM_IDX+1)+' из '+ROOM_Q.length+'</span>'+timerHtml+'<span>Очки: '+ROOM_SCORE+'</span></div>'
     +'<div style="font-size:15px;font-weight:600;margin-bottom:14px">'+q.q+'</div>'
     +opts+'</div>';
+  // таймер
+  if(tl>0){
+    var left=tl;
+    ROOM_TIMER=setInterval(function(){
+      left--;
+      var te=document.getElementById('roomTimer');
+      if(te)te.textContent=left+'с';
+      if(left<=0){clearInterval(ROOM_TIMER);ROOM_TIMER=null;roomAnswer(-1);} // время вышло — пропуск
+    },1000);
+  }
 }
 async function roomAnswer(i){
+  if(ROOM_TIMER){clearInterval(ROOM_TIMER);ROOM_TIMER=null;}
   var q=ROOM_Q[ROOM_IDX];
   var correct=(i===q.a);
   if(correct){
@@ -1657,6 +1753,8 @@ async function duelNewChallenge(preEmail){
     +'<div class="fg"><label class="fl">Тема</label><select id="duelTopic"><option value="all">Все темы</option></select></div>'
     +'<div class="fg"><label class="fl">Вопросов: <b id="duelCntL">10</b></label><input type="range" min="10" max="80" step="5" value="10" id="duelCnt" oninput="duelCntUpd()"></div>'
     +'<div class="fg"><label class="fl">Общее время: <b id="duelTimeL">10</b> мин</label><input type="range" min="5" max="60" step="5" value="10" id="duelTime" oninput="duelTimeUpd()"></div>'
+    +'<div class="fg"><label class="fl">Ставка (монеты) — 0 без ставки</label><input id="duelStake" type="number" value="0" min="0"></div>'
+    +'<div style="font-size:11px;color:var(--tx3);margin-bottom:8px">У тебя: '+myCoins()+' 🪙. Победитель забирает ставки обоих (минус 10% в джекпот).</div>'
     +'<button class="btn bbl" onclick="duelSendChallenge()" style="width:100%;margin-top:8px">Отправить вызов</button>';
   showModal('Бросить вызов ⚔️',body);
   duelChTopics();
@@ -1677,6 +1775,8 @@ async function duelSendChallenge(){
   var topic=document.getElementById('duelTopic').value;
   var cnt=+document.getElementById('duelCnt').value;
   var timeLimit=+document.getElementById('duelTime').value;
+  var stake=+document.getElementById('duelStake').value||0;
+  if(stake>myCoins()){alert('Недостаточно монет для ставки');return;}
   var pool=getQS().filter(function(q){return q.s===subj&&(topic==='all'||q.t===topic);});
   if(pool.length<cnt){alert('В этой теме только '+pool.length+' вопросов. Выберите меньше или другую тему.');return;}
   var picked=pool.slice().sort(function(){return Math.random()-.5;}).slice(0,cnt).map(function(q){return q.id;});
@@ -1685,7 +1785,7 @@ async function duelSendChallenge(){
       challenger_email:S.user.email,challenger_name:S.user.name,
       opponent_email:opp[0],opponent_name:opp[1],
       status:'pending',question_count:cnt,subject:subj,topic:topic==='all'?'':topic,
-      time_limit:timeLimit,
+      time_limit:timeLimit,stake:stake,
       questions_json:JSON.stringify(picked)
     });
     closeModal();
@@ -1830,6 +1930,32 @@ async function duelComputeWinner(d){
   try{
     await sbPatch('duels','id=eq.'+d.id,{status:'finished',winner_email:winner,finished_at:new Date().toISOString()});
     d.winner_email=winner;d.status='finished';
+    // обработка ставки — только challenger делает выплату (чтобы не задвоить)
+    var stake=d.stake||0;
+    if(stake>0&&d.challenger_email===S.user.email&&!d.payout_done){
+      // списать ставки с обоих
+      var ch=await sbGet('users','email=eq.'+encodeURIComponent(d.challenger_email)+'&select=coins,bonus_score');
+      var op=await sbGet('users','email=eq.'+encodeURIComponent(d.opponent_email)+'&select=coins,bonus_score');
+      var chC=(ch.length&&ch[0].coins)||0, opC=(op.length&&op[0].coins)||0;
+      var chB=(ch.length&&ch[0].bonus_score)||0, opB=(op.length&&op[0].bonus_score)||0;
+      if(!winner){
+        // ничья — каждый остаётся при своём (ничего не списываем)
+      }else{
+        var bank=stake*2;
+        var commission=Math.floor(bank*0.1);
+        var prize=bank-commission; // победителю
+        await addToJackpot(commission);
+        if(winner===d.challenger_email){
+          // challenger: -stake +prize, opponent: -stake
+          await sbPatch('users','email=eq.'+encodeURIComponent(d.challenger_email),{coins:chC-stake+prize,bonus_score:chB+10});
+          await sbPatch('users','email=eq.'+encodeURIComponent(d.opponent_email),{coins:Math.max(0,opC-stake)});
+        }else{
+          await sbPatch('users','email=eq.'+encodeURIComponent(d.opponent_email),{coins:opC-stake+prize,bonus_score:opB+10});
+          await sbPatch('users','email=eq.'+encodeURIComponent(d.challenger_email),{coins:Math.max(0,chC-stake)});
+        }
+        await sbPatch('duels','id=eq.'+d.id,{payout_done:true});
+      }
+    }
   }catch(e){}
   duelShowResult(d);
 }
@@ -1859,7 +1985,7 @@ function duelShowResult(d){
     +'<div style="font-size:22px;font-weight:700;color:'+col+';margin-bottom:6px">'+title+'</div>'
     +'<div style="font-size:32px;font-weight:700;font-family:var(--fm);margin:12px 0">'+myScore+' : '+oppScore+'</div>'
     +'<div style="font-size:13px;color:var(--tx2)">против '+oppName+'</div>'
-    +(iWon?'<div style="margin-top:12px;color:var(--gr);font-size:13px">+бонус к рейтингу · +15 🪙</div>':'')
+    +(iWon?'<div style="margin-top:12px;color:var(--gr);font-size:13px">+бонус к рейтингу · +15 🪙'+((d.stake||0)>0?' · выиграл '+(Math.floor(d.stake*2*0.9))+' 🪙 ставки':'')+'</div>':((d.stake||0)>0&&!tie?'<div style="margin-top:12px;color:var(--re);font-size:13px">−'+d.stake+' 🪙 ставка проиграна</div>':''))
     +'<button class="btn bbl" onclick="CUR_DUEL=null;renderDuels()" style="margin-top:16px">К дуэлям</button></div>';
   CUR_DUEL=null;
   LB_CACHE=null; // обновить рейтинг
@@ -1905,7 +2031,7 @@ var FRAMES=[
   {id:'champion',name:'Чемпион',cls:'fr-champion',icon:'🏆'},
   {id:'scholar',name:'Отличник',cls:'fr-scholar',icon:'🎓'}
 ];
-var OWNER_EMAIL='x56an@gmail.com'; // владелец — всё открыто
+var OWNER_EMAIL='x66an@gmail.com'; // владелец — всё открыто
 // Фоны профиля (баннеры)
 var BACKGROUNDS=[
   {id:'aurora',name:'Аврора',cls:'bg-aurora',rarity:'rare'},
