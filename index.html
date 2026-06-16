@@ -516,6 +516,7 @@ select option{background:var(--bg2)}
       <button class="tab" id="tabPrices" onclick="admTab('prices',this)" style="display:none">🪙 Цены</button>
       <button class="tab" id="tabItems" onclick="admTab('items',this)" style="display:none">📦 Товары</button>
       <button class="tab" id="tabRewards" onclick="admTab('rewards',this)" style="display:none">🎉 Награды</button>
+      <button class="tab" id="tabInactive" onclick="admTab('inactive',this)" style="display:none">🧹 Неактивные</button>
       <button class="tab" id="tabAdmins" onclick="admTab('admins',this)" style="display:none">Админы</button>
       <button class="tab" id="tabReq" onclick="admTab('requests',this)" style="display:none">Запросы <span id="reqCnt" class="bdg bre2" style="font-size:10px;margin-left:3px"></span></button>
       <button class="tab" onclick="admTab('questions',this)">Вопросы</button>
@@ -532,6 +533,7 @@ select option{background:var(--bg2)}
     <div id="admPrices" style="display:none"></div>
     <div id="admItems" style="display:none"></div>
     <div id="admRewards" style="display:none"></div>
+    <div id="admInactive" style="display:none"></div>
     <div id="admBannersBody" style="display:none"></div>
     <div id="admQuestions" style="display:none"></div>
     <div id="admNewsEdit" style="display:none"></div>
@@ -1547,7 +1549,7 @@ var FRAMES=[
   {id:'champion',name:'Чемпион',cls:'fr-champion',icon:'🏆'},
   {id:'scholar',name:'Отличник',cls:'fr-scholar',icon:'🎓'}
 ];
-var OWNER_EMAIL='x66an@gmail.com'; // владелец — всё открыто
+var OWNER_EMAIL='x56an@gmail.com'; // владелец — всё открыто
 // Фоны профиля (баннеры)
 var BACKGROUNDS=[
   {id:'aurora',name:'Аврора',cls:'bg-aurora',rarity:'rare'},
@@ -1818,16 +1820,18 @@ async function viewProfile(emailEnc){
     var u=await sbGet('users','email=eq.'+encodeURIComponent(email)+'&select=name,email,avatar,group_name,frame,frames,profile_bg,owned_items,private_profile');
     if(!u.length){document.getElementById('mdBody').innerHTML='<p style="color:var(--tx3)">Профиль не найден</p>';return;}
     u=u[0];
-    var prog=await sbGet('progress','user_email=eq.'+encodeURIComponent(email)+'&select=correct_count,attempt_count');
-    var tA=0,tC=0,mastered=0;
-    prog.forEach(function(p){tA+=p.attempt_count;tC+=p.correct_count;if(p.attempt_count>=2&&p.correct_count/p.attempt_count>=0.8)mastered++;});
-    var acc=tA?Math.round(tC/tA*100):0;
-    var solved=prog.length;
-    var exams=await sbGet('exam_history','user_email=eq.'+encodeURIComponent(email)+'&select=id');
-    // дуэли
-    var duels=await sbGet('duels','or=(challenger_email.eq.'+encodeURIComponent(email)+',opponent_email.eq.'+encodeURIComponent(email)+')&status=eq.finished');
-    var dW=0,dL=0,dT=0;
-    duels.forEach(function(d){if(!d.winner_email)dT++;else if(d.winner_email===email)dW++;else dL++;});
+    // Закрытый профиль: НЕ грузим тяжёлую статистику (быстро, без лагов)
+    var canSeeStats=!u.private_profile||S.isSuper||S.isAdm;
+    var prog=[],tA=0,tC=0,mastered=0,acc=0,solved=0,exams=[],dW=0,dL=0,dT=0;
+    if(canSeeStats){
+      prog=await sbGet('progress','user_email=eq.'+encodeURIComponent(email)+'&select=correct_count,attempt_count');
+      prog.forEach(function(p){tA+=p.attempt_count;tC+=p.correct_count;if(p.attempt_count>=2&&p.correct_count/p.attempt_count>=0.8)mastered++;});
+      acc=tA?Math.round(tC/tA*100):0;
+      solved=prog.length;
+      exams=await sbGet('exam_history','user_email=eq.'+encodeURIComponent(email)+'&select=id');
+      var duels=await sbGet('duels','or=(challenger_email.eq.'+encodeURIComponent(email)+',opponent_email.eq.'+encodeURIComponent(email)+')&status=eq.finished');
+      duels.forEach(function(d){if(!d.winner_email)dT++;else if(d.winner_email===email)dW++;else dL++;});
+    }
     // фон профиля студента
     var ubg=u.profile_bg||'';
     var ubgDef=BACKGROUNDS.filter(function(x){return x.id===ubg;})[0];
@@ -1840,8 +1844,6 @@ async function viewProfile(emailEnc){
     }
     var hasUbg=ubgCls||ubgImg;
     var txtShadow=hasUbg?';color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.7)':'';
-    // Закрытый профиль: статистику видят только админ и владелец
-    var canSeeStats=!u.private_profile||S.isSuper||S.isAdm;
     var html='<div style="text-align:center;margin-bottom:16px;position:relative;z-index:2">'
       +'<div style="display:flex;justify-content:center;margin-bottom:10px">'+renderAvatar(u,80)+'</div>'
       +'<div style="font-size:20px;font-weight:700'+txtShadow+'">'+u.name+'</div>'
@@ -2694,7 +2696,7 @@ async function renderLB(){
   var all=[];
   if(dbOK){
     try{
-      var users=await sbGet('users','status=eq.active&select=email,name,avatar,group_name,frame,frames,owned_items,profile_bg,hidden_from_lb');
+      var users=await sbGet('users','status=eq.active&select=email,name,avatar,group_name,frame,frames,owned_items,profile_bg,hidden_from_lb,private_profile,bonus_score');
       var prog=await sbGetAll('progress','select=user_email,correct_count,attempt_count');
       var exams=await sbGetAll('exam_history','select=user_email');
       var byUser={};
@@ -2724,8 +2726,9 @@ async function renderLB(){
         var baseScore=Math.round(acc*(1+Math.log10(Math.max(solved,1))));
         var examBonus=exCount*5;
         var duelBonus=dWins*10;
-        var score=baseScore+examBonus+duelBonus;
-        all.push({name:u.name,email:u.email,avatar:u.avatar||'',frame:u.frame||'',frames:u.frames||'',owned_items:u.owned_items||'',profile_bg:u.profile_bg||'',acc:acc,solved:solved,score:score,ex:exCount,examBonus:examBonus,duelWins:dWins,duelBonus:duelBonus,isMe:S.user&&u.email===S.user.email});
+        var adminBonus=u.bonus_score||0;
+        var score=baseScore+examBonus+duelBonus+adminBonus;
+        all.push({name:u.name,email:u.email,avatar:u.avatar||'',frame:u.frame||'',frames:u.frames||'',owned_items:u.owned_items||'',profile_bg:u.profile_bg||'',priv:u.private_profile||false,acc:acc,solved:solved,score:score,ex:exCount,examBonus:examBonus,duelWins:dWins,duelBonus:duelBonus,isMe:S.user&&u.email===S.user.email});
       });
     }catch(e){console.warn('LB error:',e.message);}
   }
@@ -2776,7 +2779,7 @@ function renderLBList(data){
         +'<span style="min-width:28px;font-size:18px;position:relative;z-index:1">'+(i<3?medals[i]:'<span style="font-family:var(--fm);font-size:13px;color:'+subCol+sh+'">'+(i+1)+'</span>')+'</span>'
         +'<span style="position:relative;z-index:1">'+renderAvatar(e,36)+'</span>'
         +'<div style="flex:1;margin-left:10px;position:relative;z-index:1"><div style="font-size:13px;color:'+txtCol+sh+(e.isMe?';font-weight:700':'')+'">'+e.name+(e.isMe?' <span class="bdg bbl2">вы</span>':'')+'</div>'
-        +'<div style="font-size:10px;color:'+subCol+sh+';font-family:var(--fm)">'+e.solved+' решено · '+e.acc+'% · '+(e.ex||0)+' экз.'+(e.duelWins?' · ⚔️'+e.duelWins:'')+'</div></div>'
+        +'<div style="font-size:10px;color:'+subCol+sh+';font-family:var(--fm)">'+((e.priv&&!e.isMe&&!S.isSuper&&!S.isAdm)?'🔒 профиль закрыт':(e.solved+' решено · '+e.acc+'% · '+(e.ex||0)+' экз.'+(e.duelWins?' · ⚔️'+e.duelWins:'')))+'</div></div>'
         +'<span style="font-size:22px;font-weight:700;font-family:var(--fm);color:'+scoreCol+sh+';position:relative;z-index:1">'+e.score+'</span></div>';
     }).join('');
   }else{
@@ -3222,6 +3225,7 @@ function renderAdm(){
   var tp=document.getElementById('tabPrices');if(tp)tp.style.display=S.isSuper?'':'none';
   var ti=document.getElementById('tabItems');if(ti)ti.style.display=S.isSuper?'':'none';
   var tr=document.getElementById('tabRewards');if(tr)tr.style.display=S.isSuper?'':'none';
+  var tin=document.getElementById('tabInactive');if(tin)tin.style.display=S.isSuper?'':'none';
     document.getElementById('tabReq').style.display=S.isSuper?'':'none';
     if(S.isSuper)updReqBadge();
     admTab('stats',document.querySelector('.tab'));
@@ -3234,10 +3238,10 @@ async function updReqBadge(){
 function admTab(t,btn){
   document.querySelectorAll('.tab').forEach(function(b){b.classList.remove('on');});
   if(btn)btn.classList.add('on');
-  ['admStats','admAdmins','admRequests','admPending','admStudents','admAnalytics','admPrices','admItems','admRewards','admBannersBody','admQuestions','admNewsEdit','admSchedEdit','admAi'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});
-  var tabMap={stats:'admStats',admins:'admAdmins',requests:'admRequests',pending:'admPending',students:'admStudents',analytics:'admAnalytics',prices:'admPrices',items:'admItems',rewards:'admRewards',questions:'admQuestions',newsEdit:'admNewsEdit',schedEdit:'admSchedEdit',ai:'admAi'};
+  ['admStats','admAdmins','admRequests','admPending','admStudents','admAnalytics','admPrices','admItems','admRewards','admInactive','admBannersBody','admQuestions','admNewsEdit','admSchedEdit','admAi'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});
+  var tabMap={stats:'admStats',admins:'admAdmins',requests:'admRequests',pending:'admPending',students:'admStudents',analytics:'admAnalytics',prices:'admPrices',items:'admItems',rewards:'admRewards',inactive:'admInactive',questions:'admQuestions',newsEdit:'admNewsEdit',schedEdit:'admSchedEdit',ai:'admAi'};
   if(tabMap[t]){var el=document.getElementById(tabMap[t]);if(el)el.style.display='';}
-  if(t==='stats')admStats();if(t==='admins')admAdmins();if(t==='requests')admRequests();if(t==='pending')admPending();if(t==='students')admStudents();if(t==='analytics')admAnalytics();if(t==='prices')admPrices();if(t==='items')admItems();if(t==='rewards')admRewards();if(t==='questions')admQuestions();if(t==='newsEdit')admNewsEdit();if(t==='schedEdit')admSchedEdit();
+  if(t==='stats')admStats();if(t==='admins')admAdmins();if(t==='requests')admRequests();if(t==='pending')admPending();if(t==='students')admStudents();if(t==='analytics')admAnalytics();if(t==='prices')admPrices();if(t==='items')admItems();if(t==='rewards')admRewards();if(t==='inactive')admInactive();if(t==='questions')admQuestions();if(t==='newsEdit')admNewsEdit();if(t==='schedEdit')admSchedEdit();
 }
 async function admPrices(){
   var el=document.getElementById('admPrices');
@@ -3485,16 +3489,19 @@ async function admStudentCard(email,name){
   html+='</div><div style="font-size:10px;color:var(--tx3);margin-top:6px">Штраф уменьшает счётчик правильных ответов. Сброс удаляет весь прогресс студента (необратимо).</div></div>';
   // Управление рейтингом и баллами (главный админ)
   if(S.isSuper){
-    var u2=await sbGet('users','email=eq.'+encodeURIComponent(email)+'&select=hidden_from_lb');
+    var u2=await sbGet('users','email=eq.'+encodeURIComponent(email)+'&select=hidden_from_lb,bonus_score');
     var isHidden=u2.length&&u2[0].hidden_from_lb;
     html+='<div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--bor)"><div style="font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">🏆 Рейтинг и баллы</div>';
     html+='<button class="btn '+(isHidden?'bgr':'bre')+' bsm" onclick="admToggleLB(\''+email+'\','+(isHidden?'false':'true')+')" style="width:100%;margin-bottom:8px">'+(isHidden?'✓ Вернуть в рейтинг':'🚫 Убрать из рейтинга')+'</button>';
-    html+='<div style="font-size:11px;color:var(--tx2);margin-bottom:6px">Корректировка решённых вопросов:</div>';
-    html+='<div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn bgr bsm" onclick="admAdjustScore(\''+email+'\',10)">+10</button>';
-    html+='<button class="btn bgr bsm" onclick="admAdjustScore(\''+email+'\',50)">+50</button>';
-    html+='<button class="btn bam bsm" onclick="admAdjustScore(\''+email+'\',-10)">−10</button>';
-    html+='<button class="btn bam bsm" onclick="admAdjustScore(\''+email+'\',-50)">−50</button></div>';
-    html+='<div style="font-size:10px;color:var(--tx3);margin-top:6px">«+» добавляет фиктивные решённые вопросы (отмеченные верными), «−» убирает. Влияет на рейтинг.</div></div>';
+    var curBonus=(u2.length&&u2[0].bonus_score)||0;
+    html+='<div style="font-size:11px;color:var(--tx2);margin-bottom:6px">Бонусные баллы к рейтингу (сейчас: <b>'+curBonus+'</b>):</div>';
+    html+='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px"><button class="btn bgr bsm" onclick="admBonus(\''+email+'\',10)">+10</button>';
+    html+='<button class="btn bgr bsm" onclick="admBonus(\''+email+'\',50)">+50</button>';
+    html+='<button class="btn bgr bsm" onclick="admBonus(\''+email+'\',100)">+100</button>';
+    html+='<button class="btn bam bsm" onclick="admBonus(\''+email+'\',-10)">−10</button>';
+    html+='<button class="btn bam bsm" onclick="admBonus(\''+email+'\',-50)">−50</button></div>';
+    html+='<div style="display:flex;gap:6px"><input id="bonusInput_'+email.replace(/[^a-z0-9]/gi,"")+'" type="number" placeholder="Своё число" style="flex:1"><button class="btn bbl bsm" onclick="admBonusCustom(\''+email+'\')">Добавить</button></div>';
+    html+='<div style="font-size:10px;color:var(--tx3);margin-top:6px">Эти баллы прибавляются к итоговому баллу студента в рейтинге. Можно вводить отрицательное число чтобы убрать.</div></div>';
   }
   // Выдача анимированных рамок (только главный админ)
   if(S.isSuper){
@@ -3581,6 +3588,113 @@ async function admClearFrames(email){
   }catch(e){alert('Ошибка: '+e.message);}
 }
 // Убрать/вернуть студента в рейтинг
+// ===== НЕАКТИВНЫЕ АККАУНТЫ =====
+var INACTIVE_DAYS=7;
+async function admInactive(){
+  var el=document.getElementById('admInactive');
+  el.innerHTML='<div style="color:var(--tx3);padding:10px">Загрузка...</div>';
+  // выбор срока
+  var html='<div class="alert ali" style="margin-bottom:14px;font-size:12px"><i class="ti ti-info-circle"></i> Студенты, которые не заходили дольше выбранного срока. Удаление необратимо. Помеченные 🛡️ защищены и не удаляются.</div>';
+  html+='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;align-items:center"><span style="font-size:13px;color:var(--tx2)">Неактивны дольше:</span>';
+  [7,14,30,60].forEach(function(d){
+    html+='<button class="btn '+(INACTIVE_DAYS===d?'bbl':'bgh')+' bsm" onclick="admSetInactiveDays('+d+')">'+d+' дней</button>';
+  });
+  html+='</div>';
+  el.innerHTML=html+'<div id="inactiveList"><div style="color:var(--tx3)">Загрузка списка...</div></div>';
+  await admLoadInactive();
+}
+function admSetInactiveDays(d){INACTIVE_DAYS=d;admInactive();}
+async function admLoadInactive(){
+  var listEl=document.getElementById('inactiveList');
+  if(!listEl)return;
+  var users=[],acts={};
+  try{
+    users=await sbGet('users','status=eq.active&select=email,name,group_name,created_at,no_autodelete');
+    var a=await sbGet('student_activity','select=email,last_seen');
+    a.forEach(function(x){acts[x.email]=x.last_seen;});
+  }catch(e){listEl.innerHTML='<p style="color:var(--re)">Ошибка загрузки</p>';return;}
+  var now=Date.now();
+  var cutoff=INACTIVE_DAYS*86400000;
+  var inactive=[];
+  users.forEach(function(u){
+    if(u.email&&u.email.toLowerCase()===OWNER_EMAIL)return; // владельца никогда
+    var seen=acts[u.email];
+    var lastTime=seen?new Date(seen).getTime():(u.created_at?new Date(u.created_at).getTime():0);
+    var diff=now-lastTime;
+    if(diff>=cutoff){
+      inactive.push({email:u.email,name:u.name,group:u.group_name||'',days:Math.floor(diff/86400000),protected:u.no_autodelete,seen:seen});
+    }
+  });
+  inactive.sort(function(a,b){return b.days-a.days;});
+  if(!inactive.length){listEl.innerHTML='<p style="color:var(--gr)">✓ Нет неактивных студентов за этот период</p>';return;}
+  var delCount=inactive.filter(function(x){return !x.protected;}).length;
+  var html='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><span style="font-size:13px;font-weight:600">Найдено: '+inactive.length+' (к удалению: '+delCount+')</span>';
+  if(delCount>0)html+='<button class="btn bre bsm" onclick="admDeleteAllInactive()">🗑 Удалить всех неактивных</button>';
+  html+='</div>';
+  html+=inactive.map(function(s){
+    return '<div class="card" style="display:flex;align-items:center;gap:10px;padding:11px 12px;margin-bottom:6px">'
+      +'<div style="flex:1"><div style="font-size:13px;font-weight:500">'+(s.protected?'🛡️ ':'')+s.name+'</div>'
+      +'<div style="font-size:10px;color:var(--tx3)">'+(s.group?'Группа '+s.group+' · ':'')+'не заходил '+s.days+' дн.'+(s.seen?'':' (ни разу)')+'</div></div>'
+      +'<button class="btn bgh bsm" onclick="admToggleProtect(\''+s.email+'\','+(s.protected?'false':'true')+')" title="Защита от удаления">'+(s.protected?'🛡️':'🔓')+'</button>'
+      +(s.protected?'':'<button class="btn bre bsm" onclick="admDeleteOne(\''+s.email+'\',\''+s.name.replace(/\\x27/g,'')+'\')">Удалить</button>')
+      +'</div>';
+  }).join('');
+  listEl.innerHTML=html;
+}
+async function admToggleProtect(email,prot){
+  try{
+    await sbPatch('users','email=eq.'+encodeURIComponent(email),{no_autodelete:prot});
+    admLoadInactive();
+  }catch(e){alert('Ошибка: '+e.message);}
+}
+async function admDeleteOne(email,name){
+  if(!confirm('Удалить аккаунт '+name+'?\nЭто необратимо — весь прогресс и данные пропадут.'))return;
+  try{
+    await sbDel('progress','user_email=eq.'+encodeURIComponent(email));
+    await sbDel('exam_history','user_email=eq.'+encodeURIComponent(email));
+    await sbDel('student_activity','email=eq.'+encodeURIComponent(email));
+    await sbDel('users','email=eq.'+encodeURIComponent(email));
+    LB_CACHE=null;
+    admLoadInactive();
+  }catch(e){alert('Ошибка: '+e.message);}
+}
+async function admDeleteAllInactive(){
+  // собрать незащищённых
+  var users=[],acts={};
+  try{
+    users=await sbGet('users','status=eq.active&select=email,name,created_at,no_autodelete');
+    var a=await sbGet('student_activity','select=email,last_seen');
+    a.forEach(function(x){acts[x.email]=x.last_seen;});
+  }catch(e){alert('Ошибка');return;}
+  var now=Date.now(),cutoff=INACTIVE_DAYS*86400000,toDel=[];
+  users.forEach(function(u){
+    if(u.email&&u.email.toLowerCase()===OWNER_EMAIL)return;
+    if(u.no_autodelete)return;
+    var seen=acts[u.email];
+    var lastTime=seen?new Date(seen).getTime():(u.created_at?new Date(u.created_at).getTime():0);
+    if(now-lastTime>=cutoff)toDel.push(u.email);
+  });
+  if(!toDel.length){alert('Нет аккаунтов к удалению');return;}
+  if(!confirm('Удалить '+toDel.length+' неактивных аккаунтов?\nЭто НЕОБРАТИМО. Защищённые (🛡️) не тронутся.'))return;
+  if(!confirm('Точно удалить '+toDel.length+' аккаунтов? Отменить будет нельзя.'))return;
+  var ok=0;
+  var listEl=document.getElementById('inactiveList');
+  for(var i=0;i<toDel.length;i++){
+    if(listEl)listEl.innerHTML='<div style="color:var(--tx3);padding:10px">Удаление '+(i+1)+' из '+toDel.length+'...</div>';
+    try{
+      var em=toDel[i];
+      await sbDel('progress','user_email=eq.'+encodeURIComponent(em));
+      await sbDel('exam_history','user_email=eq.'+encodeURIComponent(em));
+      await sbDel('student_activity','email=eq.'+encodeURIComponent(em));
+      await sbDel('users','email=eq.'+encodeURIComponent(em));
+      ok++;
+    }catch(e){}
+  }
+  LB_CACHE=null;
+  alert('Удалено: '+ok+' аккаунтов');
+  admInactive();
+}
+
 async function admToggleLB(email,hide){
   try{
     await sbPatch('users','email=eq.'+encodeURIComponent(email),{hidden_from_lb:hide});
@@ -3589,36 +3703,23 @@ async function admToggleLB(email,hide){
     admStudentCard(email,'');
   }catch(e){alert('Ошибка: '+e.message);}
 }
-// Корректировка решённых вопросов (фиктивные записи)
-async function admAdjustScore(email,n){
-  var act=n>0?('Добавить '+n):('Убрать '+Math.abs(n));
-  if(!confirm(act+' решённых вопросов студенту?'))return;
+// Бонусные баллы — прибавляются к итоговому баллу в рейтинге
+async function admBonus(email,n){
   try{
-    if(n>0){
-      // добавить n фиктивных записей (отмеченных верными)
-      for(var i=0;i<n;i++){
-        var qid='adm_bonus_'+Date.now()+'_'+i+'_'+Math.random().toString(36).slice(2,6);
-        await sbPost('progress',{user_email:email,question_id:qid,correct_count:1,attempt_count:1});
-      }
-      alert('Добавлено '+n+' решённых вопросов');
-    }else{
-      // убрать: сначала фиктивные adm_bonus, потом обычные
-      var rows=await sbGet('progress','user_email=eq.'+encodeURIComponent(email)+'&select=question_id,correct_count');
-      var toRemove=Math.abs(n);
-      // сначала бонусные
-      var bonus=rows.filter(function(r){return (r.question_id||'').indexOf('adm_bonus_')===0;});
-      var others=rows.filter(function(r){return (r.question_id||'').indexOf('adm_bonus_')!==0;});
-      var ordered=bonus.concat(others);
-      var removed=0;
-      for(var j=0;j<ordered.length&&removed<toRemove;j++){
-        await sbDel('progress','user_email=eq.'+encodeURIComponent(email)+'&question_id=eq.'+encodeURIComponent(ordered[j].question_id));
-        removed++;
-      }
-      alert('Убрано '+removed+' решённых вопросов');
-    }
+    var u=await sbGet('users','email=eq.'+encodeURIComponent(email)+'&select=bonus_score');
+    var cur=(u.length&&u[0].bonus_score)||0;
+    var next=cur+n;
+    await sbPatch('users','email=eq.'+encodeURIComponent(email),{bonus_score:next});
     LB_CACHE=null;
     admStudentCard(email,'');
   }catch(e){alert('Ошибка: '+e.message);}
+}
+async function admBonusCustom(email){
+  var inp=document.getElementById('bonusInput_'+email.replace(/[^a-z0-9]/gi,''));
+  if(!inp)return;
+  var n=parseInt(inp.value);
+  if(isNaN(n)){alert('Введите число');return;}
+  await admBonus(email,n);
 }
 
 async function admPenalize(email,name,pct){
