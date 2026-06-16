@@ -711,6 +711,7 @@ async function loadProg(){
     S.user.coins=fresh.coins||0;
     S.user.owned_items=fresh.owned_items||'';
     S.user.profile_bg=fresh.profile_bg||'';
+    S.user.private_profile=fresh.private_profile||false;
     sv();renderAuthHdr();
     await loadFavs();
     await loadDaily();
@@ -1546,7 +1547,7 @@ var FRAMES=[
   {id:'champion',name:'Чемпион',cls:'fr-champion',icon:'🏆'},
   {id:'scholar',name:'Отличник',cls:'fr-scholar',icon:'🎓'}
 ];
-var OWNER_EMAIL='x65an@gmail.com'; // владелец — всё открыто
+var OWNER_EMAIL='x66an@gmail.com'; // владелец — всё открыто
 // Фоны профиля (баннеры)
 var BACKGROUNDS=[
   {id:'aurora',name:'Аврора',cls:'bg-aurora',rarity:'rare'},
@@ -1721,7 +1722,7 @@ async function renderProfile(){
   var b=document.getElementById('profileBody');
   b.innerHTML='<div style="color:var(--tx3);padding:10px">Загрузка профиля...</div>';
   // данные пользователя (включая рамку для отображения)
-  var me={name:S.user.name,email:S.user.email,group_name:S.user.group||'',avatar:S.user.avatar||'',frame:S.user.frame||'',frames:S.user.frames||''};
+  var me={name:S.user.name,email:S.user.email,group_name:S.user.group||'',avatar:S.user.avatar||'',frame:S.user.frame||'',frames:S.user.frames||'',private_profile:S.user.private_profile||false};
   // статистика — СЧИТАЕМ ИЗ БАЗЫ (чтобы совпадало с рейтингом)
   var st=getMyStats(); // запасной вариант (локальный)
   var dWins=0,dLoss=0,dTie=0;
@@ -1774,7 +1775,8 @@ async function renderProfile(){
     +'<button class="btn bgh bsm" onclick="profEditFrame()"><i class="ti ti-sparkles"></i> Рамка</button>'
     +'<button class="btn bgh bsm" onclick="profEditBg()"><i class="ti ti-photo-scan"></i> Фон</button>'
     +'</div>'
-    +'<div style="margin-top:10px"><button class="btn bbl bsm" onclick="go(\'shop\')"><i class="ti ti-shopping-cart"></i> Магазин</button></div>'
+    +'<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn bbl bsm" onclick="go(\'shop\')"><i class="ti ti-shopping-cart"></i> Магазин</button>'
+    +'<button class="btn bgh bsm" onclick="profTogglePrivacy()">'+(me.private_profile?'<i class="ti ti-lock"></i> Профиль закрыт':'<i class="ti ti-lock-open"></i> Профиль открыт')+'</button></div>'
     +(S.isAdm?'<button class="btn bgh bsm" onclick="go(\'admin\')" style="margin-top:10px"><i class="ti ti-shield-lock"></i> Панель администратора</button>':'')
     +'<div style="margin-top:10px"><button class="btn bgh bsm" onclick="doLogout()" style="color:var(--re)"><i class="ti ti-logout"></i> Выйти</button></div>'
     +'</div></div>';
@@ -1813,7 +1815,7 @@ async function viewProfile(emailEnc){
   if(S.user&&email===S.user.email){go('profile');return;} // свой — на свою страницу
   showModal('Профиль','<div style="color:var(--tx3);padding:10px">Загрузка...</div>');
   try{
-    var u=await sbGet('users','email=eq.'+encodeURIComponent(email)+'&select=name,email,avatar,group_name,frame,frames,profile_bg,owned_items');
+    var u=await sbGet('users','email=eq.'+encodeURIComponent(email)+'&select=name,email,avatar,group_name,frame,frames,profile_bg,owned_items,private_profile');
     if(!u.length){document.getElementById('mdBody').innerHTML='<p style="color:var(--tx3)">Профиль не найден</p>';return;}
     u=u[0];
     var prog=await sbGet('progress','user_email=eq.'+encodeURIComponent(email)+'&select=correct_count,attempt_count');
@@ -1838,10 +1840,21 @@ async function viewProfile(emailEnc){
     }
     var hasUbg=ubgCls||ubgImg;
     var txtShadow=hasUbg?';color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.7)':'';
+    // Закрытый профиль: статистику видят только админ и владелец
+    var canSeeStats=!u.private_profile||S.isSuper||S.isAdm;
     var html='<div style="text-align:center;margin-bottom:16px;position:relative;z-index:2">'
       +'<div style="display:flex;justify-content:center;margin-bottom:10px">'+renderAvatar(u,80)+'</div>'
       +'<div style="font-size:20px;font-weight:700'+txtShadow+'">'+u.name+'</div>'
       +'<div style="font-size:12px'+(hasUbg?';color:rgba(255,255,255,.9);text-shadow:0 1px 4px rgba(0,0,0,.7)':';color:var(--tx3)')+'">'+(u.group_name?'Группа '+u.group_name:'')+'</div></div>';
+    if(!canSeeStats){
+      html+='<div style="text-align:center;padding:30px 16px;position:relative;z-index:2"><div style="font-size:44px;margin-bottom:12px">🔒</div><div style="font-size:15px;font-weight:600'+txtShadow+'">Профиль закрыт</div><div style="font-size:12px;color:'+(hasUbg?'rgba(255,255,255,.85)':'var(--tx3)')+';margin-top:6px'+(hasUbg?';text-shadow:0 1px 4px rgba(0,0,0,.7)':'')+'">Студент скрыл свою статистику</div></div>';
+      // кнопка дуэли всё равно доступна
+      html+='<div style="position:relative;z-index:2;margin-top:10px"><button class="btn bbl" style="width:100%" onclick="closeModal();duelChallengeTo(\''+encodeURIComponent(email)+'\',\''+(u.name||'').replace(/[\'\"\\]/g,'')+'\')"><i class="ti ti-swords"></i> Вызвать на дуэль</button></div>';
+      var mb0=document.getElementById('mdBody');if(mb0)mb0.innerHTML=html;
+      // фон модалки
+      if(hasUbg){var mdl0=document.getElementById('modal');if(mdl0){mdl0.style.position='relative';mdl0.style.overflow='hidden';var bb=document.createElement('div');bb.className='modalBg '+(ubgCls||'');bb.style.cssText='position:absolute;inset:0;z-index:0;opacity:.45;border-radius:inherit;pointer-events:none';if(ubgImg){bb.style.backgroundImage='url('+ubgImg+')';bb.style.backgroundSize='cover';bb.style.backgroundPosition='center';}mdl0.insertBefore(bb,mdl0.firstChild);}}
+      return;
+    }
     html+='<div class="cgrid" style="margin-bottom:14px">'
       +'<div class="card" style="text-align:center;padding:12px"><div style="font-size:20px;font-weight:700;color:var(--bl)">'+solved+'</div><div style="font-size:10px;color:var(--tx3)">Решено</div></div>'
       +'<div class="card" style="text-align:center;padding:12px"><div style="font-size:20px;font-weight:700;color:var(--gr)">'+acc+'%</div><div style="font-size:10px;color:var(--tx3)">Точность</div></div>'
@@ -1875,6 +1888,17 @@ async function viewProfile(emailEnc){
       }
     }
   }catch(e){document.getElementById('mdBody').innerHTML='<p style="color:var(--re)">Ошибка загрузки</p>';}
+}
+async function profTogglePrivacy(){
+  var now=S.user.private_profile||false;
+  var next=!now;
+  try{
+    await sbPatch('users','email=eq.'+encodeURIComponent(S.user.email),{private_profile:next});
+    S.user.private_profile=next;
+    sv();
+    alert(next?'Профиль закрыт 🔒\nТеперь другие студенты не видят твою статистику (решено, точность, экзамены). Админ видит всегда.':'Профиль открыт 🔓\nТвоя статистика снова видна всем.');
+    renderProfile();
+  }catch(e){alert('Ошибка: '+e.message);}
 }
 function profEditName(){
   var body='<div class="fg"><label class="fl">Новое имя</label><input id="profNameInp" value="'+(S.user.name||'').replace(/"/g,'&quot;')+'" maxlength="30"></div>'
@@ -2670,7 +2694,7 @@ async function renderLB(){
   var all=[];
   if(dbOK){
     try{
-      var users=await sbGet('users','status=eq.active&select=email,name,avatar,group_name,frame,frames,owned_items,profile_bg');
+      var users=await sbGet('users','status=eq.active&select=email,name,avatar,group_name,frame,frames,owned_items,profile_bg,hidden_from_lb');
       var prog=await sbGetAll('progress','select=user_email,correct_count,attempt_count');
       var exams=await sbGetAll('exam_history','select=user_email');
       var byUser={};
@@ -2690,6 +2714,7 @@ async function renderLB(){
         fduels.forEach(function(d){if(d.winner_email)duelWins[d.winner_email]=(duelWins[d.winner_email]||0)+1;});
       }catch(e){}
       users.forEach(function(u){
+        if(u.hidden_from_lb)return; // убран из рейтинга админом
         var st=byUser[u.email]||{c:0,a:0};
         var acc=st.a?Math.round(st.c/st.a*100):0;
         var solved=solvedCount[u.email]||0;
@@ -3458,6 +3483,19 @@ async function admStudentCard(email,name){
   html+='<button class="btn bam bsm" onclick="admPenalize(\''+email+'\',\''+name.replace(/\x27/g,'')+'\',10)">−10%</button>';
   html+='<button class="btn bre bsm" onclick="admResetProgress(\''+email+'\',\''+name.replace(/\x27/g,'')+'\')">Сбросить весь прогресс</button>';
   html+='</div><div style="font-size:10px;color:var(--tx3);margin-top:6px">Штраф уменьшает счётчик правильных ответов. Сброс удаляет весь прогресс студента (необратимо).</div></div>';
+  // Управление рейтингом и баллами (главный админ)
+  if(S.isSuper){
+    var u2=await sbGet('users','email=eq.'+encodeURIComponent(email)+'&select=hidden_from_lb');
+    var isHidden=u2.length&&u2[0].hidden_from_lb;
+    html+='<div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--bor)"><div style="font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">🏆 Рейтинг и баллы</div>';
+    html+='<button class="btn '+(isHidden?'bgr':'bre')+' bsm" onclick="admToggleLB(\''+email+'\','+(isHidden?'false':'true')+')" style="width:100%;margin-bottom:8px">'+(isHidden?'✓ Вернуть в рейтинг':'🚫 Убрать из рейтинга')+'</button>';
+    html+='<div style="font-size:11px;color:var(--tx2);margin-bottom:6px">Корректировка решённых вопросов:</div>';
+    html+='<div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn bgr bsm" onclick="admAdjustScore(\''+email+'\',10)">+10</button>';
+    html+='<button class="btn bgr bsm" onclick="admAdjustScore(\''+email+'\',50)">+50</button>';
+    html+='<button class="btn bam bsm" onclick="admAdjustScore(\''+email+'\',-10)">−10</button>';
+    html+='<button class="btn bam bsm" onclick="admAdjustScore(\''+email+'\',-50)">−50</button></div>';
+    html+='<div style="font-size:10px;color:var(--tx3);margin-top:6px">«+» добавляет фиктивные решённые вопросы (отмеченные верными), «−» убирает. Влияет на рейтинг.</div></div>';
+  }
   // Выдача анимированных рамок (только главный админ)
   if(S.isSuper){
     // Подарки: рамки
@@ -3542,6 +3580,47 @@ async function admClearFrames(email){
     alert('Предметы убраны');
   }catch(e){alert('Ошибка: '+e.message);}
 }
+// Убрать/вернуть студента в рейтинг
+async function admToggleLB(email,hide){
+  try{
+    await sbPatch('users','email=eq.'+encodeURIComponent(email),{hidden_from_lb:hide});
+    LB_CACHE=null;
+    alert(hide?'Студент убран из рейтинга':'Студент возвращён в рейтинг');
+    admStudentCard(email,'');
+  }catch(e){alert('Ошибка: '+e.message);}
+}
+// Корректировка решённых вопросов (фиктивные записи)
+async function admAdjustScore(email,n){
+  var act=n>0?('Добавить '+n):('Убрать '+Math.abs(n));
+  if(!confirm(act+' решённых вопросов студенту?'))return;
+  try{
+    if(n>0){
+      // добавить n фиктивных записей (отмеченных верными)
+      for(var i=0;i<n;i++){
+        var qid='adm_bonus_'+Date.now()+'_'+i+'_'+Math.random().toString(36).slice(2,6);
+        await sbPost('progress',{user_email:email,question_id:qid,correct_count:1,attempt_count:1});
+      }
+      alert('Добавлено '+n+' решённых вопросов');
+    }else{
+      // убрать: сначала фиктивные adm_bonus, потом обычные
+      var rows=await sbGet('progress','user_email=eq.'+encodeURIComponent(email)+'&select=question_id,correct_count');
+      var toRemove=Math.abs(n);
+      // сначала бонусные
+      var bonus=rows.filter(function(r){return (r.question_id||'').indexOf('adm_bonus_')===0;});
+      var others=rows.filter(function(r){return (r.question_id||'').indexOf('adm_bonus_')!==0;});
+      var ordered=bonus.concat(others);
+      var removed=0;
+      for(var j=0;j<ordered.length&&removed<toRemove;j++){
+        await sbDel('progress','user_email=eq.'+encodeURIComponent(email)+'&question_id=eq.'+encodeURIComponent(ordered[j].question_id));
+        removed++;
+      }
+      alert('Убрано '+removed+' решённых вопросов');
+    }
+    LB_CACHE=null;
+    admStudentCard(email,'');
+  }catch(e){alert('Ошибка: '+e.message);}
+}
+
 async function admPenalize(email,name,pct){
   if(!confirm('Оштрафовать '+name+' на '+pct+'%?\nЭто уменьшит число правильных ответов на '+pct+'%.'))return;
   try{
@@ -3744,7 +3823,7 @@ function admBulkM(){
 function parseBulkQA(txt){
   var result=[],bad=[];
   // Разбиваем по номерам: "31." или "31)" (слитно или с новой строки)
-  var segs=txt.split(/(?=(?:^|\n)\s*\d{1,3}[\.\)])/);
+  var segs=txt.split(/(?=(?:^|\n)\s*\d{1,3}[\.\)](?!\d))/);
   segs.forEach(function(seg){
     seg=seg.trim();
     if(!seg)return;
