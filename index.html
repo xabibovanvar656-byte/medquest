@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>МедКвест</title>
+<title>Vita</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.10.0/dist/tabler-icons.min.css">
 <style>
-:root{--bg:#151b28;--bg2:#1c2433;--bg3:#222b3d;--bg4:#2c374d;--bor:#2e3a52;--bor2:#3e4d6b;--tx:#e6edf7;--tx2:#9aabc4;--tx3:#677893;--bl:#4f8ef7;--bl2:#3570d4;--bld:#0a1933;--gr:#22d07a;--grd:#061a10;--am:#f5a623;--amd:#1e1200;--re:#f04060;--red:#1a0810;--pu:#a78bfa;--pud:#120d26;--te:#00d4c8;--r:10px;--rs:7px;--f:'Sora',system-ui,sans-serif;--fm:'JetBrains Mono',monospace}
-[data-light]{--bg:#f0f4fc;--bg2:#fff;--bg3:#e8eef8;--bg4:#dde5f5;--bor:#c0cee8;--bor2:#9aaed0;--tx:#0d1a30;--tx2:#3a5080;--tx3:#8099c0;--bld:#dae8ff;--grd:#d0f8e8;--amd:#fff3d8;--red:#ffe0e8;--pud:#ede8ff}
+:root{--bg:#16141f;--bg2:#1e1c2b;--bg3:#262436;--bg4:#302d42;--bor:#2c2a3d;--bor2:#3d3a52;--tx:#e8e5f2;--tx2:#a8a4be;--tx3:#7e7b95;--bl:#8b7cff;--bl2:#6d5ef0;--bld:#221d3d;--gr:#1dc99a;--grd:#10271e;--am:#f5b73c;--amd:#2e2810;--re:#ff6b8a;--red:#2e1620;--pu:#a89bff;--pud:#1c1633;--te:#c07cf5;--r:16px;--rs:11px;--f:'Sora',system-ui,sans-serif;--fm:'JetBrains Mono',monospace}
+[data-light]{--bg:#f6f5fc;--bg2:#fff;--bg3:#f4f2fb;--bg4:#ece9f7;--bor:#efecf7;--bor2:#ddd9ec;--tx:#15132b;--tx2:#56536b;--tx3:#8c8aa0;--bl:#6d5ef0;--bl2:#5a4fd0;--gr:#12b886;--am:#d98a00;--re:#e8516e;--pu:#8b5fe8;--bld:#efecfe;--grd:#e3f8f1;--amd:#fff8e0;--red:#fde8ec;--pud:#f5f1ff}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;font-family:var(--f);background:var(--bg);color:var(--tx);font-size:14px;line-height:1.6;overflow:hidden}
 .app{display:flex;flex-direction:column;height:100vh}
-.hdr{height:52px;background:rgba(28,34,48,.72);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;padding:0 16px;gap:10px;flex-shrink:0;z-index:100}
+.hdr{height:52px;background:rgba(24,22,38,.72);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;padding:0 16px;gap:10px;flex-shrink:0;z-index:100}
 [data-light] .hdr{background:rgba(255,255,255,.78);border-bottom:1px solid rgba(0,0,0,.06)}
 .logo{font-size:15px;font-weight:700;background:linear-gradient(135deg,var(--bl),var(--te));-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:flex;align-items:center;gap:7px}
 .hsp{flex:1}
@@ -23,8 +23,8 @@ html,body{height:100%;font-family:var(--f);background:var(--bg);color:var(--tx);
 .layout{display:flex;flex:1;overflow:hidden}
 .sidebar{width:196px;background:var(--bg2);border-right:1px solid var(--bor);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;padding:6px 0}
 .nlbl{font-size:10px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--tx3);padding:6px 14px 2px}
-.nb{display:flex;align-items:center;gap:9px;width:100%;padding:8px 14px;border:none;border-left:2px solid transparent;background:none;color:var(--tx2);font-size:13px;cursor:pointer;text-align:left;font-family:var(--f)}
-.nb:hover{background:var(--bg3);color:var(--tx)}.nb.on{background:var(--bld);color:var(--bl);border-left-color:var(--bl);font-weight:500}
+.nb{display:flex;align-items:center;gap:10px;padding:9px 13px;margin:1px 8px;border:none;border-radius:12px;background:none;color:var(--tx2);font-size:13px;cursor:pointer;text-align:left;font-family:var(--f)}
+.nb:hover{background:var(--bg3);color:var(--tx)}.nb.on{background:linear-gradient(135deg,var(--bl2),var(--bl));color:#fff;font-weight:600;box-shadow:0 6px 16px -6px rgba(109,94,240,.55)}.nb.on i{color:#fff}
 .nb i{font-size:16px;flex-shrink:0}.nsep{height:1px;background:var(--bor);margin:5px 12px}.nsp{flex:1}
 .nbadge{background:var(--re);color:#fff;font-size:10px;font-weight:700;min-width:17px;height:17px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-left:auto;padding:0 4px}
 .main{flex:1;overflow-y:auto;padding:20px}
@@ -34,7 +34,7 @@ html,body{height:100%;font-family:var(--f);background:var(--bg);color:var(--tx);
 .cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:18px}
 .btn{padding:8px 16px;border-radius:var(--rs);border:none;cursor:pointer;font-size:13px;font-weight:500;font-family:var(--f);display:inline-flex;align-items:center;gap:6px}
 .btn:hover{opacity:.85}.btn:disabled{opacity:.4;cursor:default}
-.bbl{background:var(--bl);color:#fff}.bgr{background:var(--gr);color:#000}.bam{background:var(--am);color:#000}.bre{background:var(--re);color:#fff}
+.bbl{background:linear-gradient(135deg,var(--bl2),var(--bl));color:#fff;box-shadow:0 8px 18px -8px rgba(109,94,240,.6)}.bgr{background:var(--gr);color:#000}.bam{background:var(--am);color:#000}.bre{background:var(--re);color:#fff}
 .bgh{background:none;border:1px solid var(--bor);color:var(--tx)}.bgh:hover{background:var(--bg3)}
 .bfu{width:100%;justify-content:center}.bsm{padding:5px 11px;font-size:12px}
 input,select,textarea{background:var(--bg3);border:1px solid var(--bor);border-radius:var(--rs);padding:8px 11px;font-size:13px;color:var(--tx);font-family:var(--f);outline:none;width:100%}
@@ -42,9 +42,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--bl)}
 select option{background:var(--bg2)}
 .fg{margin-bottom:12px}.fl{font-size:11px;font-weight:600;color:var(--tx2);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
 .ferr{color:var(--re);font-size:12px;margin-top:4px;display:none}
-.tabs{display:flex;border-bottom:1px solid var(--bor);margin-bottom:16px;overflow-x:auto}
-.tab{padding:8px 14px;border:none;border-bottom:2px solid transparent;background:none;color:var(--tx2);font-size:13px;cursor:pointer;font-family:var(--f);white-space:nowrap}
-.tab:hover{color:var(--tx)}.tab.on{color:var(--bl);border-bottom-color:var(--bl);font-weight:500}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;overflow-x:auto;padding-bottom:2px}
+.tab{padding:8px 15px;border:1px solid var(--bor);border-radius:99px;background:var(--bg2);color:var(--tx2);font-size:13px;cursor:pointer;font-family:var(--f);white-space:nowrap;transition:all .18s}
+.tab:hover{color:var(--tx);border-color:var(--bor2)}.tab.on{color:#fff;background:linear-gradient(135deg,var(--bl2),var(--bl));border-color:transparent;font-weight:600;box-shadow:0 6px 14px -7px rgba(109,94,240,.8)}
 .bdg{padding:2px 7px;border-radius:20px;font-size:11px;font-weight:600}
 .bbl2{background:var(--bld);color:var(--bl)}.bgr2{background:var(--grd);color:var(--gr)}.bam2{background:var(--amd);color:var(--am)}.bre2{background:var(--red);color:var(--re)}
 .alert{padding:10px 14px;border-radius:var(--rs);font-size:13px;margin-bottom:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -59,7 +59,7 @@ select option{background:var(--bg2)}
 .opt.sel{background:var(--bld);border-color:var(--bl);color:var(--bl)}
 .opt.ok{background:var(--grd);border-color:var(--gr);color:var(--gr)}
 .opt.bad{background:var(--red);border-color:var(--re);color:var(--re)}
-.ol{width:26px;height:26px;border-radius:50%;background:var(--bg4);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--fm)}
+.ol{width:28px;height:28px;border-radius:50%;background:var(--bg4);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--fm)}
 .opt.sel .ol{background:var(--bl);color:#fff}.opt.ok .ol{background:var(--gr);color:#000}.opt.bad .ol{background:var(--re);color:#fff}
 .fcard{background:var(--bg2);border:1px solid var(--bor);border-radius:var(--r);padding:26px;min-height:230px;cursor:pointer;position:relative;transition:transform .25s ease,opacity .25s ease;touch-action:pan-y;user-select:none}
 .fcard.swiping{transition:none}
@@ -80,13 +80,15 @@ select option{background:var(--bg2)}
 .pdots{display:flex;gap:3px;margin-bottom:12px;flex-wrap:wrap}
 .pd{height:4px;flex:1;min-width:7px;border-radius:2px;background:var(--bor)}
 .pd.cur{background:var(--bl)}.pd.done{background:var(--gr)}
-.timer{font-size:20px;font-weight:700;font-family:var(--fm);letter-spacing:2px;color:var(--am)}
+.timer{font-size:26px;font-weight:800;font-family:var(--fm);letter-spacing:1px;color:var(--am);background:var(--amd);padding:6px 18px;border-radius:12px;display:inline-flex;align-items:center;gap:7px}
+.timer::before{content:'\23F1';font-size:17px}
 .timer.urg{color:var(--re);animation:blink 1s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
 @keyframes spin{to{transform:rotate(360deg)}}
-.mmap{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px}
-.mq{width:27px;height:27px;border-radius:4px;border:1px solid var(--bor);background:var(--bg3);cursor:pointer;font-size:11px;font-weight:600;font-family:var(--fm);display:flex;align-items:center;justify-content:center;color:var(--tx3)}
-.mq.ans{background:var(--bld);border-color:rgba(79,142,247,.3);color:var(--bl)}.mq.cur{border:2px solid var(--bl);color:var(--bl)}
+.mmap{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;padding:16px;background:var(--bg2);border:1px solid var(--bor);border-radius:16px}
+.mq{width:34px;height:34px;border-radius:9px;border:1px solid var(--bor);background:var(--bg3);cursor:pointer;font-size:12px;font-weight:700;font-family:var(--fm);display:flex;align-items:center;justify-content:center;color:var(--tx3);transition:transform .14s,background .2s}
+.mq:hover{transform:translateY(-2px)}
+.mq.ans{background:var(--grd);border-color:var(--gr);color:var(--gr)}.mq.cur{background:var(--bl);border-color:var(--bl);color:#fff;box-shadow:0 4px 12px -3px rgba(109,94,240,.7)}
 .aibox{background:var(--pud);border:1px solid rgba(167,139,250,.2);border-radius:var(--rs);padding:14px;font-size:13px;line-height:1.7;margin-top:10px}
 .aihdr{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--pu);margin-bottom:7px}
 .mbg{position:fixed;inset:0;background:rgba(0,0,0,.78);display:flex;align-items:center;justify-content:center;z-index:300;backdrop-filter:blur(6px)}
@@ -115,7 +117,7 @@ select option{background:var(--bg2)}
 .ldg{position:fixed;inset:0;background:rgba(8,12,20,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:400}
 .spin{animation:spin 1s linear infinite}
 .bottomnav{display:none;position:fixed;bottom:calc(14px + env(safe-area-inset-bottom));left:14px;right:14px;z-index:300;
-  background:rgba(28,34,48,.78);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);
+  background:rgba(24,22,38,.82);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);
   border:1px solid rgba(255,255,255,.1);border-radius:26px;
   box-shadow:0 8px 32px rgba(0,0,0,.45),0 2px 8px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.08);
   padding:9px 8px;justify-content:space-around;align-items:center}
@@ -152,6 +154,9 @@ select option{background:var(--bg2)}
 .tbl th,.tbl td{padding:6px 6px}
 .cgrid{grid-template-columns:repeat(2,1fr)}
 .mdl{padding:18px;width:94vw}
+.fcard{min-height:340px;padding:30px 22px;display:flex;flex-direction:column;justify-content:center}
+.fcq{font-size:20px;line-height:1.6}
+.fcans{font-size:18px}
 }
 @media(max-width:400px){
 .cgrid{grid-template-columns:1fr 1fr}
@@ -258,6 +263,35 @@ select option{background:var(--bg2)}
 /* конфетти */
 .confetti{position:fixed;width:10px;height:10px;z-index:10000;pointer-events:none;animation:confFall linear forwards}
 @keyframes confFall{to{transform:translateY(100vh) rotate(720deg);opacity:0}}
+
+/* ===== VITA: плавность и вау-эффекты ===== */
+@keyframes vPageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.page.on{animation:vPageIn .42s cubic-bezier(.22,1,.36,1)}
+.card,.sc,.nc{transition:transform .22s cubic-bezier(.22,1,.36,1),box-shadow .22s,border-color .22s}
+.card:hover,.sc:hover,.nc:hover{transform:translateY(-3px);box-shadow:0 16px 32px -18px rgba(60,40,120,.45);border-color:var(--bor2)}
+.nb{transition:background .2s,color .2s,transform .14s}
+.nb:active{transform:scale(.97)}
+.btn{transition:transform .14s ease,box-shadow .2s,opacity .2s}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:scale(.95)}
+.opt{transition:transform .16s,background .2s,border-color .2s,color .2s}
+.opt:hover:not(:disabled){transform:translateX(3px)}
+.opt.ok{animation:vPop .42s cubic-bezier(.34,1.56,.64,1)}
+@keyframes vPop{0%{transform:scale(.97)}60%{transform:scale(1.02)}100%{transform:scale(1)}}
+.opt.bad{animation:vShake .4s ease}
+@keyframes vShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+/* шиммер по прогресс-барам */
+.pbf{position:relative;overflow:hidden}
+.pbf::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.32),transparent);transform:translateX(-100%);animation:vShimmer 2.4s ease-in-out infinite}
+@keyframes vShimmer{0%{transform:translateX(-100%)}55%,100%{transform:translateX(220%)}}
+/* «дыхание» свечения активного пункта нижнего меню */
+.bni.on::before{animation:vGlow 2.8s ease-in-out infinite}
+@keyframes vGlow{0%,100%{opacity:.15}50%{opacity:.3}}
+/* живой оттенок логотипа */
+.logo span{animation:vHue 7s ease infinite}
+@keyframes vHue{0%,100%{filter:hue-rotate(0deg)}50%{filter:hue-rotate(20deg)}}
+/* мягкая тень под флеш-карточкой при наведении */
+.fcard:hover{box-shadow:0 20px 42px -24px rgba(60,40,120,.55)}
 </style>
 </head>
 <body>
@@ -268,7 +302,7 @@ select option{background:var(--bg2)}
   <div style="font-size:14px;color:var(--tx2)" id="ltxt">Подключение к Supabase...</div>
 </div>
 <header class="hdr">
-  <div class="logo"><span style="-webkit-text-fill-color:initial">🏥</span>МедКвест</div>
+  <div class="logo"><span style="-webkit-text-fill-color:initial;display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:9px;background:linear-gradient(135deg,#6d5ef0,#b06ef0);color:#fff;font-weight:800;font-size:15px;letter-spacing:-.5px">V</span>Vita</div>
   <span class="bdg bbl2" style="font-size:10px">BETA</span>
   <div class="hsp"></div>
   <div id="dbst" style="font-size:11px;font-family:var(--fm);color:var(--tx3)"></div>
@@ -443,11 +477,15 @@ select option{background:var(--bg2)}
     <div class="mmap" id="exMmap"></div>
   </div>
   <div id="exRes" style="display:none">
-    <div class="card" style="text-align:center;padding:32px;margin-bottom:14px">
-      <div style="font-size:32px;margin-bottom:6px" id="exStars"></div>
-      <div class="rpct" id="exRpct"></div>
-      <div style="font-size:17px;margin-top:8px;font-weight:500" id="exRscore"></div>
-      <div style="font-size:13px;color:var(--tx2);margin-top:4px" id="exRverd"></div>
+    <div id="exHero" class="card" style="text-align:center;padding:34px 28px;margin-bottom:14px;position:relative;overflow:hidden">
+      <div id="exTrophy" style="font-size:72px;line-height:1;margin-bottom:6px;animation:floaty 3s ease-in-out infinite"></div>
+      <div id="exHeroTitle" style="font-size:24px;font-weight:800;letter-spacing:-.3px;margin-bottom:14px"></div>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <div style="background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);border-radius:16px;padding:14px 20px;min-width:84px"><div class="rpct" id="exRpct" style="font-size:34px;letter-spacing:0"></div><div style="font-size:11px;opacity:.85;margin-top:2px;color:#fff">точность</div></div>
+        <div style="background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);border-radius:16px;padding:14px 20px;min-width:84px"><div style="font-size:34px;font-weight:800;font-family:var(--fm);color:#fff" id="exRscoreN"></div><div style="font-size:11px;opacity:.85;margin-top:2px;color:#fff" id="exRscore"></div></div>
+        <div style="background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);border-radius:16px;padding:14px 20px;min-width:84px"><div style="font-size:34px;font-weight:800;font-family:var(--fm);color:#fff" id="exRcoinN">+0</div><div style="font-size:11px;opacity:.85;margin-top:2px;color:#fff">🪙 награда</div></div>
+      </div>
+      <div id="exRverd" style="font-size:13.5px;margin-top:16px;font-weight:600;color:#fff;opacity:.92"></div>
     </div>
     <div class="card" style="max-height:400px;overflow-y:auto;margin-bottom:12px" id="exReview"></div>
     <button class="btn bbl" onclick="exReset()"><i class="ti ti-refresh"></i>Новый</button>
@@ -467,6 +505,16 @@ select option{background:var(--bg2)}
 </div>
 <div id="pg-duels" class="page">
   <div class="ph"><div class="pt">Дуэли ⚔️</div><div class="ps">Брось вызов другому студенту</div></div>
+  <div style="position:relative;overflow:hidden;background:linear-gradient(120deg,#6d5ef0,#8b5fe8 48%,#ec5f9b);border-radius:18px;padding:22px 24px;margin-bottom:14px;box-shadow:0 16px 36px -16px rgba(236,95,155,.5)">
+    <div style="position:absolute;right:-20px;top:-30px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.1)"></div>
+    <div style="position:relative;display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:14px;flex:1;min-width:230px">
+        <div style="width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;font-weight:800">⚔️</div>
+        <div><div style="font-size:18px;font-weight:800;color:#fff;line-height:1.2">Сразись 1 на 1</div><div style="font-size:13px;color:rgba(255,255,255,.9);margin-top:3px">10 вопросов · кто быстрее и точнее — забирает победу и монеты</div></div>
+      </div>
+      <button class="btn" style="background:#fff;color:#6d5ef0;font-weight:800;flex-shrink:0" onclick="duelNewChallenge()"><i class="ti ti-bolt"></i> Вызвать соперника</button>
+    </div>
+  </div>
   <div id="jackpotZone"></div>
   <div id="duelActive"></div>
   <div id="duelIncoming"></div>
@@ -501,9 +549,9 @@ select option{background:var(--bg2)}
 <div id="pg-admin" class="page">
   <div id="admLock">
     <div class="admlock">
-      <div style="font-size:56px;margin-bottom:16px;opacity:.3">🛡️</div>
+      <div style="width:88px;height:88px;border-radius:26px;background:linear-gradient(135deg,var(--bl2),var(--pu));display:flex;align-items:center;justify-content:center;font-size:42px;margin-bottom:18px;box-shadow:0 16px 36px -14px rgba(109,94,240,.7)">🛡️</div>
       <div class="pt" style="margin-bottom:8px">Панель администратора</div>
-      <div class="ps" style="margin-bottom:24px">Только для администраторов</div>
+      <div class="ps" style="margin-bottom:24px">Только для администраторов Vita</div>
       <button class="btn bbl" id="admLoginBtn">🔓 Войти как администратор</button>
     </div>
   </div>
@@ -613,7 +661,7 @@ var SM={
   biology:{label:'Биология',icon:'🧬',color:'#f5a623',dim:'#1e1200'}
 };
 var KEY='mq9';
-var S={prog:{},hist:[],user:null,isAdm:false,isSuper:false,adminEmail:null,dark:true,favs:{},daily:null};
+var S={prog:{},hist:[],user:null,isAdm:false,isSuper:false,adminEmail:null,dark:false,favs:{},daily:null};
 var DEVICE=(function(){try{var d=localStorage.getItem('mq_dev');if(!d){d=(navigator.userAgent.indexOf('Mobile')>=0?'📱 Телефон':'💻 Компьютер')+' #'+Math.random().toString(36).slice(2,6);localStorage.setItem('mq_dev',d);}return d;}catch(e){return 'Устройство';}})();
 try{var _d=localStorage.getItem(KEY);if(_d)S=Object.assign({},S,JSON.parse(_d));}catch(e){}
 function sv(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
@@ -634,7 +682,7 @@ setTimeout(hideLdg,6000);
 
 async function init(){
   newsCache=[
-    {id:1,title:'МедКвест запущен! 🚀',body:'545 вопросов по физике, химии и биологии.',pinned:true,news_date:'01.06.2026'},
+    {id:1,title:'Vita запущен! 🚀',body:'545 вопросов по физике, химии и биологии.',pinned:true,news_date:'01.06.2026'},
     {id:2,title:'Как пользоваться',body:'Карточки → Тренажёр → Экзамен. Начните с карточек.',pinned:false,news_date:'01.06.2026'}
   ];
   schedCache=[
@@ -1145,6 +1193,7 @@ async function loadDaily(){
     }
   }catch(e){}
 }
+function vplural(n,a,b,c){n=Math.abs(n)%100;var n1=n%10;if(n>10&&n<20)return c;if(n1>1&&n1<5)return b;if(n1==1)return a;return c;}
 function renderDaily(){
   var el=document.getElementById('hDaily');if(!el||!S.user)return;
   if(!S.daily)S.daily={date:todayStr(),count:0,streakDays:0,lastDay:''};
@@ -1154,17 +1203,22 @@ function renderDaily(){
   var pct=Math.min(100,Math.round(cnt/DAILY_GOAL*100));
   var done=cnt>=DAILY_GOAL;
   var days=S.daily.streakDays||0;
-  var circumference=2*Math.PI*26;
-  var offset=circumference*(1-pct/100);
-  el.innerHTML='<div class="card" style="display:flex;align-items:center;gap:16px;margin-bottom:18px">'
-    +'<div style="position:relative;width:64px;height:64px;flex-shrink:0">'
-    +'<svg width="64" height="64" style="transform:rotate(-90deg)"><circle cx="32" cy="32" r="26" fill="none" stroke="var(--bor)" stroke-width="6"/><circle cx="32" cy="32" r="26" fill="none" stroke="'+(done?'var(--gr)':'var(--bl)')+'" stroke-width="6" stroke-linecap="round" stroke-dasharray="'+circumference+'" stroke-dashoffset="'+offset+'" style="transition:stroke-dashoffset .4s"/></svg>'
-    +'<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;font-family:var(--fm)">'+(done?'✓':cnt+'/'+DAILY_GOAL)+'</div>'
+  var R=50,circ=2*Math.PI*R,off=circ*(1-pct/100);
+  var name=(S.user&&S.user.name)?S.user.name:'друг';
+  var left=Math.max(0,DAILY_GOAL-cnt);
+  var msg=done?'Дневная цель выполнена — ты сегодня в ударе! 🔥':'До дневной цели осталось <b>'+left+'</b> '+vplural(left,'вопрос','вопроса','вопросов')+'.';
+  el.innerHTML='<div style="position:relative;background:linear-gradient(120deg,#6d5ef0,#8b5fe8 45%,#ec5f9b);border-radius:20px;padding:24px 26px;color:#fff;overflow:hidden;display:flex;align-items:center;gap:22px;margin-bottom:20px;box-shadow:0 16px 36px -16px rgba(109,94,240,.55)">'
+    +'<div style="position:absolute;right:-30px;top:-40px;width:170px;height:170px;border-radius:50%;background:rgba(255,255,255,.1)"></div>'
+    +'<div style="flex:1;position:relative;min-width:0">'
+      +'<div style="font-size:23px;font-weight:800;letter-spacing:-.4px;margin-bottom:6px">Привет, '+name+' 👋</div>'
+      +'<div style="font-size:14px;opacity:.92;line-height:1.55">'+msg+'</div>'
+      +'<div style="display:inline-flex;align-items:center;gap:7px;margin-top:16px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);padding:7px 14px;border-radius:999px;font-size:13px;font-weight:600">🔥 '+days+' '+vplural(days,'день','дня','дней')+' подряд</div>'
     +'</div>'
-    +'<div style="flex:1"><div style="font-weight:600;font-size:14px">'+(done?'Цель на сегодня выполнена! 🎉':'Цель дня: '+DAILY_GOAL+' вопросов')+'</div>'
-    +'<div style="font-size:12px;color:var(--tx2);margin-top:2px">'+(done?'Отличная работа! Возвращайтесь завтра.':'Решено сегодня: '+cnt+'. Осталось '+(DAILY_GOAL-cnt)+'.')+'</div></div>'
-    +'<div style="text-align:center;flex-shrink:0"><div style="font-size:24px">🔥</div><div style="font-size:18px;font-weight:700;font-family:var(--fm);color:var(--am);line-height:1">'+days+'</div><div style="font-size:9px;color:var(--tx3);text-transform:uppercase">дней</div></div>'
-    +'</div>';
+    +'<div style="position:relative;width:112px;height:112px;flex-shrink:0">'
+      +'<svg width="112" height="112" viewBox="0 0 112 112" style="transform:rotate(-90deg)"><circle cx="56" cy="56" r="50" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="10"/><circle cx="56" cy="56" r="50" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-dasharray="'+circ+'" stroke-dashoffset="'+off+'" style="transition:stroke-dashoffset .5s"/></svg>'
+      +'<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center"><div style="font-size:24px;font-weight:800;font-family:var(--fm);line-height:1">'+(done?'✓':cnt)+'</div><div style="font-size:11px;opacity:.85">'+(done?'готово':'из '+DAILY_GOAL)+'</div></div>'
+    +'</div>'
+  +'</div>';
 }
 var ACHIEVEMENTS=[
   {id:'first',icon:'🎯',name:'Первый шаг',desc:'Решить первый вопрос',check:function(s){return s.totalAttempts>=1;}},
@@ -1189,6 +1243,17 @@ function getMyStats(){
     acc:totalA?Math.round(totalC/totalA*100):0,mastered:mastered,
     streakDays:S.daily?(S.daily.streakDays||0):0,exams:S.hist.length,bestExam:bestExam
   };
+}
+// ===== УРОВНИ / XP (косметика, считается из статистики) =====
+var VITA_RANKS=[{n:'Новичок',e:'🌱'},{n:'Студент',e:'📘'},{n:'Практикант',e:'🩹'},{n:'Ординатор',e:'🩺'},{n:'Врач',e:'⚕️'},{n:'Профессор',e:'🎓'},{n:'Светило',e:'✨'}];
+function vitaLevel(st){
+  var xp=(st.totalAttempts||0)*5+(st.mastered||0)*20+(st.exams||0)*40+(st.streakDays||0)*15;
+  var per=300;
+  var level=Math.floor(xp/per)+1;
+  var inLevel=xp%per, need=per;
+  var ri=Math.min(VITA_RANKS.length-1,Math.floor((level-1)/2));
+  var r=VITA_RANKS[ri];
+  return {xp:xp,level:level,inLevel:inLevel,need:need,pct:Math.round(inLevel/need*100),rank:r.n,emoji:r.e};
 }
 function renderAchievements(){
   var el=document.getElementById('achGrid');if(!el)return;
@@ -2211,6 +2276,11 @@ async function renderProfile(){
     +'<div style="font-size:22px;font-weight:700;margin-bottom:4px'+(hasBanner?';color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.6)':'')+'">'+me.name+'</div>'
     +'<div style="font-size:13px'+(hasBanner?';color:rgba(255,255,255,.85);text-shadow:0 1px 4px rgba(0,0,0,.6)':';color:var(--tx3)')+'">'+(me.group_name?'Группа '+me.group_name:me.email)+'</div>'
     +'<div style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;background:var(--amd);padding:5px 12px;border-radius:20px"><span style="font-size:16px">🪙</span><span style="font-weight:700;color:var(--am)" class="coinDisp">'+myCoins()+'</span></div>'
+    +(function(){var lv=vitaLevel(st);return '<div style="max-width:380px;margin:16px auto 0;text-align:left;background:'+(hasBanner?'rgba(0,0,0,.32)':'var(--bg3)')+';border:1px solid '+(hasBanner?'rgba(255,255,255,.18)':'var(--bor)')+';border-radius:14px;padding:13px 16px">'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><span style="font-size:13px;font-weight:700'+(hasBanner?';color:#fff':'')+'">'+lv.emoji+' Ур. '+lv.level+' · '+lv.rank+'</span><span style="font-size:11px;font-family:var(--fm);color:'+(hasBanner?'rgba(255,255,255,.8)':'var(--tx3)')+'">'+lv.inLevel+' / '+lv.need+' XP</span></div>'
+      +'<div style="height:9px;background:'+(hasBanner?'rgba(255,255,255,.22)':'var(--bg4)')+';border-radius:99px;overflow:hidden"><div class="pbf" style="height:100%;width:'+lv.pct+'%;border-radius:99px;background:linear-gradient(90deg,#6d5ef0,#ec5f9b)"></div></div>'
+      +'<div style="font-size:10.5px;margin-top:6px;color:'+(hasBanner?'rgba(255,255,255,.8)':'var(--tx3)')+'">Ещё '+(lv.need-lv.inLevel)+' XP до следующего уровня</div>'
+    +'</div>';})()
     +'<div style="display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap">'
     +'<button class="btn bgh bsm" onclick="profEditName()"><i class="ti ti-edit"></i> Имя</button>'
     +'<button class="btn bgh bsm" onclick="profEditAvatar()"><i class="ti ti-photo"></i> Аватар</button>'
@@ -2224,10 +2294,10 @@ async function renderProfile(){
     +'</div></div>';
   // Статистика
   html+='<div class="cgrid" style="margin-bottom:16px">'
-    +'<div class="card" style="text-align:center;padding:16px"><div style="font-size:26px;font-weight:700;color:var(--bl)">'+st.solved+'</div><div style="font-size:11px;color:var(--tx3)">Решено</div></div>'
-    +'<div class="card" style="text-align:center;padding:16px"><div style="font-size:26px;font-weight:700;color:var(--gr)">'+st.acc+'%</div><div style="font-size:11px;color:var(--tx3)">Точность</div></div>'
-    +'<div class="card" style="text-align:center;padding:16px"><div style="font-size:26px;font-weight:700;color:var(--am)">'+st.mastered+'</div><div style="font-size:11px;color:var(--tx3)">Освоено</div></div>'
-    +'<div class="card" style="text-align:center;padding:16px"><div style="font-size:26px;font-weight:700;color:var(--pu)">'+st.exams+'</div><div style="font-size:11px;color:var(--tx3)">Экзаменов</div></div>'
+    +'<div class="card" style="text-align:center;padding:18px 16px"><div style="font-size:30px;font-weight:800;font-family:var(--fm);color:var(--bl);line-height:1">'+st.solved+'</div><div style="font-size:11px;color:var(--tx3);margin-top:6px">Решено</div></div>'
+    +'<div class="card" style="text-align:center;padding:18px 16px"><div style="font-size:30px;font-weight:800;font-family:var(--fm);color:var(--gr);line-height:1">'+st.acc+'%</div><div style="font-size:11px;color:var(--tx3);margin-top:6px">Точность</div></div>'
+    +'<div class="card" style="text-align:center;padding:18px 16px"><div style="font-size:30px;font-weight:800;font-family:var(--fm);color:var(--am);line-height:1">'+st.mastered+'</div><div style="font-size:11px;color:var(--tx3);margin-top:6px">Освоено</div></div>'
+    +'<div class="card" style="text-align:center;padding:18px 16px"><div style="font-size:30px;font-weight:800;font-family:var(--fm);color:var(--pu);line-height:1">'+st.exams+'</div><div style="font-size:11px;color:var(--tx3);margin-top:6px">Экзаменов</div></div>'
     +'</div>';
   // Дуэли
   html+='<div style="font-size:14px;font-weight:600;margin-bottom:10px">⚔️ Дуэли</div>'
@@ -2668,8 +2738,9 @@ function openMoreMenu(){
 function renderHome(){
   renderAuthHdr();
   renderDaily();
-  document.getElementById('hTitle').textContent=S.user?'Привет, '+S.user.name+'! 👋':'Добро пожаловать в МедКвест 🏥';
+  document.getElementById('hTitle').textContent=S.user?'Привет, '+S.user.name+'! 👋':'Добро пожаловать в Vita ✨';
   document.getElementById('hSub').textContent=S.user?'Группа: '+(S.user.group||'—'):'Учебная платформа для медицинских студентов';
+  var _ph=document.querySelector('#pg-home .ph');if(_ph)_ph.style.display=S.user?'none':'block';
   var QS=getQS();
   var tA=0,tC=0;
   Object.values(S.prog).forEach(function(v){tA+=(v.a||0);tC+=(v.c||0);});
@@ -2677,9 +2748,16 @@ function renderHome(){
   var mast=Object.values(S.prog).filter(function(v){return v.a>=2&&v.c/v.a>=0.8;}).length;
   var statsEl=document.getElementById('hStats');
   statsEl.innerHTML='';
-  [{l:'Попыток',v:tA,i:'ti-pencil',c:'bl'},{l:'Точность',v:acc+'%',i:'ti-target',c:'gr'},{l:'Освоено',v:mast,i:'ti-check',c:'am'},{l:'Экзаменов',v:S.hist.length,i:'ti-certificate',c:'pu'}].forEach(function(s){
-    var d=document.createElement('div');d.className='card';
-    d.innerHTML='<div style="display:flex;align-items:center;gap:6px;margin-bottom:8px"><i class="ti '+s.i+'" style="font-size:15px;color:var(--'+s.c+')"></i><span style="font-size:11px;color:var(--tx2)">'+s.l+'</span></div><div style="font-size:28px;font-weight:700;font-family:var(--fm)">'+s.v+'</div>';
+  var days=S.daily?(S.daily.streakDays||0):0;
+  [{l:'Серия',v:days+' <span style="font-size:14px;color:var(--tx3);font-weight:600">'+vplural(days,'день','дня','дней')+'</span>',emoji:'🔥',bg:'#fff0df'},
+   {l:'Точность',v:acc+'<span style="font-size:14px;color:var(--tx3);font-weight:600">%</span>',i:'ti-target',c:'gr'},
+   {l:'Освоено',v:mast,i:'ti-checkbox',c:'bl'},
+   {l:'Монеты',v:myCoins(),emoji:'🪙',bg:'#fff8e0'}].forEach(function(s){
+    var d=document.createElement('div');d.className='card';d.style.padding='16px 18px';
+    var chip=s.emoji
+      ? '<span style="width:34px;height:34px;border-radius:11px;background:'+s.bg+';display:flex;align-items:center;justify-content:center;font-size:17px">'+s.emoji+'</span>'
+      : '<span style="width:34px;height:34px;border-radius:11px;background:var(--'+s.c+'d);display:flex;align-items:center;justify-content:center"><i class="ti '+s.i+'" style="font-size:18px;color:var(--'+s.c+')"></i></span>';
+    d.innerHTML='<div style="display:flex;align-items:center;gap:9px;margin-bottom:10px">'+chip+'<span style="font-size:12px;color:var(--tx2);font-weight:500">'+s.l+'</span></div><div style="font-size:28px;font-weight:800;font-family:var(--fm);line-height:1">'+s.v+'</div>';
     statsEl.appendChild(d);
   });
   var subjsEl=document.getElementById('hSubjs');subjsEl.innerHTML='';
@@ -2690,21 +2768,21 @@ function renderHome(){
     var pct=a?Math.round(c/a*100):0;
     var locked=PROTECTED.indexOf('flashcards')>=0&&!S.user&&!S.isAdm;
     var d=document.createElement('div');
-    d.className='sc';d.style.background=m.color+'14';d.style.borderColor=m.color+'33';
-    d.innerHTML='<div style="font-size:26px;margin-bottom:7px">'+m.icon+'</div><div style="font-weight:700;color:'+m.color+'">'+m.label+'</div><div style="font-size:11px;color:var(--tx3);margin-top:2px">'+qs.length+' вопросов</div>'+(locked?'<div style="font-size:12px;color:var(--am);margin-top:6px">🔒 Войдите</div>':'')+'<div style="margin-top:10px"><div style="height:3px;background:'+m.color+'22;border-radius:2px"><div style="height:100%;width:'+pct+'%;background:'+m.color+';border-radius:2px"></div></div><div style="font-size:10px;color:'+m.color+';margin-top:3px;font-family:var(--fm)">'+pct+'%</div></div>';
+    d.className='sc';d.style.cssText='padding:16px 18px;cursor:pointer;background:var(--bg2);border:1px solid var(--bor)';
+    var done=qs.filter(function(q){return S.prog[q.id]&&S.prog[q.id].a>0;}).length;
+    d.innerHTML='<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><span style="width:40px;height:40px;border-radius:12px;background:'+m.color+'1f;display:flex;align-items:center;justify-content:center;font-size:20px">'+m.icon+'</span><div style="flex:1;min-width:0"><div style="font-weight:700;font-size:14px">'+m.label+'</div></div><span style="font-size:13px;font-weight:700;font-family:var(--fm);color:'+m.color+'">'+pct+'%</span></div>'+(locked?'<div style="font-size:12px;color:var(--am);margin-bottom:8px">🔒 Войдите</div>':'')+'<div style="height:8px;background:var(--bg3);border-radius:99px;overflow:hidden"><div class="pbf" style="height:100%;width:'+pct+'%;background:'+m.color+';border-radius:99px"></div></div><div style="font-size:11.5px;color:var(--tx3);margin-top:8px">'+done+' из '+qs.length+' вопросов</div>';
     if(locked){d.addEventListener('click',showLoginWall);}
     else{(function(key){d.addEventListener('click',function(){document.getElementById('fcS').value=key;go('flashcards',document.querySelector('[data-pg=flashcards]'));});})(k);}
     subjsEl.appendChild(d);
   });
   var modesEl=document.getElementById('hModes');modesEl.innerHTML='';
-  [{l:'Флеш-карточки',d:'Вопрос → ответ',i:'ti-layers-subtract',pg:'flashcards',c:'var(--bl)'},
-   {l:'Тренажёр',d:'Неверный → повторяется',i:'ti-target',pg:'trainer',c:'var(--gr)'},
-   {l:'Экзамен',d:'Таймер, без подсказок',i:'ti-certificate',pg:'exam',c:'var(--am)'},
-   {l:'Прогресс',d:'Моя статистика',i:'ti-chart-line',pg:'progress',c:'var(--pu)'}].forEach(function(a){
+  [{l:'Карточки',d:'Вопрос → переворот → ответ',i:'ti-layers-subtract',pg:'flashcards',c:'var(--bl)'},
+   {l:'Тренажёр',d:'Неверный вернётся снова',i:'ti-target',pg:'trainer',c:'var(--gr)'},
+   {l:'Экзамен',d:'Таймер, без подсказок',i:'ti-certificate',pg:'exam',c:'var(--am)'}].forEach(function(a){
     var locked2=PROTECTED.indexOf(a.pg)>=0&&!S.user&&!S.isAdm;
     var btn=document.createElement('button');
-    btn.style.cssText='display:flex;align-items:flex-start;gap:10px;padding:14px;background:var(--bg2);border:1px solid var(--bor);border-radius:var(--r);cursor:pointer;text-align:left;font-family:var(--f);position:relative;width:100%';
-    btn.innerHTML='<i class="ti '+a.i+'" style="font-size:20px;color:'+a.c+';flex-shrink:0;margin-top:2px"></i><div><div style="font-weight:600;color:var(--tx)">'+a.l+'</div><div style="font-size:11px;color:var(--tx3);margin-top:2px">'+a.d+'</div></div>'+(locked2?'<span style="position:absolute;top:8px;right:10px">🔒</span>':'');
+    btn.style.cssText='display:flex;flex-direction:column;gap:11px;padding:16px;background:var(--bg2);border:1px solid var(--bor);border-radius:var(--r);cursor:pointer;text-align:left;font-family:var(--f);position:relative;width:100%';
+    btn.innerHTML='<span style="width:42px;height:42px;border-radius:13px;background:'+a.c.replace(')','d)')+';display:flex;align-items:center;justify-content:center"><i class="ti '+a.i+'" style="font-size:22px;color:'+a.c+'"></i></span><div><div style="font-weight:700;font-size:15px;color:var(--tx)">'+a.l+'</div><div style="font-size:12px;color:var(--tx3);margin-top:2px">'+a.d+'</div></div>'+(locked2?'<span style="position:absolute;top:10px;right:12px">🔒</span>':'');
     btn.addEventListener('mouseover',function(){this.style.borderColor=a.c;this.style.background='var(--bg3)';});
     btn.addEventListener('mouseout',function(){this.style.borderColor='var(--bor)';this.style.background='var(--bg2)';});
     if(locked2){btn.addEventListener('click',showLoginWall);}
@@ -3102,11 +3180,24 @@ async function exFinish(){
   }
   await saveExam(score,EXP.length,subj,spent);
   document.getElementById('exRun').style.display='none';document.getElementById('exRes').style.display='';
-  var col=pct>=70?'var(--gr)':pct>=50?'var(--am)':'var(--re)';
-  document.getElementById('exStars').textContent=pct>=90?'⭐⭐⭐':pct>=70?'⭐⭐':'⭐';
-  document.getElementById('exRpct').style.color=col;document.getElementById('exRpct').textContent=pct+'%';
-  document.getElementById('exRscore').textContent=score+' из '+EXP.length+' правильно';
-  document.getElementById('exRverd').textContent=pct>=70?'✓ Экзамен сдан!':pct>=50?'⚠ Нужна практика':'✗ Повторите материал';
+  var passed=pct>=70;
+  var hero=document.getElementById('exHero');
+  // праздничный фон по результату
+  if(pct>=90){hero.style.background='linear-gradient(135deg,#6d5ef0,#8b5fe8 50%,#ec5f9b)';}
+  else if(passed){hero.style.background='linear-gradient(135deg,#12b886,#1dc99a)';}
+  else if(pct>=50){hero.style.background='linear-gradient(135deg,#f5a623,#f5872a)';}
+  else{hero.style.background='linear-gradient(135deg,#8a6d6d,#6b5050)';}
+  hero.style.border='none';
+  document.getElementById('exTrophy').textContent=pct>=90?'🏆':passed?'🎉':pct>=50?'💪':'📚';
+  document.getElementById('exHeroTitle').style.color='#fff';
+  document.getElementById('exHeroTitle').textContent=pct>=90?'Блестящий результат!':passed?'Экзамен сдан!':pct>=50?'Почти получилось':'Нужно повторить';
+  document.getElementById('exRpct').style.color='#fff';document.getElementById('exRpct').textContent=pct+'%';
+  document.getElementById('exRscoreN').textContent=score+'/'+EXP.length;
+  document.getElementById('exRscore').textContent='правильно';
+  // монеты: +10 за сдачу (как в saveExam, дневной лимит учитывается там)
+  document.getElementById('exRcoinN').textContent=passed?'+10':'+0';
+  document.getElementById('exRverd').textContent=pct>=90?'Ты в ударе сегодня 🔥':passed?'Так держать — серия растёт!':pct>=50?'Ещё чуть-чуть до проходного балла':'Загляни в карточки и тренажёр';
+  if(passed)launchConfetti();
   document.getElementById('exReview').innerHTML=EXP.map(function(q,i){var ans=EXA[q.id],ok=ans===q.a;return '<div style="padding:9px 0;border-bottom:1px solid var(--bor);display:flex;gap:9px"><span style="font-size:15px;flex-shrink:0">'+(ok?'✅':'❌')+'</span><div><div style="font-size:13px">'+(i+1)+'. '+q.q+'</div>'+(!ok?'<div style="font-size:12px;color:var(--gr);margin-top:2px">✓ '+q.o[q.a]+'</div>':'')+(ans!==undefined&&!ok?'<div style="font-size:12px;color:var(--re)">✗ '+q.o[ans]+'</div>':'')+'</div></div>';}).join('');
 }
 function exReset(){clearInterval(EXtmr);document.getElementById('exSetup').style.display='';document.getElementById('exRun').style.display='none';document.getElementById('exRes').style.display='none';}
@@ -3114,7 +3205,26 @@ function exReset(){clearInterval(EXtmr);document.getElementById('exSetup').style
 function renderProg(){
   renderAchievements();
   var QS=getQS();
-  document.getElementById('progS').innerHTML=Object.keys(SM).map(function(k){
+  // ===== БОЛЬШОЕ КОЛЬЦО ОБЩЕЙ ТОЧНОСТИ =====
+  var tA=0,tC=0,tSolved=0;
+  QS.forEach(function(q){var p=S.prog[q.id];if(p&&p.a>0){tA+=p.a;tC+=p.c;tSolved++;}});
+  var tAcc=tA?Math.round(tC/tA*100):0;
+  var tWrong=tA-tC;
+  var R=74,CIRC=Math.round(2*Math.PI*R);
+  var off=Math.round(CIRC*(1-tAcc/100));
+  var ringHtml='<div class="card" style="display:flex;gap:24px;align-items:center;margin-bottom:14px;flex-wrap:wrap">'
+    +'<div style="position:relative;width:170px;height:170px;flex-shrink:0;margin:0 auto">'
+      +'<svg width="170" height="170" viewBox="0 0 170 170" style="transform:rotate(-90deg)"><circle cx="85" cy="85" r="'+R+'" fill="none" stroke="var(--bg4)" stroke-width="14"/><circle cx="85" cy="85" r="'+R+'" fill="none" stroke="url(#vgRing)" stroke-width="14" stroke-linecap="round" stroke-dasharray="'+CIRC+'" stroke-dashoffset="'+off+'" style="transition:stroke-dashoffset 1s cubic-bezier(.22,1,.36,1)"/><defs><linearGradient id="vgRing" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#12b886"/><stop offset="1" stop-color="#6d5ef0"/></linearGradient></defs></svg>'
+      +'<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center"><div style="font-size:40px;font-weight:800;font-family:var(--fm);color:var(--tx);line-height:1">'+tAcc+'%</div><div style="font-size:12px;color:var(--tx3);margin-top:4px">точность</div></div>'
+    +'</div>'
+    +'<div style="display:flex;gap:14px;flex:1;min-width:240px;flex-wrap:wrap">'
+      +'<div style="flex:1;min-width:90px;text-align:center"><div style="font-size:24px;font-weight:800;font-family:var(--fm);color:var(--gr)">'+tC+'</div><div style="font-size:11px;color:var(--tx3);margin-top:3px">верно</div></div>'
+      +'<div style="flex:1;min-width:90px;text-align:center"><div style="font-size:24px;font-weight:800;font-family:var(--fm);color:var(--re)">'+tWrong+'</div><div style="font-size:11px;color:var(--tx3);margin-top:3px">ошибок</div></div>'
+      +'<div style="flex:1;min-width:90px;text-align:center"><div style="font-size:24px;font-weight:800;font-family:var(--fm);color:var(--bl)">'+tSolved+'</div><div style="font-size:11px;color:var(--tx3);margin-top:3px">вопросов</div></div>'
+      +'<div style="flex:1;min-width:90px;text-align:center"><div style="font-size:24px;font-weight:800;font-family:var(--fm);color:var(--am)">'+S.hist.length+'</div><div style="font-size:11px;color:var(--tx3);margin-top:3px">экзаменов</div></div>'
+    +'</div>'
+  +'</div>';
+  document.getElementById('progS').innerHTML=ringHtml+Object.keys(SM).map(function(k){
     var m=SM[k];var qs=QS.filter(function(q){return q.s===k;});
     var a=0,c=0;qs.forEach(function(q){a+=(S.prog[q.id]?S.prog[q.id].a:0);c+=(S.prog[q.id]?S.prog[q.id].c:0);});
     var done=qs.filter(function(q){return S.prog[q.id]&&S.prog[q.id].a>0;}).length;
@@ -3207,8 +3317,31 @@ function renderLBList(data){
   if(!ranked.length&&!notYet.length){lb.innerHTML='<p style="color:var(--tx3);font-size:13px">Пока нет участников</p>';return;}
   var medals=['🥇','🥈','🥉'];
   var html='<div class="alert ali" style="font-size:12px;margin-bottom:12px"><i class="ti ti-info-circle"></i> Балл = точность × объём. В рейтинг попадают решившие 50+ вопросов.</div>';
+  // ===== ПОДИУМ ТОП-3 =====
+  if(ranked.length>=3){
+    var podOrder=[1,0,2]; // 2-е, 1-е, 3-е визуально
+    html+='<div style="display:flex;align-items:flex-end;gap:14px;justify-content:center;margin-bottom:22px">';
+    podOrder.forEach(function(idx){
+      var e=ranked[idx]; if(!e)return;
+      var first=idx===0;
+      var medal=idx===0?'🥇':(idx===1?'🥈':'🥉');
+      var accent=idx===0?'var(--am)':(idx===1?'#9aa9c9':'#cd8a4a');
+      var cardBg=first?'linear-gradient(165deg,var(--amd),var(--bg2) 70%)':'var(--bg2)';
+      html+='<div onclick="viewProfile(\''+encodeURIComponent(e.email)+'\')" style="flex:1;max-width:'+(first?'250px':'220px')+';cursor:pointer;margin-top:'+(first?'0':'22px')+';background:'+cardBg+';border:1.5px solid '+(first?'var(--am)':'var(--bor)')+';border-radius:18px;padding:'+(first?'26px 18px 20px':'20px 16px')+';text-align:center;position:relative;box-shadow:'+(first?'0 16px 38px -16px rgba(245,166,35,.5)':'0 10px 26px -16px rgba(0,0,0,.4)')+'">'
+        +(first?'<div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:26px;filter:drop-shadow(0 3px 5px rgba(0,0,0,.3))">👑</div>':'')
+        +'<div style="font-size:'+(first?26:20)+'px;line-height:1;margin-bottom:10px">'+medal+'</div>'
+        +'<div style="display:flex;justify-content:center;margin-bottom:12px">'+renderAvatar(e,first?72:58)+'</div>'
+        +'<div style="font-size:'+(first?16:14)+'px;font-weight:800;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px">'+e.name+(e.isMe?' <span class="bdg bbl2">вы</span>':'')+'</div>'
+        +'<div style="font-size:11px;color:var(--tx3);margin-bottom:10px">'+e.acc+'% точность · '+e.solved+' решено</div>'
+        +'<div style="display:inline-flex;align-items:center;gap:5px;background:'+(first?'var(--bg2)':'var(--bg3)')+';border:1px solid '+accent+';border-radius:99px;padding:5px 14px"><span style="font-size:'+(first?20:17)+'px;font-weight:800;font-family:var(--fm);color:'+accent+'">'+e.score+'</span></div>'
+      +'</div>';
+    });
+    html+='</div>';
+  }
   if(ranked.length){
-    html+=ranked.map(function(e,i){
+    var listStart=ranked.length>=3?3:0;
+    html+=ranked.slice(listStart).map(function(e,i0){
+      var i=i0+listStart;
       var bg=lbRowBg(e);
       var txtCol=bg.hasBg?'#fff':'var(--tx)';
       var subCol=bg.hasBg?'rgba(255,255,255,.85)':'var(--tx3)';
@@ -3846,7 +3979,7 @@ async function admAnalytics(){
 async function admStats(){
   var QS=getQS();var us={active:0,pending:0,blocked:0};
   if(dbOK){try{var r=await sbGet('users','select=status');r.forEach(function(u){us[u.status]=(us[u.status]||0)+1;});}catch(e){}}
-  document.getElementById('admStats').innerHTML='<div class="cgrid">'+[{l:'Вопросов',v:QS.length},{l:'Физика',v:QS.filter(function(q){return q.s==='physics';}).length},{l:'Химия',v:QS.filter(function(q){return q.s==='chemistry';}).length},{l:'Биология',v:QS.filter(function(q){return q.s==='biology';}).length},{l:'Студентов',v:us.active||0},{l:'Ожидают',v:us.pending||0},{l:'Заблок.',v:us.blocked||0}].map(function(s){return '<div class="card"><div style="font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;font-weight:600">'+s.l+'</div><div style="font-size:26px;font-weight:700;font-family:var(--fm);margin-top:5px">'+s.v+'</div></div>';}).join('')+'</div><div style="font-size:13px;color:var(--tx2)">База: '+(dbOK?'<span style="color:var(--gr)">Supabase ✅</span>':'<span style="color:var(--am)">Локально ⚠</span>')+'</div>';
+  document.getElementById('admStats').innerHTML='<div class="cgrid">'+[{l:'Вопросов',v:QS.length,c:'var(--bl)'},{l:'Физика',v:QS.filter(function(q){return q.s==='physics';}).length,c:'#4d8df6'},{l:'Химия',v:QS.filter(function(q){return q.s==='chemistry';}).length,c:'var(--pu)'},{l:'Биология',v:QS.filter(function(q){return q.s==='biology';}).length,c:'var(--gr)'},{l:'Студентов',v:us.active||0,c:'var(--bl)'},{l:'Ожидают',v:us.pending||0,c:'var(--am)'},{l:'Заблок.',v:us.blocked||0,c:'var(--re)'}].map(function(s){return '<div class="card" style="text-align:center;padding:18px 14px"><div style="font-size:30px;font-weight:800;font-family:var(--fm);color:'+s.c+';line-height:1">'+s.v+'</div><div style="font-size:11px;color:var(--tx3);margin-top:6px;font-weight:500">'+s.l+'</div></div>';}).join('')+'</div><div style="font-size:13px;color:var(--tx2)">База: '+(dbOK?'<span style="color:var(--gr)">Supabase ✅</span>':'<span style="color:var(--am)">Локально ⚠</span>')+'</div>';
 }
 async function admPending(){
   var el=document.getElementById('admPending');el.innerHTML='<div style="color:var(--tx3);padding:10px">Загрузка...</div>';
