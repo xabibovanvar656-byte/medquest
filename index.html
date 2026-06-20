@@ -294,8 +294,10 @@ select option{background:var(--bg2)}
 /* мягкая тень под флеш-карточкой при наведении */
 .fcard:hover{box-shadow:0 20px 42px -24px rgba(60,40,120,.55)}
 /* Telegram Mini App: учёт системной шапки */
-[data-tg] .hdr{padding-top:calc(8px + env(safe-area-inset-top,0px))}
+[data-tg] .hdr{padding-top:calc(10px + env(safe-area-inset-top,0px))}
 [data-tg] body,[data-tg]{--tg-pad-top:env(safe-area-inset-top,0px)}
+/* Полноэкранный режим: отступ под статус-бар телефона (часы, батарея) */
+[data-tg-fs] .hdr{padding-top:calc(44px + env(safe-area-inset-top,0px))}
 </style>
 </head>
 <body>
@@ -692,6 +694,11 @@ function tgInit(){
       TG=window.Telegram.WebApp;
       TG.ready();
       TG.expand(); // на весь экран
+      // полноэкранный режим (минимальная шапка) — где поддерживается
+      try{
+        if(TG.requestFullscreen){TG.requestFullscreen();document.documentElement.setAttribute('data-tg-fs','1');}
+        if(TG.disableVerticalSwipes){TG.disableVerticalSwipes();} // чтобы свайп не сворачивал
+      }catch(e){}
       try{TG.setHeaderColor && TG.setHeaderColor('#17151f');}catch(e){}
       try{TG.setBackgroundColor && TG.setBackgroundColor('#17151f');}catch(e){}
       // данные пользователя Telegram
