@@ -748,24 +748,96 @@ function isTG(){return !!TG;}
 async function tgAutoLogin(){
   if(!TG_USER || S.user || !dbOK) return;
   try{
-    var tgEmail='tg_'+TG_USER.id+'@vita.app'; // виртуальный email на основе Telegram ID
-    // ищем пользователя
-    var ex=await sbGet('users','email=eq.'+encodeURIComponent(tgEmail)+'&select=email,name,group_name,avatar,frames,frame,coins,owned_items,profile_bg,private_profile,status,role');
-    if(ex && ex.length){
-      var u=ex[0];
-      if(u.status==='blocked'){return;} // заблокирован — обычный вход
-      S.user={name:u.name,email:u.email,group:u.group_name||'',avatar:u.avatar||'',frames:u.frames||'',frame:u.frame||'',coins:u.coins||0,owned_items:u.owned_items||'',profile_bg:u.profile_bg||'',private_profile:u.private_profile||false};
+    var tgId=String(TG_USER.id);
+    // 1. Ищем аккаунт уже привязанный к этому Telegram
+    var found=null;
+    try{var r=await sbRpc('find_by_tg',{p_tg_id:tgId});if(r&&r.length)found=r[0];}catch(e){}
+    if(found){
+      if(found.status==='blocked'||found.status==='rejected')return;
+      S.user={name:found.name,email:found.email,group:found.group_name||'',avatar:found.avatar||'',frames:found.frames||'',frame:found.frame||'',coins:found.coins||0,owned_items:found.owned_items||'',profile_bg:found.profile_bg||'',private_profile:found.private_profile||false};
       sv();
-      // сохранить Telegram chat_id чтобы бот мог слать уведомления
-      try{await sbPatch('users','email=eq.'+encodeURIComponent(tgEmail),{tg_chat_id:String(TG_USER.id)});}catch(e){}
-    }else{
-      // создаём нового — но спросим группу позже, пока пустая
-      var newU={email:tgEmail,name:TG_USER.name,group_name:'',status:'active',coins:0,role:'student',tg_chat_id:String(TG_USER.id)};
-      try{await sbPost('users',newU);}catch(e){}
-      S.user={name:TG_USER.name,email:tgEmail,group:'',avatar:'',frames:'',frame:'',coins:0,owned_items:'',profile_bg:''};
-      sv();
+      // обновим chat_id
+      try{await sbPatch('users','tg_id=eq.'+encodeURIComponent(tgId),{tg_chat_id:tgId});}catch(e){}
+      return;
     }
+    // 2. Не привязан — показываем выбор «есть аккаунт?»
+    tgShowLinkChoice();
   }catch(e){}
+}
+// Выбор при первом входе через Telegram
+function tgShowLinkChoice(){
+  var body='<div style="text-align:center;margin-bottom:18px"><div style="font-size:40px;margin-bottom:8px">👋</div>'
+    +'<div style="font-size:16px;font-weight:700">Добро пожаловать в Vita!</div>'
+    +'<div style="font-size:13px;color:var(--tx2);margin-top:6px">У тебя уже есть аккаунт на сайте Vita?</div></div>'
+    +'<button class="btn bbl" onclick="tgLinkExisting()" style="width:100%;margin-bottom:10px">✅ Да, войти и привязать Telegram</button>'
+    +'<button class="btn bgh" onclick="tgCreateNew()" style="width:100%">🆕 Нет, создать новый аккаунт</button>';
+  showModal('Вход через Telegram',body);
+  // нельзя закрыть просто так — убираем крестик на этом шаге
+  var mc=document.querySelector('#modal .mclose');if(mc)mc.style.display='none';
+}
+// Привязать к существующему аккаунту
+function tgLinkExisting(){
+  var body='<div style="font-size:13px;color:var(--tx2);margin-bottom:14px">Войди в свой аккаунт — и Telegram привяжется к нему. Дальше будешь входить автоматически.</div>'
+    +'<div class="fg"><label class="fl">Email</label><input id="tgLEm" type="email" placeholder="твой email"></div>'
+    +'<div class="fg"><label class="fl">Пароль</label><input id="tgLPw" type="password" placeholder="твой пароль"></div>'
+    +'<p id="tgLErr" class="ferr"></p>'
+    +'<button class="btn bbl" onclick="tgDoLink()" style="width:100%;margin-bottom:8px">Войти и привязать</button>'
+    +'<button class="btn bgh bsm" onclick="tgShowLinkChoice()" style="width:100%">← Назад</button>';
+  showModal('Вход в аккаунт',body);
+}
+async function tgDoLink(){
+  var email=val('tgLEm'),pass=val('tgLPw');
+  var errEl=document.getElementById('tgLErr');
+  if(!email||!pass){if(errEl){errEl.textContent='Введите email и пароль';errEl.style.display='block';}return;}
+  var btn=document.querySelector('#mdBody .btn');btn.disabled=true;btn.textContent='Привязка...';
+  try{
+    var res=await sbRpc('link_telegram',{p_email:email,p_password:pass,p_tg_id:String(TG_USER.id),p_chat_id:String(TG_USER.id)});
+    if(!res||!res.length){if(errEl){errEl.textContent='❌ Неверный email или пароль';errEl.style.display='block';}btn.disabled=false;btn.textContent='Войти и привязать';return;}
+    var u=res[0];
+    if(u.status==='blocked'){if(errEl){errEl.textContent='🚫 Аккаунт заблокирован';errEl.style.display='block';}btn.disabled=false;return;}
+    S.user={name:u.name,email:u.email,group:u.group_name||'',avatar:u.avatar||'',frames:u.frames||'',frame:u.frame||'',coins:u.coins||0,owned_items:u.owned_items||'',profile_bg:u.profile_bg||'',private_profile:u.private_profile||false};
+    sv();closeModal();renderAuthHdr();
+    await loadProg();renderHome();
+    showAlert('hAlert','alok','ti-check','✅ Telegram привязан! Теперь входишь автоматически.',6000);
+  }catch(e){if(errEl){errEl.textContent='Ошибка: '+e.message;errEl.style.display='block';}btn.disabled=false;btn.textContent='Войти и привязать';}
+}
+// Создать новый аккаунт через Telegram
+async function tgCreateNew(){
+  try{
+    var tgEmail='tg_'+TG_USER.id+'@vita.app';
+    var newU={email:tgEmail,name:TG_USER.name,group_name:'',status:'active',coins:0,role:'student',tg_id:String(TG_USER.id),tg_chat_id:String(TG_USER.id)};
+    try{await sbPost('users',newU);}catch(e){}
+    S.user={name:TG_USER.name,email:tgEmail,group:'',avatar:'',frames:'',frame:'',coins:0,owned_items:'',profile_bg:''};
+    sv();closeModal();renderAuthHdr();
+    await loadProg();renderHome();
+    // предложить задать email+пароль для входа с сайта
+    setTimeout(tgOfferCredentials,1500);
+  }catch(e){}
+}
+// Предложить задать email/пароль (чтобы входить и с сайта)
+function tgOfferCredentials(){
+  var body='<div style="text-align:center;margin-bottom:16px"><div style="font-size:36px;margin-bottom:6px">🔗</div>'
+    +'<div style="font-size:15px;font-weight:700">Хочешь входить и с сайта?</div>'
+    +'<div style="font-size:13px;color:var(--tx2);margin-top:6px">Задай email и пароль — сможешь заходить в Vita не только через Telegram. Можно пропустить и сделать позже в профиле.</div></div>'
+    +'<div class="fg"><label class="fl">Email</label><input id="tgCEm" type="email" placeholder="твой email"></div>'
+    +'<div class="fg"><label class="fl">Пароль</label><input id="tgCPw" type="password" placeholder="придумай пароль"></div>'
+    +'<p id="tgCErr" class="ferr"></p>'
+    +'<button class="btn bbl" onclick="tgSaveCredentials()" style="width:100%;margin-bottom:8px">Сохранить</button>'
+    +'<button class="btn bgh bsm" onclick="closeModal()" style="width:100%">Пропустить</button>';
+  showModal('Вход с сайта (необязательно)',body);
+}
+async function tgSaveCredentials(){
+  var email=val('tgCEm'),pass=val('tgCPw');
+  var errEl=document.getElementById('tgCErr');
+  if(!email||!pass){if(errEl){errEl.textContent='Введите email и пароль';errEl.style.display='block';}return;}
+  var btn=document.querySelector('#mdBody .btn');btn.disabled=true;btn.textContent='Сохранение...';
+  try{
+    var res=await sbRpc('set_credentials',{p_old_email:S.user.email,p_new_email:email,p_password:pass});
+    if(res==='email_taken'){if(errEl){errEl.textContent='❌ Этот email уже занят';errEl.style.display='block';}btn.disabled=false;btn.textContent='Сохранить';return;}
+    S.user.email=email;sv();
+    closeModal();
+    showAlert('hAlert','alok','ti-check','✅ Готово! Теперь можешь входить с сайта по этому email и паролю.',6000);
+  }catch(e){if(errEl){errEl.textContent='Ошибка: '+e.message;errEl.style.display='block';}btn.disabled=false;btn.textContent='Сохранить';}
 }
 
 async function init(){
@@ -841,6 +913,8 @@ async function loadProg(){
     // Подтягиваем СВЕЖИЕ данные пользователя из базы (монеты, предметы, рамки — могли измениться)
     var chk=await sbGet('users','email=eq.'+encodeURIComponent(S.user.email)+'&select=email,name,group_name,avatar,frames,frame,coins,owned_items,profile_bg,private_profile,hidden_from_lb,bonus_score,status,role');
     if(!chk.length){
+      // Telegram-юзер мог только что создаться — не удаляем сразу
+      if(S.user.email&&S.user.email.indexOf('tg_')===0){return;}
       alert('Ваш аккаунт был удалён администратором.');
       S.user=null;S.hist=[];S.prog={};sv();renderAuthHdr();renderHome();return;
     }
@@ -1128,6 +1202,10 @@ async function doAuth(){
       }
       S.user={name:user?user.name:email,email:email,group:user?user.group_name:'',avatar:user?(user.avatar||''):'',frames:user?(user.frames||''):'',frame:user?(user.frame||''):'',coins:user?(user.coins||0):0,owned_items:user?(user.owned_items||''):'',profile_bg:user?(user.profile_bg||''):'',private_profile:user?(user.private_profile||false):false};
       sv();closeModal();renderAuthHdr();
+      // если вошёл с сайта внутри Telegram — привяжем Telegram к аккаунту
+      if(typeof isTG==='function'&&isTG()&&TG_USER&&email.indexOf('tg_')!==0){
+        try{await sbPatch('users','email=eq.'+encodeURIComponent(email),{tg_id:String(TG_USER.id),tg_chat_id:String(TG_USER.id)});}catch(e){}
+      }
       pushActivity('вошёл');
       await loadProg();renderHome();
     }catch(e){showErr('Ошибка: '+e.message);btn.disabled=false;btn.textContent='Войти';}
@@ -2402,6 +2480,7 @@ async function renderProfile(){
     +'</div>'
     +'<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn bbl bsm" onclick="go(\'shop\')"><i class="ti ti-shopping-cart"></i> Магазин</button>'
     +'<button class="btn bgh bsm" onclick="profTogglePrivacy()">'+(me.private_profile?'<i class="ti ti-lock"></i> Профиль закрыт':'<i class="ti ti-lock-open"></i> Профиль открыт')+'</button></div>'
+    +profLinkSection()
     +(S.isAdm?'<button class="btn bgh bsm" onclick="go(\'admin\')" style="margin-top:10px"><i class="ti ti-shield-lock"></i> Панель администратора</button>':'')
     +'<div style="margin-top:10px"><button class="btn bgh bsm" onclick="doLogout()" style="color:var(--re)"><i class="ti ti-logout"></i> Выйти</button></div>'
     +'</div></div>';
@@ -2513,6 +2592,28 @@ async function viewProfile(emailEnc){
       }
     }
   }catch(e){document.getElementById('mdBody').innerHTML='<p style="color:var(--re)">Ошибка загрузки</p>';}
+}
+// Раздел привязки аккаунта в профиле
+function profLinkSection(){
+  if(!S.user)return '';
+  var isTgAccount=S.user.email&&S.user.email.indexOf('tg_')===0;
+  var html='';
+  if(isTgAccount){
+    // TG-аккаунт без email/пароля — предложить задать для входа с сайта
+    html='<div style="margin-top:10px"><button class="btn bgh bsm" onclick="tgOfferCredentials()" style="color:var(--bl)"><i class="ti ti-link"></i> Добавить email и пароль (вход с сайта)</button></div>';
+  }else if(typeof isTG==='function'&&isTG()&&TG_USER){
+    // сайтовый аккаунт открыт в Telegram, но Telegram не привязан — привязать
+    html='<div style="margin-top:10px"><button class="btn bgh bsm" onclick="profLinkTelegram()" style="color:var(--bl)"><i class="ti ti-brand-telegram"></i> Привязать этот Telegram</button></div>';
+  }
+  return html;
+}
+async function profLinkTelegram(){
+  if(!TG_USER){alert('Открой через Telegram чтобы привязать');return;}
+  try{
+    await sbPatch('users','email=eq.'+encodeURIComponent(S.user.email),{tg_id:String(TG_USER.id),tg_chat_id:String(TG_USER.id)});
+    showAlert('hAlert','alok','ti-check','✅ Telegram привязан! Теперь вход автоматический и придут уведомления.',6000);
+    renderProfile();
+  }catch(e){alert('Ошибка: '+e.message);}
 }
 async function profTogglePrivacy(){
   var now=S.user.private_profile||false;
@@ -4069,6 +4170,10 @@ async function admAnalytics(){
     if(webPct>0)srcHtml+='<div style="width:'+webPct+'%;background:linear-gradient(90deg,#12b886,#1cc28e);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700">'+(webPct>=12?'🌐 '+webPct+'%':'')+'</div>';
     srcHtml+='</div></div>';
     // кто откуда (список последних)
+    // Сколько студентов подключены к боту (есть tg_chat_id)
+    var tgConnected=[];
+    try{tgConnected=await sbGet('users','tg_chat_id=neq.&select=email');}catch(e){}
+    srcHtml+='<div class="card" style="padding:14px;margin-bottom:16px;border:1px solid var(--bl)"><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px"><div><div style="font-size:13px;font-weight:600">🔔 Подключены к боту: '+tgConnected.length+'</div><div style="font-size:11px;color:var(--tx3)">Столько студентов получат уведомления в Telegram</div></div><button class="btn bbl bsm" onclick="admTestNotify()">Отправить тест</button></div></div>';
     srcHtml+='<div class="nlbl" style="margin-bottom:10px">Кто откуда заходит</div>';
     srcHtml+='<div style="max-height:280px;overflow-y:auto;margin-bottom:20px">';
     srcHtml+=acts.slice(0,50).map(function(a){
