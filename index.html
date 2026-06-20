@@ -624,6 +624,12 @@ var SB_URL='https://ryswcwqyiopcqxkbgwng.supabase.co';
 var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ5c3djd3F5aW9wY3F4a2Jnd25nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzMTEwMzgsImV4cCI6MjA5NTg4NzAzOH0.j5l-V5suO1P076HvQxkI6z9UpMkM1_QDhGKihB0Et8c';
 
 var SBH={apikey:SB_KEY,Authorization:'Bearer '+SB_KEY,'Content-Type':'application/json',Prefer:'return=representation'};
+// Вызов защищённой функции Supabase (RPC)
+async function sbRpc(fn,params){
+  var r=await fetch(SB_URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:SBH,body:JSON.stringify(params||{})});
+  if(!r.ok)throw new Error('rpc '+fn+' failed');
+  return await r.json();
+}
 function sbFetch(method,table,filter,body){
   var url=SB_URL+'/rest/v1/'+table+(filter?'?'+filter:'');
   var opts={method:method,headers:SBH};
@@ -744,7 +750,7 @@ async function tgAutoLogin(){
   try{
     var tgEmail='tg_'+TG_USER.id+'@vita.app'; // виртуальный email на основе Telegram ID
     // ищем пользователя
-    var ex=await sbGet('users','email=eq.'+encodeURIComponent(tgEmail)+'&select=*');
+    var ex=await sbGet('users','email=eq.'+encodeURIComponent(tgEmail)+'&select=email,name,group_name,avatar,frames,frame,coins,owned_items,profile_bg,private_profile,status,role');
     if(ex && ex.length){
       var u=ex[0];
       if(u.status==='blocked'){return;} // заблокирован — обычный вход
@@ -831,7 +837,7 @@ async function loadProg(){
   if(!dbOK||!S.user)return;
   try{
     // Подтягиваем СВЕЖИЕ данные пользователя из базы (монеты, предметы, рамки — могли измениться)
-    var chk=await sbGet('users','email=eq.'+encodeURIComponent(S.user.email)+'&select=*');
+    var chk=await sbGet('users','email=eq.'+encodeURIComponent(S.user.email)+'&select=email,name,group_name,avatar,frames,frame,coins,owned_items,profile_bg,private_profile,hidden_from_lb,bonus_score,status,role');
     if(!chk.length){
       alert('Ваш аккаунт был удалён администратором.');
       S.user=null;S.hist=[];S.prog={};sv();renderAuthHdr();renderHome();return;
@@ -1084,12 +1090,20 @@ async function doAuth(){
     btn.disabled=true;btn.textContent='Отправка...';
     try{
       if(dbOK){
-        var ex=await sbGet('users','email=eq.'+encodeURIComponent(email)+'&select=email');
-        if(ex.length>0){showErr('Email уже зарегистрирован');btn.disabled=false;btn.textContent='Отправить заявку';return;}
+        // проверка занятости email через защищённую функцию
+        var ex=null;
+        try{var ee=await sbRpc('check_email_exists',{p_email:email});ex=(ee&&ee.length)?ee[0].status:null;}catch(e){}
+        if(ex!==null){
+          var msg='❌ Этот email уже зарегистрирован.';
+          if(ex==='pending')msg='⏳ С этого email уже отправлена заявка. Дождитесь одобрения.';
+          else if(ex==='rejected')msg='🚫 Заявка с этого email была отклонена.';
+          else if(ex==='active')msg='✅ Этот email уже зарегистрирован. Просто войдите.';
+          showErr(msg);btn.disabled=false;btn.textContent='Отправить заявку';return;
+        }
         await sbPost('users',{email:email,name:name,group_name:group,password:pass,status:'pending',joined:new Date().toLocaleDateString('ru-RU')});
       }
       closeModal();
-      showAlert('hAlert','alw','ti-clock','Заявка отправлена! Ожидайте подтверждения.',8000);
+      showAlert('hAlert','alw','ti-clock','✅ Заявка отправлена! Ожидайте одобрения администратором. Вы пока НЕ вошли — войдёте после одобрения.',9000);
       updPendBadge();
     }catch(e){showErr('Ошибка: '+e.message);btn.disabled=false;btn.textContent='Отправить заявку';}
   }else{
@@ -1098,13 +1112,19 @@ async function doAuth(){
     try{
       var user=null;
       if(dbOK){
-        var rows=await sbGet('users','email=eq.'+encodeURIComponent(email)+'&select=*');
-        if(!rows.length||rows[0].password!==pass){showErr('Неверный email или пароль');btn.disabled=false;btn.textContent='Войти';return;}
-        user=rows[0];
-        if(user.status==='pending'){showErr('Заявка ещё не одобрена');btn.disabled=false;btn.textContent='Войти';return;}
-        if(user.status==='blocked'){showErr('Аккаунт заблокирован');btn.disabled=false;btn.textContent='Войти';return;}
+        // сначала проверим есть ли вообще такой email и его статус
+        var st=null;
+        try{var se=await sbRpc('check_email_exists',{p_email:email});st=(se&&se.length)?se[0].status:null;}catch(e){}
+        if(st===null){showErr('❌ Этот email не зарегистрирован. Сначала отправьте заявку.');btn.disabled=false;btn.textContent='Войти';return;}
+        if(st==='pending'){showErr('⏳ Ваша заявка ещё на рассмотрении. Дождитесь одобрения администратором.');btn.disabled=false;btn.textContent='Войти';return;}
+        if(st==='rejected'){showErr('🚫 Вам отказано в доступе. Заявка отклонена администратором.');btn.disabled=false;btn.textContent='Войти';return;}
+        if(st==='blocked'){showErr('🚫 Ваш аккаунт заблокирован администратором.');btn.disabled=false;btn.textContent='Войти';return;}
+        // email есть и активен — проверяем пароль через защищённую функцию
+        var res=await sbRpc('check_user_login',{p_email:email,p_password:pass});
+        if(!res||!res.length){showErr('❌ Неверный пароль. Проверьте правильность ввода.');btn.disabled=false;btn.textContent='Войти';return;}
+        user=res[0];
       }
-      S.user={name:user?user.name:email,email:email,group:user?user.group_name:'',avatar:user?(user.avatar||''):'',frames:user?(user.frames||''):'',frame:user?(user.frame||''):'',coins:user?(user.coins||0):0,owned_items:user?(user.owned_items||''):'',profile_bg:user?(user.profile_bg||''):''};
+      S.user={name:user?user.name:email,email:email,group:user?user.group_name:'',avatar:user?(user.avatar||''):'',frames:user?(user.frames||''):'',frame:user?(user.frame||''):'',coins:user?(user.coins||0):0,owned_items:user?(user.owned_items||''):'',profile_bg:user?(user.profile_bg||''):'',private_profile:user?(user.private_profile||false):false};
       sv();closeModal();renderAuthHdr();
       pushActivity('вошёл');
       await loadProg();renderHome();
@@ -4074,7 +4094,10 @@ async function admPending(){
 async function admApprove(email){try{await sbPatch('users','email=eq.'+encodeURIComponent(email),{status:'active'});admPending();}catch(e){alert('Ошибка: '+e.message);}}
 async function admReject(email,name){
   if(S.isSuper){
-    if(confirm('Удалить заявку '+email+'?')){try{await sbDel('users','email=eq.'+encodeURIComponent(email));admPending();}catch(e){alert(e.message);}}
+    // отклонить с пометкой (человек увидит "вам отказано"), не удаляя
+    if(confirm('Отклонить заявку '+email+'?\n\nOK = отклонить (студент увидит «вам отказано»)\nОтмена = ничего не делать')){
+      try{await sbPatch('users','email=eq.'+encodeURIComponent(email),{status:'rejected'});admPending();}catch(e){alert(e.message);}
+    }
   }else{
     if(confirm('Отправить запрос на отклонение заявки '+email+' главному админу?')){
       try{await sbPost('pending_actions',{action:'reject',target_email:email,target_name:name||email,requested_by:S.adminEmail});alert('Запрос отправлен главному админу на подтверждение.');}catch(e){alert(e.message);}
