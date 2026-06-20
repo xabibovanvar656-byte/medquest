@@ -42,7 +42,7 @@ input,select,textarea{background:var(--bg3);border:1px solid var(--bor);border-r
 input:focus,select:focus,textarea:focus{border-color:var(--bl)}
 select option{background:var(--bg2)}
 .fg{margin-bottom:12px}.fl{font-size:11px;font-weight:600;color:var(--tx2);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
-.ferr{color:var(--re);font-size:12px;margin-top:4px;display:none}
+.ferr{color:var(--re);font-size:13px;margin-top:10px;display:none;background:var(--red);border:1px solid var(--re);border-radius:10px;padding:10px 12px;line-height:1.45;font-weight:500}
 .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;overflow-x:auto;padding-bottom:2px}
 .tab{padding:8px 15px;border:1px solid var(--bor);border-radius:99px;background:var(--bg2);color:var(--tx2);font-size:13px;cursor:pointer;font-family:var(--f);white-space:nowrap;transition:all .18s}
 .tab:hover{color:var(--tx);border-color:var(--bor2)}.tab.on{color:#fff;background:linear-gradient(135deg,var(--bl2),var(--bl));border-color:transparent;font-weight:600;box-shadow:0 6px 14px -7px rgba(109,94,240,.8)}
@@ -1076,7 +1076,7 @@ function closeModal(){
   document.getElementById('modal').style.display='none';
   var mb=document.querySelector('#modal .modalBg');if(mb)mb.remove();
 }
-function showErr(msg){var e=document.getElementById('mErr');if(e){e.textContent=msg;e.style.display='';}}
+function showErr(msg){var e=document.getElementById('mErr');if(e){e.textContent=msg;e.style.display='block';}else{alert(msg);}}
 var mmode='login';
 
 async function doAuth(){
