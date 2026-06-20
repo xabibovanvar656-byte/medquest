@@ -297,7 +297,13 @@ select option{background:var(--bg2)}
 [data-tg] .hdr{padding-top:calc(10px + env(safe-area-inset-top,0px))}
 [data-tg] body,[data-tg]{--tg-pad-top:env(safe-area-inset-top,0px)}
 /* Полноэкранный режим: отступ под статус-бар телефона (часы, батарея) */
-[data-tg-fs] .hdr{padding-top:calc(var(--tg-top, 56px) + 8px)}
+/* Telegram fullscreen: шапку скрываем (есть нижнее меню), контент под кнопки Telegram */
+[data-tg-fs] .hdr{display:none}
+[data-tg-fs] .main{padding-top:calc(var(--tg-top, 50px) + 10px)}
+/* Плавающая кнопка темы в Telegram (вместо скрытой шапки) */
+#tgThemeBtn{display:none}
+[data-tg-fs] #tgThemeBtn{display:flex;position:fixed;top:calc(var(--tg-top, 50px) + 6px);right:14px;z-index:200;width:34px;height:34px;border-radius:50%;background:rgba(40,37,55,.7);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1);align-items:center;justify-content:center;color:var(--tx);cursor:pointer;font-size:17px}
+[data-light][data-tg-fs] #tgThemeBtn{background:rgba(255,255,255,.7);border-color:rgba(0,0,0,.08)}
 </style>
 </head>
 <body>
@@ -315,6 +321,7 @@ select option{background:var(--bg2)}
   <button class="hib" onclick="toggleTheme()" title="Тема"><i class="ti ti-moon" id="thic"></i></button>
   <div id="authhdr"></div>
 </header>
+<button id="tgThemeBtn" onclick="toggleTheme()" title="Тема"><i class="ti ti-moon" id="thic2"></i></button>
 <div class="layout">
 <nav class="sidebar">
   <div style="padding:4px 0">
@@ -679,6 +686,7 @@ function applyTheme(d){
   if(d)document.documentElement.removeAttribute('data-light');
   else document.documentElement.setAttribute('data-light','');
   document.getElementById('thic').className=d?'ti ti-moon':'ti ti-sun';
+  var t2=document.getElementById('thic2');if(t2)t2.className=d?'ti ti-moon':'ti ti-sun';
 }
 function toggleTheme(){S.dark=!S.dark;applyTheme(S.dark);sv();}
 applyTheme(S.dark);
