@@ -756,9 +756,11 @@ async function tgAutoLogin(){
       if(u.status==='blocked'){return;} // заблокирован — обычный вход
       S.user={name:u.name,email:u.email,group:u.group_name||'',avatar:u.avatar||'',frames:u.frames||'',frame:u.frame||'',coins:u.coins||0,owned_items:u.owned_items||'',profile_bg:u.profile_bg||'',private_profile:u.private_profile||false};
       sv();
+      // сохранить Telegram chat_id чтобы бот мог слать уведомления
+      try{await sbPatch('users','email=eq.'+encodeURIComponent(tgEmail),{tg_chat_id:String(TG_USER.id)});}catch(e){}
     }else{
       // создаём нового — но спросим группу позже, пока пустая
-      var newU={email:tgEmail,name:TG_USER.name,group_name:'',status:'active',coins:0,role:'student'};
+      var newU={email:tgEmail,name:TG_USER.name,group_name:'',status:'active',coins:0,role:'student',tg_chat_id:String(TG_USER.id)};
       try{await sbPost('users',newU);}catch(e){}
       S.user={name:TG_USER.name,email:tgEmail,group:'',avatar:'',frames:'',frame:'',coins:0,owned_items:'',profile_bg:''};
       sv();
@@ -1894,6 +1896,13 @@ function duelChTopics(){
 }
 function duelCntUpd(){document.getElementById('duelCntL').textContent=document.getElementById('duelCnt').value;}
 function duelTimeUpd(){document.getElementById('duelTimeL').textContent=document.getElementById('duelTime').value;}
+// Добавить уведомление в очередь (бот разошлёт в Telegram)
+async function notifyTelegram(title,body,kind,group,email){
+  if(!dbOK)return;
+  try{
+    await sbPost('notifications_queue',{title:title,body:body||'',kind:kind||'info',target_group:group||'',target_email:email||'',sent:false});
+  }catch(e){}
+}
 async function duelSendChallenge(){
   var oppVal=document.getElementById('duelOpp').value;
   var opp=oppVal.split('|');
@@ -1914,6 +1923,7 @@ async function duelSendChallenge(){
       time_limit:timeLimit,stake:stake,
       questions_json:JSON.stringify(picked)
     });
+    await notifyTelegram('⚔️ Тебя вызвали на дуэль!',S.user.name+' бросил тебе вызов в Vita. Прими бой!','duel','',opp[0]);
     closeModal();
     alert('Вызов отправлен! У соперника 5 минут чтобы принять.');
     duelCheckState();
@@ -4014,6 +4024,7 @@ async function admAddItem(){
   var id='ci_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
   try{
     await sbPost('custom_items',{id:id,type:type,name:name,image_url:url,price:price,rarity:rarity});
+    await notifyTelegram('🛍️ Новинка в магазине','«'+name+'» уже доступен за '+price+' 🪙. Загляни в магазин Vita!','shop','');
     alert('Товар добавлен в магазин! 🎉');
     admItems();
   }catch(e){alert('Ошибка: '+e.message);}
@@ -4878,6 +4889,7 @@ async function admSavePoll(){
   var id='poll_'+Date.now();
   try{
     await sbPost('polls',{id:id,question:q,options:opts.join('|'),multi:multi});
+    await notifyTelegram('📊 Новый опрос','«'+q+'» — загляни в Vita и проголосуй!','poll','');
     alert('Опрос создан! 📊');
     closeModal();
     admNewsEdit();
@@ -4905,7 +4917,7 @@ async function admSaveNews(){
   var title=val('nnT'),body=val('nnB');var pinned=document.getElementById('nnP')?document.getElementById('nnP').checked:false;
   if(!title||!body){showErr('Заполните все поля');return;}
   var btn=document.querySelector('#mdBody .btn');btn.disabled=true;btn.textContent='Публикация...';
-  try{var d=new Date().toLocaleDateString('ru-RU');if(dbOK)await sbPost('news',{title:title,body:body,pinned:pinned,news_date:d});else newsCache.unshift({id:Date.now(),title:title,body:body,pinned:pinned,news_date:d});closeModal();admNewsEdit();}
+  try{var d=new Date().toLocaleDateString('ru-RU');if(dbOK){await sbPost('news',{title:title,body:body,pinned:pinned,news_date:d});await notifyTelegram('📰 '+title,body,'news','');}else newsCache.unshift({id:Date.now(),title:title,body:body,pinned:pinned,news_date:d});closeModal();admNewsEdit();}
   catch(e){showErr('Ошибка: '+e.message);btn.disabled=false;btn.textContent='Опубликовать';}
 }
 async function admEditNewsM(id){
