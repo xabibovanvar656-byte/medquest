@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Vita</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.10.0/dist/tabler-icons.min.css">
 <style>
@@ -292,6 +293,9 @@ select option{background:var(--bg2)}
 @keyframes vHue{0%,100%{filter:hue-rotate(0deg)}50%{filter:hue-rotate(20deg)}}
 /* мягкая тень под флеш-карточкой при наведении */
 .fcard:hover{box-shadow:0 20px 42px -24px rgba(60,40,120,.55)}
+/* Telegram Mini App: учёт системной шапки */
+[data-tg] .hdr{padding-top:calc(8px + env(safe-area-inset-top,0px))}
+[data-tg] body,[data-tg]{--tg-pad-top:env(safe-area-inset-top,0px)}
 </style>
 </head>
 <body>
@@ -680,7 +684,54 @@ applyTheme(S.dark);
 function hideLdg(){var l=document.getElementById('ldg');if(l)l.style.display='none';}
 setTimeout(hideLdg,6000);
 
+// ===== TELEGRAM MINI APP =====
+var TG=null, TG_USER=null;
+function tgInit(){
+  try{
+    if(window.Telegram && window.Telegram.WebApp){
+      TG=window.Telegram.WebApp;
+      TG.ready();
+      TG.expand(); // на весь экран
+      try{TG.setHeaderColor && TG.setHeaderColor('#17151f');}catch(e){}
+      try{TG.setBackgroundColor && TG.setBackgroundColor('#17151f');}catch(e){}
+      // данные пользователя Telegram
+      var u=TG.initDataUnsafe && TG.initDataUnsafe.user;
+      if(u){
+        TG_USER={
+          id:u.id,
+          name:[u.first_name,u.last_name].filter(Boolean).join(' ')||u.username||('user'+u.id),
+          username:u.username||''
+        };
+      }
+      document.documentElement.setAttribute('data-tg','1');
+    }
+  }catch(e){}
+}
+function isTG(){return !!TG;}
+// Авто-вход через Telegram (если в Telegram и ещё не вошёл)
+async function tgAutoLogin(){
+  if(!TG_USER || S.user || !dbOK) return;
+  try{
+    var tgEmail='tg_'+TG_USER.id+'@vita.app'; // виртуальный email на основе Telegram ID
+    // ищем пользователя
+    var ex=await sbGet('users','email=eq.'+encodeURIComponent(tgEmail)+'&select=*');
+    if(ex && ex.length){
+      var u=ex[0];
+      if(u.status==='blocked'){return;} // заблокирован — обычный вход
+      S.user={name:u.name,email:u.email,group:u.group_name||'',avatar:u.avatar||'',frames:u.frames||'',frame:u.frame||'',coins:u.coins||0,owned_items:u.owned_items||'',profile_bg:u.profile_bg||'',private_profile:u.private_profile||false};
+      sv();
+    }else{
+      // создаём нового — но спросим группу позже, пока пустая
+      var newU={email:tgEmail,name:TG_USER.name,group_name:'',status:'active',coins:0,role:'student'};
+      try{await sbPost('users',newU);}catch(e){}
+      S.user={name:TG_USER.name,email:tgEmail,group:'',avatar:'',frames:'',frame:'',coins:0,owned_items:'',profile_bg:''};
+      sv();
+    }
+  }catch(e){}
+}
+
 async function init(){
+  tgInit();
   newsCache=[
     {id:1,title:'Vita запущен! 🚀',body:'545 вопросов по физике, химии и биологии.',pinned:true,news_date:'01.06.2026'},
     {id:2,title:'Как пользоваться',body:'Карточки → Тренажёр → Экзамен. Начните с карточек.',pinned:false,news_date:'01.06.2026'}
@@ -710,6 +761,8 @@ async function init(){
     dbOK=false;
     document.getElementById('dbst').innerHTML='<span style="color:#f5a623">● Локально</span>';
   }
+  // авто-вход через Telegram (если открыто в Telegram и не вошёл)
+  if(TG_USER && !S.user){try{await tgAutoLogin();}catch(e){}}
   hideLdg();
   try{renderHome();}catch(e){console.error('renderHome:',e);}
   try{renderAuthHdr();}catch(e){console.error('renderAuthHdr:',e);}
