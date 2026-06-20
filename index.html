@@ -299,6 +299,10 @@ select option{background:var(--bg2)}
 /* Полноэкранный режим: отступ под статус-бар телефона (часы, батарея) */
 /* Telegram fullscreen: шапку скрываем (есть нижнее меню), контент под кнопки Telegram */
 [data-tg-fs] .hdr{display:none}
+/* В Telegram всегда нижний навбар (на планшете/компе тоже), sidebar скрыт */
+[data-tg] .bottomnav{display:flex !important}
+[data-tg] .sidebar{display:none !important}
+[data-tg] .main{padding-bottom:175px}
 [data-tg-fs] .main{padding-top:calc(var(--tg-top, 50px) + 10px)}
 /* Плавающая кнопка темы в Telegram (вместо скрытой шапки) */
 #tgThemeBtn{display:none}
@@ -740,10 +744,28 @@ function tgInit(){
         };
       }
       document.documentElement.setAttribute('data-tg','1');
+      // стартовый параметр (например duel_123 — открыть конкретную дуэль)
+      try{
+        var sp=TG.initDataUnsafe && TG.initDataUnsafe.start_param;
+        if(sp)TG_START_PARAM=sp;
+      }catch(e){}
     }
   }catch(e){}
 }
+var TG_START_PARAM='';
 function isTG(){return !!TG;}
+// Обработать стартовый параметр после загрузки (открыть дуэль)
+async function handleStartParam(){
+  if(!TG_START_PARAM||!S.user)return;
+  var p=TG_START_PARAM;TG_START_PARAM='';
+  if(p.indexOf('duel_')===0){
+    var duelId=p.slice(5);
+    // перейти на дуэли и открыть активную
+    go('duels',document.querySelector('[data-pg=duels]'));
+    // дуэль подхватится через duelCheckState (она accepted)
+    setTimeout(function(){try{duelCheckState();}catch(e){}},400);
+  }
+}
 // Авто-вход через Telegram (если в Telegram и ещё не вошёл)
 async function tgAutoLogin(){
   if(!TG_USER || S.user || !dbOK) return;
@@ -878,6 +900,8 @@ async function init(){
   try{renderAuthHdr();}catch(e){console.error('renderAuthHdr:',e);}
   try{updNotifBadges();}catch(e){}
   if(S.user)loadProg();
+  // открыть дуэль если запущено из уведомления
+  setTimeout(handleStartParam,600);
   // фоновая подгрузка новостей/расписания для значков
   loadNotifData();
 }
@@ -1975,10 +1999,10 @@ function duelChTopics(){
 function duelCntUpd(){document.getElementById('duelCntL').textContent=document.getElementById('duelCnt').value;}
 function duelTimeUpd(){document.getElementById('duelTimeL').textContent=document.getElementById('duelTime').value;}
 // Добавить уведомление в очередь (бот разошлёт в Telegram)
-async function notifyTelegram(title,body,kind,group,email){
+async function notifyTelegram(title,body,kind,group,email,refId){
   if(!dbOK)return;
   try{
-    await sbPost('notifications_queue',{title:title,body:body||'',kind:kind||'info',target_group:group||'',target_email:email||'',sent:false});
+    await sbPost('notifications_queue',{title:title,body:body||'',kind:kind||'info',target_group:group||'',target_email:email||'',ref_id:refId||'',sent:false});
   }catch(e){}
 }
 async function duelSendChallenge(){
@@ -1994,14 +2018,15 @@ async function duelSendChallenge(){
   if(pool.length<cnt){alert('В этой теме только '+pool.length+' вопросов. Выберите меньше или другую тему.');return;}
   var picked=pool.slice().sort(function(){return Math.random()-.5;}).slice(0,cnt).map(function(q){return q.id;});
   try{
-    await sbPost('duels',{
+    var created=await sbPost('duels',{
       challenger_email:S.user.email,challenger_name:S.user.name,
       opponent_email:opp[0],opponent_name:opp[1],
       status:'pending',question_count:cnt,subject:subj,topic:topic==='all'?'':topic,
       time_limit:timeLimit,stake:stake,
       questions_json:JSON.stringify(picked)
     });
-    await notifyTelegram('⚔️ Тебя вызвали на дуэль!',S.user.name+' бросил тебе вызов в Vita. Прими бой!','duel','',opp[0]);
+    var duelId=(created&&created.length&&created[0].id)?String(created[0].id):'';
+    await notifyTelegram('⚔️ Тебя вызвали на дуэль!',S.user.name+' бросил тебе вызов в Vita. Прими бой!','duel','',opp[0],duelId);
     closeModal();
     alert('Вызов отправлен! У соперника 5 минут чтобы принять.');
     duelCheckState();
@@ -2013,12 +2038,18 @@ async function duelCancel(id){
 async function duelAccept(id){
   try{
     await sbPatch('duels','id=eq.'+id,{status:'accepted'});
+    // убрать неотправленные уведомления о бое (бой уже принят)
+    try{if(S.user)await sbDel('notifications_queue','kind=eq.duel&sent=eq.false&target_email=eq.'+encodeURIComponent(S.user.email));}catch(e){}
     var d=await sbGet('duels','id=eq.'+id);
     if(d.length)duelEnterMatch(d[0]);
   }catch(e){alert('Ошибка: '+e.message);}
 }
 async function duelDecline(id){
-  try{await sbPatch('duels','id=eq.'+id,{status:'declined'});duelPoll();}catch(e){}
+  try{
+    await sbPatch('duels','id=eq.'+id,{status:'declined'});
+    try{if(S.user)await sbDel('notifications_queue','kind=eq.duel&sent=eq.false&target_email=eq.'+encodeURIComponent(S.user.email));}catch(e){}
+    duelPoll();
+  }catch(e){}
 }
 
 function duelEnterMatch(d){
@@ -2482,7 +2513,9 @@ async function renderProfile(){
     +'<button class="btn bgh bsm" onclick="profTogglePrivacy()">'+(me.private_profile?'<i class="ti ti-lock"></i> Профиль закрыт':'<i class="ti ti-lock-open"></i> Профиль открыт')+'</button></div>'
     +profLinkSection()
     +(S.isAdm?'<button class="btn bgh bsm" onclick="go(\'admin\')" style="margin-top:10px"><i class="ti ti-shield-lock"></i> Панель администратора</button>':'')
-    +'<div style="margin-top:10px"><button class="btn bgh bsm" onclick="doLogout()" style="color:var(--re)"><i class="ti ti-logout"></i> Выйти</button></div>'
+    +'<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn bgh bsm" onclick="doLogout()" style="color:var(--re)"><i class="ti ti-logout"></i> Выйти</button>'
+    +(S.isAdm?'':'<button class="btn bgh bsm" onclick="openModal(\'admin\')" style="color:var(--tx3)"><i class="ti ti-shield-lock"></i> Вход для админа</button>')
+    +'</div>'
     +'</div></div>';
   // Статистика
   html+='<div class="cgrid" style="margin-bottom:16px">'
@@ -5043,7 +5076,7 @@ async function admUpdNews(id){
   try{if(dbOK)await sbPatch('news','id=eq.'+id,{title:title,body:body,pinned:pinned});newsCache=newsCache.map(function(n){return n.id===id?Object.assign({},n,{title:title,body:body,pinned:pinned}):n;});closeModal();admNewsEdit();}
   catch(e){showErr('Ошибка: '+e.message);btn.disabled=false;btn.textContent='Сохранить';}
 }
-async function admDelNews(id){if(confirm('Удалить новость?')){try{if(dbOK)await sbDel('news','id=eq.'+id);newsCache=newsCache.filter(function(n){return n.id!==id;});admNewsEdit();}catch(e){alert(e.message);}}}
+async function admDelNews(id){if(confirm('Удалить новость?')){try{if(dbOK){await sbDel('news','id=eq.'+id);try{await sbDel('notifications_queue','kind=eq.news&sent=eq.false');}catch(e){}}newsCache=newsCache.filter(function(n){return n.id!==id;});admNewsEdit();}catch(e){alert(e.message);}}}
 async function admSchedEdit(){
   var el=document.getElementById('admSchedEdit');el.innerHTML='<div style="color:var(--tx3);padding:10px">Загрузка...</div>';
   if(dbOK){try{schedCache=await sbGet('schedule','order=exam_date.asc');}catch(e){}}
