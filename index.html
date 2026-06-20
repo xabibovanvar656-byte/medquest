@@ -976,7 +976,7 @@ function showLoginWall(){
 var PAGE_LABELS={home:'на главной',flashcards:'учит карточки',trainer:'решает тренажёр',exam:'на экзамене',progress:'смотрит прогресс',leaderboard:'смотрит рейтинг',news:'читает новости',schedule:'смотрит расписание'};
 async function pushActivity(action){
   if(!dbOK||!S.user)return;
-  try{await sbUps('student_activity',{email:S.user.email,name:S.user.name,current_action:action,last_seen:new Date().toISOString()},'email');}catch(e){}
+  try{await sbUps('student_activity',{email:S.user.email,name:S.user.name,current_action:action,last_seen:new Date().toISOString(),source:(typeof isTG==='function'&&isTG())?'tg':'web'},'email');}catch(e){}
 }
 function go(pg,btn){
   if(PROTECTED.indexOf(pg)>=0&&!S.user&&!S.isAdm){showLoginWall();return;}
@@ -4028,10 +4028,50 @@ async function admDelItem(id){
 
 async function admAnalytics(){
   var el=document.getElementById('admAnalytics');
-  el.innerHTML='<div style="color:var(--tx3);padding:10px">Анализирую ответы студентов...</div>';
+  el.innerHTML='<div style="color:var(--tx3);padding:10px">Загружаю аналитику...</div>';
+  // ===== ДАШБОРД ИСТОЧНИКОВ ВХОДА =====
+  var srcHtml='';
+  try{
+    var acts=await sbGet('student_activity','select=email,name,source,last_seen,current_action&order=last_seen.desc');
+    var allUsers=await sbGet('users','status=eq.active&select=email');
+    var totalUsers=allUsers.length;
+    var tg=acts.filter(function(a){return a.source==='tg';});
+    var web=acts.filter(function(a){return a.source!=='tg';});
+    var now=Date.now();
+    var online=acts.filter(function(a){return now-new Date(a.last_seen).getTime()<150000;});
+    var onlineTg=online.filter(function(a){return a.source==='tg';}).length;
+    var onlineWeb=online.length-onlineTg;
+    var tgPct=acts.length?Math.round(tg.length/acts.length*100):0;
+    var webPct=100-tgPct;
+    srcHtml='<div class="nlbl" style="margin-bottom:10px">📊 Откуда заходят</div>';
+    // карточки сводки
+    srcHtml+='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px">';
+    srcHtml+='<div class="card" style="padding:14px"><div style="display:flex;align-items:center;gap:7px;margin-bottom:8px"><span style="font-size:18px">✈️</span><span style="font-size:11px;color:var(--tx2)">Telegram</span></div><div style="font-size:26px;font-weight:800;font-family:var(--fm)">'+tg.length+'</div><div style="font-size:10px;color:var(--tx3)">'+tgPct+'% · 🟢 '+onlineTg+' сейчас</div></div>';
+    srcHtml+='<div class="card" style="padding:14px"><div style="display:flex;align-items:center;gap:7px;margin-bottom:8px"><span style="font-size:18px">🌐</span><span style="font-size:11px;color:var(--tx2)">Сайт</span></div><div style="font-size:26px;font-weight:800;font-family:var(--fm)">'+web.length+'</div><div style="font-size:10px;color:var(--tx3)">'+webPct+'% · 🟢 '+onlineWeb+' сейчас</div></div>';
+    srcHtml+='<div class="card" style="padding:14px"><div style="display:flex;align-items:center;gap:7px;margin-bottom:8px"><span style="font-size:18px">👥</span><span style="font-size:11px;color:var(--tx2)">Всего</span></div><div style="font-size:26px;font-weight:800;font-family:var(--fm)">'+totalUsers+'</div><div style="font-size:10px;color:var(--tx3)">студентов</div></div>';
+    srcHtml+='<div class="card" style="padding:14px"><div style="display:flex;align-items:center;gap:7px;margin-bottom:8px"><span style="font-size:18px">🟢</span><span style="font-size:11px;color:var(--tx2)">Онлайн</span></div><div style="font-size:26px;font-weight:800;font-family:var(--fm)">'+online.length+'</div><div style="font-size:10px;color:var(--tx3)">сейчас в сети</div></div>';
+    srcHtml+='</div>';
+    // полоса соотношения
+    srcHtml+='<div class="card" style="padding:14px;margin-bottom:16px"><div style="font-size:12px;color:var(--tx2);margin-bottom:8px">Соотношение Telegram / Сайт</div>';
+    srcHtml+='<div style="display:flex;height:28px;border-radius:8px;overflow:hidden;background:var(--bg3)">';
+    if(tgPct>0)srcHtml+='<div style="width:'+tgPct+'%;background:linear-gradient(90deg,#4d8df6,#6d5ef0);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700">'+(tgPct>=12?'✈️ '+tgPct+'%':'')+'</div>';
+    if(webPct>0)srcHtml+='<div style="width:'+webPct+'%;background:linear-gradient(90deg,#12b886,#1cc28e);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700">'+(webPct>=12?'🌐 '+webPct+'%':'')+'</div>';
+    srcHtml+='</div></div>';
+    // кто откуда (список последних)
+    srcHtml+='<div class="nlbl" style="margin-bottom:10px">Кто откуда заходит</div>';
+    srcHtml+='<div style="max-height:280px;overflow-y:auto;margin-bottom:20px">';
+    srcHtml+=acts.slice(0,50).map(function(a){
+      var isOnline=now-new Date(a.last_seen).getTime()<150000;
+      var src=a.source==='tg'?'<span style="color:#4d8df6">✈️ Telegram</span>':'<span style="color:var(--gr)">🌐 Сайт</span>';
+      var ago='';var diff=now-new Date(a.last_seen).getTime();
+      ago=isOnline?'🟢 сейчас':(diff<3600000?Math.round(diff/60000)+' мин':(diff<86400000?Math.round(diff/3600000)+' ч':Math.round(diff/86400000)+' дн'))+' назад';
+      return '<div style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--bg2);border:1px solid var(--bor);border-radius:10px;margin-bottom:6px"><div style="flex:1"><div style="font-size:13px;font-weight:500">'+(a.name||a.email)+'</div><div style="font-size:11px">'+src+'</div></div><div style="font-size:10px;color:var(--tx3)">'+ago+'</div></div>';
+    }).join('');
+    srcHtml+='</div>';
+  }catch(e){srcHtml='<p style="color:var(--tx3)">Не удалось загрузить статистику источников</p>';}
   var prog=[];
   if(dbOK){try{prog=await sbGet('progress','select=question_id,correct_count,attempt_count');}catch(e){}}
-  if(!prog.length){el.innerHTML='<p style="color:var(--tx3)">Пока нет данных. Студенты ещё не решали вопросы.</p>';return;}
+  if(!prog.length){el.innerHTML=srcHtml+'<div class="nlbl" style="margin:10px 0">📉 Сложные вопросы</div><p style="color:var(--tx3)">Пока нет данных по вопросам. Студенты ещё не решали.</p>';return;}
   // Группируем по вопросу: суммируем попытки и правильные по всем студентам
   var byQ={};
   prog.forEach(function(p){
@@ -4061,7 +4101,9 @@ async function admAnalytics(){
   });
   var themes=Object.keys(byTheme).map(function(t){return {t:t,rate:Math.round(byTheme[t].err/byTheme[t].total*100),total:byTheme[t].total};});
   themes=themes.filter(function(x){return x.total>=5;}).sort(function(a,b){return b.rate-a.rate;});
-  var html='<div class="alert ali" style="margin-bottom:14px;font-size:12px"><i class="ti ti-info-circle"></i> Какие вопросы и темы чаще всего проваливают студенты. Помогает понять что объяснить на занятии.</div>';
+  var html=srcHtml;
+  html+='<div class="nlbl" style="margin-bottom:10px">📉 Сложные вопросы и темы</div>';
+  html+='<div class="alert ali" style="margin-bottom:14px;font-size:12px"><i class="ti ti-info-circle"></i> Какие вопросы и темы чаще всего проваливают студенты. Помогает понять что объяснить на занятии.</div>';
   // Слабые темы
   html+='<div style="font-size:14px;font-weight:600;margin-bottom:8px">📉 Самые сложные темы</div>';
   if(themes.length){
