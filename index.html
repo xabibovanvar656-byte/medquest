@@ -2006,9 +2006,14 @@ function duelTimeUpd(){document.getElementById('duelTimeL').textContent=document
 // Добавить уведомление в очередь (бот разошлёт в Telegram)
 async function notifyTelegram(title,body,kind,group,email,refId){
   if(!dbOK)return;
+  var rec={title:title,body:body||'',kind:kind||'info',target_group:group||'',target_email:email||'',sent:false};
+  if(refId)rec.ref_id=refId;
   try{
-    await sbPost('notifications_queue',{title:title,body:body||'',kind:kind||'info',target_group:group||'',target_email:email||'',ref_id:refId||'',sent:false});
-  }catch(e){}
+    await sbPost('notifications_queue',rec);
+  }catch(e){
+    // если поле ref_id отсутствует — пробуем без него
+    try{delete rec.ref_id;await sbPost('notifications_queue',rec);}catch(e2){console.error('notifyTelegram:',e2);}
+  }
 }
 async function duelSendChallenge(){
   var oppVal=document.getElementById('duelOpp').value;
@@ -2035,9 +2040,17 @@ async function duelSendChallenge(){
     if(!duelId){
       try{var found=await sbGet('duels','challenger_email=eq.'+encodeURIComponent(S.user.email)+'&opponent_email=eq.'+encodeURIComponent(opp[0])+'&status=eq.pending&order=id.desc&limit=1');if(found.length)duelId=String(found[0].id);}catch(e){}
     }
-    await notifyTelegram('⚔️ Тебя вызвали на дуэль!',S.user.name+' бросил тебе вызов в Vita. Прими бой!','duel','',opp[0],duelId);
+    var notifyOk=false;
+    try{
+      var rec={title:'⚔️ Тебя вызвали на дуэль!',body:S.user.name+' бросил тебе вызов в Vita. Прими бой!',kind:'duel',target_group:'',target_email:opp[0],sent:false};
+      if(duelId)rec.ref_id=duelId;
+      await sbPost('notifications_queue',rec);
+      notifyOk=true;
+    }catch(e){
+      try{var rec2={title:'⚔️ Тебя вызвали на дуэль!',body:S.user.name+' бросил тебе вызов!',kind:'duel',target_group:'',target_email:opp[0],sent:false};await sbPost('notifications_queue',rec2);notifyOk=true;}catch(e2){alert('Уведомление НЕ создано: '+e2.message);}
+    }
     closeModal();
-    alert('Вызов отправлен! У соперника 5 минут чтобы принять.');
+    alert('Вызов отправлен!'+(notifyOk?' (уведомление в Telegram создано ✓)':' (БЕЗ уведомления ✗)'));
     duelCheckState();
   }catch(e){alert('Ошибка: '+e.message);}
 }
