@@ -709,7 +709,12 @@ var TG=null, TG_USER=null;
 function tgInit(){
   try{
     if(window.Telegram && window.Telegram.WebApp){
-      TG=window.Telegram.WebApp;
+      var wa=window.Telegram.WebApp;
+      // ПРОВЕРКА: реально ли мы внутри Telegram?
+      // В обычном браузере SDK загружен, но initData пустой и platform='unknown'
+      var realTg=(wa.initData && wa.initData.length>0) || (wa.platform && wa.platform!=='unknown');
+      if(!realTg){return;} // не Telegram — выходим, обычный сайт
+      TG=wa;
       TG.ready();
       TG.expand(); // на весь экран
       // полноэкранный режим (минимальная шапка) — где поддерживается
@@ -2026,6 +2031,10 @@ async function duelSendChallenge(){
       questions_json:JSON.stringify(picked)
     });
     var duelId=(created&&created.length&&created[0].id)?String(created[0].id):'';
+    // запасной вариант — найти ID если не вернулся
+    if(!duelId){
+      try{var found=await sbGet('duels','challenger_email=eq.'+encodeURIComponent(S.user.email)+'&opponent_email=eq.'+encodeURIComponent(opp[0])+'&status=eq.pending&order=id.desc&limit=1');if(found.length)duelId=String(found[0].id);}catch(e){}
+    }
     await notifyTelegram('⚔️ Тебя вызвали на дуэль!',S.user.name+' бросил тебе вызов в Vita. Прими бой!','duel','',opp[0],duelId);
     closeModal();
     alert('Вызов отправлен! У соперника 5 минут чтобы принять.');
