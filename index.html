@@ -309,6 +309,177 @@ select option{background:var(--bg2)}
 #tgThemeBtn{display:none}
 [data-tg-fs] #tgThemeBtn{display:flex;position:fixed;top:calc(var(--tg-top, 50px) + 6px);right:14px;z-index:200;width:34px;height:34px;border-radius:50%;background:rgba(40,37,55,.7);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1);align-items:center;justify-content:center;color:var(--tx);cursor:pointer;font-size:17px}
 [data-light][data-tg-fs] #tgThemeBtn{background:rgba(255,255,255,.7);border-color:rgba(0,0,0,.08)}
+
+/* ====== STUDY SECTION CSS ====== */
+/* ===== РАЗДЕЛ УЧЁБА — стили ===== */
+.study-search{display:flex;align-items:center;gap:11px;background:var(--bg2);border:1px solid var(--bor);border-radius:15px;padding:14px 16px;margin-bottom:20px;cursor:pointer;color:var(--tx3)}
+.study-search i{font-size:19px;color:var(--bl)}
+.study-search span{font-size:14px;font-weight:500}
+.study-search-input{flex:1;display:flex;align-items:center;gap:10px;background:var(--bg2);border:1px solid var(--bor);border-radius:14px;padding:12px 15px}
+.study-search-input i{color:var(--bl);font-size:18px}
+.study-search-input input{flex:1;border:none;outline:none;background:none;font-family:inherit;font-size:15px;font-weight:600;color:var(--tx)}
+.study-search-hint{text-align:center;color:var(--tx3);padding:40px 20px;font-size:13px;font-weight:500}
+.study-search-count{font-size:12.5px;color:var(--tx2);font-weight:600;margin-bottom:12px}
+.study-sres{background:var(--bg2);border:1px solid var(--bor);border-radius:14px;padding:15px 16px;margin-bottom:9px;cursor:pointer;box-shadow:0 6px 18px -14px rgba(0,0,0,.2)}
+.study-sres .sr-t{font-size:14.5px;font-weight:700;color:var(--tx)}
+
+.study-eyebrow{font-size:11px;font-weight:700;color:var(--am);margin-bottom:6px;letter-spacing:.3px}
+.study-h1{font-size:27px;font-weight:800;letter-spacing:-.7px;line-height:1.05;margin-bottom:18px;color:var(--tx)}
+.study-h1 em{font-style:italic;color:var(--bl)}
+
+.study-crumb{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--tx3);font-weight:600;margin-bottom:16px}
+.study-crumb .sep{opacity:.5}
+.study-crumb .now{color:var(--bl);font-weight:800}
+
+.study-back{text-align:center;color:var(--tx3);font-size:13px;font-weight:600;padding:18px;margin-top:8px;cursor:pointer}
+
+.study-empty{text-align:center;padding:50px 20px;color:var(--tx3)}
+.study-empty .se-ic{font-size:44px;margin-bottom:14px}
+.study-empty .se-t{font-size:15px;font-weight:700;color:var(--tx2)}
+.study-empty .se-s{font-size:13px;margin-top:5px}
+
+/* университет */
+.study-uni{background:var(--bg2);border:1px solid var(--bor);border-radius:20px;padding:15px;margin-bottom:12px;box-shadow:0 12px 32px -22px rgba(0,0,0,.3);cursor:pointer;display:flex;align-items:center;gap:14px;transition:transform .15s}
+.study-uni:active{transform:scale(.98)}
+.study-uni .su-b{width:56px;height:56px;border-radius:17px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
+.study-uni .su-b.a{background:linear-gradient(140deg,var(--bld),#e8e1fc)}
+.study-uni .su-b.b{background:linear-gradient(140deg,#fef0eb,#fde0d5)}
+.study-uni .su-b.c{background:linear-gradient(140deg,#e9f9f2,#d4f3e6)}
+.study-uni .su-t{flex:1}
+.study-uni .su-t b{font-size:17px;font-weight:800;letter-spacing:-.3px;display:block;color:var(--tx)}
+.study-uni .su-t span{font-size:12.5px;color:var(--tx3);font-weight:600;margin-top:2px;display:block}
+.study-uni .su-go{width:36px;height:36px;border-radius:50%;background:var(--bld);display:flex;align-items:center;justify-content:center;color:var(--bl);font-size:17px;flex-shrink:0}
+
+/* курс */
+.study-course{background:var(--bg2);border:1px solid var(--bor);border-radius:20px;padding:17px;margin-bottom:11px;box-shadow:0 12px 32px -22px rgba(0,0,0,.3);cursor:pointer;display:flex;align-items:center;gap:15px;transition:transform .15s}
+.study-course:active{transform:scale(.98)}
+.study-course .sc-yr{width:50px;height:50px;border-radius:15px;background:var(--bld);color:var(--bl);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;flex-shrink:0}
+.study-course .sc-info{flex:1}
+.study-course .sc-info b{font-size:16px;font-weight:800;display:block;color:var(--tx)}
+.study-course .sc-info span{font-size:12px;color:var(--tx3);font-weight:500;margin-top:2px;display:block}
+
+/* предмет */
+.study-subj{background:var(--bg2);border:1px solid var(--bor);border-radius:20px;padding:17px;margin-bottom:12px;box-shadow:0 12px 32px -22px rgba(0,0,0,.3);cursor:pointer;display:flex;align-items:center;gap:15px;position:relative;overflow:hidden;transition:transform .15s}
+.study-subj:active{transform:scale(.98)}
+.study-subj .ss-acc{position:absolute;left:0;top:0;bottom:0;width:5px}
+.study-subj.violet .ss-acc{background:linear-gradient(180deg,#9333ea,#7c3aed)}
+.study-subj.coral .ss-acc{background:linear-gradient(180deg,#f4663a,#e8920a)}
+.study-subj.mint .ss-acc{background:linear-gradient(180deg,#0fa873,#0891b2)}
+.study-subj .ss-ic{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:25px;flex-shrink:0}
+.study-subj.violet .ss-ic{background:var(--bld)}
+.study-subj.coral .ss-ic{background:#fef0eb}
+.study-subj.mint .ss-ic{background:#e9f9f2}
+.study-subj .ss-t{flex:1}
+.study-subj .ss-t b{font-size:16px;font-weight:800;letter-spacing:-.3px;display:block;color:var(--tx)}
+.study-subj .ss-t span{font-size:12px;color:var(--tx3);font-weight:600;margin-top:3px;display:block}
+.study-subj .ss-ring{position:relative;width:50px;height:50px;flex-shrink:0}
+.study-subj .ss-pc{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:800;color:var(--tx)}
+
+/* прогресс предмета над темами */
+.study-tprog{background:var(--bg2);border:1px solid var(--bor);border-radius:18px;padding:17px;margin-bottom:16px;box-shadow:0 10px 28px -20px rgba(0,0,0,.25)}
+.study-tprog .stp-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.study-tprog .stp-top b{font-size:15px;font-weight:800;color:var(--tx)}
+.study-tprog .stp-top span{font-size:13px;color:var(--bl);font-weight:800}
+.study-tprog .stp-bar{height:9px;background:var(--bld);border-radius:99px;overflow:hidden}
+.study-tprog .stp-bar i{display:block;height:100%;background:linear-gradient(90deg,#9333ea,#7c3aed);border-radius:99px;transition:width .5s}
+
+/* тема */
+.study-topic{display:flex;align-items:center;gap:14px;padding:15px;background:var(--bg2);border:1px solid var(--bor);border-radius:17px;margin-bottom:10px;cursor:pointer;box-shadow:0 10px 28px -22px rgba(0,0,0,.2);transition:transform .14s}
+.study-topic:active{transform:scale(.98)}
+.study-topic .st-d{width:38px;height:38px;border-radius:12px;background:var(--bld);color:var(--bl);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;flex-shrink:0}
+.study-topic.done .st-d{background:linear-gradient(135deg,#0fa873,#0891b2);color:#fff}
+.study-topic.active .st-d{background:linear-gradient(135deg,#9333ea,#7c3aed);color:#fff}
+.study-topic .st-t{flex:1}
+.study-topic .st-t b{font-size:14.5px;font-weight:700;letter-spacing:-.2px;display:block;color:var(--tx)}
+.study-topic .st-t span{font-size:11.5px;color:var(--tx3);font-weight:600;margin-top:2px;display:block}
+.study-topic .st-m{font-size:13px;color:var(--tx3);font-weight:700}
+
+/* ===== ЧТЕНИЕ ===== */
+.reader-top{display:flex;align-items:center;gap:13px;margin-bottom:16px}
+.reader-top .r-back{width:42px;height:42px;border-radius:14px;background:var(--bg2);border:1px solid var(--bor);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--tx);cursor:pointer}
+.reader-top .r-crumb{flex:1;font-size:12.5px;color:var(--tx3);font-weight:600}
+.reader-top .r-crumb b{color:var(--tx2);font-weight:700}
+.reader-top .r-bm{width:42px;height:42px;border-radius:14px;background:var(--bg2);border:1px solid var(--bor);display:flex;align-items:center;justify-content:center;font-size:19px;color:var(--am);cursor:pointer;flex-shrink:0}
+
+.study-reader-hero{position:relative;border-radius:26px;overflow:hidden;padding:26px 22px;margin-bottom:14px;background:radial-gradient(circle at 85% 12%,rgba(244,102,58,.4),transparent 50%),linear-gradient(150deg,#6d28d9,#7c3aed 60%,#9333ea);color:#fff}
+.study-reader-hero .srh-k{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.72);margin-bottom:12px}
+.study-reader-hero h1{font-size:34px;font-weight:800;line-height:1.05;letter-spacing:-.8px;color:#fff;margin:0}
+.study-reader-hero .srh-lede{font-size:14px;line-height:1.5;color:rgba(255,255,255,.85);font-weight:500;margin-top:12px}
+.study-reader-hero .srh-floats{display:flex;gap:8px;margin-top:16px}
+.study-reader-hero .srh-chip{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.22);border-radius:99px;padding:7px 13px;font-size:11.5px;font-weight:700}
+
+/* блоки материала */
+.sblk{background:var(--bg2);border:1px solid var(--bor);border-radius:20px;padding:20px;margin-bottom:12px;box-shadow:0 10px 28px -22px rgba(0,0,0,.2)}
+.sblk .sb-eb{font-size:10.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--bl);margin-bottom:11px}
+.sblk p{font-size:15px;line-height:1.68;color:var(--tx2);margin:0}
+.sblk p .term{color:var(--bl);font-weight:700}
+.sblk p b{color:var(--tx);font-weight:700}
+.sb-drop::first-letter{font-size:50px;float:left;line-height:.8;margin:4px 11px 0 0;color:var(--am);font-weight:800}
+
+.sblk.term{display:flex;gap:14px;align-items:flex-start;background:linear-gradient(140deg,var(--bld),var(--bg2))}
+.sblk.term .sb-tic{width:44px;height:44px;border-radius:13px;background:var(--bl);color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.sblk.term .sb-tw b{font-size:16px;font-weight:800;display:block;margin-bottom:3px;color:var(--tx)}
+.sblk.term .sb-tw p{font-size:13.5px}
+
+.sblk.steps{background:linear-gradient(140deg,var(--bg2),var(--bld))}
+.sblk.steps .sb-flow{display:flex;align-items:flex-start;justify-content:space-between;margin-top:8px}
+.sblk.steps .sb-st{text-align:center;flex:1}
+.sblk.steps .sb-o{width:46px;height:46px;border-radius:14px;background:var(--bg2);border:1.5px solid var(--bld);display:flex;align-items:center;justify-content:center;font-size:20px;margin:0 auto 7px}
+.sblk.steps .sb-st small{font-size:10px;color:var(--tx3);font-weight:700;display:block;line-height:1.2}
+.sblk.steps .sb-ar{color:var(--bl);font-size:14px;margin-top:13px}
+
+.sblk.img{padding:0;overflow:hidden}
+.sblk.img img{border-radius:0}
+.sblk.img .sb-ph{height:170px;background:linear-gradient(135deg,var(--bld),#fef0eb);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--bl)}
+.sblk.img .sb-ph .i{font-size:38px}
+.sblk.img .sb-ph small{font-size:12px;font-weight:600}
+.sblk.img .sb-cap{padding:13px 16px;font-size:12px;color:var(--tx3);font-weight:600}
+
+.sblk.remember{background:linear-gradient(140deg,#fef6e7,var(--bg2));border-color:#fce8c0}
+.sblk.remember .sb-eb{color:var(--am)}
+.sblk.remember p{font-size:14px}
+
+.sblk.clinic{background:linear-gradient(140deg,#fef0eb,var(--bg2));border-color:#fde0d5}
+.sblk.clinic .sb-eb{color:var(--re)}
+.sblk.clinic .sb-ci{font-size:24px;margin-bottom:8px}
+.sblk.clinic p{font-size:14px}
+
+.sblk-vs{display:grid;grid-template-columns:1fr auto 1fr;background:var(--bg2);border:1px solid var(--bor);border-radius:20px;overflow:hidden;margin-bottom:12px;box-shadow:0 10px 28px -22px rgba(0,0,0,.2)}
+.sblk-vs .vs-sd{padding:19px 16px}
+.sblk-vs .vs-sd h4{font-size:13.5px;font-weight:800;margin-bottom:9px}
+.sblk-vs .vs-sd.l h4{color:var(--re)}
+.sblk-vs .vs-sd.r h4{color:var(--gr)}
+.sblk-vs .vs-sd p{font-size:12.5px;line-height:1.55;color:var(--tx2);margin:0}
+.sblk-vs .vs-md{width:46px;display:flex;align-items:center;justify-content:center;background:var(--bld);font-style:italic;color:var(--tx3);font-size:18px}
+
+.sblk .sb-table{border-radius:12px;overflow:hidden;border:1px solid var(--bor);margin-top:4px}
+.sblk .sb-tr{display:grid;grid-template-columns:1fr 1.4fr;border-bottom:1px solid var(--bor)}
+.sblk .sb-tr:last-child{border-bottom:none}
+.sblk .sb-tr.head{background:var(--bld)}
+.sblk .sb-td{padding:11px 13px;font-size:12.5px;color:var(--tx2);font-weight:500}
+.sblk .sb-tr.head .sb-td{color:var(--bl);font-weight:800}
+.sblk .sb-td:first-child{border-right:1px solid var(--bor);font-weight:700;color:var(--tx)}
+
+.sblk.quiz{background:linear-gradient(140deg,#e9f9f2,var(--bg2));border-color:#c0ebd8}
+.sblk.quiz .sb-eb{color:var(--gr)}
+.sblk.quiz .sb-q{font-size:15px;font-weight:700;margin-bottom:12px;color:var(--tx)}
+.sblk.quiz .sb-opt{padding:12px 15px;border:1.5px solid var(--bor);border-radius:13px;font-size:13.5px;font-weight:600;margin-bottom:8px;color:var(--tx2);background:var(--bg2);cursor:pointer;transition:.15s}
+.sblk.quiz .sb-opt.correct{border-color:var(--gr);background:#e9f9f2;color:var(--gr)}
+.sblk.quiz .sb-opt.wrong{border-color:var(--re);background:#fef0eb;color:var(--re)}
+
+.study-cta{position:relative;border-radius:22px;padding:1.5px;background:linear-gradient(135deg,#7c3aed,#f4663a);margin-top:6px;cursor:pointer}
+.study-cta .sct-inner{background:var(--bg);border-radius:21px;padding:18px;display:flex;align-items:center;gap:15px}
+.study-cta .sct-ic{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#0fa873,#0891b2);display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;flex-shrink:0}
+.study-cta .sct-t{flex:1}
+.study-cta .sct-t b{font-size:16px;font-weight:800;display:block;color:var(--tx)}
+.study-cta .sct-t span{font-size:12.5px;color:var(--tx3);font-weight:600}
+.study-cta .sct-arr{width:38px;height:38px;border-radius:50%;background:var(--bg2);border:1px solid var(--bor);display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--bl);flex-shrink:0}
+
+.study-end{text-align:center;padding:26px 0 10px;font-size:19px;font-style:italic;color:var(--tx3)}
+
+.study-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:12px 20px;border-radius:14px;font-size:13.5px;font-weight:700;z-index:3000;opacity:0;transition:opacity .3s;pointer-events:none}
+.study-toast.show{opacity:1}
+
 </style>
 </head>
 <body>
@@ -334,6 +505,7 @@ select option{background:var(--bg2)}
   </div>
   <div style="padding:4px 0">
     <div class="nlbl">Учёба</div>
+    <button class="nb" data-pg="study" onclick="go('study',this)"><i class="ti ti-book-2"></i><span>Материалы</span></button>
     <button class="nb" data-pg="flashcards" onclick="go('flashcards',this)"><i class="ti ti-layers-subtract"></i><span>Карточки</span></button>
     <button class="nb" data-pg="trainer" onclick="go('trainer',this)"><i class="ti ti-target"></i><span>Тренажёр</span></button>
     <button class="nb" data-pg="exam" onclick="go('exam',this)"><i class="ti ti-certificate"></i><span>Экзамен</span></button>
@@ -362,9 +534,9 @@ select option{background:var(--bg2)}
   <button class="bni on" data-pg="home" onclick="go('home',this)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5"/><path d="M5 10v10h14V10"/></svg>
     <span>Главная</span></button>
-  <button class="bni" data-pg="trainer" onclick="go('trainer',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>
-    <span>Тренажёр</span></button>
+  <button class="bni" data-pg="study" onclick="go('study',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4z"/><path d="M4 9h16M9 5v14"/></svg>
+    <span>Учёба</span></button>
   <button class="bni" data-pg="duels" onclick="go('duels',this)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4l5.5 5.5-9 9-5.5-5.5z"/><path d="M3 21l3-3M16 8l5-5"/></svg>
     <span>Дуэли</span><span class="nbadge" id="duelBadgeM" style="display:none">!</span></button>
@@ -389,6 +561,9 @@ select option{background:var(--bg2)}
   <div id="hModes" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:20px"></div>
   <div class="nlbl" style="margin-bottom:10px">Предметы</div>
   <div id="hSubjs" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px"></div>
+</div>
+<div id="pg-study" class="page">
+  <div id="studyBody"></div>
 </div>
 <div id="pg-flashcards" class="page">
   <div class="ph"><div class="pt">Флеш-карточки</div><div class="ps">Вопрос → переворот → ответ</div></div>
@@ -1095,7 +1270,7 @@ function go(pg,btn){
   document.getElementById('mscroll').scrollTop=0;
   // подсветка во ВСЕХ меню (сайдбар + нижнее)
   document.querySelectorAll('[data-pg="'+pg+'"]').forEach(function(b){b.classList.add('on');});
-  var fns={home:renderHome,flashcards:fcInit,trainer:trTopics,exam:exTopics,progress:renderProg,leaderboard:renderLB,duels:renderDuels,news:renderNews,schedule:renderSched,admin:renderAdm,profile:renderProfile,shop:renderShop};
+  var fns={home:renderHome,study:renderStudy,flashcards:fcInit,trainer:trTopics,exam:exTopics,progress:renderProg,leaderboard:renderLB,duels:renderDuels,news:renderNews,schedule:renderSched,admin:renderAdm,profile:renderProfile,shop:renderShop};
   if(fns[pg])fns[pg]();
   if(S.user&&PAGE_LABELS[pg])pushActivity(PAGE_LABELS[pg]);
 }
@@ -5210,6 +5385,372 @@ document.querySelector('.logo').addEventListener('click',function(){
 });
 
 init();
+
+// ====== STUDY SECTION JS ======
+// ============================================
+// ===== РАЗДЕЛ «УЧЁБА» (модуль) =====
+// Использует существующие sbGet/sbPost/sbPatch/sbRpc/S из Vita
+// ============================================
+
+// состояние Учёбы
+var ST={
+  view:'worlds',   // worlds (выбор тесты/учёба) пока не нужен — сразу universities
+  uni:null, course:null, subject:null, topic:null,
+  unis:[], courses:[], subjects:[], topics:[], blocks:[],
+  progress:{}      // {topic_id: {read_pct, completed}}
+};
+
+// корневой рендер раздела (вызывается роутером go('study'))
+function renderStudy(){
+  var el=document.getElementById('studyBody');
+  if(!el)return;
+  // всегда начинаем с выбора университета
+  renderStudyUnis(el);
+}
+
+// загрузка прогресса учёбы
+function loadStudyProgress(){
+  if(!S.user)return Promise.resolve();
+  return sbGet('study_progress','user_email=eq.'+encodeURIComponent(S.user.email)+'&select=topic_id,read_pct,completed,test_passed').then(function(rows){
+    (rows||[]).forEach(function(p){ST.progress[p.topic_id]={read_pct:p.read_pct,completed:p.completed,test_passed:p.test_passed};});
+  }).catch(function(){});
+}
+
+// ===== ЭКРАН: УНИВЕРСИТЕТЫ =====
+function renderStudyUnis(el){
+  el.innerHTML='<div class="ph"><div class="pt">Загрузка…</div></div>';
+  sbGet('universities','active=eq.true&select=*&order=sort_order.asc').then(function(rows){
+    ST.unis=rows||[];
+    var h='';
+    h+='<div class="ph"><div class="pt">📚 Учёба</div><div class="ps">Конспекты и материалы по предметам</div></div>';
+    // поиск
+    h+='<div class="study-search" onclick="studyOpenSearch()"><i class="ti ti-search"></i><span>Найти тему: некроз, нефрон…</span></div>';
+    h+='<div class="study-eyebrow">С ЧЕГО НАЧНЁМ</div>';
+    h+='<div class="study-h1">Выбери свой <em>университет</em></div>';
+    if(!ST.unis.length){
+      h+='<div class="study-empty"><div class="se-ic">🏛️</div><div class="se-t">Университеты ещё не добавлены</div><div class="se-s">Появятся когда админ их создаст</div></div>';
+    }else{
+      var grads=['a','b','c','a','b','c'];
+      ST.unis.forEach(function(u,i){
+        h+='<div class="study-uni" onclick="studyPickUni('+u.id+')"><div class="su-b '+grads[i%3]+'">'+(u.emoji||'🏛️')+'</div><div class="su-t"><b>'+esc(u.name)+'</b><span>'+esc(u.full_name||'')+'</span></div><div class="su-go">→</div></div>';
+      });
+    }
+    el.innerHTML=h;
+  });
+}
+function studyPickUni(id){
+  ST.uni=ST.unis.find(function(u){return u.id===id;});
+  var el=document.getElementById('studyBody');
+  renderStudyCourses(el);
+}
+
+// ===== ЭКРАН: КУРСЫ =====
+function renderStudyCourses(el){
+  el.innerHTML='<div class="ph"><div class="pt">Загрузка…</div></div>';
+  sbGet('courses','university_id=eq.'+ST.uni.id+'&select=*&order=number.asc').then(function(rows){
+    ST.courses=rows||[];
+    var h='';
+    h+='<div class="study-crumb"><span class="now">'+esc(ST.uni.name)+'</span></div>';
+    h+='<div class="study-eyebrow">ТВОЙ ВУЗ · '+esc(ST.uni.name).toUpperCase()+'</div>';
+    h+='<div class="study-h1">На каком ты <em>курсе</em></div>';
+    if(!ST.courses.length){
+      h+='<div class="study-empty"><div class="se-ic">📅</div><div class="se-t">Курсы ещё не добавлены</div></div>';
+    }else{
+      ST.courses.forEach(function(c){
+        h+='<div class="study-course" onclick="studyPickCourse('+c.id+')"><div class="sc-yr">'+c.number+'</div><div class="sc-info"><b>'+esc(c.title||(c.number+' курс'))+'</b><span>'+esc(c.description||'')+'</span></div><div class="su-go">→</div></div>';
+      });
+    }
+    h+='<div class="study-back" onclick="renderStudy()">← Сменить университет</div>';
+    el.innerHTML=h;
+  });
+}
+function studyPickCourse(id){
+  ST.course=ST.courses.find(function(c){return c.id===id;});
+  renderStudySubjects(document.getElementById('studyBody'));
+}
+
+// ===== ЭКРАН: ПРЕДМЕТЫ =====
+function renderStudySubjects(el){
+  el.innerHTML='<div class="ph"><div class="pt">Загрузка…</div></div>';
+  Promise.all([
+    sbGet('subjects','course_id=eq.'+ST.course.id+'&select=*&order=sort_order.asc'),
+    loadStudyProgress()
+  ]).then(function(r){
+    ST.subjects=r[0]||[];
+    var h='';
+    h+='<div class="study-crumb">'+esc(ST.uni.name)+' <span class="sep">›</span> <span class="now">'+esc(ST.course.title||ST.course.number+' курс')+'</span></div>';
+    h+='<div class="study-eyebrow">'+esc(ST.course.title||(ST.course.number+' КУРС'))+'</div>';
+    h+='<div class="study-h1">Что будем <em>изучать</em></div>';
+    if(!ST.subjects.length){
+      h+='<div class="study-empty"><div class="se-ic">📘</div><div class="se-t">Предметы ещё не добавлены</div></div>';
+    }else{
+      // для каждого предмета посчитаем прогресс (нужны темы — упрощённо: загрузим число тем и пройденных)
+      ST.subjects.forEach(function(s){
+        var col=s.color||'violet';
+        h+='<div class="study-subj '+col+'" onclick="studyPickSubject('+s.id+')"><div class="ss-acc"></div><div class="ss-ic">'+(s.emoji||'📘')+'</div><div class="ss-t"><b>'+esc(s.name)+'</b><span id="subjMeta'+s.id+'">загрузка…</span></div><div class="ss-ring" id="subjRing'+s.id+'"></div></div>';
+      });
+    }
+    h+='<div class="study-back" onclick="studyPickUni('+ST.uni.id+')">← Сменить курс</div>';
+    el.innerHTML=h;
+    // подгрузим прогресс по каждому предмету
+    ST.subjects.forEach(function(s){loadSubjectMeta(s);});
+  });
+}
+function loadSubjectMeta(s){
+  sbGet('topics','subject_id=eq.'+s.id+'&select=id').then(function(topics){
+    topics=topics||[];
+    var total=topics.length;
+    var done=0;
+    topics.forEach(function(t){if(ST.progress[t.id]&&ST.progress[t.id].completed)done++;});
+    var pct=total?Math.round(done/total*100):0;
+    var meta=document.getElementById('subjMeta'+s.id);
+    if(meta)meta.textContent=total+' тем · '+done+' пройдено';
+    var ring=document.getElementById('subjRing'+s.id);
+    if(ring){
+      var col=s.color==='coral'?'#f4663a':s.color==='mint'?'#0fa873':'#7c3aed';
+      var off=125.6*(1-pct/100);
+      ring.innerHTML='<svg width="50" height="50" viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" fill="none" stroke="rgba(124,58,237,.12)" stroke-width="5"/><circle cx="25" cy="25" r="20" fill="none" stroke="'+col+'" stroke-width="5" stroke-linecap="round" stroke-dasharray="125.6" stroke-dashoffset="'+off+'" transform="rotate(-90 25 25)"/></svg><div class="ss-pc">'+pct+'%</div>';
+    }
+  });
+}
+function studyPickSubject(id){
+  ST.subject=ST.subjects.find(function(s){return s.id===id;});
+  renderStudyTopics(document.getElementById('studyBody'));
+}
+
+// ===== ЭКРАН: ТЕМЫ =====
+function renderStudyTopics(el){
+  el.innerHTML='<div class="ph"><div class="pt">Загрузка…</div></div>';
+  Promise.all([
+    sbGet('topics','subject_id=eq.'+ST.subject.id+'&select=*&order=sort_order.asc,number.asc'),
+    loadStudyProgress()
+  ]).then(function(r){
+    ST.topics=r[0]||[];
+    var total=ST.topics.length,done=0;
+    ST.topics.forEach(function(t){if(ST.progress[t.id]&&ST.progress[t.id].completed)done++;});
+    var pct=total?Math.round(done/total*100):0;
+    var h='';
+    h+='<div class="study-crumb">'+esc(ST.course.title||ST.course.number+' курс')+' <span class="sep">›</span> <span class="now">'+esc(ST.subject.name)+'</span></div>';
+    h+='<div class="study-tprog"><div class="stp-top"><b>'+esc(ST.subject.name)+'</b><span>'+pct+'%</span></div><div class="stp-bar"><i style="width:'+pct+'%"></i></div></div>';
+    if(!ST.topics.length){
+      h+='<div class="study-empty"><div class="se-ic">📄</div><div class="se-t">Темы ещё не добавлены</div></div>';
+    }else{
+      ST.topics.forEach(function(t){
+        var p=ST.progress[t.id];
+        var cls=p&&p.completed?'done':(p&&p.read_pct>0?'active':'');
+        var sub=p&&p.completed?'Прочитано'+(p.test_passed?' · тест сдан':''):(p&&p.read_pct>0?'Читаешь · '+p.read_pct+'%':(t.read_minutes||5)+' мин чтения');
+        var mark=p&&p.completed?'✓':(p&&p.read_pct>0?'▸':'→');
+        h+='<div class="study-topic '+cls+'" onclick="studyOpenTopic('+t.id+')"><div class="st-d">'+(t.number||'•')+'</div><div class="st-t"><b>'+esc(t.title)+'</b><span>'+sub+'</span></div><div class="st-m">'+mark+'</div></div>';
+      });
+    }
+    h+='<div class="study-back" onclick="studyPickCourse('+ST.course.id+')">← Сменить предмет</div>';
+    el.innerHTML=h;
+  });
+}
+
+// ===== ЭКРАН: ЧТЕНИЕ МАТЕРИАЛА =====
+function studyOpenTopic(id){
+  ST.topic=ST.topics.find(function(t){return t.id===id;});
+  var el=document.getElementById('studyBody');
+  el.innerHTML='<div class="ph"><div class="pt">Загрузка…</div></div>';
+  sbGet('blocks','topic_id=eq.'+id+'&select=*&order=sort_order.asc').then(function(rows){
+    ST.blocks=rows||[];
+    renderTopicReader(el);
+  });
+}
+function renderTopicReader(el){
+  var t=ST.topic;
+  var h='';
+  // топбар
+  h+='<div class="reader-top"><div class="r-back" onclick="renderStudyTopics(document.getElementById(\'studyBody\'))">←</div><div class="r-crumb">'+esc(ST.subject.name)+' <b>· Тема '+(t.number||'')+'</b></div><div class="r-bm" onclick="studyToggleBookmark('+t.id+')" id="bmBtn">☆</div></div>';
+  // hero
+  h+='<div class="study-reader-hero"><div class="srh-k">'+esc(t.kicker||ST.subject.name)+'</div><h1>'+esc(t.title)+'</h1>';
+  if(t.lede)h+='<p class="srh-lede">'+esc(t.lede)+'</p>';
+  h+='<div class="srh-floats"><span class="srh-chip">⏱ '+(t.read_minutes||5)+' мин</span></div></div>';
+  // блоки
+  ST.blocks.forEach(function(b){h+=renderBlock(b);});
+  // тест по теме (если есть quiz-блоки или просто кнопка)
+  h+='<div class="study-cta" onclick="studyFinishTopic('+t.id+')"><div class="sct-inner"><div class="sct-ic">✓</div><div class="sct-t"><b>Отметить пройденным</b><span>+50 баллов к рейтингу</span></div><div class="sct-arr">→</div></div></div>';
+  h+='<div class="study-end">конец темы</div>';
+  el.innerHTML=h;
+  // отметить начало чтения
+  studyMarkReading(t.id);
+  // проверить закладку
+  studyCheckBookmark(t.id);
+}
+
+// рендер одного блока по типу
+function renderBlock(b){
+  var d=b.data||{};
+  if(typeof d==='string'){try{d=JSON.parse(d);}catch(e){d={};}}
+  if(b.type==='text'){
+    return '<div class="sblk"><div class="sb-eb">◆ '+esc(b.title||'')+'</div><p class="sb-drop">'+fmtText(b.body)+'</p></div>';
+  }
+  if(b.type==='term'){
+    return '<div class="sblk term"><div class="sb-tic">📌</div><div class="sb-tw"><b>'+esc(b.title)+'</b><p>'+esc(b.body)+'</p></div></div>';
+  }
+  if(b.type==='steps'){
+    var steps=d.steps||[];
+    var inner='';
+    steps.forEach(function(s,i){
+      inner+='<div class="sb-st"><div class="sb-o">'+(s.emoji||'●')+'</div><small>'+esc(s.label||'')+'</small></div>';
+      if(i<steps.length-1)inner+='<div class="sb-ar">→</div>';
+    });
+    return '<div class="sblk steps"><div class="sb-eb">◆ '+esc(b.title||'Этапы')+'</div><div class="sb-flow">'+inner+'</div></div>';
+  }
+  if(b.type==='image'){
+    var img=b.image_url?'<img src="'+esc(b.image_url)+'" style="width:100%;display:block">':'<div class="sb-ph"><div class="i">🖼️</div><small>'+esc(b.caption||'Изображение')+'</small></div>';
+    return '<div class="sblk img">'+img+(b.caption?'<div class="sb-cap">'+esc(b.caption)+'</div>':'')+'</div>';
+  }
+  if(b.type==='remember'){
+    return '<div class="sblk remember"><div class="sb-eb">⚡ '+esc(b.title||'Запомни')+'</div><p>'+fmtText(b.body)+'</p></div>';
+  }
+  if(b.type==='compare'){
+    var l=d.left||{},r=d.right||{};
+    return '<div class="sblk-vs"><div class="vs-sd l"><h4>'+esc(l.title||'')+'</h4><p>'+esc(l.text||'')+'</p></div><div class="vs-md">vs</div><div class="vs-sd r"><h4>'+esc(r.title||'')+'</h4><p>'+esc(r.text||'')+'</p></div></div>';
+  }
+  if(b.type==='clinic'){
+    return '<div class="sblk clinic"><div class="sb-ci">💡</div><div class="sb-eb">'+esc(b.title||'Клинический пример')+'</div><p>'+fmtText(b.body)+'</p></div>';
+  }
+  if(b.type==='table'){
+    var rows=d.rows||[];var head=d.head||['',''];
+    var tb='<div class="sb-tr head"><div class="sb-td">'+esc(head[0])+'</div><div class="sb-td">'+esc(head[1])+'</div></div>';
+    rows.forEach(function(row){tb+='<div class="sb-tr"><div class="sb-td">'+esc(row[0]||'')+'</div><div class="sb-td">'+esc(row[1]||'')+'</div></div>';});
+    return '<div class="sblk"><div class="sb-eb">◆ '+esc(b.title||'Таблица')+'</div><div class="sb-table">'+tb+'</div></div>';
+  }
+  if(b.type==='quiz'){
+    var opts=d.options||[];var correct=d.correct;
+    var oh='';
+    opts.forEach(function(o,i){oh+='<div class="sb-opt" onclick="studyQuizAnswer(this,'+(i===correct?1:0)+')">'+esc(o)+'</div>';});
+    return '<div class="sblk quiz"><div class="sb-eb">❓ Проверь понимание</div><div class="sb-q">'+esc(b.title)+'</div><div class="sb-opts">'+oh+'</div></div>';
+  }
+  return '';
+}
+function fmtText(s){
+  // **жирный** и *термин*
+  s=esc(s||'');
+  s=s.replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');
+  s=s.replace(/\*(.+?)\*/g,'<span class="term">$1</span>');
+  return s;
+}
+function studyQuizAnswer(el,correct){
+  if(el.parentNode.querySelector('.answered'))return;
+  el.classList.add('answered');
+  el.parentNode.classList.add('answered');
+  if(correct){el.classList.add('correct');if(navigator.vibrate)navigator.vibrate(15);}
+  else{el.classList.add('wrong');
+    // подсветить правильный
+    var opts=el.parentNode.querySelectorAll('.sb-opt');
+    opts.forEach(function(o){o.onclick=null;});
+  }
+}
+
+// прогресс чтения
+function studyMarkReading(topicId){
+  if(!S.user)return;
+  var cur=ST.progress[topicId]||{};
+  if(cur.completed)return;
+  ST.progress[topicId]={read_pct:Math.max(cur.read_pct||0,20),completed:false};
+  upsertStudyProgress(topicId,{read_pct:ST.progress[topicId].read_pct,completed:false});
+}
+function studyFinishTopic(topicId){
+  if(!S.user){if(typeof showLoginWall==='function')showLoginWall();return;}
+  ST.progress[topicId]={read_pct:100,completed:true,test_passed:(ST.progress[topicId]||{}).test_passed||false};
+  upsertStudyProgress(topicId,{read_pct:100,completed:true});
+  // награда баллами (переиспользуем механизм Vita если есть)
+  if(typeof addScoreVita==='function')addScoreVita(50);
+  toast2('✓ Тема пройдена! +50 баллов');
+  renderStudyTopics(document.getElementById('studyBody'));
+}
+function upsertStudyProgress(topicId,fields){
+  if(!S.user)return;
+  var body=Object.assign({user_email:S.user.email,topic_id:topicId,updated_at:new Date().toISOString()},fields);
+  fetch(SB_URL+'/rest/v1/study_progress?on_conflict=user_email,topic_id',{
+    method:'POST',
+    headers:Object.assign({},SBHEAD(),{Prefer:'resolution=merge-duplicates'}),
+    body:JSON.stringify(body)
+  }).catch(function(){});
+}
+
+// закладки
+function studyCheckBookmark(topicId){
+  if(!S.user)return;
+  sbGet('bookmarks','user_email=eq.'+encodeURIComponent(S.user.email)+'&topic_id=eq.'+topicId+'&select=id').then(function(rows){
+    var btn=document.getElementById('bmBtn');
+    if(btn&&rows&&rows.length)btn.textContent='★';
+  });
+}
+function studyToggleBookmark(topicId){
+  if(!S.user){if(typeof showLoginWall==='function')showLoginWall();return;}
+  var btn=document.getElementById('bmBtn');
+  var isOn=btn&&btn.textContent==='★';
+  if(isOn){
+    sbDel('bookmarks','user_email=eq.'+encodeURIComponent(S.user.email)+'&topic_id=eq.'+topicId);
+    if(btn)btn.textContent='☆';
+    toast2('Закладка убрана');
+  }else{
+    sbPost('bookmarks',{user_email:S.user.email,topic_id:topicId});
+    if(btn)btn.textContent='★';
+    toast2('★ В закладках');
+  }
+}
+
+// ===== ПОИСК ТЕМ =====
+function studyOpenSearch(){
+  var el=document.getElementById('studyBody');
+  el.innerHTML='<div class="reader-top"><div class="r-back" onclick="renderStudy()">←</div><div class="study-search-input"><i class="ti ti-search"></i><input id="studySearchInp" placeholder="Название темы…" oninput="studyDoSearch(this.value)" autofocus></div></div><div id="studySearchRes"><div class="study-search-hint">Начни вводить — найдём тему</div></div>';
+  setTimeout(function(){var i=document.getElementById('studySearchInp');if(i)i.focus();},100);
+}
+function studyDoSearch(q){
+  var res=document.getElementById('studySearchRes');
+  q=(q||'').trim();
+  if(q.length<2){res.innerHTML='<div class="study-search-hint">Минимум 2 буквы</div>';return;}
+  // поиск по всем темам (загружаем с join инфой)
+  sbGet('topics','title=ilike.*'+encodeURIComponent(q)+'*&select=id,title,number,subject_id&limit=30').then(function(rows){
+    rows=rows||[];
+    if(!rows.length){res.innerHTML='<div class="study-search-hint">Ничего не найдено</div>';return;}
+    var h='<div class="study-search-count">Найдено: '+rows.length+'</div>';
+    rows.forEach(function(t){
+      h+='<div class="study-sres" onclick="studyOpenSearchTopic('+t.id+','+t.subject_id+')"><div class="sr-t">'+esc(t.title)+'</div></div>';
+    });
+    res.innerHTML=h;
+  });
+}
+function studyOpenSearchTopic(topicId,subjectId){
+  // загрузить контекст (предмет, курс, универ) для корректной навигации назад
+  sbGet('subjects','id=eq.'+subjectId+'&select=*').then(function(subs){
+    if(subs&&subs.length){
+      ST.subject=subs[0];
+      sbGet('courses','id=eq.'+ST.subject.course_id+'&select=*').then(function(cs){
+        if(cs&&cs.length){ST.course=cs[0];
+          sbGet('universities','id=eq.'+ST.course.university_id+'&select=*').then(function(us){
+            if(us&&us.length)ST.uni=us[0];
+            // загрузить темы предмета для навигации
+            sbGet('topics','subject_id=eq.'+subjectId+'&select=*&order=sort_order.asc').then(function(tp){
+              ST.topics=tp||[];
+              studyOpenTopic(topicId);
+            });
+          });
+        }
+      });
+    }
+  });
+}
+
+// мини-тост (если в Vita есть свой — используем, иначе свой)
+function toast2(msg){
+  if(typeof toast==='function'){toast(msg);return;}
+  var el=document.getElementById('studyToast');
+  if(!el){el=document.createElement('div');el.id='studyToast';el.className='study-toast';document.body.appendChild(el);}
+  el.textContent=msg;el.classList.add('show');
+  setTimeout(function(){el.classList.remove('show');},2200);
+}
+
+// заголовки Supabase (берём из Vita)
+function SBHEAD(){
+  return {apikey:SB_KEY,Authorization:'Bearer '+SB_KEY,'Content-Type':'application/json',Prefer:'return=representation'};
+}
+
 </script>
 </body>
 </html>
