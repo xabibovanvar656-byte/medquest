@@ -1266,6 +1266,33 @@ input::placeholder,textarea::placeholder{color:var(--tx3)}
 #exHero.ex-hero div{color:inherit!important;opacity:1!important}
 #exHero.ex-hero [style*="rgba(255,255,255"]{background:rgba(0,0,0,.1)!important;border-color:transparent!important}
 
+/* пароли */
+.pw-wrap{position:relative}
+.pw-wrap input{padding-right:50px}
+.pw-eye{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:42px;height:40px;border:none;background:none;color:var(--tx3);font-size:20px;cursor:pointer;border-radius:10px;display:flex;align-items:center;justify-content:center}
+.pw-eye:hover{color:var(--tx)}
+.pw-note{text-align:center;font-size:13px;color:var(--tx2);margin-top:12px;line-height:1.45}
+.pw-note a{color:var(--meth-t);font-weight:600;text-decoration:none}
+.pw-code{font-size:24px!important;font-weight:700;letter-spacing:.4em;text-align:center}
+.pw-tmp{font-size:30px;font-weight:800;letter-spacing:.08em;text-align:center;padding:16px;border-radius:16px;background:var(--bg3);user-select:all;font-feature-settings:"tnum" 1}
+.ferr.ok{color:var(--mal-t);background:var(--mal-s);border-color:var(--mal)}
+
+/* админы и просьбы */
+.bvio{background:var(--vio);color:var(--vio-ink);box-shadow:0 4px 0 var(--vio-e)}
+.adm-note{font-size:13px;color:var(--tx2);line-height:1.5;background:var(--bg2);border-radius:16px;padding:12px 14px;margin-bottom:12px;box-shadow:0 3px 0 var(--edge)}
+.adm-note b{color:var(--tx)}
+.adm-people{display:flex;flex-direction:column;gap:10px}
+.adm-person{display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border-radius:18px;padding:12px 14px;box-shadow:0 4px 0 var(--edge);margin-bottom:10px}
+.adm-people .adm-person{margin-bottom:0}
+.adm-person-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.adm-person-t b{font-size:15px;font-weight:700}
+.adm-person-t>span{font-size:12.5px;color:var(--tx3);overflow-wrap:anywhere;display:flex;align-items:center;gap:5px}
+.adm-person-t>span.ok{color:var(--mal-t)}
+.adm-person-t>span.warn{color:var(--iod-t)}
+.adm-person-a{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.pw-alt{margin-top:16px;padding-top:14px;border-top:1px solid var(--bor);display:flex;flex-direction:column;gap:8px}
+.pw-alt span{font-size:13px;color:var(--tx3);text-align:center}
+
 /* читалка урока — шрифт для долгого чтения */
 .sblk p,.sb-drop,.study-reader-hero .srh-lede{font-family:var(--read);line-height:1.72}
 
@@ -1653,6 +1680,7 @@ function sbFetch(method,table,filter,body){
   if(table==='users'){
     if(method==='GET')table='users_public';
     else if(method==='DELETE')return vAdminWrite('delete','users',filter,null);
+    else if(method==='PATCH'&&body&&['status','role','hidden_from_lb','no_autodelete','group_name'].some(function(k){return k in body;}))return vAdminWrite('update','users',filter,body);
     else filter=(filter?filter+'&':'')+'select=email';
   }
   var url=SB_URL+'/rest/v1/'+table+(filter?'?'+filter:'');
@@ -1819,11 +1847,11 @@ async function tgAutoLogin(){
     var r=await fetch(VITA_AUTH_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({init_data:TG.initData})});
     var j=await r.json();
     if(j.status==='ok'&&j.user){
-      var f=j.user;S.token=j.token;
+      var f=j.user;S.token=j.token;S.viaTg=true;try{setTimeout(function(){vApplyRole(f.role,f.email);vOpenAdminLink();},0);}catch(e){}
       S.user={name:f.name,email:f.email,group:f.group_name||'',avatar:f.avatar||'',frames:f.frames||'',frame:f.frame||'',coins:f.coins||0,owned_items:f.owned_items||'',profile_bg:f.profile_bg||'',private_profile:f.private_profile||false};
       sv();renderAuthHdr();await loadProg();renderHome();return;
     }
-    if(j.status==='new'){S.token=j.token;sv();if(!S.user)tgShowLinkChoice();}
+    if(j.status==='new'){S.token=j.token;S.viaTg=true;sv();if(!S.user)tgShowLinkChoice();}
   }catch(e){}
 }
 // Выбор при первом входе через Telegram
@@ -1832,10 +1860,10 @@ function tgShowLinkChoice(){
     +'<div style="font-size:16px;font-weight:700">Добро пожаловать в Vita!</div>'
     +'<div style="font-size:13px;color:var(--tx2);margin-top:6px">У тебя уже есть аккаунт на сайте Vita?</div></div>'
     +'<button class="btn bbl" onclick="tgLinkExisting()" style="width:100%;margin-bottom:10px"><i class="ti ti-circle-check"></i> Да, войти и привязать Telegram</button>'
-    +'<button class="btn bgh" onclick="tgCreateNew()" style="width:100%">🆕 Нет, создать новый аккаунт</button>';
+    +'<button class="btn bgh" onclick="tgCreateNew()" style="width:100%"><i class="ti ti-user-plus"></i> Нет, создать новый аккаунт</button>';
   showModal('Вход через Telegram',body);
   // нельзя закрыть просто так — убираем крестик на этом шаге
-  var mc=document.querySelector('#modal .mclose');if(mc)mc.style.display='none';
+  vModalX(false);
 }
 // Привязать к существующему аккаунту
 function tgLinkExisting(){
@@ -1904,7 +1932,7 @@ async function tgSaveCredentials(){
 
 async function vVerifyAdmin(){
   if(!S.isAdm)return;
-  try{var si=await sbRpc('session_info',{p_token:vAdminToken()});if(!(si&&si.length&&si[0].is_admin)){S.isAdm=false;S.isSuper=false;S.adminToken='';sv();try{renderAuthHdr();}catch(e){}}}
+  try{var si=await sbRpc('session_info',{p_token:vAdminToken()});if(si&&si.length&&si[0].is_admin){S.isSuper=!!si[0].is_super;sv();}if(!(si&&si.length&&si[0].is_admin)){S.isAdm=false;S.isSuper=false;S.adminToken='';sv();try{renderAuthHdr();}catch(e){}}}
   catch(e){S.isAdm=false;S.isSuper=false;sv();}
 }
 async function init(){
@@ -1934,6 +1962,8 @@ async function init(){
     dbOK=true;
     document.getElementById('dbst').innerHTML='';
     vVerifyAdmin();
+    if(S.user&&S.mustChange)setTimeout(function(){openChangePassword(true);},600);
+    else setTimeout(vOpenAdminLink,900);
   }catch(e){
     dbOK=false;
     document.getElementById('dbst').innerHTML='<span style="color:var(--am)">Нет связи с сервером</span>';
@@ -2085,7 +2115,7 @@ function renderAuthHdr(){
 async function updPendBadge(){
   if(!S.isAdm)return;
   var n=0;
-  if(dbOK){try{var r=await sbGet('users','status=eq.pending&select=email');n=r.length;}catch(e){}}
+  if(dbOK){try{var r=await sbGet('users','status=eq.pending&select=email');n=r.length;}catch(e){}try{n+=(await admPassHelp()).length;}catch(e){}}
   var b=document.getElementById('admBadge'),c=document.getElementById('pendCnt');
   if(b){b.style.display=n>0?'flex':'none';b.textContent=n;}
   if(c)c.textContent=n>0?n:'';
@@ -2161,6 +2191,10 @@ function openModal(m){
     addInput(b,'mPw','password','Пароль','');
     addErr(b);
     addBtn(b,'bbl','Войти',doAuth);
+    var fp=document.createElement('p');fp.className='pw-note';fp.style.marginTop='10px';
+    var fa=document.createElement('a');fa.href='#';fa.textContent='Забыли пароль?';
+    fa.addEventListener('click',function(e){e.preventDefault();openForgot(val('mEm').trim());});
+    fp.appendChild(fa);b.appendChild(fp);
     var p=document.createElement('p');
     p.style.cssText='text-align:center;margin-top:11px;font-size:12px;color:var(--tx2)';
     p.textContent='Нет аккаунта? ';
@@ -2187,7 +2221,7 @@ function openModal(m){
     b.innerHTML='';
     var al=document.createElement('div');al.className='alert ali';al.style.marginBottom='14px';
     if(S.user){
-      al.innerHTML='<i class="ti ti-info-circle"></i> Вы вошли как '+S.user.name+'. Если вам выдали админку — нажмите «Войти как админ». Главный админ — введите пароль.';
+      al.innerHTML='<i class="ti ti-info-circle"></i> Ты вошёл как '+esc(S.user.name)+'. Если твоему аккаунту выдали права админа или главного админа — нажми «Войти как админ». Общий пароль главного админа — запасной вариант.';
     }else{
       al.innerHTML='<i class="ti ti-alert-triangle"></i> Главный админ: введите пароль. Обычный админ: сначала войдите как студент.';
     }
@@ -2202,6 +2236,160 @@ function openModal(m){
     addErr(b);
     addBtn(b,'bbl','Войти по паролю',doAdm);
   }
+}
+
+// ===== ПАРОЛИ: смена, «Забыли пароль?», сброс админом =====
+var V_FORCE_PW=false,V_FG_EM='';
+function vBotUrl(p){return VITA_BOT_DOMAIN?VITA_BOT_DOMAIN.replace(/\/$/,'')+p:'';}
+function vPwField(id,label,ac){
+  return '<div class="fg"><label class="fl" for="'+id+'">'+label+'</label><div class="pw-wrap"><input id="'+id+'" type="password" autocomplete="'+ac+'">'
+    +'<button type="button" class="pw-eye" aria-label="Показать пароль" onclick="vPwEye(\''+id+'\',this)"><i class="ti ti-eye"></i></button></div></div>';
+}
+function vPwEye(id,b){
+  var i=document.getElementById(id);if(!i)return;
+  var show=i.type==='password';i.type=show?'text':'password';
+  b.innerHTML='<i class="ti ti-eye'+(show?'-off':'')+'"></i>';b.setAttribute('aria-label',show?'Скрыть пароль':'Показать пароль');
+}
+function vErr(msg){var e=document.getElementById('mErr');if(e){e.textContent=msg||'';e.style.display=msg?'block':'none';}return false;}
+function vModalX(show){var x=document.getElementById('mdXBtn');if(x)x.style.display=show?'':'none';}
+
+// Telegram: обновить сессию (вход через бота) — нужна, чтобы менять пароль без старого
+async function vTgRefresh(){
+  if(!VITA_AUTH_URL||!(TG&&TG.initData))return false;
+  try{
+    var r=await fetch(VITA_AUTH_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({init_data:TG.initData})});
+    var j=await r.json();
+    if(j.status==='ok'&&j.token&&j.user&&S.user&&j.user.email===S.user.email){S.token=j.token;S.viaTg=true;sv();return true;}
+  }catch(e){}
+  return false;
+}
+// Привязать Telegram к аккаунту с почтой (подпись Telegram проверяет бот)
+async function vTgLink(){
+  if(!(TG&&TG.initData)||!S.token)return 'no_tg';
+  var url=vBotUrl('/auth/link');if(!url)return 'no_server';
+  var r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({init_data:TG.initData,token:S.token})});
+  var j=await r.json().catch(function(){return {};});
+  if(j.status==='ok'){S.viaTg=true;S.user.tg_linked=true;sv();}
+  return j.status||'error';
+}
+
+// ---- Смена пароля (из профиля или принудительно после временного) ----
+function openChangePassword(forced,askOld){
+  V_FORCE_PW=!!forced;
+  var needOld=!forced&&(askOld||!(TG_USER&&S.viaTg));
+  var h=(forced?'<div class="alert ali" style="margin-bottom:14px"><i class="ti ti-key"></i> У тебя временный пароль от администратора. Придумай свой — его будешь знать только ты.</div>':'')
+    +(needOld?vPwField('pwOld','Старый пароль','current-password'):'')
+    +vPwField('pwNew','Новый пароль — от 6 символов','new-password')
+    +vPwField('pwNew2','Повтори новый пароль','new-password')
+    +'<p class="ferr" id="mErr"></p>'
+    +'<button class="btn bbl bfu" id="pwSave" onclick="vSavePassword()">Сохранить пароль</button>'
+    +(needOld?'<p class="pw-note">Не помнишь старый? <a href="#" onclick="event.preventDefault();openForgot(S.user&&S.user.email)">Сбросить через Telegram</a></p>':'')
+    +(!needOld&&!forced?'<p class="pw-note">Ты вошёл через Telegram — старый пароль не нужен.</p>':'')
+    +(forced?'<p class="pw-note"><a href="#" onclick="event.preventDefault();V_FORCE_PW=false;closeModal();doLogout()">Выйти из аккаунта</a></p>':'');
+  showModal(forced?'Придумай свой пароль':'Сменить пароль',h);
+  vModalX(!forced);
+  setTimeout(function(){var f=document.getElementById(needOld?'pwOld':'pwNew');if(f)f.focus();},60);
+}
+async function vSavePassword(){
+  var oldEl=document.getElementById('pwOld');
+  var o=oldEl?oldEl.value:'',n=val('pwNew'),n2=val('pwNew2');
+  if(oldEl&&!o)return vErr('Введи старый пароль');
+  if(n.length<6)return vErr('Пароль — минимум 6 символов');
+  if(n!==n2)return vErr('Пароли не совпадают');
+  var b=document.getElementById('pwSave');b.disabled=true;b.textContent='Сохраняю…';
+  var done=function(){b.disabled=false;b.textContent='Сохранить пароль';};
+  try{
+    var r=await sbRpc('change_password',{p_token:S.token||'',p_old:o,p_new:n});
+    if(r==='need_old'&&!oldEl&&TG_USER&&await vTgRefresh())r=await sbRpc('change_password',{p_token:S.token||'',p_old:'',p_new:n});
+    if(r==='need_old'&&!oldEl){S.viaTg=false;openChangePassword(false,true);vErr('Введи старый пароль');return;}
+    if(r!=='ok'){
+      vErr({wrong_old:'Старый пароль неверный',weak:'Пароль — минимум 6 символов',no_session:'Сессия устарела — выйди и войди заново'}[r]||('Не получилось: '+r));
+      done();return;
+    }
+    V_FORCE_PW=false;S.mustChange=false;sv();vModalX(true);closeModal();
+    showAlert('hAlert','alok','ti-check',' Пароль сохранён. На других устройствах нужно будет войти заново.',6000);
+    if(TG_USER&&S.user&&!S.user.tg_linked&&S.user.email.indexOf('tg_')!==0){vTgLink().catch(function(){});}
+  }catch(e){vErr('Нет связи с сервером. Попробуй ещё раз.');done();}
+}
+
+// ---- «Забыли пароль?» — код от бота в Telegram ----
+function openForgot(prefill){
+  V_FORCE_PW=false;vModalX(true);
+  var h='<p class="pw-note" style="margin:0 0 14px;text-align:left">Бот Vita пришлёт код в Telegram — если твой аккаунт к нему привязан. Если нет — попроси администратора, кнопка внизу.</p>'
+    +'<div class="fg"><label class="fl" for="fgEm">Email</label><input id="fgEm" type="email" autocomplete="username" placeholder="student@med.uz" value="'+esc(prefill||'')+'"></div>'
+    +'<p class="ferr" id="mErr"></p>'
+    +'<button class="btn bbl bfu" id="fgBtn" onclick="vForgotSend()"><i class="ti ti-brand-telegram"></i> Прислать код в Telegram</button>'
+    +'<p class="pw-note"><a href="#" onclick="event.preventDefault();V_FG_EM=val(\'fgEm\').trim();if(V_FG_EM)vForgotStep2(false);else vErr(\'Введи email\')">У меня уже есть код</a> · <a href="#" onclick="event.preventDefault();openModal(\'login\')">Назад ко входу</a></p>'
+    +'<div class="pw-alt"><span>Нет Telegram или код не приходит?</span><button class="btn bgh bfu" onclick="openAskAdmin(val(\'fgEm\'))"><i class="ti ti-user-shield"></i> Сбросить через администратора</button></div>';
+  showModal('Забыли пароль?',h);
+}
+async function vForgotSend(){
+  var em=val('fgEm').trim();
+  if(!em||em.indexOf('@')<0)return vErr('Введи email, с которым входишь');
+  var url=vBotUrl('/auth/reset_request');
+  if(!url)return vErr('Сброс сейчас недоступен — напиши администратору');
+  var b=document.getElementById('fgBtn');b.disabled=true;b.textContent='Отправляю…';
+  try{
+    var r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:em})});
+    var j=await r.json().catch(function(){return {};});
+    V_FG_EM=em;
+    if(j.status==='sent'){vForgotStep2(true);return;}
+    vErr({no_telegram:'К этому email не привязан Telegram (или такого аккаунта нет). Нажми «Сбросить через администратора» ниже.',
+      wait:'Код уже отправлен. Новый можно запросить через минуту — или нажми «У меня уже есть код».',
+      limit:'На сегодня лимит кодов исчерпан. Попробуй завтра или напиши администратору.',
+      cant_send:'Бот не смог тебе написать. Открой бота Vita в Telegram, нажми «Старт» и попробуй снова.'}[j.status]||'Не получилось отправить код. Попробуй позже.');
+  }catch(e){vErr('Нет связи с сервером. Попробуй позже.');}
+  b.disabled=false;b.innerHTML='<i class="ti ti-brand-telegram"></i> Прислать код в Telegram';
+}
+function vForgotStep2(justSent){
+  var h=(justSent?'<div class="alert alok" style="margin-bottom:14px"><i class="ti ti-brand-telegram"></i> Код отправлен в Telegram от бота Vita. Он действует 10 минут.</div>':'')
+    +'<div class="fg"><label class="fl" for="fgCode">Код из Telegram</label><input id="fgCode" class="pw-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="••••••"></div>'
+    +vPwField('pwNew','Новый пароль — от 6 символов','new-password')
+    +vPwField('pwNew2','Повтори новый пароль','new-password')
+    +'<p class="ferr" id="mErr"></p>'
+    +'<button class="btn bbl bfu" id="fgBtn2" onclick="vForgotConfirm()">Сохранить пароль</button>'
+    +'<p class="pw-note"><a href="#" onclick="event.preventDefault();openForgot(V_FG_EM)">Прислать код ещё раз</a></p>';
+  showModal('Новый пароль',h);
+  setTimeout(function(){var f=document.getElementById('fgCode');if(f)f.focus();},60);
+}
+async function vForgotConfirm(){
+  var code=val('fgCode').replace(/\D/g,''),n=val('pwNew'),n2=val('pwNew2');
+  if(code.length!==6)return vErr('Код — 6 цифр из сообщения бота');
+  if(n.length<6)return vErr('Пароль — минимум 6 символов');
+  if(n!==n2)return vErr('Пароли не совпадают');
+  var b=document.getElementById('fgBtn2');b.disabled=true;b.textContent='Сохраняю…';
+  try{
+    var r=await sbRpc('reset_confirm',{p_email:V_FG_EM,p_code:code,p_new:n});
+    if(r==='ok'){
+      openModal('login');
+      var em=document.getElementById('mEm');if(em)em.value=V_FG_EM;
+      var pw=document.getElementById('mPw');if(pw)pw.focus();
+      var e=document.getElementById('mErr');if(e){e.className='ferr ok';e.textContent='Пароль изменён — войди с новым.';e.style.display='block';}
+      return;
+    }
+    vErr({bad_code:'Неверный код',expired:'Код истёк — запроси новый',too_many:'Слишком много попыток — запроси новый код',weak:'Пароль — минимум 6 символов'}[r]||('Не получилось: '+r));
+  }catch(e){vErr('Нет связи с сервером. Попробуй ещё раз.');}
+  b.disabled=false;b.textContent='Сохранить пароль';
+}
+
+// ---- Админ: сбросить пароль студенту ----
+async function admResetPw(email,name){
+  if(!confirm('Сбросить пароль для «'+(name||email)+'»?\nСтарый пароль перестанет работать, студента выкинет со всех устройств.'))return;
+  try{
+    var r=await fetch(SB_URL+'/rest/v1/rpc/admin_reset_password',{method:'POST',headers:SBH,body:JSON.stringify({p_token:vAdminToken(),p_email:email})});
+    var j=await r.json().catch(function(){return null;});
+    if(!r.ok){alert((j&&j.message)||'Не получилось сбросить пароль');return;}
+    var tmp=String(j||'');
+    var msg='Твой временный пароль для Vita: '+tmp+'\nВойди с ним — приложение сразу попросит придумать свой.';
+    showModal('Временный пароль',
+      '<p class="pw-note" style="margin:0 0 12px;text-align:left">Передай студенту <b>'+esc(name||email)+'</b>. При входе он сразу придумает свой пароль, а этот перестанет работать.</p>'
+      +'<div class="pw-tmp" aria-label="Временный пароль">'+esc(tmp)+'</div>'
+      +'<div style="display:flex;gap:8px;margin-top:12px"><button class="btn bbl bsm" style="flex:1" id="pwCp1"><i class="ti ti-copy"></i> Скопировать пароль</button><button class="btn bgh bsm" style="flex:1" id="pwCp2"><i class="ti ti-message"></i> Текст для студента</button></div>'
+      +'<p class="pw-note">Посмотреть пароль позже будет нельзя — только сбросить снова.</p>');
+    var cp=function(t,btn){try{navigator.clipboard.writeText(t).then(function(){btn.innerHTML='<i class="ti ti-check"></i> Скопировано';});}catch(e){prompt('Скопируй:',t);}};
+    document.getElementById('pwCp1').onclick=function(){cp(tmp,this);};
+    document.getElementById('pwCp2').onclick=function(){cp(msg,this);};
+  }catch(e){alert('Нет связи с сервером');}
 }
 
 function addInput(parent,id,type,label,ph){
@@ -2230,6 +2418,7 @@ function showModal(title,htmlBody){
   document.getElementById('mdBody').innerHTML=htmlBody;
 }
 function closeModal(){
+  if(V_FORCE_PW)return;
   document.getElementById('modal').style.display='none';
   var mb=document.querySelector('#modal .modalBg');if(mb)mb.remove();
   var mr=document.getElementById('modalRoot');if(mr)mr.innerHTML='';
@@ -2283,11 +2472,14 @@ async function doAuth(){
         user=res[0];
       }
       S.user={name:user?user.name:email,email:email,group:user?user.group_name:'',avatar:user?(user.avatar||''):'',frames:user?(user.frames||''):'',frame:user?(user.frame||''):'',coins:user?(user.coins||0):0,owned_items:user?(user.owned_items||''):'',profile_bg:user?(user.profile_bg||''):'',private_profile:user?(user.private_profile||false):false};
+      S.viaTg=false;S.mustChange=!!(user&&user.must_change);
+      if(user&&S.token)vApplyRole(user.role,email);
       sv();closeModal();renderAuthHdr();
-      // если вошёл с сайта внутри Telegram — привяжем Telegram к аккаунту
+      // если вошёл с сайта внутри Telegram — привяжем Telegram к аккаунту (через бота, с проверкой подписи)
       if(typeof isTG==='function'&&isTG()&&TG_USER&&email.indexOf('tg_')!==0){
-        try{await sbPatch('users','email=eq.'+encodeURIComponent(email),{tg_id:String(TG_USER.id),tg_chat_id:String(TG_USER.id)});}catch(e){}
+        try{await vTgLink();}catch(e){}
       }
+      if(S.mustChange)setTimeout(function(){openChangePassword(true);},250);
       pushActivity('вошёл');
       await loadProg();renderHome();
     }catch(e){showErr('Ошибка: '+e.message);btn.disabled=false;btn.textContent='Войти';}
@@ -2317,7 +2509,7 @@ async function doAdm(){
       var si=S.token?await sbRpc('session_info',{p_token:S.token}):[];
       var rows=await sbGet('users','email=eq.'+encodeURIComponent(S.user.email)+'&select=role,name');
       if(si&&si.length&&si[0].is_admin&&rows.length){S.adminToken=S.token;
-        S.isAdm=true;S.isSuper=false;S.adminEmail=S.user.email;sv();closeModal();renderAuthHdr();
+        S.isAdm=true;S.isSuper=!!si[0].is_super;S.adminEmail=S.user.email;sv();closeModal();renderAuthHdr();
         registerAdminSession(rows[0].name||S.user.name,S.user.email);
         go('admin',document.querySelector('[data-pg=admin]'));
         return;
@@ -2361,7 +2553,7 @@ setInterval(async function(){
     if(badgeM)badgeM.style.display=inc.length?'flex':'none';
   }catch(e){}
 },8000);
-function doLogout(){S.user=null;S.hist=[];S.prog={};S.token='';S.adminToken='';S.isAdm=false;S.isSuper=false;sv();renderAuthHdr();renderHome();}
+function doLogout(){V_FORCE_PW=false;S.user=null;S.hist=[];S.prog={};S.token='';S.adminToken='';S.isAdm=false;S.isSuper=false;S.mustChange=false;S.viaTg=false;sv();renderAuthHdr();renderHome();}
 async function admOut(){if(!S.isSuper&&S.adminEmail&&dbOK){try{await sbDel('admin_sessions','email=eq.'+encodeURIComponent(S.adminEmail));}catch(e){}}S.isAdm=false;S.isSuper=false;S.adminEmail=null;sv();renderAuthHdr();renderAdm();}
 
 function val(id){var e=document.getElementById(id);return e?e.value.trim():'';}
@@ -3605,6 +3797,7 @@ async function renderProfile(){
     +'<button onclick="profTogglePrivacy()"><i class="ti '+(me.private_profile?'ti-lock':'ti-lock-open')+'"></i>Статистика в профиле<span class="r">'+(me.private_profile?'скрыта':'видна всем')+'</span></button>'
     +'<button onclick="toggleSound()"><i class="ti ti-volume"></i>Звуки<span class="r" id="sndBtn">'+(S.sound===false?'выключены':'включены')+'</span></button>'
     +'<button onclick="toggleTheme()"><i class="ti ti-moon"></i>Тема<span class="r">'+(S.dark?'тёмная':'светлая')+'</span></button>'
+    +(String(me.email||'').indexOf('tg_')!==0?'<button onclick="openChangePassword(false)"><i class="ti ti-key"></i>Сменить пароль</button>':'')
     +(S.isAdm?'<button onclick="go(\'admin\')"><i class="ti ti-shield-lock"></i>Панель администратора</button>':'<button onclick="openModal(\'admin\')"><i class="ti ti-shield-lock"></i>Вход для администратора</button>')
     +'<button class="danger" onclick="doLogout()"><i class="ti ti-logout"></i>Выйти</button>'
     +'</div>'+link+'<div style="height:12px"></div>';
@@ -3708,7 +3901,8 @@ function profLinkSection(){
 async function profLinkTelegram(){
   if(!TG_USER){alert('Открой через Telegram чтобы привязать');return;}
   try{
-    await sbPatch('users','email=eq.'+encodeURIComponent(S.user.email),{tg_id:String(TG_USER.id),tg_chat_id:String(TG_USER.id)});
+    var st=await vTgLink();
+    if(st!=='ok'){alert(st==='no_session'?'Сессия устарела — выйди и войди заново, потом привяжи Telegram.':'Не получилось привязать Telegram. Попробуй позже.');return;}
     showAlert('hAlert','alok','ti-check',' Telegram привязан! Теперь вход автоматический и придут уведомления.',6000);
     renderProfile();
   }catch(e){alert('Ошибка: '+e.message);}
@@ -5361,8 +5555,18 @@ function admOpenSubjectQs(k){admTab('questions',admTabBtn('questions'));setTimeo
 async function admPending(){
   var el=document.getElementById('admPending');el.innerHTML='<div style="color:var(--tx3);padding:10px">Загрузка...</div>';
   var rows=[];if(dbOK){try{rows=await sbGet('users','status=eq.pending&order=created_at.asc');}catch(e){}}
-  if(!rows.length){el.innerHTML='<div class="alert alok"><i class="ti ti-check"></i> Нет ожидающих заявок</div>';return;}
-  el.innerHTML='<p style="font-size:13px;color:var(--tx2);margin-bottom:12px">Заявки: '+rows.length+'</p>'+rows.map(function(u){return '<div class="prow"><div style="flex:1"><div style="font-weight:600">'+u.name+'</div><div style="font-size:11px;color:var(--tx2)">'+u.email+' · '+u.group_name+' · '+u.joined+'</div></div><button class="btn bgr bsm" onclick="admApprove(\''+u.email+'\')"><i class="ti ti-check"></i>Принять</button><button class="btn bre bsm" style="margin-left:6px" onclick="admReject(\''+u.email+'\',\''+u.name+'\')"><i class="ti ti-x"></i>Отклонить</button></div>';}).join('');
+  var help=dbOK?await admPassHelp():[];
+  var hh='';
+  if(help.length){
+    hh='<div class="adm-h3" style="margin-top:0">Просят сбросить пароль · '+help.length+'</div>'+help.map(function(h){
+      var nm=esc(String(h.name||h.email).replace(/'/g,'')),em=esc(h.email).replace(/'/g,'');
+      return '<div class="adm-person"><span class="lb-blob iod" style="width:40px;height:40px;font-size:21px;flex-shrink:0"><i class="ti ti-key"></i></span><div class="adm-person-t"><b>'+esc(h.name||h.email)+'</b><span>'+esc(h.email)+'</span>'
+        +'<span>Связаться: <b style="color:var(--tx)">'+esc(h.contact)+'</b> · '+new Date(h.created_at).toLocaleString('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+'</span>'
+        +'<div class="adm-person-a"><button class="btn bbl bsm" onclick="admHelpReset('+h.id+',\''+em+'\',\''+nm+'\')"><i class="ti ti-key"></i>Сбросить пароль</button><button class="btn bgh bsm" onclick="admHelpClose('+h.id+')">Закрыть</button></div></div></div>';
+    }).join('')+'<div class="adm-h3">Заявки на регистрацию</div>';
+  }
+  if(!rows.length){el.innerHTML=hh+'<div class="alert alok"><i class="ti ti-check"></i> Нет ожидающих заявок</div>';updPendBadge();return;}
+  el.innerHTML=hh+'<p style="font-size:13px;color:var(--tx2);margin-bottom:12px">Заявки: '+rows.length+'</p>'+rows.map(function(u){return '<div class="prow"><div style="flex:1"><div style="font-weight:600">'+u.name+'</div><div style="font-size:11px;color:var(--tx2)">'+u.email+' · '+u.group_name+' · '+u.joined+'</div></div><button class="btn bgr bsm" onclick="admApprove(\''+u.email+'\')"><i class="ti ti-check"></i>Принять</button><button class="btn bre bsm" style="margin-left:6px" onclick="admReject(\''+u.email+'\',\''+u.name+'\')"><i class="ti ti-x"></i>Отклонить</button></div>';}).join('');
   updPendBadge();
 }
 async function admApprove(email){try{await sbPatch('users','email=eq.'+encodeURIComponent(email),{status:'active'});admPending();}catch(e){alert('Ошибка: '+e.message);}}
@@ -5388,7 +5592,7 @@ async function admStudents(){
   if(!rows.length){el.innerHTML='<p style="color:var(--tx3);font-size:13px">Нет студентов</p>';return;}
   var now=Date.now();
   el.innerHTML='<p style="font-size:11px;color:var(--tx3);margin-bottom:8px">Нажмите на имя — статистика студента. <i class="ti ti-point-filled"></i> = сейчас в сети.</p><table class="tbl"><thead><tr><th>Имя</th><th>Активность</th><th>Роль</th><th>Статус</th><th>Действие</th></tr></thead><tbody>'+rows.map(function(u){
-    var roleBdg=u.role==='admin'?'<span class="bdg bam2" style="font-size:9px"><i class="ti ti-shield"></i></span>':'<span style="color:var(--tx3);font-size:11px">студ.</span>';
+    var roleBdg=u.role==='super'?'<span class="bdg" style="font-size:10px;background:var(--vio-s);color:var(--vio-t)" title="Главный админ"><i class="ti ti-crown"></i></span>':u.role==='admin'?'<span class="bdg" style="font-size:10px;background:var(--meth-s);color:var(--meth-t)" title="Админ"><i class="ti ti-shield"></i></span>':'<span style="color:var(--tx3);font-size:11px">студ.</span>';
     // Активность
     var act=ACT_CACHE[u.email];
     var actHtml='<span style="color:var(--tx3);font-size:11px">—</span>';
@@ -5400,9 +5604,10 @@ async function admStudents(){
     }
     var actions='';
     actions+=(u.status==='active'?'<button class="btn bre bsm" onclick="event.stopPropagation();admBlock(\''+u.email+'\',\''+u.name+'\')"><i class="ti ti-ban"></i></button>':'<button class="btn bgr bsm" onclick="event.stopPropagation();admUnblock(\''+u.email+'\')"><i class="ti ti-lock-open"></i></button>');
+    actions+='<button class="btn bgh bsm" style="margin-left:3px" title="Сбросить пароль" aria-label="Сбросить пароль" onclick="event.stopPropagation();admResetPw(\''+u.email+'\',\''+esc(String(u.name||'').replace(/\x27/g,''))+'\')"><i class="ti ti-key"></i></button>';
     actions+='<button class="btn bgh bsm" style="margin-left:3px" onclick="event.stopPropagation();admDelUser(\''+u.email+'\',\''+u.name+'\')"><i class="ti ti-trash"></i></button>';
     if(S.isSuper){
-      if(u.role==='admin')actions+='<button class="btn bgh bsm" style="margin-left:3px" title="Убрать админа" onclick="event.stopPropagation();admRevokeAdmin(\''+u.email+'\')">⬇️</button>';
+      if(u.role==='admin'||u.role==='super')actions+='<button class="btn bgh bsm" style="margin-left:3px" title="Права — во вкладке «Админы»" aria-label="Права админа" onclick="event.stopPropagation();admTab(\'admins\',admTabBtn(\'admins\'))"><i class="ti ti-shield-cog"></i></button>';
       else actions+='<button class="btn bam bsm" style="margin-left:3px" title="Сделать админом" onclick="event.stopPropagation();admMakeAdmin(\''+u.email+'\')"><i class="ti ti-star"></i></button>';
     }
     return '<tr style="cursor:pointer" onclick="admStudentCard(\''+u.email+'\',\''+(u.name||'').replace(/\x27/g,'')+'\')"><td style="font-weight:500">'+u.name+'<div style="font-size:10px;color:var(--tx3)">'+u.email+'</div></td><td>'+actHtml+'</td><td>'+roleBdg+'</td><td><span class="bdg '+(u.status==='active'?'bgr2':'bre2')+'">'+(u.status==='active'?'Акт.':'Блок')+'</span></td><td style="display:flex;gap:2px;flex-wrap:wrap" onclick="event.stopPropagation()">'+actions+'</td></tr>';
@@ -5435,6 +5640,11 @@ async function admStudentCard(email,name){
     html+=exams.map(function(e){var pct=Math.round(e.score/e.total*100);var col=pct>=70?'var(--gr)':pct>=50?'var(--am)':'var(--re)';return '<div style="display:flex;justify-content:space-between;padding:7px 10px;background:var(--bg3);border-radius:6px;margin-bottom:5px;font-size:12px"><span>'+(SM[e.subject]?SM[e.subject].label:'Все')+' · '+e.exam_date+'</span><span style="font-weight:700;color:'+col+'">'+pct+'%</span></div>';}).join('');
   }else{
     html+='<div style="font-size:12px;color:var(--tx3)">Экзаменов ещё не было</div>';
+  }
+  if(email.indexOf('tg_')!==0){
+    html+='<div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--bor)"><div class="adm-h3" style="margin:0 0 8px">Доступ</div>'
+      +'<button class="btn bgh bsm" onclick="admResetPw(\''+email+'\',\''+esc(String(name||'').replace(/\x27/g,''))+'\')"><i class="ti ti-key"></i> Сбросить пароль</button>'
+      +'<div style="font-size:12px;color:var(--tx3);margin-top:6px">Студент получит временный пароль и при входе придумает свой.</div></div>';
   }
   // Кнопки управления прогрессом (для админов)
   html+='<div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--bor)"><div style="font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Управление прогрессом</div>';
@@ -5727,33 +5937,111 @@ async function admDelUser(e,name){
 async function admAdmins(){
   var el=document.getElementById('admAdmins');
   el.innerHTML='<div style="color:var(--tx3);padding:10px">Загрузка...</div>';
-  var admins=[],sessions=[];
+  var people=[],sessions=[];
   if(dbOK){
-    try{admins=await sbGet('users','role=eq.admin&select=email,name,status');}catch(e){}
+    try{people=(await sbGet('users','role=eq.super&select=email,name,status,role,tg_chat_id')).concat(await sbGet('users','role=eq.admin&select=email,name,status,role,tg_chat_id'));}catch(e){}
     try{sessions=await sbGet('admin_sessions','select=email,name,device,last_seen');}catch(e){}
   }
-  var sessByEmail={};
-  sessions.forEach(function(s){sessByEmail[s.email]=s;});
-  var now=Date.now();
-  var html='<div class="alert ali" style="margin-bottom:14px"><i class="ti ti-info-circle"></i> Чтобы выдать админку — откройте «Студенты» и нажмите <i class="ti ti-star"></i> напротив нужного человека.</div>';
-  if(!admins.length){
-    html+='<p style="color:var(--tx3);font-size:13px">Пока нет назначенных админов</p>';
-  }else{
-    html+='<table class="tbl"><thead><tr><th>Имя</th><th>Email</th><th>Устройство</th><th>Онлайн</th><th></th></tr></thead><tbody>';
-    html+=admins.map(function(a){
-      var s=sessByEmail[a.email];
-      var online=false,dev='—',seen='не заходил';
-      if(s){
-        dev=s.device||'—';
-        var diff=now-new Date(s.last_seen).getTime();
-        online=diff<90000;
-        seen=online?' сейчас':('был '+Math.round(diff/60000)+' мин назад');
-      }
-      return '<tr><td style="font-weight:500">'+a.name+'</td><td style="color:var(--tx2);font-size:11px">'+a.email+'</td><td style="font-size:11px">'+dev+'</td><td style="font-size:11px;color:'+(online?'var(--gr)':'var(--tx3)')+'">'+seen+'</td><td><button class="btn bre bsm" onclick="admRevokeAdmin(\''+a.email+'\')">Забрать</button></td></tr>';
-    }).join('');
-    html+='</tbody></table>';
+  var sessByEmail={};sessions.forEach(function(s){sessByEmail[s.email]=s;});
+  var now=Date.now(),me=S.user&&S.user.email;
+  var supers=people.filter(function(a){return a.role==='super';}).length;
+  var html='<div class="adm-note"><b>Главный админ</b> — всё, включая выдачу прав. <b>Админ</b> — заявки, вопросы, уроки; блокировку и удаление отправляет главному на подтверждение.<br>'
+    +'Уведомления в Telegram приходят тем, у кого привязан Telegram: заявки и сбросы паролей — всем админам, запросы от админов — только главным.'
+    +(S.isSuper?' Новых админов назначают во вкладке «Студенты» кнопкой <i class="ti ti-star"></i>.':'')+'</div>';
+  if(S.isSuper&&S.adminEmail==='super'&&!supers){
+    html+='<div class="alert alw" style="margin-bottom:12px"><i class="ti ti-alert-triangle"></i> Ты вошёл общим паролем. Сделай свой аккаунт главным админом (вкладка «Студенты» → <i class="ti ti-star"></i>, потом здесь «Сделать главным»), чтобы получать уведомления в Telegram.</div>';
   }
-  el.innerHTML=html;
+  if(!people.length){el.innerHTML=html+'<p style="color:var(--tx3);font-size:13px">Пока нет назначенных админов</p>';return;}
+  html+='<div class="adm-people">';
+  people.forEach(function(a){
+    var s=sessByEmail[a.email],seen='не заходил в админку',online=false;
+    if(s){var diff=now-new Date(s.last_seen).getTime();online=diff<90000;seen=online?'сейчас в админке':('был '+(diff<3600000?Math.round(diff/60000)+' мин':diff<86400000?Math.round(diff/3600000)+' ч':Math.round(diff/86400000)+' дн')+' назад');}
+    var tg=a.tg_chat_id&&String(a.tg_chat_id).trim();
+    var isSup=a.role==='super';
+    var acts='';
+    if(S.isSuper){
+      var em=esc(a.email).replace(/'/g,'');
+      acts+=isSup?'<button class="btn bgh bsm" onclick="admSetRole(\''+em+'\',\'admin\')">Сделать обычным</button>'
+                 :'<button class="btn bvio bsm" onclick="admSetRole(\''+em+'\',\'super\')"><i class="ti ti-crown"></i>Сделать главным</button>';
+      acts+='<button class="btn bgh bsm adm-danger" onclick="admSetRole(\''+em+'\',\'student\')">Забрать права</button>';
+    }
+    html+='<div class="adm-person">'
+      +'<span class="lb-blob '+(isSup?'vio':'meth')+'" style="width:40px;height:40px;font-size:21px;flex-shrink:0"><i class="ti '+(isSup?'ti-crown':'ti-shield')+'"></i></span>'
+      +'<div class="adm-person-t"><b>'+esc(a.name||a.email)+(a.email===me?' <span style="color:var(--tx3);font-weight:500">(ты)</span>':'')+'</b>'
+      +'<span>'+(isSup?'Главный админ':'Админ')+' · '+esc(a.email)+'</span>'
+      +'<span class="'+(tg?'ok':'warn')+'"><i class="ti '+(tg?'ti-bell-ringing':'ti-bell-off')+'"></i>'+(tg?'Уведомления в Telegram приходят':'Нет Telegram — уведомления не придут')+'</span>'
+      +'<span style="color:'+(online?'var(--mal-t)':'var(--tx3)')+'">'+seen+'</span>'
+      +(acts?'<div class="adm-person-a">'+acts+'</div>':'')+'</div></div>';
+  });
+  el.innerHTML=html+'</div>';
+}
+async function admSetRole(email,role){
+  if(!S.isSuper)return;
+  var txt={super:'Сделать главным админом '+email+'?\nОн сможет выдавать и забирать права, подтверждать блокировки и удаление.',
+           admin:'Сделать '+email+' обычным админом?',
+           student:'Забрать права админа у '+email+'?'}[role];
+  if(!confirm(txt))return;
+  try{
+    await sbPatch('users','email=eq.'+encodeURIComponent(email),{role:role});
+    if(role==='student'){try{await sbDel('admin_sessions','email=eq.'+encodeURIComponent(email));}catch(e){}}
+    if(S.user&&email===S.user.email&&role!=='super'){alert('Твои права изменились — войди заново.');doLogout();go('home');return;}
+    admAdmins();
+  }catch(e){alert(e.message);}
+}
+async function admPassHelp(){
+  try{return await sbRpc('admin_password_help',{p_token:vAdminToken()})||[];}catch(e){return [];}
+}
+async function admHelpReset(id,email,name){
+  await admResetPw(email,name);
+  setTimeout(function(){if(document.getElementById('admPending'))admPending();updPendBadge();},400);
+}
+async function admHelpClose(id){
+  try{await sbRpc('admin_password_help_done',{p_token:vAdminToken(),p_id:id});}catch(e){}
+  admPending();updPendBadge();
+}
+// студент без Telegram просит админа сбросить пароль
+function openAskAdmin(prefill){
+  V_FORCE_PW=false;vModalX(true);
+  var h='<p class="pw-note" style="margin:0 0 14px;text-align:left">Администраторы получат просьбу в Telegram, сбросят пароль и напишут тебе временный. При входе ты сразу придумаешь свой.</p>'
+    +'<div class="fg"><label class="fl" for="ahEm">Email аккаунта</label><input id="ahEm" type="email" autocomplete="username" placeholder="student@med.uz" value="'+esc(prefill||'')+'"></div>'
+    +'<div class="fg"><label class="fl" for="ahCt">Как с тобой связаться</label><input id="ahCt" type="text" maxlength="80" placeholder="Telegram @ник или телефон"></div>'
+    +'<p class="ferr" id="mErr"></p>'
+    +'<button class="btn bbl bfu" id="ahBtn" onclick="vAskAdminSend()"><i class="ti ti-send"></i> Отправить администратору</button>'
+    +'<p class="pw-note"><a href="#" onclick="event.preventDefault();openForgot(val(\'ahEm\'))">Назад</a></p>';
+  showModal('Попросить администратора',h);
+}
+async function vAskAdminSend(){
+  var em=val('ahEm'),ct=val('ahCt');
+  if(!em||em.indexOf('@')<0)return vErr('Введи email, с которым входишь');
+  if(ct.length<3)return vErr('Оставь контакт — иначе администратор не сможет передать пароль');
+  var b=document.getElementById('ahBtn');b.disabled=true;b.textContent='Отправляю…';
+  try{
+    var r=await sbRpc('request_password_help',{p_email:em,p_contact:ct});
+    if(r==='ok'||r==='already'){
+      showModal('Просьба отправлена','<div style="text-align:center;padding:6px 0 4px"><span class="lb-blob mal" style="width:56px;height:56px;font-size:30px;margin:0 auto 12px"><i class="ti ti-send"></i></span>'
+        +'<p style="font-size:15px;line-height:1.5;margin:0 0 6px">'+(r==='already'?'Просьба уже у администраторов.':'Администраторы получили просьбу.')+'</p>'
+        +'<p class="pw-note" style="margin:0 0 16px">Тебе напишут временный пароль на <b>'+esc(ct)+'</b>. Если аккаунта с таким email нет, ответа не будет.</p>'
+        +'<button class="btn bbl bfu" onclick="openModal(\'login\')">Понятно</button></div>');
+      return;
+    }
+    vErr({need_contact:'Оставь контакт для связи',busy:'Сейчас слишком много запросов. Попробуй через час.'}[r]||'Не получилось отправить. Попробуй позже.');
+  }catch(e){vErr('Нет связи с сервером. Попробуй позже.');}
+  b.disabled=false;b.innerHTML='<i class="ti ti-send"></i> Отправить администратору';
+}
+// права админа сразу после входа, если они есть у аккаунта
+function vApplyRole(role,email){
+  if(role==='admin'||role==='super'){
+    S.adminToken=S.token;S.isAdm=true;S.isSuper=(role==='super');S.adminEmail=email;sv();
+    try{registerAdminSession((S.user&&S.user.name)||email,email);}catch(e){}
+  }else if(S.adminEmail===email){S.isAdm=false;S.isSuper=false;S.adminToken='';S.adminEmail=null;sv();}
+}
+// ссылка из уведомления бота: ...#admin
+function vOpenAdminLink(){
+  if(location.hash!=='#admin')return;
+  try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}
+  if(S.isAdm)go('admin',document.querySelector('[data-pg=admin]'));
+  else if(S.user)openModal('admin');
+  else openModal('login');
 }
 
 // ===== ЗАПРОСЫ от обычных админов (только главный) =====
