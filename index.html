@@ -6238,8 +6238,19 @@ async function admAiCard(job){
   try{miss=(await sbGetAll('custom_questions','explanation=is.null&select=id')).length;}catch(e){return;}
   var run=job&&job.running;
   el.innerHTML='<div class="adm-auto"><div class="adm-auto-t"><b><i class="ti ti-sparkles" style="color:var(--vio-t)"></i> Объяснения от ИИ</b>'
-    +'<span>'+(run?'Создаю… готово '+job.done+' из '+job.total+(job.errors?', ошибок: '+job.errors:''):miss?'Нет у '+miss+' из '+total+' вопросов. Создаются один раз и хранятся в базе — студентам бесплатно.':'Есть у всех '+total+' вопросов.')+'</span></div>'
+    +'<span>'+(run?'Создаю… готово '+job.done+' из '+job.total+(job.errors?', не получилось: '+job.errors:''):miss?'Нет у '+miss+' из '+total+' вопросов. Создаются один раз и хранятся в базе — студентам бесплатно.':'Есть у всех '+total+' вопросов.')+'</span>'
+    +(job&&job.errors&&job.last_error?'<span style="color:var(--eos-t)"><b>Причина:</b> '+esc(vAiReason(job.last_error))+'</span>':'')+'</div>'
     +(miss&&!run?'<button class="btn bvio bsm" onclick="admAiStart()">Создать для всех</button>':'')+'</div>';
+}
+// понятная причина ошибки Anthropic
+function vAiReason(e){
+  var t=String(e||'');
+  if(/credit balance|billing/i.test(t))return 'на балансе Anthropic нет денег — пополни в console.anthropic.com → Billing.';
+  if(/^401|invalid x-api-key|authentication/i.test(t))return 'ключ неверный — проверь ANTHROPIC_API_KEY в Railway.';
+  if(/^404|model/i.test(t))return 'неверное имя модели — проверь переменную AI_MODEL в Railway (или удали её).';
+  if(/^429|rate limit/i.test(t))return 'слишком много запросов в минуту — бот подождёт и продолжит; потом нажми ещё раз для оставшихся.';
+  if(/^529|overloaded/i.test(t))return 'серверы Anthropic перегружены — попробуй позже.';
+  return t.slice(0,160);
 }
 async function admAiStart(){
   if(!confirm('Создать объяснения для всех вопросов без объяснения?\nЭто разовая трата — примерно 1–2 цента на 100 вопросов.'))return;
@@ -6247,6 +6258,7 @@ async function admAiStart(){
     try{var r=await fetch(vBotUrl('/ai/job'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:vAdminToken(),start:!!start})});var j=await r.json();
       if(j.status!=='ok'){alert({ai_not_configured:'ИИ не подключён: на Railway нет ключа ANTHROPIC_API_KEY.',forbidden:'Нужен вход администратора.'}[j.status]||'Не получилось: '+j.status);admAiCard();return;}
       admAiCard(j);if(j.running)setTimeout(function(){poll(false);},2000);
+      else if(!start&&j.errors&&j.last_error)alert('Готово '+(j.done-j.errors)+' из '+j.total+'. Не получилось: '+j.errors+'.\nПричина: '+vAiReason(j.last_error));
     }catch(e){alert('Нет связи с ботом');}
   };
   poll(true);
