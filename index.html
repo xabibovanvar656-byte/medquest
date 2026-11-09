@@ -1312,6 +1312,26 @@ input::placeholder,textarea::placeholder{color:var(--tx3)}
 #eqXc{width:20px!important;height:20px;min-height:0;flex:0 0 auto;margin:0;padding:0}
 label:has(#eqXc){white-space:nowrap}
 
+/* сводка по вопросам */
+.adm-qsum{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:10px}
+.adm-qsum div{background:var(--bg2);border-radius:16px;padding:10px;box-shadow:0 3px 0 var(--edge);display:flex;flex-direction:column;gap:2px;min-width:0}
+.adm-qsum b{font-size:20px;font-weight:800}
+.adm-qsum span{font-size:11.5px;color:var(--tx3);line-height:1.25}
+.adm-qsubj{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.adm-qrow{display:flex;align-items:center;gap:12px;width:100%;border:none;border-radius:16px;background:var(--bg2);box-shadow:0 3px 0 var(--edge);padding:10px 12px;text-align:left;color:var(--tx);font-family:var(--f);cursor:pointer}
+.adm-qrow-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.adm-qrow-t b{font-size:15px;font-weight:700}
+.adm-qrow-t span{font-size:12px;color:var(--tx3)}
+.adm-qrow-t em{font-style:normal;font-weight:600}
+.adm-qbar2{display:block;height:5px;border-radius:3px;background:var(--bg4);overflow:hidden;max-width:220px}
+.adm-qbar2 i{display:block;height:5px;border-radius:3px;background:var(--vio)}
+.adm-qrow-n{font-size:22px;font-weight:800;flex-shrink:0}
+.adm-qdet{background:var(--bg2);border-radius:16px;padding:12px 14px;margin-bottom:12px;box-shadow:0 3px 0 var(--edge)}
+.adm-qdet summary{cursor:pointer;font-weight:700;font-size:14px;display:flex;align-items:center;gap:6px;list-style:none}
+.adm-qdet summary::-webkit-details-marker{display:none}
+.adm-qdet .adm-qrow,.adm-qdet .adm-qsum div{background:var(--bg3);box-shadow:none}
+@media(max-width:400px){.adm-qsum{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
 /* читалка урока — шрифт для долгого чтения */
 .sblk p,.sb-drop,.study-reader-hero .srh-lede{font-family:var(--read);line-height:1.72}
 
@@ -5588,16 +5608,49 @@ async function admAnalytics(){
   }).join('')+'</tbody></table></div>';
   el.innerHTML=html;
 }
+// Сводка по вопросам: сколько по каждому предмету, тем, новых за неделю, с объяснениями
+async function admQuestionStatsHtml(){
+  var rows=[],missing=[];
+  try{rows=await sbGetAll('custom_questions','select=subject,topic,created_at');}catch(e){return '';}
+  try{missing=await sbGetAll('custom_questions','explanation=is.null&select=subject');}catch(e){}
+  var now=Date.now(),DAY=86400000,by={},tot={n:0,d1:0,d7:0,miss:missing.length};
+  rows.forEach(function(r){
+    vEnsureSubject(r.subject);
+    var o=by[r.subject]||(by[r.subject]={n:0,topics:{},d1:0,d7:0,miss:0});
+    o.n++;tot.n++;if(r.topic)o.topics[r.topic]=1;
+    var t=r.created_at?new Date(r.created_at).getTime():0;
+    if(t&&now-t<7*DAY){o.d7++;tot.d7++;}if(t&&now-t<DAY){o.d1++;tot.d1++;}
+  });
+  missing.forEach(function(r){if(by[r.subject])by[r.subject].miss++;});
+  var keys=Object.keys(by).sort(function(a,b){return by[b].n-by[a].n;});
+  var pct=function(o){return o.n?Math.round((o.n-o.miss)/o.n*100):0;};
+  var h='<div class="adm-qsum">'
+    +'<div><b>'+vNum(tot.n)+'</b><span>всего вопросов</span></div>'
+    +'<div><b style="color:var(--mal-t)">+'+vNum(tot.d1)+'</b><span>за сегодня</span></div>'
+    +'<div><b style="color:var(--meth-t)">+'+vNum(tot.d7)+'</b><span>за 7 дней</span></div>'
+    +'<div><b style="color:var(--vio-t)">'+pct(tot)+'%</b><span>с объяснением</span></div></div>';
+  h+='<div class="adm-qsubj">'+keys.map(function(k){
+    var o=by[k],tone=vSubjTone(k),nt=Object.keys(o.topics).length,pc=pct(o);
+    return '<button class="adm-qrow" onclick="admOpenSubjectQs(\''+esc(k).replace(/'/g,'')+'\')">'
+      +'<span class="lb-blob '+tone+'" style="width:38px;height:38px;font-size:20px;flex-shrink:0">'+(SM[k]?SM[k].icon:'<i class="ti ti-book"></i>')+'</span>'
+      +'<span class="adm-qrow-t"><b>'+esc(vSubjLabel(k))+'</b>'
+      +'<span>'+nt+' '+vplural(nt,'тема','темы','тем')+(o.d7?' · <em style="color:var(--meth-t)">+'+o.d7+' за неделю</em>':'')+'</span>'
+      +'<span class="adm-qbar2" title="С объяснением: '+pc+'%"><i style="width:'+pc+'%"></i></span>'
+      +'<span>объяснения: '+pc+'%</span></span>'
+      +'<span class="adm-qrow-n">'+vNum(o.n)+'</span></button>';
+  }).join('')+'</div>';
+  return h;
+}
 async function admStats(){
-  var QS=getQS();var us={active:0,pending:0,blocked:0};
-  if(dbOK){try{var r=await sbGet('users','select=status');r.forEach(function(u){us[u.status]=(us[u.status]||0)+1;});}catch(e){}}
+  var us={active:0,pending:0,blocked:0};
+  if(dbOK){try{var r=await sbGetAll('users','select=status');r.forEach(function(u){us[u.status]=(us[u.status]||0)+1;});}catch(e){}}
   var card=function(x){return '<div class="adm-stat"'+(x.on?' role="button" tabindex="0" onclick="'+x.on+'"':'')+'><b style="color:'+x.c+'">'+vNum(x.v)+'</b><span>'+esc(x.l)+'</span></div>';};
   var people=[{l:'Студентов',v:us.active||0,c:'var(--mal-t)',on:"admTab('students',admTabBtn('students'))"},{l:'Ожидают',v:us.pending||0,c:'var(--iod-t)',on:"admTab('pending',admTabBtn('pending'))"},{l:'В блоке',v:us.blocked||0,c:'var(--eos-t)'}];
-  var subj=[{l:'Всего вопросов',v:QS.length,c:'var(--tx)'}].concat(Object.keys(SM).map(function(k){return {l:SM[k].label,v:QS.filter(function(q){return q.s===k;}).length,c:'var(--'+vSubjTone(k)+'-t)',on:"admOpenSubjectQs('"+esc(k)+"')"};}));
-  document.getElementById('admStats').innerHTML=
-    '<div class="adm-h3">Люди</div><div class="adm-grid">'+people.map(card).join('')+'</div>'
-    +'<div class="adm-h3">Вопросы по предметам</div><div class="adm-grid">'+subj.map(card).join('')+'</div>'
+  var el=document.getElementById('admStats');
+  el.innerHTML='<div class="adm-h3">Люди</div><div class="adm-grid">'+people.map(card).join('')+'</div>'
+    +'<div class="adm-h3">Вопросы</div><div id="admQStats" style="color:var(--tx3);font-size:13px">Считаю…</div>'
     +'<div style="font-size:13px;color:var(--tx2);margin-top:12px">База: '+(dbOK?'<span style="color:var(--mal-t)">Supabase подключена <i class="ti ti-circle-check"></i></span>':'<span style="color:var(--iod-t)">нет связи <i class="ti ti-alert-triangle"></i></span>')+'</div>';
+  if(dbOK){var q=document.getElementById('admQStats');var html=await admQuestionStatsHtml();if(q)q.innerHTML=html||'Не получилось посчитать.';}
 }
 function admTabBtn(t){var b=null;document.querySelectorAll('.adm-tabs .tab').forEach(function(x){if((x.getAttribute('onclick')||'').indexOf("'"+t+"'")>=0)b=x;});return b;}
 function admOpenSubjectQs(k){admTab('questions',admTabBtn('questions'));setTimeout(function(){var f=document.getElementById('qFs');if(f){f.value=k;admQF();}},150);}
@@ -6144,6 +6197,7 @@ async function admQuestions(keep){
   document.getElementById('admQuestions').innerHTML=
     '<div class="adm-qbar"><button class="btn bbl bsm" onclick="admAddQM()"><i class="ti ti-plus"></i>Добавить вопрос</button><button class="btn bgr bsm" onclick="admBulkM()"><i class="ti ti-upload"></i>Массово</button><span style="font-size:13px;color:var(--tx3);margin-left:auto">Всего '+vNum(QS.length)+'</span></div>'
     +'<div class="adm-qbar"><select id="qFs" onchange="admQF()" aria-label="Предмет">'+vSubjOptions('<option value="all">Все предметы</option>','<option value="custom">Только добавленные вручную</option>')+'</select><input id="qSr" placeholder="Поиск по вопросу или теме" oninput="admQF()" aria-label="Поиск"></div>'
+    +'<details class="adm-qdet" id="qStatDet" ontoggle="if(this.open)admQStatLoad()"><summary><i class="ti ti-chart-bar"></i> Сводка по предметам</summary><div id="qStatBox" style="padding-top:10px;color:var(--tx3);font-size:13px">Считаю…</div></details>'
     +'<div id="qAiCard"></div>'
     +'<div id="qSubjTools" class="adm-qbar" style="display:none"></div>'
     +(batches.length?'<div class="adm-qbar"><select id="qBatch" onchange="admQF()" aria-label="Партия">'+batchOpts+'</select><button class="btn bgh bsm adm-danger" onclick="admDelBatch()"><i class="ti ti-trash"></i>Удалить партию</button></div>':'')
@@ -6177,10 +6231,11 @@ function admQF(){
     return '<tr><td>'+chk+'</td><td style="color:var(--tx3);font-family:var(--fm);font-size:11px">'+(i+1)+'</td><td style="font-size:11px;color:var(--tx3);max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+esc(vSubjLabel(q.s)+' · '+q.t)+'"><b style="color:var(--'+vSubjTone(q.s)+'-t);font-weight:600">'+esc(vSubjLabel(q.s))+'</b><br>'+esc(q.t)+'</td><td style="font-size:12px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+esc(q.q)+'">'+esc(q.q)+'</td><td style="font-size:12px;color:var(--gr);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(q.o[q.a])+'</td><td style="white-space:nowrap"><button class="btn bgh bsm" onclick="admEditQM(\''+q.id+'\')" style="padding:4px 7px"><i class="ti ti-edit" style="font-size:12px"></i></button>'+(isCust?'<button class="btn bre bsm" onclick="admDelQ(\''+q.id+'\')" style="padding:4px 7px;margin-left:3px"><i class="ti ti-trash" style="font-size:12px"></i></button>':'')+'</td></tr>';
   }).join('')+'</tbody></table>';
 }
+async function admQStatLoad(){var b=document.getElementById('qStatBox');if(!b)return;b.innerHTML=(await admQuestionStatsHtml())||'Не получилось посчитать.';}
 async function admAiCard(job){
   var el=document.getElementById('qAiCard');if(!el||!VITA_BOT_DOMAIN||!dbOK)return;
   var miss=0,total=getQS().length;
-  try{miss=(await sbGet('custom_questions','explanation=is.null&select=id')).length;}catch(e){return;}
+  try{miss=(await sbGetAll('custom_questions','explanation=is.null&select=id')).length;}catch(e){return;}
   var run=job&&job.running;
   el.innerHTML='<div class="adm-auto"><div class="adm-auto-t"><b><i class="ti ti-sparkles" style="color:var(--vio-t)"></i> Объяснения от ИИ</b>'
     +'<span>'+(run?'Создаю… готово '+job.done+' из '+job.total+(job.errors?', ошибок: '+job.errors:''):miss?'Нет у '+miss+' из '+total+' вопросов. Создаются один раз и хранятся в базе — студентам бесплатно.':'Есть у всех '+total+' вопросов.')+'</span></div>'
