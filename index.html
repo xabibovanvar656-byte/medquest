@@ -1373,6 +1373,120 @@ label:has(#eqXc){white-space:nowrap}
 .adm-row>.ti-chevron-right{color:var(--tx3);font-size:18px;flex-shrink:0}
 .adm-acts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .adm-acts .btn{justify-content:center}
+/* массовое добавление: повторы */
+.adm-dupbox{margin-top:8px;background:var(--bg3);border-radius:12px;padding:8px 10px}
+.adm-dupbox summary{cursor:pointer;list-style:none}
+.adm-dupbox summary::-webkit-details-marker{display:none}
+.adm-dupbox p{font-size:12px;color:var(--tx3);margin:6px 0}
+.adm-dupbox .btn{margin:2px 0 6px}
+.adm-dup{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-top:1px solid var(--bor);cursor:pointer;font-size:12.5px}
+.adm-dup input{width:20px;height:20px;flex-shrink:0;margin-top:1px}
+.adm-dup>span{display:flex;flex-direction:column;gap:3px;min-width:0}
+.adm-dup b{font-size:13px;color:var(--tx)}
+.adm-dup-n{color:var(--mal-t)}
+.adm-dup-o{color:var(--tx3)}
+.adm-dup-o i{font-style:normal}
+/* загрузка PDF: итог по страницам */
+.bk-pg{margin-top:8px;background:var(--bg3);border-radius:12px;padding:8px 10px;display:flex;flex-direction:column;gap:4px;align-items:flex-start;font-size:12.5px}
+.bk-pg b{color:var(--tx);font-size:13px}
+.bk-pg.bad b{color:var(--eos-t)}
+.bk-pg span{color:var(--tx3)}
+.bk-pg details summary,.bk-all summary{cursor:pointer;color:var(--tx2)}
+.bk-pg details div{margin-top:4px;color:var(--tx3)}
+.bk-pg .btn{margin-top:4px}
+.bk-all{margin-top:8px;font-size:12.5px}
+.bk-all div{display:flex;flex-direction:column;gap:2px;margin-top:6px;color:var(--tx2);max-height:220px;overflow:auto}
+
+/* ===== АДМИНКА: главная с разделами ===== */
+.adm-grp{margin:18px 2px 10px;display:flex;align-items:baseline;gap:8px}
+.adm-grp h3{font-size:15px;font-weight:700;margin:0;color:var(--tx)}
+.adm-grp span{font-size:12.5px;color:var(--tx3)}
+.adm-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media(min-width:700px){.adm-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.adm-card{position:relative;border:none;border-radius:18px;background:var(--bg2);box-shadow:0 4px 0 var(--edge);color:var(--tx);padding:13px;display:flex;flex-direction:column;align-items:flex-start;gap:8px;text-align:left;cursor:pointer;font-family:var(--f);min-width:0}
+.adm-card:active{transform:translateY(2px);box-shadow:0 2px 0 var(--edge)}
+.adm-card .lb-blob{width:38px;height:38px;border-radius:12px;font-size:20px;display:flex;align-items:center;justify-content:center}
+.adm-card b{font-size:15px;font-weight:700}
+.adm-card small{font-size:12.5px;line-height:1.35;color:var(--tx3)}
+.adm-card .adm-cnt{position:absolute;top:10px;right:10px;min-width:24px;height:24px;padding:0 7px;border-radius:12px;background:var(--eos);color:var(--eos-ink);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center}
+.adm-sec{margin-bottom:14px}
+.adm-back{border:none;background:var(--bg2);color:var(--tx);font-family:var(--f);font-weight:600;font-size:14px;height:38px;padding:0 14px 0 10px;border-radius:12px;display:inline-flex;align-items:center;gap:6px;cursor:pointer;box-shadow:0 3px 0 var(--edge)}
+.adm-back:active{transform:translateY(2px);box-shadow:0 1px 0 var(--edge)}
+.adm-sec-t{display:flex;gap:12px;align-items:center;margin-top:14px}
+.adm-sec-t .lb-blob{flex:0 0 44px;height:44px;border-radius:14px;font-size:23px;display:flex;align-items:center;justify-content:center}
+.adm-sec-t h2{font-size:20px;font-weight:800;margin:0}
+.adm-sec-t p{font-size:13px;color:var(--tx3);margin:2px 0 0;line-height:1.4}
+/* список студентов */
+.adm-find{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.adm-find input{flex:1 1 180px;min-width:0}
+.adm-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.adm-chip{border:none;font-family:var(--f);font-size:13px;font-weight:600;height:34px;padding:0 12px;border-radius:999px;background:var(--bg2);color:var(--tx2);cursor:pointer}
+.adm-chip.on{background:var(--meth);color:var(--meth-ink)}
+.adm-list{display:flex;flex-direction:column;gap:8px}
+.adm-row{border:none;width:100%;background:var(--bg2);border-radius:16px;box-shadow:0 3px 0 var(--edge);padding:10px 12px;display:flex;align-items:center;gap:12px;text-align:left;color:var(--tx);font-family:var(--f);cursor:pointer;min-width:0}
+.adm-row:active{transform:translateY(2px);box-shadow:0 1px 0 var(--edge)}
+.adm-av{flex:0 0 40px;height:40px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px}
+.adm-row-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.adm-row-t b{font-size:15px;font-weight:600;display:flex;align-items:center;gap:6px;min-width:0}
+.adm-row-t b span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.adm-row-t small{font-size:12.5px;color:var(--tx3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.adm-row-t small.on{color:var(--mal-t)}
+.adm-tag{flex-shrink:0;font-size:11px;font-weight:700;padding:2px 7px;border-radius:999px}
+.adm-row>.ti-chevron-right{color:var(--tx3);font-size:18px;flex-shrink:0}
+.adm-acts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.adm-acts .btn{justify-content:center}
+/* массовое добавление: повторы */
+.adm-dupbox{margin-top:8px;background:var(--bg3);border-radius:12px;padding:8px 10px}
+.adm-dupbox summary{cursor:pointer;list-style:none}
+.adm-dupbox summary::-webkit-details-marker{display:none}
+.adm-dupbox p{font-size:12px;color:var(--tx3);margin:6px 0}
+.adm-dupbox .btn{margin:2px 0 6px}
+.adm-dup{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-top:1px solid var(--bor);cursor:pointer;font-size:12.5px}
+.adm-dup input{width:20px;height:20px;flex-shrink:0;margin-top:1px}
+.adm-dup>span{display:flex;flex-direction:column;gap:3px;min-width:0}
+.adm-dup b{font-size:13px;color:var(--tx)}
+.adm-dup-n{color:var(--mal-t)}
+.adm-dup-o{color:var(--tx3)}
+.adm-dup-o i{font-style:normal}
+
+/* ===== АДМИНКА: главная с разделами ===== */
+.adm-grp{margin:18px 2px 10px;display:flex;align-items:baseline;gap:8px}
+.adm-grp h3{font-size:15px;font-weight:700;margin:0;color:var(--tx)}
+.adm-grp span{font-size:12.5px;color:var(--tx3)}
+.adm-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media(min-width:700px){.adm-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.adm-card{position:relative;border:none;border-radius:18px;background:var(--bg2);box-shadow:0 4px 0 var(--edge);color:var(--tx);padding:13px;display:flex;flex-direction:column;align-items:flex-start;gap:8px;text-align:left;cursor:pointer;font-family:var(--f);min-width:0}
+.adm-card:active{transform:translateY(2px);box-shadow:0 2px 0 var(--edge)}
+.adm-card .lb-blob{width:38px;height:38px;border-radius:12px;font-size:20px;display:flex;align-items:center;justify-content:center}
+.adm-card b{font-size:15px;font-weight:700}
+.adm-card small{font-size:12.5px;line-height:1.35;color:var(--tx3)}
+.adm-card .adm-cnt{position:absolute;top:10px;right:10px;min-width:24px;height:24px;padding:0 7px;border-radius:12px;background:var(--eos);color:var(--eos-ink);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center}
+.adm-sec{margin-bottom:14px}
+.adm-back{border:none;background:var(--bg2);color:var(--tx);font-family:var(--f);font-weight:600;font-size:14px;height:38px;padding:0 14px 0 10px;border-radius:12px;display:inline-flex;align-items:center;gap:6px;cursor:pointer;box-shadow:0 3px 0 var(--edge)}
+.adm-back:active{transform:translateY(2px);box-shadow:0 1px 0 var(--edge)}
+.adm-sec-t{display:flex;gap:12px;align-items:center;margin-top:14px}
+.adm-sec-t .lb-blob{flex:0 0 44px;height:44px;border-radius:14px;font-size:23px;display:flex;align-items:center;justify-content:center}
+.adm-sec-t h2{font-size:20px;font-weight:800;margin:0}
+.adm-sec-t p{font-size:13px;color:var(--tx3);margin:2px 0 0;line-height:1.4}
+/* список студентов */
+.adm-find{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.adm-find input{flex:1 1 180px;min-width:0}
+.adm-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.adm-chip{border:none;font-family:var(--f);font-size:13px;font-weight:600;height:34px;padding:0 12px;border-radius:999px;background:var(--bg2);color:var(--tx2);cursor:pointer}
+.adm-chip.on{background:var(--meth);color:var(--meth-ink)}
+.adm-list{display:flex;flex-direction:column;gap:8px}
+.adm-row{border:none;width:100%;background:var(--bg2);border-radius:16px;box-shadow:0 3px 0 var(--edge);padding:10px 12px;display:flex;align-items:center;gap:12px;text-align:left;color:var(--tx);font-family:var(--f);cursor:pointer;min-width:0}
+.adm-row:active{transform:translateY(2px);box-shadow:0 1px 0 var(--edge)}
+.adm-av{flex:0 0 40px;height:40px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px}
+.adm-row-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.adm-row-t b{font-size:15px;font-weight:600;display:flex;align-items:center;gap:6px;min-width:0}
+.adm-row-t b span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.adm-row-t small{font-size:12.5px;color:var(--tx3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.adm-row-t small.on{color:var(--mal-t)}
+.adm-tag{flex-shrink:0;font-size:11px;font-weight:700;padding:2px 7px;border-radius:999px}
+.adm-row>.ti-chevron-right{color:var(--tx3);font-size:18px;flex-shrink:0}
+.adm-acts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.adm-acts .btn{justify-content:center}
 
 
 /* учёба: без капс-подписей и акцентного курсива */
@@ -6422,6 +6536,7 @@ async function delQuestionIds(ids){
 }
 // ===== МАССОВЫЙ ИМПОРТ ВОПРОСОВ =====
 function admBulkM(){
+  BK_FORCE=null;
   document.getElementById('mdT').textContent='Массовое добавление';
   var b=document.getElementById('mdBody');b.innerHTML='';
   // \u0412\u044B\u0431\u043E\u0440 \u043F\u0440\u0435\u0434\u043C\u0435\u0442\u0430 \u0438 \u0442\u0435\u043C\u044B \u0441\u0432\u0435\u0440\u0445\u0443 (\u043E\u0434\u0438\u043D \u0440\u0430\u0437 \u043D\u0430 \u0432\u0441\u044E \u043F\u0430\u0447\u043A\u0443)
@@ -6435,12 +6550,12 @@ function admBulkM(){
   nw.innerHTML='<label class="fl">\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u043D\u043E\u0432\u043E\u0433\u043E \u043F\u0440\u0435\u0434\u043C\u0435\u0442\u0430</label><input id="bkNewName" placeholder="\u041D\u0430\u043F\u0440. \u0410\u043D\u0430\u0442\u043E\u043C\u0438\u044F">';
   b.appendChild(nw);
   addInput(b,'bkT','text','\u0422\u0435\u043C\u0430 (\u0434\u043B\u044F \u0432\u0441\u0435\u0445)','\u041D\u0430\u043F\u0440. \u0422\u0435\u043C\u0430 2: \u0413\u0435\u043D\u0435\u0442\u0438\u043A\u0430');
-  var up=document.createElement('div');up.className='adm-auto';up.style.marginBottom='12px';
-  up.innerHTML='<div class="adm-auto-t"><b><i class="ti ti-file-type-pdf" style="color:var(--eos-t)"></i> Из PDF или фото</b>'
+  var up=document.createElement('div');up.className='adm-auto';up.style.cssText='margin-bottom:12px;flex-direction:column;align-items:stretch;gap:0';
+  up.innerHTML='<div style="display:flex;gap:14px;align-items:center"><div class="adm-auto-t"><b><i class="ti ti-file-type-pdf" style="color:var(--eos-t)"></i> Из PDF или фото</b>'
     +'<span>ИИ найдёт вопросы и отмеченные правильные ответы на страницах и скриншотах и вставит их ниже — проверишь и добавишь. ~1 цент за 10 страниц.</span>'
     +'<label style="display:flex;gap:8px;align-items:flex-start;margin-top:6px;cursor:pointer;color:var(--tx2)"><input type="checkbox" id="bkSel" checked style="width:18px;height:18px;flex-shrink:0;margin-top:1px"><span><b style="color:var(--tx)">Выбранный ответ = правильный</b> — для скриншотов теста, сданного на 100%. Выключи, если на скриншотах есть ошибки.</span></label>'
-    +'<span id="bkFileSt"></span></div>'
-    +'<label class="btn bvio bsm" style="flex-shrink:0;cursor:pointer"><i class="ti ti-upload"></i>Выбрать<input type="file" id="bkFile" accept="application/pdf,image/*" multiple style="display:none" onchange="admBulkFile(this)"></label>';
+    +'</div>'
+    +'<label class="btn bvio bsm" style="flex-shrink:0;cursor:pointer"><i class="ti ti-upload"></i>Выбрать<input type="file" id="bkFile" accept="application/pdf,image/*" multiple style="display:none" onchange="admBulkFile(this)"></label></div><div id="bkFileSt"></div>';
   b.appendChild(up);
   var info=document.createElement('div');info.className='alert ali';info.style.marginBottom='12px';info.style.fontSize='12px';
   info.innerHTML='<div style="line-height:1.6"><b>Поддерживаемые форматы (номер. или номер)):</b><br><b>•</b> вопрос, затем варианты — правильный помечен <code>]</code> в начале.<br><b>•</b> или вопрос, затем один ответ — неверные варианты придумает ИИ.</div>';
@@ -6537,7 +6652,7 @@ function vSameAns(a,b){var x=vStems(a),y=vStems(b);if(!x.length||!y.length)retur
 var V_DUPIDX=null;
 function vDupIndex(){
   if(V_DUPIDX&&V_DUPIDX.n===getQS().length)return V_DUPIDX;
-  var list=getQS().map(function(x){return {st:vStems(x.q),q:x.q,ans:(x.o||[])[x.a],s:x.s};}).filter(function(x){return x.st.length;});
+  var list=getQS().map(function(x){return {st:vStems(x.q),q:x.q,ans:(x.o||[])[x.a],o:x.o||[],s:x.s};}).filter(function(x){return x.st.length;});
   V_DUPIDX={n:getQS().length,list:list};return V_DUPIDX;
 }
 // new — нет в базе; dup — уже есть (тот же вопрос и ответ); conflict — такой же вопрос, но ответ другой
@@ -6554,13 +6669,18 @@ function vDupCheck(q,ans,extra){
   return best?{st:'conflict',m:best}:{st:'new'};
 }
 function vBulkAns(x){return x.opts?x.opts[x.correct]:x.a;}
+function vOptKey(o){return (o||[]).map(function(s){return vStems(s).sort().join(' ')||String(s).trim().toLowerCase();}).sort().join('|');}
+// варианты ответа у нового вопроса не такие, как у того, что в базе
+function vOptsDiffer(a,b){if(!a||!a.length||!b||!b.length)return false;return vOptKey(a)!==vOptKey(b);}
+function vBulkKey(x){return x.q+'\u0001'+(vBulkAns(x)||'');}
+var BK_FORCE=null;   // какие повторы админ отметил «добавить всё равно» (по ключу вопроса)
 // разбор + проверка на повторы для массового добавления
 function vBulkClassify(qa){
   var seen=[],res={add:[],dup:[],conf:[],self:0};
   qa.forEach(function(x){
     var a=vBulkAns(x),r=vDupCheck(x.q,a);
     if(r.st==='new'){var st=vStems(x.q),rep=seen.some(function(y){return vSameQ(st,y.st);});if(rep){res.self++;return;}}
-    if(r.st==='dup')res.dup.push({x:x,m:r.m});
+    if(r.st==='dup')res.dup.push({x:x,m:r.m,diff:vOptsDiffer(x.opts,r.m.o)});
     else if(r.st==='conflict')res.conf.push({x:x,m:r.m});
     else{res.add.push(x);seen.push({st:vStems(x.q),q:x.q,ans:a});}
   });
@@ -6630,78 +6750,137 @@ function vImgJpeg(file){
     im.onerror=function(){rej(new Error('не удалось открыть картинку '+file.name));};im.src=u;
   });
 }
-var BK_NOANS=[];
+// страницы загруженных файлов: картинка, подпись, что с ней стало
+var BK_PAGES=null;
 async function admBulkFile(inp){
   var files=Array.prototype.slice.call(inp.files||[]);inp.value='';if(!files.length)return;
-  var st=document.getElementById('bkFileSt'),lbl=inp.parentNode;
-  var say=function(t,col){if(st)st.innerHTML='<span style="display:block;margin-top:4px;font-weight:600;color:'+(col||'var(--meth-t)')+'">'+t+'</span>';};
-  lbl.style.pointerEvents='none';lbl.style.opacity='.5';
-  var pages=[];
+  var lbl=inp.parentNode;admBkBusy(true);
+  var pages=[],one=files.length===1;
   try{
     for(var f=0;f<files.length;f++){
-      var fl=files[f];
+      var fl=files[f],nm=fl.name.replace(/\.[^.]+$/,'').slice(0,24);
       if(/pdf$/i.test(fl.type)||/\.pdf$/i.test(fl.name)){
-        say('Открываю '+esc(fl.name)+'…');
-        var ps=await vPdfPages(fl,function(i,n){say('Готовлю страницы: '+i+' из '+n+'…');});
-        pages=pages.concat(ps);
-      }else pages.push(await vImgJpeg(fl));
+        admBkSay('Открываю '+esc(fl.name)+'…');
+        var ps=await vPdfPages(fl,function(i,n){admBkSay('Готовлю страницы: '+i+' из '+n+'…');});
+        ps.forEach(function(img,i){pages.push({img:img,label:one?'стр. '+(i+1):nm+', стр. '+(i+1)});});
+      }else pages.push({img:await vImgJpeg(fl),label:one?'фото':'фото «'+nm+'»'});
     }
-  }catch(e){say('Не получилось открыть файл: '+esc(e.message||e),'var(--eos-t)');lbl.style.pointerEvents='';lbl.style.opacity='';return;}
-  if(pages.length>300){say('Слишком много страниц ('+pages.length+'). Раздели файл на части до 300 страниц.','var(--eos-t)');lbl.style.pointerEvents='';lbl.style.opacity='';return;}
-  var res=new Array(pages.length),k=0,done=0,fails=0,err=null,stop=false;
+  }catch(e){admBkSay('Не получилось открыть файл: '+esc(e.message||e),'var(--eos-t)');admBkBusy(false);return;}
+  if(pages.length>300){admBkSay('Слишком много страниц ('+pages.length+'). Раздели файл на части до 300 страниц.','var(--eos-t)');admBkBusy(false);return;}
+  BK_PAGES=pages;
+  await admBulkRun(pages.map(function(_,i){return i;}));
+}
+function admBkBusy(on){var l=(document.getElementById('bkFile')||{}).parentNode;if(l){l.style.pointerEvents=on?'none':'';l.style.opacity=on?'.5':'';}
+  document.querySelectorAll('.bkRetry').forEach(function(b){b.disabled=on;});}
+function admBkSay(t,col){var st=document.getElementById('bkFileSt');if(st)st.innerHTML='<span style="display:block;margin-top:4px;font-weight:600;color:'+(col||'var(--meth-t)')+'">'+t+'</span>';}
+// ИИ читает страницы с номерами idxs (по 3 одновременно) и дописывает найденные вопросы в поле
+async function admBulkRun(idxs){
+  var pages=BK_PAGES;if(!pages||!idxs.length)return;
+  admBkBusy(true);
+  var k=0,done=0,stop=false;
   var worker=async function(){
-    while(k<pages.length&&!stop){
-      var i=k++,j=await vAdminAi('extract',{image:pages[i],media_type:'image/jpeg'});
-      if(j.status==='ok')res[i]=j.items||[];else{fails++;if(!err)err=j;if(j.status==='forbidden'||j.status==='ai_not_configured'||j.status==='network')stop=true;}
-      done++;say('ИИ читает страницы: '+done+' из '+pages.length+'…');
+    while(k<idxs.length&&!stop){
+      var i=idxs[k++],pg=pages[i],j=await vAdminAi('extract',{image:pg.img,media_type:'image/jpeg'});
+      if(j.status==='ok'){pg.state=(j.items||[]).length?'ok':'empty';pg.items=j.items||[];pg.err=null;}
+      else{pg.state='fail';pg.items=[];pg.err=j;if(j.status==='forbidden'||j.status==='ai_not_configured'||j.status==='network')stop=true;}
+      done++;admBkSay('ИИ читает страницы: '+done+' из '+idxs.length+'…');
     }
   };
-  say('ИИ читает страницы: 0 из '+pages.length+'…');
+  admBkSay('ИИ читает страницы: 0 из '+idxs.length+'…');
   await Promise.all([worker(),worker(),worker()]);
-  lbl.style.pointerEvents='';lbl.style.opacity='';
-  // собираем, убираем повторы (скриншоты часто повторяются)
+  if(stop)idxs.forEach(function(i){if(!pages[i].state){pages[i].state='fail';pages[i].err=pages[i].err||{status:'network'};}});
+  // разбираем найденное на этих страницах
   var useSel=!!(document.getElementById('bkSel')||{}).checked;
-  res.forEach(function(items){(items||[]).forEach(function(it){if(it.correct===null&&useSel&&it.selected!==null&&it.selected!==undefined)it.correct=it.selected;});});
-  var seen={},ok=[],noAns=[],inDb=0,nk=function(s){return String(s||'').toLowerCase().replace(/[^a-zа-яё0-9]/gi,'');};
-  var ta0=document.getElementById('bulkTxt');
-  parseBulkQA(ta0?ta0.value:'').forEach(function(x){seen[nk(x.q)]=1;});
-
-  res.forEach(function(items){(items||[]).forEach(function(it){
-    var key=nk(it.q);if(!key||seen[key])return;seen[key]=1;
-    var ca=it.correct!==null&&it.correct!==undefined?it.options[it.correct]:(it.answer||null);
-    if(vDupCheck(it.q,ca).st==='dup'){inDb++;return;}
-    if(it.options.length>=2&&it.correct===null)noAns.push(it);else ok.push(it);
-  });});
-  BK_NOANS=noAns;
+  var seen={},ok=[],inDb=0,nk=function(s){return String(s||'').toLowerCase().replace(/[^a-zа-яё0-9]/gi,'');};
+  var ta=document.getElementById('bulkTxt');
+  parseBulkQA(ta?ta.value:'').forEach(function(x){seen[nk(x.q)]=1;});
+  idxs.forEach(function(pi){var pg=pages[pi];pg.added=0;pg.dup=0;pg.noAns=[];
+    (pg.items||[]).forEach(function(it){
+      if(it.correct===null&&useSel&&it.selected!==null&&it.selected!==undefined)it.correct=it.selected;
+      var key=nk(it.q);if(!key||seen[key]){pg.dup++;return;}seen[key]=1;
+      var ca=it.correct!==null&&it.correct!==undefined?it.options[it.correct]:(it.answer||null);
+      var dc=vDupCheck(it.q,ca);
+      if(dc.st==='dup'&&!vOptsDiffer(it.options,dc.m.o)){inDb++;pg.dup++;return;}
+      if(it.options.length>=2&&(it.correct===null||it.correct===undefined)){pg.noAns.push(it);return;}
+      ok.push(it);pg.added++;
+    });
+  });
   var lines=ok.map(function(it,n){
     var q=it.q.replace(/[\r\n]+/g,' ').trim();if(!/[?:]$/.test(q))q+=':';
     if(it.options.length>=2)return (n+1)+'. '+q+'\n'+it.options.map(function(o,i){return (i===it.correct?']':'')+o.replace(/^[\]\s]+/,'');}).join('\n');
     return (n+1)+'. '+q+'\n'+(it.answer||it.options[0]||'');
   });
-  var ta=document.getElementById('bulkTxt');
   if(ta&&lines.length){var cur=ta.value.trim();
     if(cur){var mx=0;(cur.match(/(?:^|\n)\s*(\d{1,3})[.)]/g)||[]).forEach(function(m){mx=Math.max(mx,parseInt(m.replace(/\D/g,''),10));});
       lines=lines.map(function(l){return l.replace(/^(\d+)\./,function(_,d){return (parseInt(d,10)+mx)+'.';});});}
     ta.value=(cur?cur+'\n\n':'')+lines.join('\n\n');}
-  var msg='Нашёл вопросов: '+ok.length+' на '+pages.length+' стр.';
-  if(inDb)msg+=' · уже есть в базе: '+inDb+' (пропущены)';
-  if(noAns.length)msg+=' · без отмеченного ответа: '+noAns.length+' (не вставлены'+(useSel?'':' — попробуй включить «Выбранный ответ = правильный»')+')';
-  if(fails)msg+=' · не прочитано страниц: '+fails+(err?' — '+esc(vAdminAiErr(err)):'');
-  say(msg,ok.length?'var(--mal-t)':'var(--eos-t)');
-  if(noAns.length&&st)st.innerHTML+='<details style="margin-top:6px"><summary style="cursor:pointer">Показать вопросы без ответа</summary><div style="font-size:12px;margin-top:6px">'+noAns.slice(0,50).map(function(it){return '• '+esc(it.q);}).join('<br>')+'</div></details>';
-  if(lines.length){admBulkPreview();if(ta)ta.scrollIntoView({block:'center',behavior:'smooth'});}
+  admBkBusy(false);
+  admBkReport(ok.length,inDb,idxs.length,useSel);
+  if(lines.length){admBulkPreview();}
+}
+// итог по страницам: какие не прочитаны, на каких ничего не нашлось — с кнопкой «прочитать ещё раз»
+function admBkReport(added,inDb,ran,useSel){
+  var pages=BK_PAGES||[],st=document.getElementById('bkFileSt');if(!st)return;
+  var idx=function(f){var r=[];pages.forEach(function(p,i){if(f(p))r.push(i);});return r;};
+  var fail=idx(function(p){return p.state==='fail';}),empty=idx(function(p){return p.state==='empty';});
+  var noAnsP=idx(function(p){return p.noAns&&p.noAns.length;});
+  var labels=function(a){return a.slice(0,40).map(function(i){return pages[i].label;}).join(', ')+(a.length>40?' и ещё '+(a.length-40):'');};
+  var good=pages.length-fail.length;
+  var h='<span style="display:block;margin-top:4px;font-weight:600;color:'+(added?'var(--mal-t)':'var(--tx2)')+'">'
+    +(ran<pages.length?'Перечитал '+ran+' стр. — ':'')+'Добавил в поле вопросов: '+added+(inDb?' · уже есть в базе: '+inDb:'')
+    +' · прочитано страниц: '+good+' из '+pages.length+'</span>';
+  if(fail.length){
+    var e=pages[fail[0]].err;
+    h+='<div class="bk-pg bad"><b>Не прочитаны ('+fail.length+'): '+esc(labels(fail))+'</b>'
+      +'<span>'+esc(vAdminAiErr(e||{}))+'</span>'
+      +'<button type="button" class="btn bvio bsm bkRetry" onclick="admBulkRun(['+fail.join(',')+'])"><i class="ti ti-refresh"></i>Прочитать ещё раз</button></div>';
+  }
+  if(empty.length)h+='<div class="bk-pg"><b>Вопросов не найдено ('+empty.length+'): '+esc(labels(empty))+'</b>'
+    +'<span>Может быть, там нет вопросов (обложка, оглавление). Если есть — попробуй ещё раз.</span>'
+    +'<button type="button" class="btn bgh bsm bkRetry" onclick="admBulkRun(['+empty.join(',')+'])"><i class="ti ti-refresh"></i>Прочитать ещё раз</button></div>';
+  if(noAnsP.length){
+    var n=0;noAnsP.forEach(function(i){n+=pages[i].noAns.length;});
+    h+='<div class="bk-pg"><b>Без отмеченного ответа ('+n+'): '+esc(labels(noAnsP))+'</b>'
+      +'<span>Эти вопросы не вставлены'+(useSel?'':' — попробуй включить «Выбранный ответ = правильный» и прочитать ещё раз')+'.</span>'
+      +'<details><summary>Показать</summary><div>'+noAnsP.map(function(i){return pages[i].noAns.map(function(it){return '• <i>'+esc(pages[i].label)+':</i> '+esc(it.q);}).join('<br>');}).join('<br>')+'</div></details>'
+      +'<button type="button" class="btn bgh bsm bkRetry" onclick="admBulkRun(['+noAnsP.join(',')+'])"><i class="ti ti-refresh"></i>Прочитать ещё раз</button></div>';
+  }
+  if(pages.length>1)h+='<details class="bk-all"><summary>По страницам</summary><div>'+pages.map(function(p){
+    var t=p.state==='fail'?'<span style="color:var(--eos-t)">не прочитана</span>':p.state==='empty'?'<span style="color:var(--tx3)">нет вопросов</span>'
+      :'вопросов: '+((p.items||[]).length)+(p.dup?' (повторы: '+p.dup+')':'')+(p.noAns&&p.noAns.length?' <span style="color:var(--iod-t)">без ответа: '+p.noAns.length+'</span>':'');
+    return '<span>'+esc(p.label)+' — '+t+'</span>';}).join('')+'</div></details>';
+  st.innerHTML=h;
 }
 function admDupHtml(cls){
-  var h='<div style="margin-top:6px;font-size:13px;line-height:1.5"><b style="color:var(--mal-t)">Новых — добавятся: '+cls.add.length+'</b>';
-  if(cls.dup.length)h+='<br><span style="color:var(--tx3)">Уже есть в базе — пропущу: '+cls.dup.length+'</span>';
+  var row=function(c,kind){
+    var k=esc(vBulkKey(c.x)),on=BK_FORCE&&BK_FORCE[vBulkKey(c.x)];
+    var opts=function(o,ans){return (o&&o.length?o:[ans]).map(function(s){return esc(s)+(s===ans?' ✓':'');}).join(' · ');};
+    return '<label class="adm-dup"><input type="checkbox" class="bkForce" data-k="'+k+'"'+(on?' checked':'')+' onchange="admBkForce(this)">'
+      +'<span><b>'+esc(c.x.q)+'</b>'
+      +'<span class="adm-dup-n">новый: '+opts(c.x.opts,vBulkAns(c.x))+'</span>'
+      +'<span class="adm-dup-o">в базе: '+opts(c.m.o,c.m.ans)+' <i>('+esc(vSubjLabel(c.m.s))+')</i></span></span></label>';
+  };
+  var diff=cls.dup.filter(function(c){return c.diff;}),same=cls.dup.filter(function(c){return !c.diff;});
+  var forced=cls.dup.concat(cls.conf).filter(function(c){return BK_FORCE&&BK_FORCE[vBulkKey(c.x)];}).length;
+  var h='<div style="margin-top:6px;font-size:13px;line-height:1.5"><b style="color:var(--mal-t)">Новых — добавятся: '+cls.add.length+(forced?' + отмеченных повторов: '+forced:'')+'</b>';
   if(cls.self)h+='<br><span style="color:var(--tx3)">Повторяются внутри текста — пропущу: '+cls.self+'</span>';
-  if(cls.conf.length)h+='<br><b style="color:var(--iod-t)">Такой вопрос уже есть, но с другим ответом — не добавлю: '+cls.conf.length+'</b>'
-    +'<details style="margin-top:4px"><summary style="cursor:pointer">Показать — сверь ответы</summary><div style="font-size:12px;margin-top:6px">'
-    +cls.conf.slice(0,40).map(function(c){return '• <b>'+esc(c.x.q)+'</b><br>&nbsp;&nbsp;новый ответ: '+esc(vBulkAns(c.x)||'—')+'<br>&nbsp;&nbsp;в базе: '+esc(c.m.ans||'—')+' <span style="color:var(--tx3)">('+esc(vSubjLabel(c.m.s))+')</span>';}).join('<br>')+'</div></details>';
-  if(cls.dup.length)h+='<details style="margin-top:4px"><summary style="cursor:pointer;color:var(--tx3)">Какие уже есть</summary><div style="font-size:12px;margin-top:6px;color:var(--tx3)">'
-    +cls.dup.slice(0,60).map(function(c){return '• '+esc(c.x.q);}).join('<br>')+'</div></details>';
+  if(cls.conf.length)h+='<details class="adm-dupbox" open><summary><b style="color:var(--iod-t)">Такой вопрос уже есть, но правильный ответ другой: '+cls.conf.length+'</b></summary>'
+    +'<p>Сверь ответы. Отметь галочкой те, что всё равно нужно добавить (как отдельный вопрос).</p>'
+    +'<button type="button" class="btn bgh bsm" onclick="admBkForceAll(this,true)">Отметить все</button> <button type="button" class="btn bgh bsm" onclick="admBkForceAll(this,false)">Снять</button>'
+    +cls.conf.map(function(c){return row(c);}).join('')+'</details>';
+  if(diff.length)h+='<details class="adm-dupbox"><summary><b style="color:var(--meth-t)">Уже есть с тем же ответом, но варианты другие: '+diff.length+'</b> — пропущу, если не отметишь</summary>'
+    +'<button type="button" class="btn bgh bsm" onclick="admBkForceAll(this,true)">Отметить все</button> <button type="button" class="btn bgh bsm" onclick="admBkForceAll(this,false)">Снять</button>'
+    +diff.map(function(c){return row(c);}).join('')+'</details>';
+  if(same.length)h+='<details class="adm-dupbox"><summary><span style="color:var(--tx3)">Точно такие уже есть — пропущу: '+same.length+'</span></summary>'
+    +same.map(function(c){return row(c);}).join('')+'</details>';
   return h+'</div>';
 }
+function admBkForce(cb){BK_FORCE=BK_FORCE||{};var k=cb.getAttribute('data-k');
+  if(cb.checked)BK_FORCE[k]=1;else delete BK_FORCE[k];admBkCount();}
+function admBkForceAll(btn,on){btn.closest('details').querySelectorAll('.bkForce').forEach(function(cb){cb.checked=on;admBkForce(cb);});}
+function admBkCount(){var b=document.querySelector('#bulkPrev b[style*="mal-t"]');if(!b)return;
+  var qa=parseBulkQA(val('bulkTxt')),cls=vBulkClassify(qa),f=cls.dup.concat(cls.conf).filter(function(c){return BK_FORCE&&BK_FORCE[vBulkKey(c.x)];}).length;
+  b.textContent='Новых — добавятся: '+cls.add.length+(f?' + отмеченных повторов: '+f:'');}
 function admBulkPreview(){
   var qa=parseBulkQA(document.getElementById('bulkTxt').value);
   var prev=document.getElementById('bulkPrev');
@@ -6734,7 +6913,8 @@ async function admBulkSave(){
   }
   if(!t){showErr('\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0442\u0435\u043C\u0443');return;}
   var cls=vBulkClassify(qa),bad0=qa._bad;
-  qa=cls.add;qa._bad=bad0;
+  var forced=cls.dup.concat(cls.conf).filter(function(c){return BK_FORCE&&BK_FORCE[vBulkKey(c.x)];}).map(function(c){return c.x;});
+  qa=cls.add.concat(forced);qa._bad=bad0;
   if(!qa.length){showErr('Все вопросы уже есть в базе — добавлять нечего'+(cls.conf.length?' (у '+cls.conf.length+' в базе другой ответ — см. «Проверить»)':'')+'.');return;}
   var BATCH_ID=t+' · '+new Date().toLocaleDateString('ru-RU')+' '+new Date().toLocaleTimeString('ru-RU').slice(0,5);
   // Пул ответов для авто-вариантов (только для формата вопрос:ответ)
@@ -6799,8 +6979,9 @@ async function admBulkSave(){
   closeModal();refreshSubjectDropdowns();admQuestions({subject:s});
   var bad=qa._bad||[];
   var msg='Готово! Добавлено: '+saved;
-  if(cls.dup.length||cls.self)msg+='\nУже были в базе (пропущены): '+(cls.dup.length+cls.self);
-  if(cls.conf.length)msg+='\nНе добавлены — в базе такой вопрос с другим ответом: '+cls.conf.length;
+  var fd=forced.length,skipD=cls.dup.length+cls.conf.length-fd;
+  if(fd)msg+='\nИз них повторов, которые ты отметил: '+fd;
+  if(skipD||cls.self)msg+='\nПропущены (уже есть в базе): '+(skipD+cls.self);
   if(aiOk||aiFail)msg+='\nНеверные варианты от ИИ: '+aiOk+(aiFail?', не получилось: '+aiFail+' — для них взяты ответы из других вопросов'+(aiErr?' ('+vAdminAiErr(aiErr)+')':''):'');
   if(failed){msg+=', ошибок сохранения: '+failed;if(window._bulkErr){msg+='\nПричина: '+window._bulkErr.slice(0,150);window._bulkErr=null;}}
   if(bad.length)msg+='\n\n НЕ распознано ('+bad.length+'): №'+bad.map(function(x){return x.num;}).join(', №')+'\nЭти вопросы НЕ добавлены — проверьте формат (нужен ? или :).';
