@@ -1304,6 +1304,14 @@ input::placeholder,textarea::placeholder{color:var(--tx3)}
 .adm-switch.on span{transform:translateX(22px)}
 .adm-switch:disabled{opacity:.55;cursor:not-allowed}
 
+/* ИИ-объяснение */
+.aibox .ai-text{font-size:14.5px;line-height:1.55;color:var(--tx);white-space:pre-line;margin-top:6px}
+.aibox .aihdr{display:flex;align-items:center;gap:6px;color:var(--vio-t);font-size:12.5px;font-weight:600;text-transform:none;letter-spacing:0}
+.aibox:empty{display:none}
+#eqX{width:100%;min-height:110px;resize:vertical;line-height:1.5}
+#eqXc{width:20px!important;height:20px;min-height:0;flex:0 0 auto;margin:0;padding:0}
+label:has(#eqXc){white-space:nowrap}
+
 /* читалка урока — шрифт для долгого чтения */
 .sblk p,.sb-drop,.study-reader-hero .srh-lede{font-family:var(--read);line-height:1.72}
 
@@ -1492,9 +1500,9 @@ input::placeholder,textarea::placeholder{color:var(--tx3)}
   <div id="trAiWrap" style="display:none">
     <div style="display:flex;justify-content:space-between;align-items:center">
       <div class="aihdr"><i class="ti ti-sparkles" style="font-size:12px"></i>ИИ-объяснение</div>
-      <button class="btn bgh bsm" id="trExp" onclick="trExplain()">Объяснить ↗</button>
+      <button class="btn bgh bsm" id="trExp" onclick="trExplain()"><i class="ti ti-sparkles"></i> Почему так?</button>
     </div>
-    <div class="aibox" id="trAi">Нажмите кнопку для объяснения</div>
+    <div class="aibox" id="trAi"></div>
   </div>
   <button class="btn bbl bfu" id="trNxt" style="display:none;margin-top:10px" onclick="trNext()">Следующий →</button>
 </div>
@@ -4577,7 +4585,8 @@ function trNext(){
   document.getElementById('trOpts').innerHTML=TRshuf.opts.map(function(o,i){return '<button class="opt" onclick="trAns('+i+')"><span class="ol">'+'АБВГДЕЖЗ'.charAt(i)+'</span>'+o+'</button>';}).join('');
   document.getElementById('trAiWrap').style.display='none';
   document.getElementById('trNxt').style.display='none';
-  var eb=document.getElementById('trExp');if(eb){eb.disabled=false;eb.textContent='Объяснить ↗';}
+  var eb=document.getElementById('trExp');if(eb){eb.disabled=false;eb.innerHTML='<i class="ti ti-sparkles"></i> Почему так?';eb.style.display='';}
+  var ab=document.getElementById('trAi');if(ab)ab.innerHTML='';
   document.getElementById('trOk').textContent='✓ '+TRss.c;
   document.getElementById('trErr').textContent='✗ '+TRss.w;
 }
@@ -4591,7 +4600,7 @@ async function trAns(idx){
   document.querySelectorAll('.opt').forEach(function(btn,i){if(i===TRshuf.correctIdx)btn.className='opt ok';else if(i===idx)btn.className='opt bad';btn.disabled=true;});
   document.getElementById('trAiWrap').style.display='';
   document.getElementById('trNxt').style.display='';
-  if(!ok)document.getElementById('trAi').textContent='Вы ошиблись. Нажмите Объяснить для разъяснения.';
+  if(!ok)document.getElementById('trAi').textContent='Нажми «Почему так?» — объясню, в чём ошибка.';
   // Показать прогресс освоения вопроса
   var p=S.prog[TRC.id];var st=p?(p.streak||0):0;
   var trTbdg=document.getElementById('trTbdg');
@@ -4600,18 +4609,27 @@ async function trAns(idx){
     else trTbdg.textContent=TRC.t+' · '+st+'/3 верных подряд';
   }
 }
+// ===== ИИ-объяснения: один раз на вопрос, дальше читаются из базы бесплатно =====
+async function vExplain(qid,regen){
+  if(!regen){
+    try{var r=await sbGet('custom_questions','id=eq.'+encodeURIComponent(qid)+'&select=explanation,explanation_checked');
+      if(r.length&&r[0].explanation)return {status:'ok',text:r[0].explanation,checked:!!r[0].explanation_checked};}catch(e){}
+  }
+  var url=vBotUrl('/ai/explain');if(!url)return {status:'ai_not_configured'};
+  var res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:regen?vAdminToken():(S.token||''),question_id:qid,regen:!!regen})});
+  return await res.json().catch(function(){return {status:'error'};});
+}
+function vExplainHtml(r){
+  if(r&&r.status==='ok')return '<div class="aihdr"><i class="ti ti-sparkles"></i> '+(r.checked?'Объяснение · проверено преподавателем':'Объяснение от ИИ · может содержать неточности')+'</div><div class="ai-text">'+esc(r.text)+'</div>';
+  var m={no_session:'Войди в аккаунт, чтобы смотреть объяснения.',limit:'На сегодня лимит новых объяснений исчерпан. Готовые объяснения по-прежнему доступны.',ai_not_configured:'Объяснения пока не подключены.',ai_error:'ИИ сейчас не ответил. Попробуй ещё раз чуть позже.'}[r&&r.status];
+  return '<span style="color:var(--tx2)">'+(m||'Не получилось загрузить объяснение.')+'</span>';
+}
 async function trExplain(){
-  var btn=document.getElementById('trExp');btn.disabled=true;btn.textContent='Загрузка...';
+  if(!TRC)return;
+  var btn=document.getElementById('trExp');btn.disabled=true;btn.textContent='Готовим…';
   var box=document.getElementById('trAi');
-  box.innerHTML='<div class="aihdr"><i class="ti ti-loader spin"></i>Загрузка...</div>';
-  try{
-    var parts=['Вопрос: ',TRC.q,'\nВарианты: ',TRC.o.map(function(o,i){return(i+1)+') '+o;}).join(', '),'\nПравильный ответ: ',TRC.o[TRC.a],'\n\nОбъясни кратко (2-3 предложения) почему этот ответ правильный. Для студента мед. вуза, на русском.'];
-    var prompt=parts.join('');
-    var res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:350,messages:[{role:'user',content:prompt}]})});
-    var data=await res.json();
-    var text=data.content?data.content.map(function(c){return c.text||'';}).join(''):'Нет ответа';
-    box.innerHTML='<div class="aihdr"><i class="ti ti-sparkles" style="font-size:11px"></i>Объяснение</div>'+text;
-  }catch(e){box.innerHTML='<span style="color:var(--re)">Ошибка запроса</span>';}
+  box.innerHTML='<div class="aihdr"><i class="ti ti-loader spin"></i> Готовим объяснение…</div>';
+  try{box.innerHTML=vExplainHtml(await vExplain(TRC.id));}catch(e){box.innerHTML=vExplainHtml(null);}
   btn.style.display='none';
 }
 
@@ -6126,10 +6144,12 @@ async function admQuestions(keep){
   document.getElementById('admQuestions').innerHTML=
     '<div class="adm-qbar"><button class="btn bbl bsm" onclick="admAddQM()"><i class="ti ti-plus"></i>Добавить вопрос</button><button class="btn bgr bsm" onclick="admBulkM()"><i class="ti ti-upload"></i>Массово</button><span style="font-size:13px;color:var(--tx3);margin-left:auto">Всего '+vNum(QS.length)+'</span></div>'
     +'<div class="adm-qbar"><select id="qFs" onchange="admQF()" aria-label="Предмет">'+vSubjOptions('<option value="all">Все предметы</option>','<option value="custom">Только добавленные вручную</option>')+'</select><input id="qSr" placeholder="Поиск по вопросу или теме" oninput="admQF()" aria-label="Поиск"></div>'
+    +'<div id="qAiCard"></div>'
     +'<div id="qSubjTools" class="adm-qbar" style="display:none"></div>'
     +(batches.length?'<div class="adm-qbar"><select id="qBatch" onchange="admQF()" aria-label="Партия">'+batchOpts+'</select><button class="btn bgh bsm adm-danger" onclick="admDelBatch()"><i class="ti ti-trash"></i>Удалить партию</button></div>':'')
     +'<div class="adm-qbar adm-sel"><button class="btn bgh bsm" onclick="admToggleAll(true)"><i class="ti ti-checks"></i>Выбрать все</button><button class="btn bgh bsm" onclick="admToggleAll(false)">Снять</button><button class="btn bgh bsm adm-danger" onclick="admDelChecked()"><i class="ti ti-trash"></i>Удалить выбранные</button><button class="btn bgh bsm adm-danger" onclick="admDelShown()">Удалить все показанные</button></div>'
     +'<div id="qCount" style="font-size:12px;color:var(--tx3);margin-bottom:6px"></div><div id="qTbl" class="adm-qtbl"></div>';
+  admAiCard();
   var f=document.getElementById('qFs');if(f)f.value=(SM[prevF]||prevF==='custom')?prevF:'all';
   var sr=document.getElementById('qSr');if(sr)sr.value=prevS;
   var bt=document.getElementById('qBatch');if(bt&&prevB!=='all'&&batches.indexOf(prevB)>=0)bt.value=prevB;
@@ -6156,6 +6176,25 @@ function admQF(){
     var chk=isCust?'<input type="checkbox" class="qchk" value="'+q.id+'" style="width:auto">':'';
     return '<tr><td>'+chk+'</td><td style="color:var(--tx3);font-family:var(--fm);font-size:11px">'+(i+1)+'</td><td style="font-size:11px;color:var(--tx3);max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+esc(vSubjLabel(q.s)+' · '+q.t)+'"><b style="color:var(--'+vSubjTone(q.s)+'-t);font-weight:600">'+esc(vSubjLabel(q.s))+'</b><br>'+esc(q.t)+'</td><td style="font-size:12px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+esc(q.q)+'">'+esc(q.q)+'</td><td style="font-size:12px;color:var(--gr);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(q.o[q.a])+'</td><td style="white-space:nowrap"><button class="btn bgh bsm" onclick="admEditQM(\''+q.id+'\')" style="padding:4px 7px"><i class="ti ti-edit" style="font-size:12px"></i></button>'+(isCust?'<button class="btn bre bsm" onclick="admDelQ(\''+q.id+'\')" style="padding:4px 7px;margin-left:3px"><i class="ti ti-trash" style="font-size:12px"></i></button>':'')+'</td></tr>';
   }).join('')+'</tbody></table>';
+}
+async function admAiCard(job){
+  var el=document.getElementById('qAiCard');if(!el||!VITA_BOT_DOMAIN||!dbOK)return;
+  var miss=0,total=getQS().length;
+  try{miss=(await sbGet('custom_questions','explanation=is.null&select=id')).length;}catch(e){return;}
+  var run=job&&job.running;
+  el.innerHTML='<div class="adm-auto"><div class="adm-auto-t"><b><i class="ti ti-sparkles" style="color:var(--vio-t)"></i> Объяснения от ИИ</b>'
+    +'<span>'+(run?'Создаю… готово '+job.done+' из '+job.total+(job.errors?', ошибок: '+job.errors:''):miss?'Нет у '+miss+' из '+total+' вопросов. Создаются один раз и хранятся в базе — студентам бесплатно.':'Есть у всех '+total+' вопросов.')+'</span></div>'
+    +(miss&&!run?'<button class="btn bvio bsm" onclick="admAiStart()">Создать для всех</button>':'')+'</div>';
+}
+async function admAiStart(){
+  if(!confirm('Создать объяснения для всех вопросов без объяснения?\nЭто разовая трата — примерно 1–2 цента на 100 вопросов.'))return;
+  var poll=async function(start){
+    try{var r=await fetch(vBotUrl('/ai/job'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:vAdminToken(),start:!!start})});var j=await r.json();
+      if(j.status!=='ok'){alert({ai_not_configured:'ИИ не подключён: на Railway нет ключа ANTHROPIC_API_KEY.',forbidden:'Нужен вход администратора.'}[j.status]||'Не получилось: '+j.status);admAiCard();return;}
+      admAiCard(j);if(j.running)setTimeout(function(){poll(false);},2000);
+    }catch(e){alert('Нет связи с ботом');}
+  };
+  poll(true);
 }
 async function admRenameSubj(k){
   var cur=vSubjLabel(k);
@@ -6425,11 +6464,29 @@ function admEditQM(qid){
   addInput(b,'eqQ','text','Вопрос','');addInput(b,'eqT','text','Тема','');
   var og=document.createElement('div');og.className='fg';og.innerHTML='<label class="fl">Варианты (отметьте правильный)</label>';
   q.o.forEach(function(o,i){var row=document.createElement('div');row.style.cssText='display:flex;align-items:center;gap:7px;margin-bottom:6px';row.innerHTML='<span style="font-size:12px;font-weight:600;width:18px;font-family:var(--fm)">'+'АБВГДЕЖЗ'.charAt(i)+'</span><input id="eqO'+i+'" style="flex:1"><input type="radio" name="eqC" value="'+i+'"'+(i===q.a?' checked':'')+' style="width:auto;flex-shrink:0">';og.appendChild(row);});
-  b.appendChild(og);addErr(b);
+  b.appendChild(og);
+  var ex=document.createElement('div');ex.className='fg';
+  ex.innerHTML='<label class="fl" for="eqX">Объяснение для студентов</label><textarea id="eqX" rows="5" placeholder="Пока нет. Появится, когда студент нажмёт «Почему так?», — или создай сейчас."></textarea>'
+    +'<div style="display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap"><label style="display:flex;gap:6px;align-items:center;font-size:13px;color:var(--tx2)"><input type="checkbox" id="eqXc"> Проверено преподавателем</label>'
+    +'<button type="button" class="btn bgh bsm" id="eqXg"><i class="ti ti-sparkles"></i>'+(VITA_BOT_DOMAIN?'Создать с ИИ':'ИИ не подключён')+'</button></div>';
+  b.appendChild(ex);
+  document.getElementById('eqXg').onclick=function(){admGenExpl(qid);};
+  sbGet('custom_questions','id=eq.'+encodeURIComponent(qid)+'&select=explanation,explanation_checked').then(function(r){
+    if(r.length){var t=document.getElementById('eqX');if(t&&!t.value)t.value=r[0].explanation||'';var c=document.getElementById('eqXc');if(c)c.checked=!!r[0].explanation_checked;}
+  }).catch(function(){});
+  addErr(b);
   addBtn(b,'bbl','Сохранить',function(){admSaveEQ(qid,q.s);});
   document.getElementById('eqQ').value=q.q;document.getElementById('eqT').value=q.t;
   q.o.forEach(function(o,i){var el=document.getElementById('eqO'+i);if(el)el.value=o;});
   document.getElementById('modal').style.display='flex';
+}
+async function admGenExpl(qid){
+  var b=document.getElementById('eqXg');if(!b)return;b.disabled=true;b.innerHTML='<i class="ti ti-loader spin"></i>Создаю…';
+  try{var r=await vExplain(qid,true);
+    if(r.status==='ok'){document.getElementById('eqX').value=r.text;document.getElementById('eqXc').checked=false;}
+    else alert({ai_not_configured:'ИИ не подключён: на Railway нет ключа ANTHROPIC_API_KEY.',ai_error:'ИИ не ответил, попробуй ещё раз.',no_session:'Сессия админа истекла — войди заново.'}[r.status]||'Не получилось: '+r.status);
+  }catch(e){alert('Нет связи с ботом');}
+  b.disabled=false;b.innerHTML='<i class="ti ti-sparkles"></i>Создать заново';
 }
 async function admSaveEQ(qid,qs){
   var qt=val('eqQ'),t=val('eqT');
@@ -6437,7 +6494,8 @@ async function admSaveEQ(qid,qs){
   var cr=document.querySelector('input[name="eqC"]:checked');
   if(!qt||!t||opts.some(function(o){return !o;})||!cr){showErr('Заполните все поля');return;}
   var ans=+cr.value;var btn=document.querySelector('#mdBody .btn');btn.disabled=true;btn.textContent='Сохранение...';
-  try{if(dbOK){var ex=await sbGet('custom_questions','id=eq.'+qid);if(ex.length>0)await sbPatch('custom_questions','id=eq.'+qid,{subject:qs,topic:t,question:qt,options:opts,correct_index:ans});}
+  try{if(dbOK){var ex=await sbGet('custom_questions','id=eq.'+qid);var xp=(document.getElementById('eqX')||{}).value||'';xp=xp.trim();
+    if(ex.length>0)await sbPatch('custom_questions','id=eq.'+qid,{subject:qs,topic:t,question:qt,options:opts,correct_index:ans,explanation:xp||null,explanation_checked:!!(xp&&document.getElementById('eqXc')&&document.getElementById('eqXc').checked)});}
   var idx=-1;for(var i=0;i<CQS.length;i++){if(CQS[i].id===qid){idx=i;break;}}var upd={id:qid,s:qs,t:t,q:qt,o:opts,a:ans};if(idx>=0)CQS[idx]=upd;else CQS.push(upd);closeModal();refreshSubjectDropdowns();admQF();}
   catch(e){showErr('Ошибка: '+e.message);btn.disabled=false;btn.textContent='Сохранить';}
 }
