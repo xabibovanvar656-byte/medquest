@@ -6516,6 +6516,57 @@ function parseBulkQA(txt){
   result._bad=bad;
   return result;
 }
+// ===== Повторы: есть ли такой вопрос в базе (с учётом пунктуации, окончаний, порядка слов, опечаток в 1 слово) =====
+var V_STOP={};('какой какая какое какие каких каким какую каков что чего чему чем это эта эти этот этого '
+  +'выберите выберете назовите укажите отметьте один одну ответ ответа ответы верный верные правильный правильные '
+  +'перечисленных перечисленные ниже среди для при или его ее её все всех них как так где кто').split(' ').forEach(function(w){V_STOP[w]=1;});
+function vStems(s){
+  var out={};String(s||'').toLowerCase().replace(/ё/g,'е').replace(/[^a-zа-я0-9]+/g,' ').trim().split(' ').forEach(function(w){
+    if(!w)return;if(/^\d+$/.test(w)){out[w]=1;return;}
+    if(w==='не'||w==='ни'){out[w]=1;return;}   // отрицание меняет смысл вопроса — не выбрасываем
+    if(w.length<3||V_STOP[w])return;out[w.slice(0,4)]=1;});
+  return Object.keys(out);
+}
+function vDiffList(a,b){var A={},out=[];a.forEach(function(x){A[x]=1;});b.forEach(function(x){if(A[x])delete A[x];else out.push(x);});return out.concat(Object.keys(A));}
+function vSetDiff(a,b){return vDiffList(a,b).length;}
+var V_NEG={'не':1,'ни':1,'кром':1,'неве':1,'непр':1,'искл':1,'нель':1};
+// тот же вопрос: те же слова, или отличие в одно слово у длинного вопроса (опечатка, лишнее слово), но не в отрицании
+function vSameQ(a,b){var d=vDiffList(a,b);return d.length===0||(d.length===1&&!V_NEG[d[0]]&&Math.min(a.length,b.length)>=5);}
+function vSameAns(a,b){var x=vStems(a),y=vStems(b);if(!x.length||!y.length)return String(a).trim().toLowerCase()===String(b).trim().toLowerCase();
+  var d=vSetDiff(x,y);return d===0||(d<=1&&Math.min(x.length,y.length)>=3);}
+var V_DUPIDX=null;
+function vDupIndex(){
+  if(V_DUPIDX&&V_DUPIDX.n===getQS().length)return V_DUPIDX;
+  var list=getQS().map(function(x){return {st:vStems(x.q),q:x.q,ans:(x.o||[])[x.a],s:x.s};}).filter(function(x){return x.st.length;});
+  V_DUPIDX={n:getQS().length,list:list};return V_DUPIDX;
+}
+// new — нет в базе; dup — уже есть (тот же вопрос и ответ); conflict — такой же вопрос, но ответ другой
+function vDupCheck(q,ans,extra){
+  var st=vStems(q);if(!st.length)return {st:'new'};
+  var pool=vDupIndex().list.concat(extra||[]),best=null;
+  for(var i=0;i<pool.length;i++){
+    var x=pool[i];
+    if(vSameQ(st,x.st)){
+      if(ans==null||x.ans==null||vSameAns(ans,x.ans))return {st:'dup',m:x};
+      if(!best)best=x;
+    }
+  }
+  return best?{st:'conflict',m:best}:{st:'new'};
+}
+function vBulkAns(x){return x.opts?x.opts[x.correct]:x.a;}
+// разбор + проверка на повторы для массового добавления
+function vBulkClassify(qa){
+  var seen=[],res={add:[],dup:[],conf:[],self:0};
+  qa.forEach(function(x){
+    var a=vBulkAns(x),r=vDupCheck(x.q,a);
+    if(r.st==='new'){var st=vStems(x.q),rep=seen.some(function(y){return vSameQ(st,y.st);});if(rep){res.self++;return;}}
+    if(r.st==='dup')res.dup.push({x:x,m:r.m});
+    else if(r.st==='conflict')res.conf.push({x:x,m:r.m});
+    else{res.add.push(x);seen.push({st:vStems(x.q),q:x.q,ans:a});}
+  });
+  return res;
+}
+
 // ===== PDF / фото → вопросы (ИИ читает страницы) =====
 var PDFJS_V='3.11.174';
 function vLoadPdfJs(){
@@ -6614,10 +6665,11 @@ async function admBulkFile(inp){
   var seen={},ok=[],noAns=[],inDb=0,nk=function(s){return String(s||'').toLowerCase().replace(/[^a-zа-яё0-9]/gi,'');};
   var ta0=document.getElementById('bulkTxt');
   parseBulkQA(ta0?ta0.value:'').forEach(function(x){seen[nk(x.q)]=1;});
-  var have={};getQS().forEach(function(x){have[nk(x.q)]=1;});
+
   res.forEach(function(items){(items||[]).forEach(function(it){
     var key=nk(it.q);if(!key||seen[key])return;seen[key]=1;
-    if(have[key]){inDb++;return;}
+    var ca=it.correct!==null&&it.correct!==undefined?it.options[it.correct]:(it.answer||null);
+    if(vDupCheck(it.q,ca).st==='dup'){inDb++;return;}
     if(it.options.length>=2&&it.correct===null)noAns.push(it);else ok.push(it);
   });});
   BK_NOANS=noAns;
@@ -6639,6 +6691,17 @@ async function admBulkFile(inp){
   if(noAns.length&&st)st.innerHTML+='<details style="margin-top:6px"><summary style="cursor:pointer">Показать вопросы без ответа</summary><div style="font-size:12px;margin-top:6px">'+noAns.slice(0,50).map(function(it){return '• '+esc(it.q);}).join('<br>')+'</div></details>';
   if(lines.length){admBulkPreview();if(ta)ta.scrollIntoView({block:'center',behavior:'smooth'});}
 }
+function admDupHtml(cls){
+  var h='<div style="margin-top:6px;font-size:13px;line-height:1.5"><b style="color:var(--mal-t)">Новых — добавятся: '+cls.add.length+'</b>';
+  if(cls.dup.length)h+='<br><span style="color:var(--tx3)">Уже есть в базе — пропущу: '+cls.dup.length+'</span>';
+  if(cls.self)h+='<br><span style="color:var(--tx3)">Повторяются внутри текста — пропущу: '+cls.self+'</span>';
+  if(cls.conf.length)h+='<br><b style="color:var(--iod-t)">Такой вопрос уже есть, но с другим ответом — не добавлю: '+cls.conf.length+'</b>'
+    +'<details style="margin-top:4px"><summary style="cursor:pointer">Показать — сверь ответы</summary><div style="font-size:12px;margin-top:6px">'
+    +cls.conf.slice(0,40).map(function(c){return '• <b>'+esc(c.x.q)+'</b><br>&nbsp;&nbsp;новый ответ: '+esc(vBulkAns(c.x)||'—')+'<br>&nbsp;&nbsp;в базе: '+esc(c.m.ans||'—')+' <span style="color:var(--tx3)">('+esc(vSubjLabel(c.m.s))+')</span>';}).join('<br>')+'</div></details>';
+  if(cls.dup.length)h+='<details style="margin-top:4px"><summary style="cursor:pointer;color:var(--tx3)">Какие уже есть</summary><div style="font-size:12px;margin-top:6px;color:var(--tx3)">'
+    +cls.dup.slice(0,60).map(function(c){return '• '+esc(c.x.q);}).join('<br>')+'</div></details>';
+  return h+'</div>';
+}
 function admBulkPreview(){
   var qa=parseBulkQA(document.getElementById('bulkTxt').value);
   var prev=document.getElementById('bulkPrev');
@@ -6647,12 +6710,14 @@ function admBulkPreview(){
     var badMsg=bad.length?('<div style="margin-top:6px;font-size:11px;color:var(--re)">Не распознано: '+bad.map(function(x){return '№'+x.num;}).join(', ')+'</div>'):'';
     prev.innerHTML='<span style="color:var(--re)">Не распознано ни одного. Нужен формат: номер) вопрос: ответ</span>'+badMsg;return;
   }
+  var cls=vBulkClassify(qa);
   var withOpts=qa.filter(function(x){return x.opts;}).length;
   var autoOpts=qa.length-withOpts;
   var html='<span style="color:var(--gr)">✓ Распознано: '+qa.length+'</span>';
   if(withOpts&&autoOpts)html+='<div style="font-size:11px;color:var(--tx3);margin-top:3px">С готовыми вариантами: '+withOpts+' · без вариантов: '+autoOpts+' ('+(document.getElementById('bkAi')&&document.getElementById('bkAi').checked?'придумает ИИ':'из других вопросов')+')</div>';
   else if(withOpts)html+='<div style="font-size:11px;color:var(--tx3);margin-top:3px">С готовыми вариантами</div>';
   else html+='<div style="font-size:11px;color:var(--tx3);margin-top:3px">Неверные варианты: '+(document.getElementById('bkAi')&&document.getElementById('bkAi').checked?'придумает ИИ':'из ответов других вопросов')+'</div>';
+  html+=admDupHtml(cls);
   if(bad.length){
     html+='<div style="margin-top:8px;padding:8px;background:var(--red);border-radius:6px;font-size:11px;color:var(--re)"><b><i class="ti ti-alert-triangle"></i> НЕ распознано ('+bad.length+'):</b><br>'+bad.map(function(x){return '№'+x.num+': '+x.text+'...';}).join('<br>')+'</div>';
   }
@@ -6668,6 +6733,9 @@ async function admBulkSave(){
     s=vEnsureSubject(vSubjKey(nn),nn);
   }
   if(!t){showErr('\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0442\u0435\u043C\u0443');return;}
+  var cls=vBulkClassify(qa),bad0=qa._bad;
+  qa=cls.add;qa._bad=bad0;
+  if(!qa.length){showErr('Все вопросы уже есть в базе — добавлять нечего'+(cls.conf.length?' (у '+cls.conf.length+' в базе другой ответ — см. «Проверить»)':'')+'.');return;}
   var BATCH_ID=t+' · '+new Date().toLocaleDateString('ru-RU')+' '+new Date().toLocaleTimeString('ru-RU').slice(0,5);
   // Пул ответов для авто-вариантов (только для формата вопрос:ответ)
   var ownAnswers=qa.filter(function(x){return x.a;}).map(function(x){return x.a;});
@@ -6731,6 +6799,8 @@ async function admBulkSave(){
   closeModal();refreshSubjectDropdowns();admQuestions({subject:s});
   var bad=qa._bad||[];
   var msg='Готово! Добавлено: '+saved;
+  if(cls.dup.length||cls.self)msg+='\nУже были в базе (пропущены): '+(cls.dup.length+cls.self);
+  if(cls.conf.length)msg+='\nНе добавлены — в базе такой вопрос с другим ответом: '+cls.conf.length;
   if(aiOk||aiFail)msg+='\nНеверные варианты от ИИ: '+aiOk+(aiFail?', не получилось: '+aiFail+' — для них взяты ответы из других вопросов'+(aiErr?' ('+vAdminAiErr(aiErr)+')':''):'');
   if(failed){msg+=', ошибок сохранения: '+failed;if(window._bulkErr){msg+='\nПричина: '+window._bulkErr.slice(0,150);window._bulkErr=null;}}
   if(bad.length)msg+='\n\n НЕ распознано ('+bad.length+'): №'+bad.map(function(x){return x.num;}).join(', №')+'\nЭти вопросы НЕ добавлены — проверьте формат (нужен ? или :).';
