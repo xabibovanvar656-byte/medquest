@@ -1118,17 +1118,17 @@ input::placeholder,textarea::placeholder{color:var(--tx3)}
 .lb-h2{display:flex;align-items:baseline;justify-content:space-between;margin:22px 2px 10px}
 .lb-h2 h2{font-size:17px;font-weight:700;margin:0}
 .lb-h2 span{font-size:13px;color:var(--tx3)}
-.lb-subj{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-.lb-sub{border:none;border-radius:18px;background:var(--bg2);box-shadow:0 4px 0 var(--edge);color:var(--tx);padding:12px;display:flex;flex-direction:column;gap:6px;text-align:left;cursor:pointer;font-family:var(--f);min-width:0}
+.lb-subj{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media(min-width:620px){.lb-subj{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}}
+.lb-sub{border:none;border-radius:18px;background:var(--bg2);box-shadow:0 4px 0 var(--edge);color:var(--tx);padding:12px;display:flex;align-items:center;gap:10px;text-align:left;cursor:pointer;font-family:var(--f);min-width:0}
 .lb-sub:active{transform:translateY(2px);box-shadow:0 2px 0 var(--edge)}
-.lb-sub-top{display:flex;align-items:center;justify-content:space-between;width:100%;font-size:19px}
-.lb-sub-top span{font-size:15px;font-weight:700}
-.lb-sub b{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb-sub-ic{flex:0 0 38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.lb-sub-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.lb-sub b{font-size:14px;font-weight:600;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.lb-sub small{font-size:12px;color:var(--tx3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb-sub small em{font-style:normal;font-weight:700}
 .lb-bar{display:block;height:6px;border-radius:3px;background:var(--bg4);width:100%;overflow:hidden}
 .lb-bar i{display:block;height:6px;border-radius:3px}
-.lb-subj.scroll{display:flex;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:0 16px 6px}
-.lb-subj.scroll::-webkit-scrollbar{display:none}
-.lb-subj.scroll .lb-sub{flex:0 0 31%}
 .lb-guest{margin-top:14px;border-radius:22px;background:var(--bg2);box-shadow:0 4px 0 var(--edge);padding:16px;display:flex;gap:12px;align-items:center}
 .lb-guest p{flex:1;font-size:14px;color:var(--tx2);line-height:1.45;margin:0}
 .lb-pills{display:flex;align-items:center;gap:8px}
@@ -1226,7 +1226,7 @@ input::placeholder,textarea::placeholder{color:var(--tx3)}
 .adm-header{background:var(--bg2)!important;border:none!important;border-radius:22px!important;box-shadow:0 4px 0 var(--edge)!important}
 .adm-h-badge{background:var(--vio)!important;color:var(--vio-ink)!important;box-shadow:0 3px 0 var(--vio-e)!important;border-radius:14px!important}
 .adm-h-out{border-radius:12px!important}
-.adm-tabs{display:flex!important;flex-wrap:wrap!important;gap:8px!important;overflow:visible!important;padding:2px 0 6px!important;margin-bottom:16px!important}
+.adm-tabs{display:none!important}
 .adm-tabs .tab{flex:0 0 auto;border-radius:12px;padding:9px 13px!important;font-size:13px!important;min-height:38px}
 .adm-h3{font-size:13px;font-weight:700;color:var(--tx3);margin:6px 2px 8px}
 .adm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px;margin-bottom:14px}
@@ -1334,6 +1334,45 @@ label:has(#eqXc){white-space:nowrap}
 
 /* читалка урока — шрифт для долгого чтения */
 .sblk p,.sb-drop,.study-reader-hero .srh-lede{font-family:var(--read);line-height:1.72}
+
+/* ===== АДМИНКА: главная с разделами ===== */
+.adm-grp{margin:18px 2px 10px;display:flex;align-items:baseline;gap:8px}
+.adm-grp h3{font-size:15px;font-weight:700;margin:0;color:var(--tx)}
+.adm-grp span{font-size:12.5px;color:var(--tx3)}
+.adm-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media(min-width:700px){.adm-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.adm-card{position:relative;border:none;border-radius:18px;background:var(--bg2);box-shadow:0 4px 0 var(--edge);color:var(--tx);padding:13px;display:flex;flex-direction:column;align-items:flex-start;gap:8px;text-align:left;cursor:pointer;font-family:var(--f);min-width:0}
+.adm-card:active{transform:translateY(2px);box-shadow:0 2px 0 var(--edge)}
+.adm-card .lb-blob{width:38px;height:38px;border-radius:12px;font-size:20px;display:flex;align-items:center;justify-content:center}
+.adm-card b{font-size:15px;font-weight:700}
+.adm-card small{font-size:12.5px;line-height:1.35;color:var(--tx3)}
+.adm-card .adm-cnt{position:absolute;top:10px;right:10px;min-width:24px;height:24px;padding:0 7px;border-radius:12px;background:var(--eos);color:var(--eos-ink);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center}
+.adm-sec{margin-bottom:14px}
+.adm-back{border:none;background:var(--bg2);color:var(--tx);font-family:var(--f);font-weight:600;font-size:14px;height:38px;padding:0 14px 0 10px;border-radius:12px;display:inline-flex;align-items:center;gap:6px;cursor:pointer;box-shadow:0 3px 0 var(--edge)}
+.adm-back:active{transform:translateY(2px);box-shadow:0 1px 0 var(--edge)}
+.adm-sec-t{display:flex;gap:12px;align-items:center;margin-top:14px}
+.adm-sec-t .lb-blob{flex:0 0 44px;height:44px;border-radius:14px;font-size:23px;display:flex;align-items:center;justify-content:center}
+.adm-sec-t h2{font-size:20px;font-weight:800;margin:0}
+.adm-sec-t p{font-size:13px;color:var(--tx3);margin:2px 0 0;line-height:1.4}
+/* список студентов */
+.adm-find{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.adm-find input{flex:1 1 180px;min-width:0}
+.adm-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.adm-chip{border:none;font-family:var(--f);font-size:13px;font-weight:600;height:34px;padding:0 12px;border-radius:999px;background:var(--bg2);color:var(--tx2);cursor:pointer}
+.adm-chip.on{background:var(--meth);color:var(--meth-ink)}
+.adm-list{display:flex;flex-direction:column;gap:8px}
+.adm-row{border:none;width:100%;background:var(--bg2);border-radius:16px;box-shadow:0 3px 0 var(--edge);padding:10px 12px;display:flex;align-items:center;gap:12px;text-align:left;color:var(--tx);font-family:var(--f);cursor:pointer;min-width:0}
+.adm-row:active{transform:translateY(2px);box-shadow:0 1px 0 var(--edge)}
+.adm-av{flex:0 0 40px;height:40px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px}
+.adm-row-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.adm-row-t b{font-size:15px;font-weight:600;display:flex;align-items:center;gap:6px;min-width:0}
+.adm-row-t b span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.adm-row-t small{font-size:12.5px;color:var(--tx3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.adm-row-t small.on{color:var(--mal-t)}
+.adm-tag{flex-shrink:0;font-size:11px;font-weight:700;padding:2px 7px;border-radius:999px}
+.adm-row>.ti-chevron-right{color:var(--tx3);font-size:18px;flex-shrink:0}
+.adm-acts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.adm-acts .btn{justify-content:center}
 
 
 /* учёба: без капс-подписей и акцентного курсива */
@@ -1661,7 +1700,9 @@ label:has(#eqXc){white-space:nowrap}
       <button class="tab" id="tabReq" onclick="admTab('requests',this)" style="display:none">Запросы <span id="reqCnt" class="bdg bre2" style="font-size:10px;margin-left:3px"></span></button>
       <button class="tab" onclick="admTab('ai',this)">ИИ</button>
     </div>
-    <div id="admStats"></div>
+    <div id="admHome"></div>
+    <div id="admSec" class="adm-sec" style="display:none"></div>
+    <div id="admStats" style="display:none"></div>
     <div id="admAdmins" style="display:none"></div>
     <div id="admRequests" style="display:none"></div>
     <div id="admPending" style="display:none"></div>
@@ -1677,8 +1718,8 @@ label:has(#eqXc){white-space:nowrap}
     <div id="admNewsEdit" style="display:none"></div>
     <div id="admSchedEdit" style="display:none"></div>
     <div id="admAi" style="display:none">
-      <textarea id="admAiQ" rows="3" placeholder="Задайте вопрос ИИ..."></textarea>
-      <button class="btn bbl" style="margin-top:8px" id="admAiBtn">Спросить</button>
+      <textarea id="admAiQ" rows="4" placeholder="Например: составь 5 вопросов по теме «Буферные системы крови» с 4 вариантами"></textarea>
+      <button class="btn bbl" style="margin-top:8px" id="admAiBtn"><i class="ti ti-send"></i> Спросить</button>
       <div id="admAiAns"></div>
     </div>
   </div>
@@ -2178,6 +2219,7 @@ async function updPendBadge(){
   var b=document.getElementById('admBadge'),c=document.getElementById('pendCnt');
   if(b){b.style.display=n>0?'flex':'none';b.textContent=n;}
   if(c)c.textContent=n>0?n:'';
+  if(ADM_CUR==='home')admHome();
 }
 
 var PROTECTED=['flashcards','trainer','exam','progress','leaderboard','duels','profile','shop'];
@@ -5382,21 +5424,63 @@ function renderAdm(){
   var tin=document.getElementById('tabInactive');if(tin)tin.style.display=S.isSuper?'':'none';
     document.getElementById('tabReq').style.display=S.isSuper?'':'none';
     if(S.isSuper)updReqBadge();
-    admTab('stats',document.querySelector('.tab'));
+    admTab('home');
   }
 }
 async function updReqBadge(){
   if(!S.isSuper||!dbOK)return;
-  try{var r=await sbGet('pending_actions','select=id');var c=document.getElementById('reqCnt');if(c)c.textContent=r.length>0?r.length:'';}catch(e){}
+  try{var r=await sbGet('pending_actions','select=id');var c=document.getElementById('reqCnt');if(c)c.textContent=r.length>0?r.length:'';if(ADM_CUR==='home')admHome();}catch(e){}
+}
+// Разделы админки: название, что внутри, иконка, цвет, группа. super — только главному админу.
+var ADM_SECTIONS={
+  pending:{t:'Заявки',h:'Одобрить новых студентов',d:'Новые студенты ждут одобрения. Здесь же просьбы сбросить пароль и автоприём.',i:'user-plus',k:'iod',g:'people'},
+  students:{t:'Студенты',h:'Список, поиск, доступ',d:'Все студенты. Нажми на человека — статистика, пароль, блокировка.',i:'users',k:'mal',g:'people'},
+  inactive:{t:'Неактивные',h:'Кто давно не заходил',d:'Кто давно не заходил — можно удалить.',i:'zzz',k:'eos',g:'people',sup:1},
+  admins:{t:'Админы',h:'Права админов',d:'Кто управляет приложением и с какими правами.',i:'shield-cog',k:'vio',g:'people',sup:1},
+  requests:{t:'Запросы',h:'Ждут твоего подтверждения',d:'Действия обычных админов, которые ждут твоего подтверждения.',i:'inbox',k:'meth',g:'people',sup:1},
+  questions:{t:'Вопросы',h:'Добавить и исправить тесты',d:'Тесты: добавить, загрузить пачкой, найти и исправить, объяснения ИИ.',i:'list-check',k:'mal',g:'content'},
+  studyAdmin:{t:'Учёба',h:'Вузы, курсы, уроки',d:'Вузы, курсы, уроки и конспекты.',i:'book-2',k:'meth',g:'content'},
+  newsEdit:{t:'Новости',h:'Объявления студентам',d:'Объявления, которые видят студенты.',i:'news',k:'iod',g:'content'},
+  schedEdit:{t:'Расписание',h:'Даты экзаменов',d:'Даты, время и аудитории экзаменов.',i:'calendar-event',k:'vio',g:'content'},
+  ai:{t:'ИИ-помощник',h:'Составить вопросы с ИИ',d:'Попроси ИИ составить вопросы или проверить формулировку.',i:'sparkles',k:'vio',g:'content'},
+  rewards:{t:'Награды',h:'Монеты, баннеры, джекпот',d:'Монеты, баннеры-поздравления, джекпот.',i:'gift',k:'iod',g:'shop',sup:1},
+  prices:{t:'Цены',h:'Цены в магазине',d:'Сколько монет стоят вещи в магазине.',i:'tag',k:'mal',g:'shop',sup:1},
+  items:{t:'Товары',h:'Рамки, фоны и другое',d:'Рамки, фоны и другие вещи в магазине.',i:'shopping-bag',k:'eos',g:'shop',sup:1},
+  stats:{t:'Статистика',h:'Общая сводка',d:'Сводка: люди, вопросы по предметам.',i:'chart-bar',k:'meth',g:'data'},
+  analytics:{t:'Аналитика',h:'Входы, онлайн, трудные вопросы',d:'Откуда заходят, кто в сети, трудные вопросы.',i:'chart-line',k:'vio',g:'data'}
+};
+var ADM_GROUPS=[['people','Люди','заявки и доступ'],['content','Контент','что видят студенты'],['shop','Награды и магазин',''],['data','Цифры','']];
+function admHome(){
+  var el=document.getElementById('admHome');if(!el)return;
+  var cnt={pending:(document.getElementById('pendCnt')||{}).textContent||'',requests:(document.getElementById('reqCnt')||{}).textContent||''};
+  el.innerHTML=ADM_GROUPS.map(function(g){
+    var keys=Object.keys(ADM_SECTIONS).filter(function(k){var s=ADM_SECTIONS[k];return s.g===g[0]&&(!s.sup||S.isSuper);});
+    if(!keys.length)return '';
+    return '<div class="adm-grp"><h3>'+g[1]+'</h3>'+(g[2]?'<span>'+g[2]+'</span>':'')+'</div><div class="adm-grid">'+keys.map(function(k){
+      var s=ADM_SECTIONS[k],n=cnt[k];
+      return '<button class="adm-card" onclick="admTab(\''+k+'\')">'+(n?'<span class="adm-cnt" aria-label="новых: '+n+'">'+n+'</span>':'')
+        +'<span class="lb-blob '+s.k+'"><i class="ti ti-'+s.i+'"></i></span><b>'+s.t+'</b><small>'+(s.h||s.d)+'</small></button>';
+    }).join('')+'</div>';
+  }).join('');
 }
 function admTab(t,btn){
-  document.querySelectorAll('.tab').forEach(function(b){b.classList.remove('on');});
-  if(btn)btn.classList.add('on');
+  var s=ADM_SECTIONS[t];
+  if(t!=='home'&&(!s||(s.sup&&!S.isSuper)))t='home';
   ['admStats','admAdmins','admRequests','admPending','admStudents','admAnalytics','admPrices','admItems','admRewards','admInactive','admBannersBody','admQuestions','admNewsEdit','admSchedEdit','admAi','admStudyAdmin'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});
+  var home=document.getElementById('admHome'),sec=document.getElementById('admSec');
+  ADM_CUR=t;
+  if(t==='home'){
+    sec.style.display='none';home.style.display='';admHome();updPendBadge();window.scrollTo(0,0);return;
+  }
+  home.style.display='none';sec.style.display='';
+  sec.innerHTML='<button class="adm-back" onclick="admTab(\'home\')"><i class="ti ti-arrow-left"></i> Все разделы</button>'
+    +'<div class="adm-sec-t"><span class="lb-blob '+s.k+'"><i class="ti ti-'+s.i+'"></i></span><div><h2>'+s.t+'</h2><p>'+s.d+'</p></div></div>';
   var tabMap={stats:'admStats',admins:'admAdmins',requests:'admRequests',pending:'admPending',students:'admStudents',analytics:'admAnalytics',prices:'admPrices',items:'admItems',rewards:'admRewards',inactive:'admInactive',questions:'admQuestions',newsEdit:'admNewsEdit',schedEdit:'admSchedEdit',ai:'admAi',studyAdmin:'admStudyAdmin'};
   if(tabMap[t]){var el=document.getElementById(tabMap[t]);if(el)el.style.display='';}
+  window.scrollTo(0,0);
   if(t==='stats')admStats();if(t==='admins')admAdmins();if(t==='requests')admRequests();if(t==='pending')admPending();if(t==='students')admStudents();if(t==='analytics')admAnalytics();if(t==='prices')admPrices();if(t==='items')admItems();if(t==='rewards')admRewards();if(t==='inactive')admInactive();if(t==='questions')admQuestions();if(t==='newsEdit')admNewsEdit();if(t==='schedEdit')admSchedEdit();if(t==='studyAdmin')admStudyInit();
 }
+var ADM_CUR='home';
 async function admPrices(){
   var el=document.getElementById('admPrices');
   await loadShopPrices();
@@ -5700,39 +5784,53 @@ async function admReject(email,name){
   }
 }
 var ACT_CACHE={};
+var ADM_USERS={},ADM_SF={q:'',f:'all'};
 async function admStudents(){
   var el=document.getElementById('admStudents');el.innerHTML='<div style="color:var(--tx3);padding:10px">Загрузка...</div>';
-  var rows=[];if(dbOK){try{rows=await sbGet('users','status=neq.pending&order=created_at.asc');}catch(e){}}
-  // Активность
+  var rows=[];if(dbOK){try{rows=await sbGetAll('users','status=neq.pending&order=created_at.asc');}catch(e){}}
   ACT_CACHE={};
   if(dbOK){try{var acts=await sbGet('student_activity','select=email,current_action,last_seen');acts.forEach(function(a){ACT_CACHE[a.email]=a;});}catch(e){}}
-  if(!rows.length){el.innerHTML='<p style="color:var(--tx3);font-size:13px">Нет студентов</p>';return;}
-  var now=Date.now();
-  el.innerHTML='<p style="font-size:11px;color:var(--tx3);margin-bottom:8px">Нажмите на имя — статистика студента. <i class="ti ti-point-filled"></i> = сейчас в сети.</p><table class="tbl"><thead><tr><th>Имя</th><th>Активность</th><th>Роль</th><th>Статус</th><th>Действие</th></tr></thead><tbody>'+rows.map(function(u){
-    var roleBdg=u.role==='super'?'<span class="bdg" style="font-size:10px;background:var(--vio-s);color:var(--vio-t)" title="Главный админ"><i class="ti ti-crown"></i></span>':u.role==='admin'?'<span class="bdg" style="font-size:10px;background:var(--meth-s);color:var(--meth-t)" title="Админ"><i class="ti ti-shield"></i></span>':'<span style="color:var(--tx3);font-size:11px">студ.</span>';
-    // Активность
-    var act=ACT_CACHE[u.email];
-    var actHtml='<span style="color:var(--tx3);font-size:11px">—</span>';
-    if(act){
-      var diff=now-new Date(act.last_seen).getTime();
-      var online=diff<150000;
-      var when=online?'🟢 '+(act.current_action||'в сети'):'⚪ '+(diff<3600000?Math.round(diff/60000)+' мин назад':Math.round(diff/3600000)+' ч назад');
-      actHtml='<span style="font-size:11px;color:'+(online?'var(--gr)':'var(--tx3)')+'">'+when+'</span>';
-    }
-    var actions='';
-    actions+=(u.status==='active'?'<button class="btn bre bsm" onclick="event.stopPropagation();admBlock(\''+u.email+'\',\''+u.name+'\')"><i class="ti ti-ban"></i></button>':'<button class="btn bgr bsm" onclick="event.stopPropagation();admUnblock(\''+u.email+'\')"><i class="ti ti-lock-open"></i></button>');
-    actions+='<button class="btn bgh bsm" style="margin-left:3px" title="Сбросить пароль" aria-label="Сбросить пароль" onclick="event.stopPropagation();admResetPw(\''+u.email+'\',\''+esc(String(u.name||'').replace(/\x27/g,''))+'\')"><i class="ti ti-key"></i></button>';
-    actions+='<button class="btn bgh bsm" style="margin-left:3px" onclick="event.stopPropagation();admDelUser(\''+u.email+'\',\''+u.name+'\')"><i class="ti ti-trash"></i></button>';
-    if(S.isSuper){
-      if(u.role==='admin'||u.role==='super')actions+='<button class="btn bgh bsm" style="margin-left:3px" title="Права — во вкладке «Админы»" aria-label="Права админа" onclick="event.stopPropagation();admTab(\'admins\',admTabBtn(\'admins\'))"><i class="ti ti-shield-cog"></i></button>';
-      else actions+='<button class="btn bam bsm" style="margin-left:3px" title="Сделать админом" onclick="event.stopPropagation();admMakeAdmin(\''+u.email+'\')"><i class="ti ti-star"></i></button>';
-    }
-    return '<tr style="cursor:pointer" onclick="admStudentCard(\''+u.email+'\',\''+(u.name||'').replace(/\x27/g,'')+'\')"><td style="font-weight:500">'+u.name+'<div style="font-size:10px;color:var(--tx3)">'+u.email+'</div></td><td>'+actHtml+'</td><td>'+roleBdg+'</td><td><span class="bdg '+(u.status==='active'?'bgr2':'bre2')+'">'+(u.status==='active'?'Акт.':'Блок')+'</span></td><td style="display:flex;gap:2px;flex-wrap:wrap" onclick="event.stopPropagation()">'+actions+'</td></tr>';
-  }).join('')+'</tbody></table>';
+  ADM_USERS={};rows.forEach(function(u){ADM_USERS[u.email]=u;});
+  if(!rows.length){el.innerHTML='<p style="color:var(--tx3);font-size:13px">Пока нет студентов</p>';return;}
+  el.innerHTML='<div class="adm-find"><input id="admSq" type="search" placeholder="Поиск по имени, почте или группе" value="'+esc(ADM_SF.q)+'" oninput="ADM_SF.q=this.value;admStudentsList()" aria-label="Поиск студентов"></div>'
+    +'<div class="adm-chips" id="admSchips"></div><div id="admSlist" class="adm-list"></div>';
+  admStudentsList();
+}
+function admOnline(email){var a=ACT_CACHE[email];return !!(a&&Date.now()-new Date(a.last_seen).getTime()<150000);}
+function admSeen(email){
+  var a=ACT_CACHE[email];if(!a)return 'ещё не заходил';
+  var d=Date.now()-new Date(a.last_seen).getTime();
+  if(d<150000)return 'в сети'+(a.current_action?' · '+a.current_action:'');
+  if(d<3600000)return 'был '+Math.max(1,Math.round(d/60000))+' мин назад';
+  if(d<86400000)return 'был '+Math.round(d/3600000)+' ч назад';
+  return 'был '+Math.round(d/86400000)+' дн. назад';
+}
+function admStudentsList(){
+  var all=Object.keys(ADM_USERS).map(function(k){return ADM_USERS[k];});
+  var F={all:['Все',function(){return true;}],online:['В сети',function(u){return admOnline(u.email);}],blocked:['Заблокированы',function(u){return u.status!=='active';}],adm:['Админы',function(u){return u.role==='admin'||u.role==='super';}]};
+  var ch=document.getElementById('admSchips');
+  if(ch)ch.innerHTML=Object.keys(F).map(function(k){var n=all.filter(F[k][1]).length;return (k==='all'||n)?'<button class="adm-chip'+(ADM_SF.f===k?' on':'')+'" onclick="ADM_SF.f=\''+k+'\';admStudentsList()">'+F[k][0]+' · '+n+'</button>':'';}).join('');
+  var q=ADM_SF.q.trim().toLowerCase();
+  var list=all.filter((F[ADM_SF.f]||F.all)[1]).filter(function(u){return !q||[u.name,u.email,u.group_name].join(' ').toLowerCase().indexOf(q)>=0;});
+  list.sort(function(a,b){return (admOnline(b.email)-admOnline(a.email))||String(a.name||'').localeCompare(String(b.name||''),'ru');});
+  var tones=['mal','meth','vio','iod','eos'];
+  var box=document.getElementById('admSlist');if(!box)return;
+  if(!list.length){box.innerHTML='<p style="color:var(--tx3);font-size:13px;padding:6px 2px">Никого не нашли</p>';return;}
+  box.innerHTML=list.slice(0,300).map(function(u){
+    var nm=String(u.name||u.email),tg=String(u.email).indexOf('tg_')===0,on=admOnline(u.email);
+    var tone=tones[(nm.charCodeAt(0)||0)%tones.length];
+    var tag=u.role==='super'?'<span class="adm-tag" style="background:var(--vio-s);color:var(--vio-t)">главный админ</span>':u.role==='admin'?'<span class="adm-tag" style="background:var(--meth-s);color:var(--meth-t)">админ</span>':'';
+    if(u.status!=='active')tag+='<span class="adm-tag" style="background:var(--eos-s);color:var(--eos-t)">заблокирован</span>';
+    var sub=[tg?'Telegram':u.email,u.group_name?'гр. '+u.group_name:''].filter(Boolean).join(' · ');
+    return '<button class="adm-row" onclick="admStudentCard(\''+esc(u.email).replace(/'/g,'')+'\',\''+esc(nm.replace(/'/g,''))+'\')">'
+      +'<span class="adm-av lb-blob '+tone+'">'+esc(nm.trim().charAt(0).toUpperCase()||'?')+'</span>'
+      +'<span class="adm-row-t"><b><span>'+esc(nm)+'</span>'+tag+'</b><small>'+esc(sub)+'</small><small class="'+(on?'on':'')+'">'+(on?'● ':'')+esc(admSeen(u.email))+'</small></span>'
+      +'<i class="ti ti-chevron-right"></i></button>';
+  }).join('')+(list.length>300?'<p style="color:var(--tx3);font-size:12px;padding:6px 2px">Показаны первые 300 — уточни поиск.</p>':'');
 }
 // Карточка статистики студента
 async function admStudentCard(email,name){
-  document.getElementById('mdT').textContent='📊 '+name;
+  document.getElementById('mdT').textContent=name;
   var b=document.getElementById('mdBody');b.innerHTML='<div style="color:var(--tx3);padding:10px">Загрузка...</div>';
   document.getElementById('modal').style.display='flex';
   var prog=[],exams=[],act=ACT_CACHE[email];
@@ -5758,11 +5856,14 @@ async function admStudentCard(email,name){
   }else{
     html+='<div style="font-size:12px;color:var(--tx3)">Экзаменов ещё не было</div>';
   }
-  if(email.indexOf('tg_')!==0){
-    html+='<div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--bor)"><div class="adm-h3" style="margin:0 0 8px">Доступ</div>'
-      +'<button class="btn bgh bsm" onclick="admResetPw(\''+email+'\',\''+esc(String(name||'').replace(/\x27/g,''))+'\')"><i class="ti ti-key"></i> Сбросить пароль</button>'
-      +'<div style="font-size:12px;color:var(--tx3);margin-top:6px">Студент получит временный пароль и при входе придумает свой.</div></div>';
-  }
+  var U=ADM_USERS[email]||{},qn=esc(String(name||'').replace(/\x27/g,'')),qe=esc(email).replace(/'/g,'');
+  html+='<div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--bor)"><div class="adm-h3" style="margin:0 0 8px">Доступ</div><div class="adm-acts">'
+    +(email.indexOf('tg_')!==0?'<button class="btn bgh bsm" onclick="admResetPw(\''+qe+'\',\''+qn+'\')"><i class="ti ti-key"></i> Сбросить пароль</button>':'')
+    +(U.status&&U.status!=='active'?'<button class="btn bgr bsm" onclick="closeModal();admUnblock(\''+qe+'\')"><i class="ti ti-lock-open"></i> Разблокировать</button>':'<button class="btn bam bsm" onclick="closeModal();admBlock(\''+qe+'\',\''+qn+'\')"><i class="ti ti-ban"></i> Заблокировать</button>')
+    +(S.isSuper&&U.role!=='admin'&&U.role!=='super'?'<button class="btn bgh bsm" onclick="closeModal();admMakeAdmin(\''+qe+'\')"><i class="ti ti-shield"></i> Сделать админом</button>':'')
+    +(S.isSuper&&(U.role==='admin'||U.role==='super')?'<button class="btn bgh bsm" onclick="closeModal();admTab(\'admins\')"><i class="ti ti-shield-cog"></i> Права админа</button>':'')
+    +'<button class="btn bre bsm" onclick="closeModal();admDelUser(\''+qe+'\',\''+qn+'\')"><i class="ti ti-trash"></i> Удалить</button>'
+    +'</div>'+(email.indexOf('tg_')!==0?'<div style="font-size:12px;color:var(--tx3);margin-top:8px">Сброс пароля: студент получит временный пароль и при входе придумает свой.</div>':'')+'</div>';
   // Кнопки управления прогрессом (для админов)
   html+='<div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--bor)"><div style="font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Управление прогрессом</div>';
   html+='<div style="display:flex;gap:6px;flex-wrap:wrap">';
@@ -6064,9 +6165,9 @@ async function admAdmins(){
   var supers=people.filter(function(a){return a.role==='super';}).length;
   var html='<div class="adm-note"><b>Главный админ</b> — всё, включая выдачу прав. <b>Админ</b> — заявки, вопросы, уроки; блокировку и удаление отправляет главному на подтверждение.<br>'
     +'Уведомления в Telegram приходят тем, у кого привязан Telegram: заявки и сбросы паролей — всем админам, запросы от админов — только главным.'
-    +(S.isSuper?' Новых админов назначают во вкладке «Студенты» кнопкой <i class="ti ti-star"></i>.':'')+'</div>';
+    +(S.isSuper?' Новых админов назначают в разделе «Студенты»: нажми на человека → «Сделать админом».':'')+'</div>';
   if(S.isSuper&&S.adminEmail==='super'&&!supers){
-    html+='<div class="alert alw" style="margin-bottom:12px"><i class="ti ti-alert-triangle"></i> Ты вошёл общим паролем. Сделай свой аккаунт главным админом (вкладка «Студенты» → <i class="ti ti-star"></i>, потом здесь «Сделать главным»), чтобы получать уведомления в Telegram.</div>';
+    html+='<div class="alert alw" style="margin-bottom:12px"><i class="ti ti-alert-triangle"></i> Ты вошёл общим паролем. Сделай свой аккаунт главным админом (раздел «Студенты» → человек → «Сделать админом», потом здесь «Сделать главным»), чтобы получать уведомления в Telegram.</div>';
   }
   if(!people.length){el.innerHTML=html+'<p style="color:var(--tx3);font-size:13px">Пока нет назначенных админов</p>';return;}
   html+='<div class="adm-people">';
@@ -6194,16 +6295,20 @@ async function admQuestions(keep){
   var batches=[];CQS.forEach(function(q){if(q.batch&&batches.indexOf(q.batch)<0)batches.push(q.batch);});
   var batchOpts='<option value="all">— партия (массовые) —</option>';
   batches.forEach(function(bn){batchOpts+='<option value="'+bn.replace(/"/g,'')+'">'+bn+'</option>';});
+  var delOpen=!!(document.getElementById('qDelDet')||{}).open;
   document.getElementById('admQuestions').innerHTML=
     '<div class="adm-qbar"><button class="btn bbl bsm" onclick="admAddQM()"><i class="ti ti-plus"></i>Добавить вопрос</button><button class="btn bgr bsm" onclick="admBulkM()"><i class="ti ti-upload"></i>Массово</button><span style="font-size:13px;color:var(--tx3);margin-left:auto">Всего '+vNum(QS.length)+'</span></div>'
     +'<div class="adm-qbar"><select id="qFs" onchange="admQF()" aria-label="Предмет">'+vSubjOptions('<option value="all">Все предметы</option>','<option value="custom">Только добавленные вручную</option>')+'</select><input id="qSr" placeholder="Поиск по вопросу или теме" oninput="admQF()" aria-label="Поиск"></div>'
     +'<details class="adm-qdet" id="qStatDet" ontoggle="if(this.open)admQStatLoad()"><summary><i class="ti ti-chart-bar"></i> Сводка по предметам</summary><div id="qStatBox" style="padding-top:10px;color:var(--tx3);font-size:13px">Считаю…</div></details>'
     +'<div id="qAiCard"></div>'
     +'<div id="qSubjTools" class="adm-qbar" style="display:none"></div>'
+    +'<details class="adm-qdet" id="qDelDet"><summary><i class="ti ti-trash"></i> Удаление и партии</summary><div style="padding-top:10px">'
     +(batches.length?'<div class="adm-qbar"><select id="qBatch" onchange="admQF()" aria-label="Партия">'+batchOpts+'</select><button class="btn bgh bsm adm-danger" onclick="admDelBatch()"><i class="ti ti-trash"></i>Удалить партию</button></div>':'')
     +'<div class="adm-qbar adm-sel"><button class="btn bgh bsm" onclick="admToggleAll(true)"><i class="ti ti-checks"></i>Выбрать все</button><button class="btn bgh bsm" onclick="admToggleAll(false)">Снять</button><button class="btn bgh bsm adm-danger" onclick="admDelChecked()"><i class="ti ti-trash"></i>Удалить выбранные</button><button class="btn bgh bsm adm-danger" onclick="admDelShown()">Удалить все показанные</button></div>'
+    +'<p style="font-size:12px;color:var(--tx3);margin:0">Галочки появляются у вопросов, добавленных вручную или пачкой. Удаление необратимо.</p></div></details>'
     +'<div id="qCount" style="font-size:12px;color:var(--tx3);margin-bottom:6px"></div><div id="qTbl" class="adm-qtbl"></div>';
   admAiCard();
+  if(delOpen)document.getElementById('qDelDet').open=true;
   var f=document.getElementById('qFs');if(f)f.value=(SM[prevF]||prevF==='custom')?prevF:'all';
   var sr=document.getElementById('qSr');if(sr)sr.value=prevS;
   var bt=document.getElementById('qBatch');if(bt&&prevB!=='all'&&batches.indexOf(prevB)>=0)bt.value=prevB;
@@ -6244,13 +6349,14 @@ async function admAiCard(job){
 }
 // понятная причина ошибки Anthropic
 function vAiReason(e){
-  var t=String(e||'');
-  if(/credit balance|billing/i.test(t))return 'на балансе Anthropic нет денег — пополни в console.anthropic.com → Billing.';
-  if(/^401|invalid x-api-key|authentication/i.test(t))return 'ключ неверный — проверь ANTHROPIC_API_KEY в Railway.';
-  if(/^404|model/i.test(t))return 'неверное имя модели — проверь переменную AI_MODEL в Railway (или удали её).';
-  if(/^429|rate limit/i.test(t))return 'слишком много запросов в минуту — бот подождёт и продолжит; потом нажми ещё раз для оставшихся.';
-  if(/^529|overloaded/i.test(t))return 'серверы Anthropic перегружены — попробуй позже.';
-  return t.slice(0,160);
+  var t=String(e||''),why='';
+  if(/credit balance|billing/i.test(t))why='на балансе Anthropic нет денег — пополни в console.anthropic.com → Billing.';
+  else if(/^401|invalid x-api-key|authentication/i.test(t))why='ключ неверный — проверь ANTHROPIC_API_KEY в Railway.';
+  else if(/^404|not_found/i.test(t)&&/model/i.test(t))why='неверное имя модели — удали переменную AI_MODEL в Railway.';
+  else if(/^429|rate limit/i.test(t))why='слишком много запросов в минуту — бот подождёт и продолжит; потом нажми ещё раз для оставшихся.';
+  else if(/^529|overloaded/i.test(t))why='серверы Anthropic перегружены — попробуй позже.';
+  else if(/^empty/i.test(t))why='ИИ вернул пустой ответ — попробуй ещё раз.';
+  return (why?why+' ':'')+'Ответ Anthropic: «'+t.slice(0,180)+'»';
 }
 async function admAiStart(){
   if(!confirm('Создать объяснения для всех вопросов без объяснения?\nЭто разовая трата — примерно 1–2 цента на 100 вопросов.'))return;
@@ -6311,7 +6417,7 @@ async function delQuestionIds(ids){
 }
 // ===== МАССОВЫЙ ИМПОРТ ВОПРОСОВ =====
 function admBulkM(){
-  document.getElementById('mdT').textContent='\U0001F4E5 \u041C\u0430\u0441\u0441\u043E\u0432\u043E\u0435 \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u0438\u0435';
+  document.getElementById('mdT').textContent='Массовое добавление';
   var b=document.getElementById('mdBody');b.innerHTML='';
   // \u0412\u044B\u0431\u043E\u0440 \u043F\u0440\u0435\u0434\u043C\u0435\u0442\u0430 \u0438 \u0442\u0435\u043C\u044B \u0441\u0432\u0435\u0440\u0445\u0443 (\u043E\u0434\u0438\u043D \u0440\u0430\u0437 \u043D\u0430 \u0432\u0441\u044E \u043F\u0430\u0447\u043A\u0443)
   var sel=document.createElement('div');sel.className='fg';
@@ -6337,9 +6443,9 @@ function admBulkM(){
   b.appendChild(prev);
   addErr(b);
   var row=document.createElement('div');row.style.cssText='display:flex;gap:8px';
-  var pb=document.createElement('button');pb.className='btn bgh bfu';pb.textContent='\U0001F441\uFE0F \u041F\u0440\u043E\u0432\u0435\u0440\u0438\u0442\u044C';
+  var pb=document.createElement('button');pb.className='btn bgh bfu';pb.innerHTML='<i class="ti ti-eye"></i> Проверить';
   pb.addEventListener('click',admBulkPreview);
-  var sb=document.createElement('button');sb.className='btn bbl bfu';sb.textContent='\U0001F4BE \u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0432\u0441\u0435';
+  var sb=document.createElement('button');sb.className='btn bbl bfu';sb.innerHTML='<i class="ti ti-device-floppy"></i> Добавить все';
   sb.addEventListener('click',admBulkSave);
   row.appendChild(pb);row.appendChild(sb);b.appendChild(row);
   document.getElementById('modal').style.display='flex';
@@ -6484,30 +6590,34 @@ function admAddQM(){
   });
   addErr(b);
   // ИИ-кнопка: заполнить неверные варианты автоматически
-  var aiBtn=document.createElement('button');aiBtn.className='btn bgh bfu';aiBtn.style.marginBottom='8px';
-  aiBtn.innerHTML='<i class="ti ti-message-chatbot"></i> Сгенерировать неверные варианты (ИИ)';
+  var aiBtn=document.createElement('button');aiBtn.className='btn bgh bfu';aiBtn.id='aqAiBtn';aiBtn.type='button';aiBtn.style.marginBottom='8px';
+  aiBtn.innerHTML='<i class="ti ti-sparkles"></i> Подобрать неверные варианты (ИИ)';
   aiBtn.addEventListener('click',admGenOpts);
   b.appendChild(aiBtn);
   addBtn(b,'bbl','Сохранить',admSaveNewQ);
   document.getElementById('modal').style.display='flex';
 }
+// ИИ для админки — через бота (ключ Anthropic хранится только на Railway)
+async function vAdminAi(mode,data){
+  var url=vBotUrl('/ai/admin');if(!url)return {status:'ai_not_configured'};
+  try{var r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({token:vAdminToken(),mode:mode},data))});return await r.json();}
+  catch(e){return {status:'network'};}
+}
+function vAdminAiErr(j){
+  return ({ai_not_configured:'ИИ не подключён: на Railway нет ключа ANTHROPIC_API_KEY.',forbidden:'Войдите заново как администратор.',network:'Нет связи с ботом.',bad_request:'Заполните поля.'}[j.status])
+    ||(j.reason?'ИИ не ответил: '+vAiReason(j.reason):'ИИ не ответил, попробуйте ещё раз.');
+}
 async function admGenOpts(){
   var q=val('aqQ'),correct=val('aqA0');
   if(!q||!correct){showErr('Сначала впишите вопрос и правильный ответ');return;}
-  var aiBtn=document.querySelectorAll('#mdBody .btn')[0];
-  aiBtn.disabled=true;aiBtn.innerHTML='<i class="ti ti-message-chatbot"></i> Генерация...';
-  try{
-    var parts=['Вопрос: ',q,'\nПравильный ответ: ',correct,'\n\nПридумай ровно 3 правдоподобных НЕВЕРНЫХ варианта ответа для теста. Они должны быть похожи на правильный по теме, но быть ошибочными. Ответь ТОЛЬКО списком из 3 строк, без нумерации, без пояснений.'];
-    var res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:300,messages:[{role:'user',content:parts.join('')}]})});
-    var data=await res.json();
-    var text=data.content?data.content.map(function(c){return c.text||'';}).join(''):'';
-    var wrong=text.split('\n').map(function(l){return l.replace(/^[-*•\d.)\s]+/,'').trim();}).filter(function(l){return l;}).slice(0,3);
-    if(wrong.length<3){showErr('ИИ не сработал (нужен API-ключ). Заполните вручную.');aiBtn.disabled=false;aiBtn.innerHTML='<i class="ti ti-message-chatbot"></i> Сгенерировать неверные варианты (ИИ)';return;}
-    document.getElementById('aqA1').value=wrong[0];
-    document.getElementById('aqA2').value=wrong[1];
-    document.getElementById('aqA3').value=wrong[2];
-    aiBtn.innerHTML='<i class="ti ti-circle-check"></i> Готово! Проверьте варианты';
-  }catch(e){showErr('ИИ недоступен (нужен API-ключ). Заполните вручную.');aiBtn.disabled=false;aiBtn.innerHTML='<i class="ti ti-message-chatbot"></i> Сгенерировать неверные варианты (ИИ)';}
+  var aiBtn=document.getElementById('aqAiBtn')||document.querySelectorAll('#mdBody .btn')[0];
+  var label='<i class="ti ti-sparkles"></i> Подобрать неверные варианты (ИИ)';
+  aiBtn.disabled=true;aiBtn.innerHTML='<i class="ti ti-loader spin"></i> Подбираю…';
+  var j=await vAdminAi('distractors',{question:q,answer:correct});
+  var wrong=j.status==='ok'?String(j.text||'').split('\n').map(function(l){return l.replace(/^[-*•\d.)\s]+/,'').trim();}).filter(Boolean).slice(0,3):[];
+  if(wrong.length<3){showErr(j.status==='ok'?'ИИ ответил непонятно — попробуйте ещё раз или впишите вручную.':vAdminAiErr(j));aiBtn.disabled=false;aiBtn.innerHTML=label;return;}
+  ['aqA1','aqA2','aqA3'].forEach(function(id,i){var el=document.getElementById(id);if(el)el.value=wrong[i];});
+  aiBtn.disabled=false;aiBtn.innerHTML='<i class="ti ti-circle-check"></i> Готово — проверьте варианты';
 }
 async function admSaveNewQ(){
   var s=val('aqS'),t=val('aqT'),q=val('aqQ');
@@ -6520,7 +6630,7 @@ async function admSaveNewQ(){
   if(!t||!q||opts.some(function(o){return !o;})){showErr('Заполните все поля');return;}
   var correct=opts[0];var shuffled=opts.slice().sort(function(){return Math.random()-.5;});var ci=shuffled.indexOf(correct);
   var id='cq_'+Date.now()+'_'+Math.random().toString(36).slice(2,8);
-  var btn=document.querySelector('#mdBody .btn');btn.disabled=true;btn.textContent='Сохранение...';
+  var bs=document.querySelectorAll('#mdBody .btn'),btn=bs[bs.length-1];btn.disabled=true;btn.textContent='Сохранение...';
   try{if(dbOK)await sbPost('custom_questions',{id:id,subject:s,topic:t,question:q,options:shuffled,correct_index:ci});CQS.push({id:id,s:s,t:t,q:q,o:shuffled,a:ci});closeModal();refreshSubjectDropdowns();admQuestions({subject:s});}
   catch(e){showErr('Ошибка: '+e.message);btn.disabled=false;btn.textContent='Сохранить';}
 }
@@ -6683,17 +6793,14 @@ async function admUpdSched(id){
 }
 async function admDelSched(id){if(confirm('Удалить?')){try{if(dbOK)await sbDel('schedule','id=eq.'+id);schedCache=schedCache.filter(function(s){return s.id!==id;});admSchedEdit();}catch(e){alert(e.message);}}}
 async function admAsk(){
-  var q=val('admAiQ');if(!q)return;
-  var btn=document.getElementById('admAiBtn');btn.disabled=true;btn.textContent='Обработка...';
-  var box=document.getElementById('admAiAns');
-  box.innerHTML='<div class="aibox"><div class="aihdr"><i class="ti ti-loader spin"></i>Загрузка...</div></div>';
-  try{
-    var res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,messages:[{role:'user',content:'Ты помощник преподавателя мед. вуза Узбекистана. Отвечай по-русски.\n'+q}]})});
-    var data=await res.json();
-    var text=data.content?data.content.map(function(c){return c.text||'';}).join(''):'Нет ответа';
-    box.innerHTML='<div class="aibox"><div class="aihdr"><i class="ti ti-sparkles" style="font-size:11px"></i>Ответ</div>'+text+'</div>';
-  }catch(e){box.innerHTML='<div class="alert alr">Ошибка запроса</div>';}
-  btn.disabled=false;btn.textContent='Спросить';
+  var q=val('admAiQ');if(!q){showErr('Напишите вопрос');return;}
+  var btn=document.getElementById('admAiBtn');btn.disabled=true;btn.innerHTML='<i class="ti ti-loader spin"></i> Думаю…';
+  var box=document.getElementById('admAiAns');box.innerHTML='';
+  var j=await vAdminAi('ask',{text:q});
+  box.innerHTML=j.status==='ok'
+    ?'<div class="aibox" style="margin-top:12px"><div class="aihdr"><i class="ti ti-sparkles"></i>Ответ ИИ</div><div style="white-space:pre-wrap">'+esc(j.text)+'</div></div>'
+    :'<div class="alert alr" style="margin-top:12px">'+esc(vAdminAiErr(j))+'</div>';
+  btn.disabled=false;btn.innerHTML='<i class="ti ti-send"></i> Спросить';
 }
 
 document.getElementById('admLoginBtn').addEventListener('click',function(){openModal('admin');});
@@ -7790,13 +7897,14 @@ function renderHome(){
 
   var keys=Object.keys(SM);
   h+='<div class="lb-h2"><h2>Предметы</h2><span>освоено</span></div>';
-  h+='<div class="lb-subj'+(keys.length>3?' scroll':'')+'">';
+  h+='<div class="lb-subj">';
   keys.forEach(function(k){
     var m=SM[k],s2=vSubjStats(k,QS),tone=vSubjTone(k);
     h+='<button class="lb-sub" onclick="vOpenSubject(\''+esc(k)+'\')" aria-label="'+esc(m.label)+': освоено '+s2.mast+' из '+s2.total+'">'
-      +'<span class="lb-sub-top" style="color:var(--'+tone+'-t)">'+m.icon+'<span>'+s2.pct+'%</span></span>'
-      +'<b>'+esc(m.label)+'</b>'
-      +'<span class="lb-bar"><i style="width:'+s2.pct+'%;background:'+V_TONE_VAR[tone]+'"></i></span></button>';
+      +'<span class="lb-sub-ic lb-blob '+tone+'">'+m.icon+'</span>'
+      +'<span class="lb-sub-tx"><b>'+esc(m.label)+'</b>'
+      +'<small><em style="color:var(--'+tone+'-t)">'+s2.pct+'%</em> · '+vNum(s2.mast)+' из '+vNum(s2.total)+'</small>'
+      +'<span class="lb-bar"><i style="width:'+s2.pct+'%;background:'+V_TONE_VAR[tone]+'"></i></span></span></button>';
   });
   h+='</div><div style="height:8px"></div></div>';
   document.getElementById('homeBody').innerHTML=h;
