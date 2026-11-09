@@ -6345,7 +6345,10 @@ async function admAiCard(job){
   el.innerHTML='<div class="adm-auto"><div class="adm-auto-t"><b><i class="ti ti-sparkles" style="color:var(--vio-t)"></i> Объяснения от ИИ</b>'
     +'<span>'+(run?'Создаю… готово '+job.done+' из '+job.total+(job.errors?', не получилось: '+job.errors:''):miss?'Нет у '+miss+' из '+total+' вопросов. Создаются один раз и хранятся в базе — студентам бесплатно.':'Есть у всех '+total+' вопросов.')+'</span>'
     +(job&&job.errors&&job.last_error?'<span style="color:var(--eos-t)"><b>Причина:</b> '+esc(vAiReason(job.last_error))+'</span>':'')+'</div>'
-    +(miss&&!run?'<button class="btn bvio bsm" onclick="admAiStart()">Создать для всех</button>':'')+'</div>';
+    +(run?'':'<div style="display:flex;flex-direction:column;gap:8px;flex-shrink:0">'
+      +(miss?'<button class="btn bvio bsm" onclick="admAiStart()">Создать для всех</button>':'')
+      +(miss<total?'<button class="btn bgh bsm" onclick="admAiStart(true)" title="Пересоздать все объяснения от ИИ, кроме проверенных преподавателем"><i class="ti ti-refresh"></i>Пересоздать</button>':'')
+      +'</div>')+'</div>';
 }
 // понятная причина ошибки Anthropic
 function vAiReason(e){
@@ -6356,12 +6359,14 @@ function vAiReason(e){
   else if(/^429|rate limit/i.test(t))why='слишком много запросов в минуту — бот подождёт и продолжит; потом нажми ещё раз для оставшихся.';
   else if(/^529|overloaded/i.test(t))why='серверы Anthropic перегружены — попробуй позже.';
   else if(/^empty/i.test(t))why='ИИ вернул пустой ответ — попробуй ещё раз.';
+  else if(/^network/i.test(t))why='бот не смог связаться с Anthropic — попробуй чуть позже.';
   return (why?why+' ':'')+'Ответ Anthropic: «'+t.slice(0,180)+'»';
 }
-async function admAiStart(){
-  if(!confirm('Создать объяснения для всех вопросов без объяснения?\nЭто разовая трата — примерно 1–2 цента на 100 вопросов.'))return;
+async function admAiStart(regen){
+  if(regen){if(!confirm('Пересоздать все объяснения от ИИ?\nПроверенные преподавателем (с галочкой) останутся как есть.\nСтоит примерно 1–2 цента на 100 вопросов.'))return;}
+  else if(!confirm('Создать объяснения для всех вопросов без объяснения?\nЭто разовая трата — примерно 1–2 цента на 100 вопросов.'))return;
   var poll=async function(start){
-    try{var r=await fetch(vBotUrl('/ai/job'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:vAdminToken(),start:!!start})});var j=await r.json();
+    try{var r=await fetch(vBotUrl('/ai/job'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:vAdminToken(),start:!!start,regen:!!(start&&regen)})});var j=await r.json();
       if(j.status!=='ok'){alert({ai_not_configured:'ИИ не подключён: на Railway нет ключа ANTHROPIC_API_KEY.',forbidden:'Нужен вход администратора.'}[j.status]||'Не получилось: '+j.status);admAiCard();return;}
       admAiCard(j);if(j.running)setTimeout(function(){poll(false);},2000);
       else if(!start&&j.errors&&j.last_error)alert('Готово '+(j.done-j.errors)+' из '+j.total+'. Не получилось: '+j.errors+'.\nПричина: '+vAiReason(j.last_error));
@@ -6431,7 +6436,7 @@ function admBulkM(){
   b.appendChild(nw);
   addInput(b,'bkT','text','\u0422\u0435\u043C\u0430 (\u0434\u043B\u044F \u0432\u0441\u0435\u0445)','\u041D\u0430\u043F\u0440. \u0422\u0435\u043C\u0430 2: \u0413\u0435\u043D\u0435\u0442\u0438\u043A\u0430');
   var info=document.createElement('div');info.className='alert ali';info.style.marginBottom='12px';info.style.fontSize='12px';
-  info.innerHTML='<div style="line-height:1.6"><b>Поддерживаемые форматы (номер. или номер)):</b><br><b>•</b> вопрос, затем варианты — правильный помечен <code>]</code> в начале.<br><b>•</b> или вопрос, затем один ответ — неверные подберутся сами.</div>';
+  info.innerHTML='<div style="line-height:1.6"><b>Поддерживаемые форматы (номер. или номер)):</b><br><b>•</b> вопрос, затем варианты — правильный помечен <code>]</code> в начале.<br><b>•</b> или вопрос, затем один ответ — неверные варианты придумает ИИ.</div>';
   b.appendChild(info);
   var ex=document.createElement('div');ex.style.cssText='font-size:11px;color:var(--tx3);background:var(--bg3);padding:10px;border-radius:7px;margin-bottom:12px;font-family:var(--fm);white-space:pre-wrap';
   ex.textContent='31. Последствия аберраций?\n]Нарушение баланса (правильный)\nИзменение структуры\nНерасхождение\n\n13. Сколько хромосом у сперматозоида?\n23';
@@ -6441,6 +6446,9 @@ function admBulkM(){
   b.appendChild(fg);
   var prev=document.createElement('div');prev.id='bulkPrev';prev.style.cssText='font-size:12px;color:var(--tx2);margin-bottom:10px';
   b.appendChild(prev);
+  var aiw=document.createElement('label');aiw.style.cssText='display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--tx2);margin-bottom:12px;cursor:pointer';
+  aiw.innerHTML='<input type="checkbox" id="bkAi" checked style="width:20px;height:20px;flex-shrink:0;margin-top:1px"><span><b style="color:var(--tx)">Неверные варианты — через ИИ</b><br>Для вопросов, где дан только правильный ответ. ~1 цент за 100 вопросов. Если выключить — возьмутся ответы из других вопросов.</span>';
+  b.appendChild(aiw);
   addErr(b);
   var row=document.createElement('div');row.style.cssText='display:flex;gap:8px';
   var pb=document.createElement('button');pb.className='btn bgh bfu';pb.innerHTML='<i class="ti ti-eye"></i> Проверить';
@@ -6510,9 +6518,9 @@ function admBulkPreview(){
   var withOpts=qa.filter(function(x){return x.opts;}).length;
   var autoOpts=qa.length-withOpts;
   var html='<span style="color:var(--gr)">✓ Распознано: '+qa.length+'</span>';
-  if(withOpts&&autoOpts)html+='<div style="font-size:11px;color:var(--tx3);margin-top:3px">С готовыми вариантами: '+withOpts+' · автоподбор: '+autoOpts+'</div>';
+  if(withOpts&&autoOpts)html+='<div style="font-size:11px;color:var(--tx3);margin-top:3px">С готовыми вариантами: '+withOpts+' · без вариантов: '+autoOpts+' ('+(document.getElementById('bkAi')&&document.getElementById('bkAi').checked?'придумает ИИ':'из других вопросов')+')</div>';
   else if(withOpts)html+='<div style="font-size:11px;color:var(--tx3);margin-top:3px">С готовыми вариантами</div>';
-  else html+='<div style="font-size:11px;color:var(--tx3);margin-top:3px">Неверные варианты подберутся автоматически</div>';
+  else html+='<div style="font-size:11px;color:var(--tx3);margin-top:3px">Неверные варианты: '+(document.getElementById('bkAi')&&document.getElementById('bkAi').checked?'придумает ИИ':'из ответов других вопросов')+'</div>';
   if(bad.length){
     html+='<div style="margin-top:8px;padding:8px;background:var(--red);border-radius:6px;font-size:11px;color:var(--re)"><b><i class="ti ti-alert-triangle"></i> НЕ распознано ('+bad.length+'):</b><br>'+bad.map(function(x){return '№'+x.num+': '+x.text+'...';}).join('<br>')+'</div>';
   }
@@ -6534,7 +6542,30 @@ async function admBulkSave(){
   var subjAnswers=getQS().filter(function(q){return q.s===s;}).map(function(q){return q.o[q.a];});
   var pool=ownAnswers.concat(subjAnswers);
   var btn=document.querySelectorAll('#mdBody .btn')[1];btn.disabled=true;
-  var saved=0,failed=0;
+  var saved=0,failed=0,aiOk=0,aiFail=0,aiErr=null;
+  // ИИ придумывает неверные варианты (по 3 запроса одновременно)
+  var need=qa.filter(function(x){return !x.opts;});
+  if(need.length&&document.getElementById('bkAi')&&document.getElementById('bkAi').checked){
+    var k=0,done=0,sl=vSubjLabel(s);
+    var worker=async function(){
+      while(k<need.length){
+        var it=need[k++];
+        var j=await vAdminAi('distractors',{question:it.q,answer:it.a,subject:sl,topic:t});
+        var w=[];
+        if(j.status==='ok'){
+          String(j.text||'').split('\n').forEach(function(l){
+            l=l.replace(/^[-*•\d.)\s]+/,'').replace(/^[А-ГA-D][).]\s*/,'').trim();
+            if(l&&l.toLowerCase()!==it.a.toLowerCase()&&w.indexOf(l)<0)w.push(l);
+          });
+        }else if(!aiErr)aiErr=j;
+        if(w.length>=3){it.ai=w.slice(0,3);aiOk++;}else aiFail++;
+        done++;btn.textContent='ИИ подбирает варианты '+done+'/'+need.length+'...';
+        if(j.status==='forbidden'||j.status==='ai_not_configured'||j.status==='network')k=need.length;
+      }
+    };
+    btn.textContent='ИИ подбирает варианты 0/'+need.length+'...';
+    await Promise.all([worker(),worker(),worker()]);
+  }
   for(var i=0;i<qa.length;i++){
     btn.textContent='Сохранение '+(i+1)+'/'+qa.length+'...';
     var shuffled,ci;
@@ -6545,11 +6576,14 @@ async function admBulkSave(){
       ci=shuffled.indexOf(correctOpt);
     }else{
       // ФОРМАТ ВОПРОС:ОТВЕТ — подтягиваем неверные
-      var correct=qa[i].a;
-      var distractors=pool.filter(function(x){return x&&x!==correct;});
-      var uniq=[];distractors.forEach(function(x){if(uniq.indexOf(x)<0)uniq.push(x);});
-      uniq.sort(function(){return Math.random()-.5;});
-      var wrong=uniq.slice(0,3);
+      var correct=qa[i].a,wrong;
+      if(qa[i].ai)wrong=qa[i].ai;
+      else{
+        var distractors=pool.filter(function(x){return x&&x!==correct;});
+        var uniq=[];distractors.forEach(function(x){if(uniq.indexOf(x)<0)uniq.push(x);});
+        uniq.sort(function(){return Math.random()-.5;});
+        wrong=uniq.slice(0,3);
+      }
       while(wrong.length<3)wrong.push('—');
       var allOpts=[correct].concat(wrong);
       shuffled=allOpts.slice().sort(function(){return Math.random()-.5;});
@@ -6565,6 +6599,7 @@ async function admBulkSave(){
   closeModal();refreshSubjectDropdowns();admQuestions({subject:s});
   var bad=qa._bad||[];
   var msg='Готово! Добавлено: '+saved;
+  if(aiOk||aiFail)msg+='\nНеверные варианты от ИИ: '+aiOk+(aiFail?', не получилось: '+aiFail+' — для них взяты ответы из других вопросов'+(aiErr?' ('+vAdminAiErr(aiErr)+')':''):'');
   if(failed){msg+=', ошибок сохранения: '+failed;if(window._bulkErr){msg+='\nПричина: '+window._bulkErr.slice(0,150);window._bulkErr=null;}}
   if(bad.length)msg+='\n\n НЕ распознано ('+bad.length+'): №'+bad.map(function(x){return x.num;}).join(', №')+'\nЭти вопросы НЕ добавлены — проверьте формат (нужен ? или :).';
   alert(msg);
@@ -6613,7 +6648,8 @@ async function admGenOpts(){
   var aiBtn=document.getElementById('aqAiBtn')||document.querySelectorAll('#mdBody .btn')[0];
   var label='<i class="ti ti-sparkles"></i> Подобрать неверные варианты (ИИ)';
   aiBtn.disabled=true;aiBtn.innerHTML='<i class="ti ti-loader spin"></i> Подбираю…';
-  var j=await vAdminAi('distractors',{question:q,answer:correct});
+  var sv=val('aqS');
+  var j=await vAdminAi('distractors',{question:q,answer:correct,subject:sv==='__new__'?val('aqNewName'):vSubjLabel(sv),topic:val('aqT')});
   var wrong=j.status==='ok'?String(j.text||'').split('\n').map(function(l){return l.replace(/^[-*•\d.)\s]+/,'').trim();}).filter(Boolean).slice(0,3):[];
   if(wrong.length<3){showErr(j.status==='ok'?'ИИ ответил непонятно — попробуйте ещё раз или впишите вручную.':vAdminAiErr(j));aiBtn.disabled=false;aiBtn.innerHTML=label;return;}
   ['aqA1','aqA2','aqA3'].forEach(function(id,i){var el=document.getElementById(id);if(el)el.value=wrong[i];});
