@@ -6438,6 +6438,7 @@ function admBulkM(){
   var up=document.createElement('div');up.className='adm-auto';up.style.marginBottom='12px';
   up.innerHTML='<div class="adm-auto-t"><b><i class="ti ti-file-type-pdf" style="color:var(--eos-t)"></i> Из PDF или фото</b>'
     +'<span>ИИ найдёт вопросы и отмеченные правильные ответы на страницах и скриншотах и вставит их ниже — проверишь и добавишь. ~1 цент за 10 страниц.</span>'
+    +'<label style="display:flex;gap:8px;align-items:flex-start;margin-top:6px;cursor:pointer;color:var(--tx2)"><input type="checkbox" id="bkSel" checked style="width:18px;height:18px;flex-shrink:0;margin-top:1px"><span><b style="color:var(--tx)">Выбранный ответ = правильный</b> — для скриншотов теста, сданного на 100%. Выключи, если на скриншотах есть ошибки.</span></label>'
     +'<span id="bkFileSt"></span></div>'
     +'<label class="btn bvio bsm" style="flex-shrink:0;cursor:pointer"><i class="ti ti-upload"></i>Выбрать<input type="file" id="bkFile" accept="application/pdf,image/*" multiple style="display:none" onchange="admBulkFile(this)"></label>';
   b.appendChild(up);
@@ -6530,14 +6531,37 @@ function vLoadPdfJs(){
     document.head.appendChild(s);
   });
 }
-function vCanvasJpeg(cv){var d=cv.toDataURL('image/jpeg',0.8);return d.slice(d.indexOf(',')+1);}
+// затемняем светлые тона (γ=3): бледные отметки — точка в кружке, серая галочка — становятся заметны ИИ
+var V_GAMMA=(function(){var t=new Uint8ClampedArray(256);for(var v=0;v<256;v++)t[v]=Math.round(255*Math.pow(v/255,3));return t;})();
+// обрезаем белые поля страницы, чтобы сам скриншот был крупнее (ИИ видит картинку до ~1568 px)
+function vTrimCanvas(cv){
+  try{var cx=cv.getContext('2d'),W=cv.width,H=cv.height,d=cx.getImageData(0,0,W,H).data;
+    var ink=function(i){return d[i]<245||d[i+1]<245||d[i+2]<245;};
+    var top=0,bot=H-1,l=0,r=W-1,x,y,f;
+    for(f=0;top<H&&!f;top++)for(x=0;x<W;x+=2)if(ink((top*W+x)*4)){f=1;break;}
+    for(f=0;bot>top&&!f;bot--)for(x=0;x<W;x+=2)if(ink((bot*W+x)*4)){f=1;break;}
+    for(f=0;l<W&&!f;l++)for(y=top;y<bot;y+=2)if(ink((y*W+l)*4)){f=1;break;}
+    for(f=0;r>l&&!f;r--)for(y=top;y<bot;y+=2)if(ink((y*W+r)*4)){f=1;break;}
+    top=Math.max(0,top-6);l=Math.max(0,l-6);bot=Math.min(H-1,bot+6);r=Math.min(W-1,r+6);
+    var w=r-l+1,h=bot-top+1;if(w<W*0.3||h<H*0.3||(w>W*0.97&&h>H*0.97))return cv;
+    var k=Math.min(1.6,1568/Math.max(w,h)),o=document.createElement('canvas');o.width=Math.round(w*k);o.height=Math.round(h*k);
+    var ox=o.getContext('2d');ox.imageSmoothingQuality='high';ox.drawImage(cv,l,top,w,h,0,0,o.width,o.height);return o;
+  }catch(e){return cv;}
+}
+function vCanvasJpeg(cv){
+  cv=vTrimCanvas(cv);
+  try{var cx=cv.getContext('2d'),im=cx.getImageData(0,0,cv.width,cv.height),d=im.data;
+    for(var i=0;i<d.length;i+=4){d[i]=V_GAMMA[d[i]];d[i+1]=V_GAMMA[d[i+1]];d[i+2]=V_GAMMA[d[i+2]];}
+    cx.putImageData(im,0,0);}catch(e){}
+  var u=cv.toDataURL('image/jpeg',0.85);return u.slice(u.indexOf(',')+1);
+}
 async function vPdfPages(file,onPage){
   var lib=await vLoadPdfJs();
   var pdf=await lib.getDocument({data:new Uint8Array(await file.arrayBuffer())}).promise;
   var out=[];
   for(var i=1;i<=pdf.numPages;i++){
     var pg=await pdf.getPage(i),v0=pg.getViewport({scale:1});
-    var sc=Math.min(2.5,1500/Math.max(v0.width,v0.height*0.75));
+    var sc=Math.min(3,2000/Math.max(v0.width,v0.height));
     var vp=pg.getViewport({scale:sc}),cv=document.createElement('canvas');
     cv.width=Math.round(vp.width);cv.height=Math.round(vp.height);
     var cx=cv.getContext('2d');cx.fillStyle='#fff';cx.fillRect(0,0,cv.width,cv.height);
@@ -6585,6 +6609,8 @@ async function admBulkFile(inp){
   await Promise.all([worker(),worker(),worker()]);
   lbl.style.pointerEvents='';lbl.style.opacity='';
   // собираем, убираем повторы (скриншоты часто повторяются)
+  var useSel=!!(document.getElementById('bkSel')||{}).checked;
+  res.forEach(function(items){(items||[]).forEach(function(it){if(it.correct===null&&useSel&&it.selected!==null&&it.selected!==undefined)it.correct=it.selected;});});
   var seen={},ok=[],noAns=[],inDb=0,nk=function(s){return String(s||'').toLowerCase().replace(/[^a-zа-яё0-9]/gi,'');};
   var ta0=document.getElementById('bulkTxt');
   parseBulkQA(ta0?ta0.value:'').forEach(function(x){seen[nk(x.q)]=1;});
@@ -6607,7 +6633,7 @@ async function admBulkFile(inp){
     ta.value=(cur?cur+'\n\n':'')+lines.join('\n\n');}
   var msg='Нашёл вопросов: '+ok.length+' на '+pages.length+' стр.';
   if(inDb)msg+=' · уже есть в базе: '+inDb+' (пропущены)';
-  if(noAns.length)msg+=' · без отмеченного ответа: '+noAns.length+' (не вставлены)';
+  if(noAns.length)msg+=' · без отмеченного ответа: '+noAns.length+' (не вставлены'+(useSel?'':' — попробуй включить «Выбранный ответ = правильный»')+')';
   if(fails)msg+=' · не прочитано страниц: '+fails+(err?' — '+esc(vAdminAiErr(err)):'');
   say(msg,ok.length?'var(--mal-t)':'var(--eos-t)');
   if(noAns.length&&st)st.innerHTML+='<details style="margin-top:6px"><summary style="cursor:pointer">Показать вопросы без ответа</summary><div style="font-size:12px;margin-top:6px">'+noAns.slice(0,50).map(function(it){return '• '+esc(it.q);}).join('<br>')+'</div></details>';
