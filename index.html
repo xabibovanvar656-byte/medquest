@@ -1503,6 +1503,41 @@ label:has(#eqXc){white-space:nowrap}
 .lb-pod-name{font-size:13px}.lb-pod.first .lb-pod-name{font-size:14px}
 .lb-pod-score{font-family:var(--f);font-weight:800;letter-spacing:-.03em;font-size:22px}.lb-pod.first .lb-pod-score{font-size:26px}
 .study-subj .ss-ic,.study-subj.violet .ss-ic,.study-subj.coral .ss-ic,.study-subj.mint .ss-ic{background:var(--bg3);color:var(--tx2);border-radius:12px;width:48px;height:48px;font-size:22px}
+/* ===== код группы ===== */
+.v-code input{letter-spacing:.12em;font-weight:700;text-transform:uppercase}
+.v-code input::placeholder{letter-spacing:0;font-weight:400;text-transform:none}
+.v-code-hint{font-size:12.5px;line-height:1.4;color:var(--tx3);margin-top:6px;min-height:0}
+.v-code-hint:empty{display:none}
+.v-code-hint.ok{color:var(--mal-t);font-weight:600}
+.v-code-hint.bad{color:var(--eos-t);font-weight:600}
+input.v-locked{opacity:.75;background:var(--bg3)}
+.adm-codes{flex-direction:column;align-items:stretch}
+.adm-code-req{display:flex;align-items:center;gap:12px;margin-top:12px;padding:12px;background:var(--bg3);border-radius:14px}
+.adm-code-req>div{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.adm-code-req b{font-size:14px;color:var(--tx)}
+.adm-code-req span{font-size:12.5px;color:var(--tx2);line-height:1.4}
+.adm-code-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.adm-code{background:var(--bg3);border-radius:14px;padding:12px}
+.adm-code.off{opacity:.72}
+.adm-code-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.adm-code-h b{font-size:18px;letter-spacing:.1em;color:var(--tx);font-variant-numeric:tabular-nums}
+.adm-code-st{font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:99px}
+.adm-code-st.on{background:var(--mal-s);color:var(--mal-t)}
+.adm-code-st.off{background:var(--bg4);color:var(--tx2)}
+.adm-code-m{font-size:12.5px;color:var(--tx2);line-height:1.45;margin:6px 0 10px;overflow-wrap:anywhere}
+.adm-code-m b{color:var(--tx)}
+.adm-code-a{display:flex;flex-wrap:wrap;gap:6px}
+.adm-code-empty{display:block;margin-top:10px}
+.adm-code-new{margin-top:12px}
+.adm-code-new summary{cursor:pointer;font-size:14px;font-weight:700;color:var(--meth-t);padding:8px 0;list-style:none}
+.adm-code-new summary::-webkit-details-marker{display:none}
+.adm-code-form{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.adm-code-form label{display:flex;flex-direction:column;gap:5px;font-size:12.5px;font-weight:600;color:var(--tx2)}
+.adm-code-form input[type=text],.adm-code-form input[type=number]{width:100%}
+.adm-code-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.adm-code-form label.adm-code-chk{flex-direction:row;align-items:flex-start;gap:9px;font-weight:500;line-height:1.4;color:var(--tx)}
+.adm-code-chk input{width:20px;height:20px;flex-shrink:0;margin:0;accent-color:var(--mal)}
+.adm-bycode{color:var(--iod-t);font-weight:600;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -1850,7 +1885,11 @@ var SBH={apikey:SB_KEY,Authorization:'Bearer '+SB_KEY,'Content-Type':'applicatio
 // Вызов защищённой функции Supabase (RPC)
 async function sbRpc(fn,params){
   var r=await fetch(SB_URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:SBH,body:JSON.stringify(params||{})});
-  if(!r.ok)throw new Error('rpc '+fn+' failed');
+  if(!r.ok){
+    var j=null;try{j=await r.json();}catch(e){}
+    var er=new Error((j&&j.message&&j.code!=='PGRST202')?j.message:('rpc '+fn+' failed'));
+    er.status=r.status;er.code=j&&j.code;er.missing=(r.status===404||(j&&j.code==='PGRST202'));throw er;
+  }
   return await r.json();
 }
 // Вход через Telegram: бот на Railway проверяет подпись initData.
@@ -1865,21 +1904,139 @@ function vAdminWrite(op,table,filter,body){
   return fetch(SB_URL+'/rest/v1/rpc/admin_write',{method:'POST',headers:SBH,body:JSON.stringify({p_token:vAdminToken(),p_table:table,p_op:op,p_col:col,p_val:v,p_row:body||null})})
     .then(function(r){return r.json().then(function(j){if(!r.ok){var msg=(j&&j.message)||('Ошибка '+r.status);if(r.status===401||r.status===403||/администратора/.test(msg)){msg='Сессия админа истекла. Войди в админку заново.';}throw new Error(msg);}return j;});});
 }
+// ===== КОД ГРУППЫ (приглашение от старосты) =====
+var VITA_BOT_NAME='vitastubot';
+function vCodeNorm(s){return String(s||'').toUpperCase().replace(/[^A-Z0-9]/g,'');}
+function vCodePretty(s){s=vCodeNorm(s);return s.length>4?s.slice(0,4)+' '+s.slice(4):s;}
+// код из ссылки: сайт ?code=XXXX, Telegram start=g_XXXX
+function vInviteFromUrl(){
+  var code='';
+  try{code=new URLSearchParams(location.search).get('code')||'';}catch(e){}
+  try{if(!code&&typeof TG_START_PARAM==='string'&&/^g_/.test(TG_START_PARAM)){code=TG_START_PARAM.slice(2);TG_START_PARAM='';}}catch(e){}
+  code=vCodeNorm(code);
+  if(code.length>=4&&code.length<=16){S.inviteCode=code;sv();}
+  return S.inviteCode||'';
+}
+var V_CODE_T=null,V_CODE_SEQ=0;
+// поле «Код группы» с живой проверкой; idGroup — поле группы, которое код заполняет сам
+function vCodeField(id,idGroup){
+  var need=VITA_REQ_INVITE;
+  return '<div class="fg v-code"><label class="fl" for="'+id+'">Код группы'+(need?'':' — если дал староста')+'</label>'
+    +'<input id="'+id+'" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="20" placeholder="'+(need?'8 букв и цифр от старосты':'необязательно')+'" value="'+esc(vCodePretty(S.inviteCode||''))+'" oninput="vCodeCheck(\''+id+'\',\''+(idGroup||'')+'\')">'
+    +'<div id="'+id+'Hint" class="v-code-hint" aria-live="polite">'+(need?'Без кода заявку не принять. Код выдаёт староста или администратор.':'')+'</div></div>';
+}
+function vCodeCheck(id,idGroup,now){
+  var el=document.getElementById(id),hint=document.getElementById(id+'Hint');if(!el||!hint)return;
+  var code=vCodeNorm(el.value),seq=++V_CODE_SEQ;
+  if(V_CODE_T)clearTimeout(V_CODE_T);
+  if(code.length<6){hint.className='v-code-hint';hint.textContent=code?'Код состоит из 8 букв и цифр':(VITA_REQ_INVITE?'Без кода заявку не принять. Код выдаёт староста или администратор.':'');return;}
+  V_CODE_T=setTimeout(async function(){
+    try{
+      var r=await sbRpc('invite_check',{p_code:code});if(seq!==V_CODE_SEQ)return;
+      var x=r&&r.length?r[0]:null;
+      if(x&&x.ok){hint.className='v-code-hint ok';hint.innerHTML='<i class="ti ti-circle-check"></i> Код подходит'+(x.group_name?': группа <b>'+esc(x.group_name)+'</b>':'');
+        var g=idGroup&&document.getElementById(idGroup);if(g&&x.group_name){g.value=x.group_name;g.readOnly=true;g.classList.add('v-locked');}}
+      else{hint.className='v-code-hint bad';hint.textContent=(x&&x.reason)||'Код не подошёл';
+        var g2=idGroup&&document.getElementById(idGroup);if(g2&&g2.readOnly){g2.readOnly=false;g2.classList.remove('v-locked');}}
+    }catch(e){if(seq===V_CODE_SEQ){hint.className='v-code-hint';hint.textContent='';}}
+  },now?0:450);
+}
+// ===== ЗАПИСЬ ЧЕРЕЗ ВХОД =====
+// Всё, что меняет данные студента, идёт через функцию user_write на сервере: она проверяет вход
+// и не даёт трогать чужое. VITA_UW: null — ещё не знаем, true — сервер новый (v9), false — старая база.
+var VITA_USER_TABLES=['progress','exam_history','daily_progress','student_activity','bookmarks','study_progress','poll_votes','gift_notifications','pending_actions','admin_sessions','shop_prices','jackpot','duels','duel_rooms','duel_room_players','notifications_queue'];
+var VITA_UW=null,VITA_REQ_INVITE=false;
+async function vUwProbe(){
+  try{VITA_REQ_INVITE=!!(await sbRpc('vita_require_invite',{}));VITA_UW=true;}
+  catch(e){if(e.missing)VITA_UW=false;}
+  return VITA_UW;
+}
+// 'a=eq.x&b=eq.y' → {a:'x',b:'y'}; если фильтр сложнее — null
+function vParseEq(filter){
+  var o={};if(!filter)return o;
+  var parts=String(filter).split('&');
+  for(var i=0;i<parts.length;i++){
+    if(/^select=/.test(parts[i]))continue;
+    var m=/^([a-z_]+)=eq\.(.*)$/.exec(parts[i]);if(!m)return null;
+    try{o[m[1]]=decodeURIComponent(m[2]);}catch(e){o[m[1]]=m[2];}
+  }
+  return o;
+}
+function vErrText(t){try{var j=JSON.parse(t);if(j&&j.message)return j.message;}catch(e){}return String(t);}
+var V_SESS_LOST=0;
+// сервер не узнал вход (истёк или старый): тихо входим заново через Telegram или просим войти
+function vSessionLost(){
+  if(!S.user||Date.now()-V_SESS_LOST<60000)return;V_SESS_LOST=Date.now();
+  try{if(typeof isTG==='function'&&isTG()&&TG&&TG.initData){tgAutoLogin();return;}}catch(e){}
+  var em=S.user.email;
+  try{doLogout();}catch(e){}
+  try{openModal('login');var f=document.getElementById('mEm');if(f)f.value=em;showErr('Вход устарел — войди ещё раз. Твой прогресс на месте.');}catch(e){}
+}
+async function vUserWrite(op,table,where,row,conflict){
+  var adminOp=['pending_actions','admin_sessions','shop_prices','jackpot','notifications_queue'].indexOf(table)>=0
+    ||(op==='delete'&&['progress','exam_history','student_activity','poll_votes'].indexOf(table)>=0)
+    ||(table==='progress'&&op==='update')||(table==='gift_notifications'&&op==='insert');
+  var tok=(adminOp&&S.isAdm)?vAdminToken():(S.token||vAdminToken());
+  var r=await fetch(SB_URL+'/rest/v1/rpc/user_write',{method:'POST',headers:SBH,body:JSON.stringify({p_token:tok,p_table:table,p_op:op,p_where:where||{},p_row:row||null,p_conflict:conflict||null})});
+  var j=null;try{j=await r.json();}catch(e){}
+  if(r.ok){VITA_UW=true;return j||[];}
+  if(r.status===404||(j&&j.code==='PGRST202')){VITA_UW=false;var e0=new Error('user_write missing');e0.missing=true;throw e0;}
+  VITA_UW=true;
+  var msg=(j&&j.message)||('Ошибка '+r.status);
+  if(msg==='Нужен вход')vSessionLost();
+  var er=new Error(msg);er.code=j&&j.code;er.status=r.status;throw er;
+}
+// запись в «студенческую» таблицу: сначала через вход, а если база ещё старая — как раньше
+function vRouted(method,table,filter,body,conflict,direct){
+  if(VITA_UW===false)return direct();
+  var where=vParseEq(filter);if(where===null)return direct();
+  var op=method==='POST'?(conflict?'upsert':'insert'):method==='PATCH'?'update':'delete';
+  return vUserWrite(op,table,where,body,conflict).catch(function(e){if(e.missing)return direct();throw e;});
+}
+function vInAdmin(){var a=document.getElementById('pg-admin');return !!(S.isAdm&&a&&a.classList.contains('on'));}
+function vDirect(method,table,filter,body,headers){
+  var url=SB_URL+'/rest/v1/'+table+(filter?'?'+filter:'');
+  var opts={method:method,headers:headers||SBH};
+  if(body)opts.body=JSON.stringify(body);
+  return fetch(url,opts).then(function(r){
+    if(!r.ok)return r.text().then(function(t){var e=new Error(vErrText(t));e.status=r.status;throw e;});
+    return method==='DELETE'?true:r.json();
+  });
+}
 function sbFetch(method,table,filter,body){
   if(method!=='GET'&&VITA_ADMIN_TABLES.indexOf(table)>=0)return vAdminWrite(method==='POST'?'insert':method==='PATCH'?'update':'delete',table,filter,body);
+  if(method!=='GET'&&VITA_USER_TABLES.indexOf(table)>=0)return vRouted(method,table,filter,body,null,function(){return vDirect(method,table,filter,body);});
   if(table==='users'){
     if(method==='GET')table='users_public';
     else if(method==='DELETE')return vAdminWrite('delete','users',filter,null);
     else if(method==='PATCH'&&body&&['status','role','hidden_from_lb','no_autodelete','group_name'].some(function(k){return k in body;}))return vAdminWrite('update','users',filter,body);
+    else if(method==='PATCH'&&body&&VITA_UW!==false){
+      var w=vParseEq(filter)||{},own=!!(S.user&&w.email===S.user.email);
+      if(own&&!vInAdmin()){
+        // свой профиль: имя, аватар, рамка, фон, приватность. Монеты и покупки считает сервер — их не шлём.
+        var prof={},any=false;['name','avatar','frame','profile_bg','private_profile'].forEach(function(k){if(k in body){prof[k]=body[k];any=true;}});
+        if(!any){vSyncMeSoon();return Promise.resolve([]);}
+        var flt=filter;
+        return vUserWrite('update','users',{email:S.user.email},prof,null).catch(function(e){if(e.missing)return vDirect('PATCH','users',flt+'&select=email',body);throw e;});
+      }
+      if(S.isAdm)return vAdminWrite('update','users',filter,body);   // админ выдаёт монеты, рамки, бонус
+      return Promise.resolve([]);                                   // чужие монеты студент не трогает: выплаты делает сервер
+    }
     else filter=(filter?filter+'&':'')+'select=email';
   }
-  var url=SB_URL+'/rest/v1/'+table+(filter?'?'+filter:'');
-  var opts={method:method,headers:SBH};
-  if(body)opts.body=JSON.stringify(body);
-  return fetch(url,opts).then(function(r){
-    if(!r.ok)return r.text().then(function(t){throw new Error(t);});
-    return r.json();
-  });
+  return vDirect(method,table,filter,body);
+}
+// мои монеты и покупки — как их видит сервер
+var V_SYNC_T=null;
+function vSyncMeSoon(){if(V_SYNC_T)clearTimeout(V_SYNC_T);V_SYNC_T=setTimeout(vSyncMe,1500);}
+async function vSyncMe(){
+  V_SYNC_T=null;
+  if(!S.user||!S.token||VITA_UW===false)return;
+  try{
+    var m=await sbRpc('vita_me',{p_token:S.token});if(!m)return;
+    S.user.coins=m.coins||0;S.user.owned_items=m.owned_items||'';S.user.frames=m.frames||'';
+    sv();updateCoinDisplay();
+  }catch(e){if(e.message==='Нужен вход')vSessionLost();}
 }
 function sbGet(t,f){return sbFetch('GET',t,f,null);}
 // Загрузка ВСЕХ строк постранично (обходит лимит Supabase 1000 строк за запрос)
@@ -1899,17 +2056,16 @@ async function sbGetAll(t,f){
 function sbPost(t,b){return sbFetch('POST',t,null,b);}
 function sbPatch(t,f,b){return sbFetch('PATCH',t,f,b);}
 function sbDel(t,f){
-  if(VITA_ADMIN_TABLES.indexOf(t)>=0||t==='users')return sbFetch('DELETE',t,f,null).then(function(){return true;});
-  var url=SB_URL+'/rest/v1/'+t+'?'+f;
-  return fetch(url,{method:'DELETE',headers:SBH}).then(function(r){if(!r.ok)throw new Error(r.status);return true;});
+  if(VITA_ADMIN_TABLES.indexOf(t)>=0||t==='users'||VITA_USER_TABLES.indexOf(t)>=0)return sbFetch('DELETE',t,f,null).then(function(){return true;});
+  return vDirect('DELETE',t,f,null);
 }
 function sbUps(t,b,c){
-  var h=Object.assign({},SBH,{Prefer:'resolution=merge-duplicates,return=representation'});
-  var url=SB_URL+'/rest/v1/'+t+(c?'?on_conflict='+c:'');
-  return fetch(url,{method:'POST',headers:h,body:JSON.stringify(b)}).then(function(r){
-    if(!r.ok)return r.text().then(function(t){throw new Error(t);});
-    return r.json();
-  });
+  var direct=function(){
+    var h=Object.assign({},SBH,{Prefer:'resolution=merge-duplicates,return=representation'});
+    return vDirect('POST',t,c?'on_conflict='+c:'',b,h);
+  };
+  if(VITA_USER_TABLES.indexOf(t)>=0)return vRouted('POST',t,'',b,c||'id',direct);
+  return direct();
 }
 var BASE_QS=[
 
@@ -2049,7 +2205,12 @@ async function tgAutoLogin(){
       S.token=j.token;S.viaTg=true;sv();
       // заявка подана по почте с этого устройства — показываем её статус, а не «создать аккаунт»
       if(!S.user&&S.apply&&S.apply.via==='email'&&S.apply.status!=='active'){await vApplyCheck();vShowApply();return;}
-      if(!S.user)tgShowLinkChoice();
+      if(!S.user){
+        // до показа окна узнаём, новая ли база и нужен ли код группы
+        if(VITA_UW===null){try{await Promise.race([vUwProbe(),new Promise(function(res){setTimeout(res,3000);})]);}catch(e){}}
+        try{vInviteFromUrl();}catch(e){}
+        tgShowLinkChoice();
+      }
       return;
     }
     if(j.status==='pending'||j.status==='blocked'||j.status==='rejected'){
@@ -2231,8 +2392,11 @@ function tgShowLinkChoice(){
     +'<div style="font-size:16px;font-weight:700">Добро пожаловать в Vita!</div>'
     +'<div style="font-size:13px;color:var(--tx2);margin-top:6px">У тебя уже есть аккаунт на сайте Vita?</div></div>'
     +'<button class="btn bbl" onclick="tgLinkExisting()" style="width:100%;margin-bottom:10px"><i class="ti ti-circle-check"></i> Да, войти и привязать Telegram</button>'
-    +'<button class="btn bgh" onclick="tgCreateNew()" style="width:100%"><i class="ti ti-user-plus"></i> Нет, создать новый аккаунт</button>';
+    +'<button class="btn bgh" onclick="tgCreateNew()" style="width:100%"><i class="ti ti-user-plus"></i> Нет, создать новый аккаунт</button>'
+    +(VITA_UW?'<div style="margin-top:14px;text-align:left">'+vCodeField('tgCode','')+'</div>':'')
+    +'<p id="tgNewErr" class="ferr" role="alert"></p>';
   showModal('Вход через Telegram',body);
+  if(VITA_UW&&S.inviteCode)setTimeout(function(){vCodeCheck('tgCode','',true);},50);
   // нельзя закрыть просто так — убираем крестик на этом шаге
   vModalX(false);
 }
@@ -2270,8 +2434,17 @@ async function tgDoLink(){
 }
 // Создать новый аккаунт через Telegram
 async function tgCreateNew(){
+  var tErr=document.getElementById('tgNewErr');if(tErr)tErr.textContent='';
+  var tcode=vCodeNorm(val('tgCode'));
+  if(VITA_UW&&VITA_REQ_INVITE&&!tcode){if(tErr)tErr.textContent='Нужен код группы — спроси его у старосты или администратора.';return;}
   try{
-    var res=await sbRpc('tg_create_account',{p_token:S.token||'',p_name:TG_USER.name});
+    var res;
+    try{res=await sbRpc('tg_create_account',VITA_UW?{p_token:S.token||'',p_name:TG_USER.name,p_code:tcode||null}:{p_token:S.token||'',p_name:TG_USER.name});}
+    catch(e0){
+      if(e0.missing&&VITA_UW)res=await sbRpc('tg_create_account',{p_token:S.token||'',p_name:TG_USER.name});
+      else{if(tErr)tErr.textContent=e0.missing?'Не получилось создать аккаунт. Закрой Vita и открой заново из бота.':e0.message;return;}
+    }
+    if(S.inviteCode){delete S.inviteCode;sv();}
     if(!res||!res.length){vAlert('Не получилось создать аккаунт. Закрой Vita и открой заново из бота.');return;}
     if(res[0].status&&res[0].status!=='active'){S.token='';sv();closeModal();
       vApplySet({via:'tg',status:res[0].status,name:res[0].name,at:Date.now(),email:'',key:'',reason:'',bot:S.tgBot||'',
@@ -2343,6 +2516,8 @@ async function init(){
     refreshSubjectDropdowns();
     dbOK=true;
     document.getElementById('dbst').innerHTML='';
+    try{await Promise.race([vUwProbe(),new Promise(function(res){setTimeout(res,4000);})]);}catch(e){}
+    try{vInviteFromUrl();}catch(e){}
     vVerifyAdmin();
     if(S.user&&S.mustChange)setTimeout(function(){openChangePassword(true);},600);
     else setTimeout(vOpenAdminLink,900);
@@ -2589,11 +2764,13 @@ function openModal(m){
     t.textContent='Регистрация';
     b.innerHTML='';
     addInput(b,'mNm','text','Имя','Ваше имя');
+    if(VITA_UW){var cw=document.createElement('div');cw.innerHTML=vCodeField('mCode','mGr');b.appendChild(cw.firstChild);}
     addInput(b,'mGr','text','Группа','305-А');
     addInput(b,'mEm','email','Email','student@med.uz');
     addInput(b,'mPw','password','Пароль','');
     addErr(b);
     addBtn(b,'bbl','Отправить заявку',doAuth);
+    if(VITA_UW&&S.inviteCode)setTimeout(function(){vCodeCheck('mCode','mGr',true);},50);
     var p2=document.createElement('p');
     p2.style.cssText='text-align:center;margin-top:11px;font-size:12px;color:var(--tx2)';
     p2.textContent='Есть аккаунт? ';
@@ -2834,8 +3011,16 @@ async function doAuth(){
         // секретный ключ заявки: по нему это устройство узнаёт статус без входа
         var key=vApplyKey();
         var row={email:email,name:name,group_name:group,password:pass,status:'pending',joined:new Date().toLocaleDateString('ru-RU'),apply_key:key};
+        var icode=vCodeNorm(val('mCode'));
+        if(VITA_UW&&VITA_REQ_INVITE&&!icode){showErr('Нужен код группы — спроси его у старосты или администратора.');btn.disabled=false;btn.textContent='Отправить заявку';return;}
+        if(VITA_UW&&icode)row.invite_code=icode;
         try{await sbPost('users',row);}
-        catch(e1){if(/apply_key/.test(String(e1.message))){delete row.apply_key;key='';await sbPost('users',row);}else throw e1;}
+        catch(e1){
+          var m1=String(e1.message);
+          if(/apply_key|invite_code/.test(m1)&&/column|schema|Could not find/i.test(m1)){delete row.apply_key;delete row.invite_code;key='';await sbPost('users',row);}
+          else{showErr(m1);btn.disabled=false;btn.textContent='Отправить заявку';return;}
+        }
+        if(S.inviteCode){delete S.inviteCode;sv();}
         S.apply={via:'email',email:email,key:key,name:name,at:Date.now(),status:'pending'};sv();
         await vApplyCheck();
         // автоприём включён — аккаунт уже активен: сразу входим
@@ -2902,7 +3087,7 @@ async function checkSuperPassword(pw){
     var r=await fetch(SB_URL+'/rest/v1/rpc/admin_login',{
       method:'POST',headers:SBH,body:JSON.stringify({pw:pw})
     });
-    if(!r.ok)return false;
+    if(!r.ok){try{var ej=await r.json();if(ej&&ej.message&&/Слишком много/.test(ej.message))vAlert(ej.message);}catch(e){}return false;}
     var tok=await r.json();
     if(tok){S.adminToken=tok;return true;}
     return false;
@@ -3318,8 +3503,8 @@ async function roomStartGame(){
     if(QS.length<ROOM.question_count){vAlert('Недостаточно вопросов ('+QS.length+') для выбранных тем. Уменьши количество или выбери больше тем.');return;}
     var shuffled=QS.slice().sort(function(){return Math.random()-0.5;}).slice(0,ROOM.question_count);
     var qids=shuffled.map(function(q){return q.id;});
-    // списать ставки со всех
-    for(var i=0;i<players.length;i++){
+    // списать ставки со всех (в новой базе это делает сервер при старте игры)
+    for(var i=0;i<players.length&&VITA_UW===false;i++){
       if(ROOM.stake>0){
         var u=await sbGet('users','email=eq.'+encodeURIComponent(players[i].user_email)+'&select=coins');
         var c=(u.length&&u[0].coins)||0;
@@ -3336,6 +3521,7 @@ async function roomStartGame(){
 var ROOM_TIMER=null;
 function roomStartPlaying(room){
   if(ROOM_Q.length)return; // уже играем
+  vSyncMeSoon(); // ставку списал сервер
   if(ROOM)ROOM.time_limit=room.time_limit||0;
   var qids=[];try{qids=JSON.parse(room.questions||'[]');}catch(e){}
   var QS=getQS();
@@ -3399,6 +3585,11 @@ async function roomFinish(){
 async function roomCheckFinish(room){
   if(room.host_email!==S.user.email)return; // только хост считает
   if(room.status==='finished')return;
+  if(VITA_UW!==false){
+    // банк раздаёт сервер, когда закончил последний игрок; хост лишь подталкивает на всякий случай
+    try{await sbPatch('duel_rooms','id=eq.'+encodeURIComponent(room.id),{status:'finished'});LB_CACHE=null;vSyncMeSoon();}catch(e){}
+    return;
+  }
   try{
     var players=await sbGet('duel_room_players','room_id=eq.'+encodeURIComponent(room.id)+'&order=score.desc');
     var allDone=players.every(function(p){return p.finished;});
@@ -3440,7 +3631,7 @@ async function roomCheckFinish(room){
 }
 // Показ результатов
 async function roomShowResults(room){
-  roomPollStop();
+  roomPollStop();vSyncMeSoon();
   var z=document.getElementById('roomActive');
   if(!z)return;
   var players=[];
@@ -3713,7 +3904,7 @@ async function duelSendChallenge(){
       try{var rec2={title:' Тебя вызвали на дуэль!',body:S.user.name+' бросил тебе вызов!',kind:'duel',target_group:'',target_email:opp[0],sent:false};await sbPost('notifications_queue',rec2);notifyOk=true;}catch(e2){vAlert('Уведомление НЕ создано: '+e2.message);}
     }
     closeModal();
-    vAlert('Вызов отправлен!'+(notifyOk?' (уведомление в Telegram создано ✓)':' (БЕЗ уведомления ✗)'));
+    vAlert('Вызов отправлен! Соперник увидит его в Vita'+(notifyOk?' и получит сообщение от бота.':'.'));
     duelCheckState();
   }catch(e){vAlert('Ошибка: '+e.message);}
 }
@@ -3897,6 +4088,13 @@ function duelWaitOpponent(){
 }
 
 async function duelComputeWinner(d){
+  if(VITA_UW!==false){
+    // итог, ставки и монеты считает сервер — берём готовый результат
+    try{var fx=await sbGet('duels','id=eq.'+d.id);
+      if(fx.length&&fx[0].status==='finished'){vSyncMeSoon();duelShowResult(fx[0]);return;}}catch(e){}
+    if(CUR_DUEL)duelWaitOpponent();
+    return;
+  }
   // победитель: больше правильных, при равенстве — меньше время
   var winner=null;
   if(d.challenger_score>d.opponent_score)winner=d.challenger_email;
@@ -3941,6 +4139,7 @@ async function duelComputeWinner(d){
 
 function duelShowResult(d){
   if(window._duelWait)clearInterval(window._duelWait);
+  vSyncMeSoon(); // ставку и приз посчитал сервер — показываем его монеты
   var amChal=d.challenger_email===S.user.email;
   var myScore=amChal?d.challenger_score:d.opponent_score;
   var oppScore=amChal?d.opponent_score:d.challenger_score;
@@ -4063,8 +4262,10 @@ function myCoins(){return (S.user&&S.user.coins)||0;}
 async function addCoins(n){
   if(!S.user)return;
   S.user.coins=(S.user.coins||0)+n;sv();
-  if(dbOK){try{await sbPatch('users','email=eq.'+encodeURIComponent(S.user.email),{coins:S.user.coins});}catch(e){}}
   updateCoinDisplay();
+  // новая база: монеты начисляет сервер (за первый верный ответ, экзамен, победу) — здесь только показываем и сверяемся
+  if(VITA_UW!==false){vSyncMeSoon();return;}
+  if(dbOK){try{await sbPatch('users','email=eq.'+encodeURIComponent(S.user.email),{coins:S.user.coins});}catch(e){}}
 }
 function updateCoinDisplay(){
   var els=document.querySelectorAll('.coinDisp');
@@ -4684,6 +4885,17 @@ async function shopBuy(type,id,price){
     return;
   }
   if(!(await vConfirm('Купить за '+price+' монет?','Купить')))return;
+  if(dbOK&&VITA_UW!==false){
+    // покупку проводит сервер: он проверяет цену и монеты
+    try{
+      var br=await sbRpc('shop_buy',{p_token:S.token||'',p_type:type,p_id:String(id),p_price:price});
+      S.user.coins=br.coins||0;S.user.owned_items=br.owned_items||'';sv();updateCoinDisplay();
+      vAlert(br.already?'Это у тебя уже есть — выбери в профиле.':'Куплено! Выбери в профиле.');renderShop();return;
+    }catch(e){
+      if(!e.missing){if(e.message==='Нужен вход')vSessionLost();else vAlert(e.message);return;}
+      VITA_UW=false;
+    }
+  }
   // списываем монеты
   S.user.coins=myCoins()-price;
   // добавляем предмет
@@ -6129,6 +6341,7 @@ async function admPending(){
   }
   var help=dbOK?await admPassHelp():[];
   if(dbOK)await admTgLoad();
+  if(dbOK)await admCodesLoad();
   var auto=false;try{auto=!!(await sbRpc('vita_auto_approve',{}));}catch(e){}
   ADM_V7=true;try{ADM_CONTACT=await vRpc('vita_contact',{});}catch(e){ADM_CONTACT=null;if(e.missing)ADM_V7=false;}
   var hh='<div class="adm-auto"><div class="adm-auto-t"><b>Принимать заявки автоматически</b>'
@@ -6142,6 +6355,7 @@ async function admPending(){
       :S.isSuper?'<div class="adm-contact-row"><input id="admCt" type="text" inputmode="text" autocomplete="off" placeholder="@username" value="'+(ADM_CONTACT?'@'+esc(ADM_CONTACT):'')+'" aria-label="Telegram для связи"><button class="btn bbl bsm" onclick="admSaveContact(this)">Сохранить</button></div><span id="admCtMsg"></span>'
       :'<span>'+(ADM_CONTACT?'Сейчас: <b style="color:var(--tx)">@'+esc(ADM_CONTACT)+'</b>':'Пока не указан')+' · меняет главный админ</span>')
     +'</div></div>';
+  hh+=admCodesCard();
   if(help.length){
     hh+='<div class="adm-h3">Просят сбросить пароль · '+help.length+'</div>'+help.map(function(h){
       var nm=esc(String(h.name||h.email).replace(/'/g,'')),em=esc(h.email).replace(/'/g,'');
@@ -6167,6 +6381,8 @@ function admAppRow(u,kind){
   var T=ADM_TG[u.email]||null,tun=T&&vTgName(T.username);
   var src=[tg?'через Telegram':esc(u.email),tun?'@'+esc(tun):'',u.group_name?'группа '+esc(u.group_name):''].filter(Boolean).join(' · ');
   var tgBtn=T?admTgBtn(u.email,T,true):'';
+  var UC=ADM_UCODES[u.email];
+  if(UC)src+=' · <span class="adm-bycode"><i class="ti ti-ticket"></i> по коду'+(UC.group_name?' группы '+esc(UC.group_name):'')+'</span>';
   var h='<div class="adm-person adm-app"><span class="lb-blob '+(kind==='rejected'?'eos':tg?'meth':'iod')+'" style="width:42px;height:42px;font-size:21px;flex-shrink:0"><i class="ti ti-'+(tg?'brand-telegram':'mail')+'"></i></span>'
     +'<div class="adm-person-t"><b>'+esc(u.name||u.email)+'</b><span>'+src+'</span>';
   if(kind==='pending'){
@@ -6181,6 +6397,75 @@ function admAppRow(u,kind){
       +(S.isSuper?'<button class="btn bgh bsm" onclick="admDelUser(\''+em+'\',\''+nm+'\')"><i class="ti ti-trash"></i>Удалить</button>':'')+'</div>';
   }
   return h+'</div></div>';
+}
+// ===== КОДЫ ГРУПП: заявки по приглашению от старосты =====
+var ADM_CODES=[],ADM_UCODES={},ADM_V9=null;
+async function admCodesLoad(){
+  try{ADM_CODES=(await vRpc('admin_invites',{p_token:vAdminToken()}))||[];ADM_V9=true;
+    try{VITA_REQ_INVITE=!!(await sbRpc('vita_require_invite',{}));}catch(e){}
+    try{var uc=await vRpc('admin_user_codes',{p_token:vAdminToken()});ADM_UCODES={};(uc||[]).forEach(function(x){ADM_UCODES[x.email]=x;});}catch(e){}}
+  catch(e){if(e.missing)ADM_V9=false;}
+}
+function admCodeState(k){
+  if(!k.active)return {t:'выключен',c:'off'};
+  if(k.expires_at&&Date.parse(k.expires_at)<Date.now())return {t:'срок вышел',c:'off'};
+  if(k.used>=k.max_uses)return {t:'мест нет',c:'off'};
+  return {t:'действует',c:'on'};
+}
+function admCodeLinks(code){
+  var web=location.origin+location.pathname+'?code='+code;
+  if(!/^https?:/.test(web))web='https://xabibovanvar656-byte.github.io/medquest?code='+code;
+  return {web:web,tg:'https://t.me/'+(S.tgBot||VITA_BOT_NAME)+'?start=g_'+code};
+}
+function admCodesCard(){
+  var h='<div class="adm-auto adm-codes"><div class="adm-auto-t" style="width:100%"><b><i class="ti ti-ticket" style="color:var(--iod-t)"></i> Коды групп</b>'
+    +'<span>Дай код старосте — он раздаст его своей группе. По коду видно, из какой группы человек, и посторонние заявку не подадут.</span>';
+  if(ADM_V9===false)return h+'<span style="color:var(--eos-t)">Нужно обновить базу: запусти security_v9.sql в Supabase.</span></div></div>';
+  h+='<div class="adm-code-req"><div><b>Принимать заявки только по коду</b><span>'+(VITA_REQ_INVITE?'Включено: без кода заявку подать нельзя.':'Выключено: код необязателен, но заявка с кодом помечается.')+(S.isSuper?'':' Переключает главный админ.')+'</span></div>'
+    +'<button class="adm-switch'+(VITA_REQ_INVITE?' on':'')+'" role="switch" aria-checked="'+VITA_REQ_INVITE+'" aria-label="Принимать заявки только по коду" '+(S.isSuper?'onclick="admToggleReqInvite('+(!VITA_REQ_INVITE)+')"':'disabled')+'><span></span></button></div>';
+  if(ADM_CODES.length){
+    h+='<div class="adm-code-list">'+ADM_CODES.map(function(k){
+      var st=admCodeState(k),exp=k.expires_at?Date.parse(k.expires_at):0,cd=esc(k.code);
+      return '<div class="adm-code'+(st.c==='off'?' off':'')+'"><div class="adm-code-h"><b>'+esc(vCodePretty(k.code))+'</b><span class="adm-code-st '+st.c+'">'+st.t+'</span></div>'
+        +'<div class="adm-code-m">Группа <b>'+esc(k.group_name||'—')+'</b> · занято '+k.used+' из '+k.max_uses+(exp?' · до '+esc(vWhen(exp).replace(/ в .*/,'')):'')+(k.auto_approve?' · принимает сразу':'')+(k.note?' · '+esc(k.note):'')+'</div>'
+        +'<div class="adm-code-a">'
+        +(st.c==='on'?'<button class="btn bbl bsm" onclick="admCodeCopy(\''+cd+'\',\'msg\',this)"><i class="ti ti-copy"></i>Приглашение</button><button class="btn bgh bsm" onclick="admCodeCopy(\''+cd+'\',\'code\',this)">Только код</button>':'')
+        +'<button class="btn bgh bsm" onclick="admCodeSet(\''+cd+'\','+(k.active?'false':'true')+')">'+(k.active?'Выключить':'Включить')+'</button>'
+        +(st.c==='off'?'<button class="btn bgh bsm" onclick="admCodeSet(\''+cd+'\',null)"><i class="ti ti-trash"></i>Удалить</button>':'')
+        +'</div></div>';
+    }).join('')+'</div>';
+  }else h+='<span class="adm-code-empty">Кодов пока нет. Создай первый — для одной группы.</span>';
+  h+='<details class="adm-code-new"'+(ADM_CODES.length?'':' open')+'><summary><i class="ti ti-plus"></i> Новый код</summary>'
+    +'<div class="adm-code-form"><label>Группа<input id="icG" type="text" maxlength="40" placeholder="например 101 или Лечфак 2-курс"></label>'
+    +'<div class="adm-code-row"><label>Мест<input id="icM" type="number" inputmode="numeric" min="1" max="500" value="30"></label><label>Действует, дней<input id="icD" type="number" inputmode="numeric" min="1" max="365" value="14"></label></div>'
+    +'<label>Для кого (заметка)<input id="icN" type="text" maxlength="120" placeholder="староста Азиз — необязательно"></label>'
+    +'<label class="adm-code-chk"><input id="icA" type="checkbox"> Принимать по этому коду сразу, без проверки админом</label>'
+    +'<div id="icErr" class="adm-msg-err" role="alert"></div>'
+    +'<button class="btn bgr bfu" onclick="admCodeCreate(this)"><i class="ti ti-ticket"></i> Создать код</button></div></details>';
+  return h+'</div></div>';
+}
+async function admCodeCreate(btn){
+  var er=document.getElementById('icErr');if(er)er.textContent='';
+  var g=val('icG');if(!g){if(er)er.textContent='Укажи группу';return;}
+  btn.disabled=true;
+  try{await vRpc('admin_invite_create',{p_token:vAdminToken(),p_group:g,p_max:+val('icM')||30,p_days:+val('icD')||14,p_auto:!!(document.getElementById('icA')||{}).checked,p_note:val('icN')||null});
+    await admPending();}
+  catch(e){btn.disabled=false;if(er)er.textContent=e.message;}
+}
+async function admCodeSet(code,active){
+  if(active===null&&!(await vConfirm('Удалить код '+vCodePretty(code)+'? Студенты, которые по нему пришли, останутся.','Удалить',true)))return;
+  try{await vRpc('admin_invite_set',{p_token:vAdminToken(),p_code:code,p_active:active});await admPending();}catch(e){vAlert(e.message);}
+}
+async function admToggleReqInvite(on){
+  try{VITA_REQ_INVITE=!!(await vRpc('admin_set_require_invite',{p_token:vAdminToken(),p_on:on}));await admPending();}catch(e){vAlert(e.message);}
+}
+function admCodeCopy(code,what,btn){
+  var k=ADM_CODES.filter(function(x){return x.code===code;})[0]||{},L=admCodeLinks(code),exp=k.expires_at?Date.parse(k.expires_at):0;
+  var text=what==='code'?vCodePretty(code)
+    :'Vita — тесты и уроки для нашей группы'+(k.group_name?' '+k.group_name:'')+'.\n\nПодать заявку через Telegram: '+L.tg+'\nИли с сайта: '+L.web+'\n\nКод группы: '+vCodePretty(code)+(exp?' (действует до '+vWhen(exp).replace(/ в .*/,'')+')':'')+'. Никому вне группы не пересылай.';
+  var done=function(){if(btn){var o=btn.innerHTML;btn.innerHTML='<i class="ti ti-check"></i>Скопировано';setTimeout(function(){btn.innerHTML=o;},1600);}};
+  var fallback=function(){var ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done();}catch(e){vAlert(text);}ta.remove();};
+  try{if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(done,fallback);else fallback();}catch(e){fallback();}
 }
 // ===== Telegram студента: видит только админ (профиль, @имя, написать через бота) =====
 var ADM_TG={},ADM_TG_AT=0,ADM_TG_OK=null;
@@ -8146,11 +8431,7 @@ function studyFinishTopic(topicId){
 function upsertStudyProgress(topicId,fields){
   if(!S.user)return;
   var body=Object.assign({user_email:S.user.email,topic_id:topicId,updated_at:new Date().toISOString()},fields);
-  fetch(SB_URL+'/rest/v1/study_progress?on_conflict=user_email,topic_id',{
-    method:'POST',
-    headers:Object.assign({},SBHEAD(),{Prefer:'resolution=merge-duplicates'}),
-    body:JSON.stringify(body)
-  }).catch(function(){});
+  sbUps('study_progress',body,'user_email,topic_id').catch(function(){});
 }
 
 // закладки
