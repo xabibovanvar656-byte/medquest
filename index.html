@@ -1538,6 +1538,172 @@ input.v-locked{opacity:.75;background:var(--bg3)}
 .adm-code-form label.adm-code-chk{flex-direction:row;align-items:flex-start;gap:9px;font-weight:500;line-height:1.4;color:var(--tx)}
 .adm-code-chk input{width:20px;height:20px;flex-shrink:0;margin:0;accent-color:var(--mal)}
 .adm-bycode{color:var(--iod-t);font-weight:600;white-space:nowrap}
+/* ===== ПЛАН НА СЕГОДНЯ ===== */
+.lb-cta-bar{display:block;height:8px;border-radius:99px;background:rgba(0,0,0,.16);margin-top:8px;overflow:hidden}
+.lb-cta-bar i{display:block;height:100%;border-radius:99px;background:var(--mal-ink)}
+.lb-cta.done{background:var(--bg2);color:var(--tx);box-shadow:0 6px 0 var(--edge)}
+.lb-cta.done:active{box-shadow:0 2px 0 var(--edge)}
+.lb-cta.done .lb-pill{background:var(--mal-s);color:var(--mal-t)}
+.lb-cta.done .lb-play{background:var(--mal)}.lb-cta.done .lb-play svg{fill:var(--mal-ink)}
+.lb-cta.done .deco{opacity:.06}
+.tr-plan{background:var(--bg2);border-radius:18px;padding:12px 14px;margin-bottom:14px;box-shadow:0 4px 0 var(--edge)}
+.tr-plan-h{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.tr-plan-h b{font-size:15px;font-weight:700;color:var(--tx)}
+.tr-plan-h span{flex:1;font-size:13px;color:var(--tx2);font-weight:600}
+.tr-plan-h button{width:34px;height:34px;border:none;border-radius:11px;background:var(--bg3);color:var(--tx2);font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.tr-plan-bar{height:10px;border-radius:99px;background:var(--bg3);overflow:hidden}
+.tr-plan-bar i{display:block;height:100%;border-radius:99px;background:var(--mal);transition:width .35s}
+/* ===== УРОК ↔ ТЕСТЫ, ОШИБКА В ВОПРОСЕ ===== */
+.tr-rep{width:36px;height:36px;border:none;border-radius:11px;background:none;color:var(--tx3);font-size:18px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.tr-rep:hover{background:var(--bg3);color:var(--eos-t)}
+.tr-replink{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:12px;padding:10px;border:none;background:none;color:var(--tx3);font:500 13px var(--f);cursor:pointer;border-radius:12px}
+.tr-replink:hover{color:var(--eos-t);background:var(--bg2)}
+.tr-lesson,.study-train{display:flex;align-items:center;gap:12px;width:100%;margin-top:12px;padding:12px 14px;border:none;border-radius:18px;background:var(--meth-s);color:var(--tx);text-align:left;cursor:pointer;font-family:var(--f)}
+.tr-lesson>i:first-child{width:40px;height:40px;border-radius:12px;background:var(--meth);color:var(--meth-ink);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.tr-lesson span,.study-train .st-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.tr-lesson b,.study-train b{font-size:15px;font-weight:700}
+.tr-lesson small,.study-train small{font-size:13px;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tr-lesson>i:last-child,.study-train>i:last-child{color:var(--meth-t);font-size:20px}
+.study-train{background:var(--mal-s);margin:18px 0 6px;padding:14px 16px}
+.study-train .st-ic{width:44px;height:44px;border-radius:14px;background:var(--mal);color:var(--mal-ink);box-shadow:0 3px 0 var(--mal-e);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.study-train>i:last-child{color:var(--mal-t)}
+.rq-q{font-size:14px;line-height:1.5;color:var(--tx);background:var(--bg3);border-radius:14px;padding:12px 14px;margin:0}
+.rq-l,.rm-l{font-size:13px;font-weight:700;color:var(--tx2)}
+.rq .adm-chips{display:flex;flex-direction:column;gap:6px}
+.rq .adm-chip{width:100%;text-align:left}
+.adm-reports{flex-direction:column;align-items:stretch;margin-bottom:14px}
+.adm-rep-q{font-size:14.5px;font-weight:600;line-height:1.45;color:var(--tx);overflow-wrap:anywhere}
+.adm-rep-o{margin:8px 0 0;padding-left:20px;font-size:13px;line-height:1.5;color:var(--tx2)}
+.adm-rep-o li.ok{color:var(--mal-t);font-weight:600}
+.adm-rep-o li span{font-weight:400;opacity:.85}
+.adm-rep-who{margin:10px 0;padding:10px 12px;border-radius:12px;background:var(--eos-s);font-size:13px;line-height:1.5;color:var(--tx);display:flex;flex-direction:column;gap:4px;overflow-wrap:anywhere}
+.sa-link-n{font-size:12.5px;line-height:1.45;color:var(--tx3);margin:0 0 8px}
+/* напоминание */
+.rm-hours{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.rm-h,.rm-off{height:46px;border:1px solid var(--bor);border-radius:14px;background:var(--bg3);color:var(--tx);font:700 15px var(--f);cursor:pointer;font-variant-numeric:tabular-nums}
+.rm-off{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600}
+.rm-h.on{background:var(--mal);color:var(--mal-ink);border-color:transparent;box-shadow:0 3px 0 var(--mal-e)}
+.rm-off.on{background:var(--eos-s);color:var(--eos-t);border-color:transparent}
+/* ===== ДУЭЛИ (кристаллический фиолетовый) ===== */
+.du-vs{display:block;width:100%;border:none;border-radius:24px;background:var(--vio);box-shadow:0 6px 0 var(--vio-e);color:var(--vio-ink);padding:20px 18px 18px;cursor:pointer;font-family:var(--f);text-align:center;transition:transform .12s,box-shadow .12s}
+.du-vs:active{transform:translateY(4px);box-shadow:0 2px 0 var(--vio-e)}
+.du-vs-row{display:flex;align-items:flex-start;justify-content:center;gap:18px}
+.du-p{display:flex;flex-direction:column;align-items:center;gap:6px;width:92px}
+.du-p small{font-size:13px;font-weight:600;max-width:92px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.du-av{width:68px;height:68px;border-radius:50%;background:rgba(255,255,255,.28);display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 4px rgba(0,0,0,.1)}
+.du-q{font-size:30px;font-weight:800;color:var(--vio-ink);border:3px dashed rgba(30,15,69,.45);background:none;box-shadow:none;box-sizing:border-box}
+.du-bolt{width:44px;height:44px;margin-top:12px;border-radius:14px;background:var(--vio-ink);color:var(--iod);display:flex;align-items:center;justify-content:center;font-size:26px;transform:rotate(-8deg)}
+.du-vs-t{display:block;margin-top:14px}
+.du-vs-t b{display:block;font-size:24px;font-weight:800;letter-spacing:-.02em}
+.du-vs-t span{display:block;font-size:14px;font-weight:500;margin-top:3px;opacity:.9}
+.du-menu{margin:16px 0 4px}
+.du-jack{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:18px;background:var(--iod-s);margin:12px 0 16px}
+.du-jack .lb-blob{width:40px;height:40px;border-radius:12px;font-size:22px;background:var(--iod);color:var(--iod-ink);flex-shrink:0}
+.du-jack-t{display:flex;flex-direction:column;gap:1px;min-width:0}
+.du-jack-t b{font-size:15px;font-weight:700;color:var(--tx)}
+.du-jack-t small{font-size:12.5px;color:var(--tx2);line-height:1.35}
+#pg-duels #duelBody{margin-top:14px}
+/* ===== ЭКЗАМЕН (йод): билет ===== */
+.ex-ticket{max-width:520px;border-radius:24px;background:var(--bg2);box-shadow:0 5px 0 var(--edge);overflow:hidden}
+.ex-tk-top{display:flex;align-items:center;gap:9px;padding:14px 18px;background:var(--iod);color:var(--iod-ink)}
+.ex-tk-top i{font-size:22px}.ex-tk-top b{font-size:16px;font-weight:800;letter-spacing:-.01em}
+.ex-tk-body{padding:16px 18px 6px;display:flex;flex-direction:column;gap:16px}
+.ex-f{display:flex;flex-direction:column;gap:7px}
+.ex-l{font-size:13px;font-weight:700;color:var(--tx2)}
+.ex-pick{display:flex;align-items:center;gap:8px;height:48px;padding:0 14px;border:none;border-radius:14px;background:var(--bg3);color:var(--tx);font:500 15px var(--f);cursor:pointer;text-align:left}
+.ex-pick span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ex-pick i:last-child{color:var(--tx3)}
+.ex-chips{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.ex-chip{height:52px;border:none;border-radius:14px;background:var(--bg3);color:var(--tx);font:800 18px var(--f);cursor:pointer;font-variant-numeric:tabular-nums;transition:transform .1s}
+.ex-chip small{font-size:12px;font-weight:600;opacity:.8}
+.ex-chip.on{background:var(--iod);color:var(--iod-ink);box-shadow:0 3px 0 var(--iod-e)}
+.ex-chip:active{transform:translateY(2px)}
+/* линия отрыва: пунктир и два выреза по краям */
+.ex-tk-tear{position:relative;height:28px;margin-top:10px}
+.ex-tk-tear::before{content:'';position:absolute;left:22px;right:22px;top:13px;border-top:2px dashed var(--bor2)}
+.ex-tk-tear::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 0 50%,var(--bg) 13px,transparent 14px),radial-gradient(circle at 100% 50%,var(--bg) 13px,transparent 14px)}
+.ex-tk-foot{padding:6px 18px 18px;display:flex;flex-direction:column;gap:14px}
+.ex-sum b{display:block;font-size:17px;font-weight:800;color:var(--tx);letter-spacing:-.01em}
+.ex-sum span{display:block;font-size:13.5px;color:var(--tx2);margin-top:3px;line-height:1.45}
+.ex-go{height:56px;border:none;border-radius:18px;background:var(--iod);color:var(--iod-ink);box-shadow:0 5px 0 var(--iod-e);font:800 17px var(--f);cursor:pointer;transition:transform .12s,box-shadow .12s}
+.ex-go:active{transform:translateY(3px);box-shadow:0 2px 0 var(--iod-e)}
+/* ===== КАРТОЧКИ (метиленовый синий) ===== */
+#pg-flashcards .fc-dots{display:block;height:8px;border-radius:99px;background:var(--bg3);overflow:hidden;margin:0 0 20px}
+#pg-flashcards .fc-dots i{display:block;height:100%;border-radius:99px;background:var(--meth);transition:width .3s}
+#pg-flashcards .fcard.fc-premium{background:var(--bg2);border:none;border-radius:26px;min-height:320px;padding:22px 22px 20px;
+  box-shadow:0 5px 0 var(--edge),0 12px 0 -6px var(--bg4),0 19px 0 -12px var(--bg3);margin-bottom:26px}
+#pg-flashcards .fc-glow{display:none}
+#pg-flashcards .fc-tag{background:var(--meth-s);color:var(--meth-t);border:none;font-weight:700;letter-spacing:0;text-transform:none;font-size:12.5px;padding:5px 10px;border-radius:99px}
+#pg-flashcards .fc-pos{color:var(--tx3);font-weight:600;font-size:13px;background:none;border:none;padding:0}
+#pg-flashcards .fc-question{font-family:var(--f);font-size:22px;font-weight:600;line-height:1.4;letter-spacing:-.01em;color:var(--tx)}
+#pg-flashcards .fc-answer-label{font-size:13px;font-weight:700;color:var(--mal-t);letter-spacing:0;text-transform:none}
+#pg-flashcards .fc-answer{font-family:var(--f);font-weight:700;color:var(--tx)}
+#pg-flashcards .fc-hint-tap{color:var(--tx3);font-size:13.5px;font-weight:500}
+#pg-flashcards .fc-actions{gap:12px;margin-top:0}
+#pg-flashcards .fc-btn{height:56px;padding:0 12px;border-radius:18px;font-size:16px;font-weight:800;box-shadow:none;background-image:none}
+#pg-flashcards .fc-btn.fc-dunno{background:var(--bg2);color:var(--eos-t);box-shadow:0 4px 0 var(--edge)}
+#pg-flashcards .fc-btn.fc-know{background:var(--mal);color:var(--mal-ink);box-shadow:0 4px 0 var(--mal-e)}
+#pg-flashcards .fc-btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--edge)}
+#pg-flashcards .fc-nav{display:flex;justify-content:space-between;gap:6px;margin-top:14px}
+#pg-flashcards .fc-nav-btn{flex:0 1 auto;display:inline-flex;align-items:center;gap:4px;height:44px;padding:0 10px;border:none;background:none;box-shadow:none;color:var(--tx2);font:600 14px var(--f);cursor:pointer;border-radius:12px}
+#pg-flashcards .fc-nav-btn:disabled{opacity:.35}
+#pg-flashcards .fc-stat{text-align:center;color:var(--tx3);font-size:13px;margin-top:6px}
+#pg-flashcards .fc-cnt{color:var(--tx3);font-weight:600}
+/* ===== ПРОГРЕСС ===== */
+.prog-ring-card{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;background:var(--bg2);border:none;border-radius:22px;padding:16px;box-shadow:0 4px 0 var(--edge);text-align:left;background-image:none}
+.prog-ring{position:relative;width:118px;height:118px;margin:0}
+.prog-ring svg{width:118px;height:118px}
+.prog-ring svg circle:nth-of-type(1){stroke:var(--bg3)}
+.prog-ring svg circle:nth-of-type(2){stroke:var(--mal)}
+.prog-ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.prog-ring-center .prc-val{font-family:var(--f);font-size:32px;font-weight:800;letter-spacing:-.03em;color:var(--tx);line-height:1}
+.prog-ring-center .prc-val small{font-size:16px;font-weight:700;color:var(--tx2)}
+.prog-ring-center .prc-lbl{font-size:12px;color:var(--tx3);font-weight:600;margin-top:2px;letter-spacing:0;text-transform:none}
+.prog-ring-info{text-align:left;margin:0;padding:0}
+.prog-ring-info b{display:block;font-family:var(--f);font-size:19px;font-weight:800;letter-spacing:-.02em;color:var(--tx)}
+.prog-ring-info p{font-size:13.5px;line-height:1.45;color:var(--tx2);margin:5px 0 0}
+.prog-bento{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0 0}
+.prog-bento .pgb{background:var(--bg2);background-image:none;border:none;border-radius:18px;padding:12px 14px;text-align:left;box-shadow:0 4px 0 var(--edge);display:grid;grid-template-columns:auto 1fr;column-gap:10px;align-items:center}
+.prog-bento .pgb .lb-blob{grid-row:1/3;width:38px;height:38px;border-radius:12px;font-size:21px}
+.prog-bento .pgb .pgb-v{font-family:var(--f);font-size:22px;font-weight:800;letter-spacing:-.02em;color:var(--tx);line-height:1.1}
+.prog-bento .pgb .pgb-l{font-size:12.5px;color:var(--tx3);font-weight:500;letter-spacing:0;text-transform:none;margin:0}
+#pg-progress .home-sec{margin:22px 2px 10px}
+#pg-progress .home-sec span{font-size:17px;font-weight:700;color:var(--tx);letter-spacing:0}
+.prog-subjs{display:flex;flex-direction:column;gap:10px}
+.prog-subj{background:var(--bg2);border:none;border-radius:18px;box-shadow:0 4px 0 var(--edge);padding:12px 14px}
+.prog-subj .prsj-info b{font-size:15px;font-weight:700}
+.prog-subj .prsj-info span{font-size:12.5px;color:var(--tx3)}
+.prog-subj .prsj-bar{height:8px;border-radius:99px;background:var(--bg3)}
+.prog-subj .prsj-ring{width:auto;height:auto;min-width:46px}
+.prog-subj .prsj-ring svg{display:none}
+.prog-subj .prsj-ring span{position:static;font:800 17px var(--f);color:var(--tx);font-variant-numeric:tabular-nums}
+.prog-subj .prsj-ring span::after{content:'%';font-size:12px;font-weight:700;color:var(--tx3);margin-left:1px}
+.ach-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:8px}
+.ach{position:relative;background:var(--bg2);border-radius:18px;box-shadow:0 4px 0 var(--edge);padding:14px 8px 12px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px;min-width:0}
+.ach-ic{width:44px;height:44px;border-radius:14px;background:var(--iod-s);color:var(--iod-t);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:5px}
+.ach b{font-size:13px;font-weight:700;color:var(--tx);line-height:1.2}
+.ach small{font-size:11.5px;color:var(--tx3);line-height:1.3;overflow-wrap:anywhere}
+.ach:not(.got){box-shadow:none;background:var(--bg3)}
+.ach:not(.got) .ach-ic{background:var(--bg4);color:var(--tx3)}
+.ach:not(.got) b{color:var(--tx2)}
+.ach-ok{position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;background:var(--mal);color:var(--mal-ink);display:flex;align-items:center;justify-content:center;font-size:13px}
+/* ===== РЕЙТИНГ: строка статистики — обычный текст, а не карточка ===== */
+#lbList .lb-sub{display:block;background:none;box-shadow:none;border-radius:0;padding:0;font-size:13px;color:inherit;opacity:.85;cursor:inherit;transform:none}
+/* ===== На компьютере: рабочие экраны не растягиваются на всю ширину ===== */
+@media(min-width:900px){
+  #pg-trainer,#pg-exam,#pg-flashcards,#pg-duels,#pg-progress,#pg-leaderboard,#pg-shop,#pg-tests{max-width:720px;margin-left:auto;margin-right:auto}
+}
+.lb-cta-t b{overflow-wrap:anywhere}
+@media(max-width:420px){.lb-cta-t b{font-size:22px}}
+/* обратная сторона карточки: ответ крупно, остальные варианты — тихим списком */
+#pg-flashcards .fc-answer{background:var(--mal-s);border:none;border-radius:16px;padding:14px 16px;font-size:18px;margin-bottom:14px}
+#pg-flashcards .fc-opts{gap:4px}
+#pg-flashcards .fc-opts::before{content:'Остальные варианты';font-size:12.5px;font-weight:700;color:var(--tx3);margin-bottom:2px}
+#pg-flashcards .fc-opts .fcopt{padding:0;border:none;background:none;border-radius:0;font-size:14px;font-weight:500;color:var(--tx2);line-height:1.4}
+#pg-flashcards .fc-opts .fcopt.win{display:none}
+#pg-flashcards .fcard.fc-premium .swipemark{background-image:none;letter-spacing:0;font-weight:800;border:none}
+#pg-flashcards .fcard.fc-premium .swipemark.know{background:var(--mal);color:var(--mal-ink)}
+#pg-flashcards .fcard.fc-premium .swipemark.dunno{background:var(--eos);color:var(--eos-ink)}
 </style>
 </head>
 <body>
@@ -1639,7 +1805,7 @@ input.v-locked{opacity:.75;background:var(--bg3)}
   <div id="studyBody"></div>
 </div>
 <div id="pg-flashcards" class="page">
-  <div class="ph"><div class="pt">Карточки</div><div class="ps">Смахни → знаю · ← повтор</div></div>
+  <div class="ph"><div class="pt">Карточки</div><div class="ps">Нажми на карточку — увидишь ответ. Смахни вправо, если знаешь.</div></div>
   <div class="fc-filters">
     <select id="fcS" onchange="fcInit()" class="fc-sel">
       <option value="all">Все предметы</option><option value="physics">Биофизика</option>
@@ -1662,13 +1828,13 @@ input.v-locked{opacity:.75;background:var(--bg3)}
     <div class="fchint fc-hint" id="fcHint"><span class="fc-hint-tap">Нажми, чтобы увидеть ответ</span></div>
   </div>
   <div class="fc-actions">
-    <button class="fc-btn fc-dunno" onclick="fcSwipe('dunno')"><i class="ti ti-rotate"></i> Повтор</button>
-    <button class="fc-btn fc-flip" onclick="fcFlip()"><i class="ti ti-refresh"></i></button>
+    <button class="fc-btn fc-dunno" onclick="fcSwipe('dunno')"><i class="ti ti-rotate"></i> Повторить</button>
     <button class="fc-btn fc-know" onclick="fcSwipe('know')"><i class="ti ti-check"></i> Знаю</button>
   </div>
   <div class="fc-nav">
-    <button class="fc-nav-btn" id="fcPrev" onclick="fcPrev()">← Назад</button>
-    <button class="fc-nav-btn" id="fcNext" onclick="fcNext()">Далее →</button>
+    <button class="fc-nav-btn" id="fcPrev" onclick="fcPrev()" aria-label="Предыдущая карточка"><i class="ti ti-chevron-left"></i> Назад</button>
+    <button class="fc-nav-btn" onclick="fcFlip()"><i class="ti ti-refresh"></i> Перевернуть</button>
+    <button class="fc-nav-btn" id="fcNext" onclick="fcNext()" aria-label="Следующая карточка">Дальше <i class="ti ti-chevron-right"></i></button>
   </div>
   <div class="fc-stat" id="fcStat"></div>
 </div>
@@ -1681,6 +1847,8 @@ input.v-locked{opacity:.75;background:var(--bg3)}
       </div>
     </div>
   </div>
+  <div id="trPlanBar" class="tr-plan" style="display:none"></div>
+  <div id="trFilters">
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
     <select id="trS" onchange="trTopics()" style="min-width:150px;width:auto">
       <option value="all">Все предметы</option><option value="physics">Биофизика</option>
@@ -1693,10 +1861,12 @@ input.v-locked{opacity:.75;background:var(--bg3)}
     <button class="btn bgh bsm" id="trModeErr" onclick="trSetMode('errors')">Мои ошибки</button>
     <button class="btn bgh bsm" id="trModeFav" onclick="trSetMode('fav')">Закладки</button>
   </div>
+  </div>
   <div class="card" style="margin-bottom:10px">
     <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px;align-items:center">
       <span class="bdg" id="trBdg">Химия</span><span style="font-size:11px;color:var(--tx3)" id="trTbdg"></span>
-      <button id="trFav" onclick="trToggleFav()" style="margin-left:auto;background:none;border:none;cursor:pointer;font-size:20px" title="В закладки">☆</button>
+      <button id="trRep" class="tr-rep" onclick="vReportQ()" title="Ошибка в вопросе" aria-label="Сообщить об ошибке в вопросе"><i class="ti ti-flag"></i></button>
+      <button id="trFav" onclick="trToggleFav()" style="background:none;border:none;cursor:pointer;font-size:20px" title="В закладки" aria-label="В закладки">☆</button>
     </div>
     <div style="font-size:16px;font-weight:500;line-height:1.65;margin-bottom:16px" id="trQ">Загрузка...</div>
     <div id="trOpts"></div>
@@ -1708,21 +1878,32 @@ input.v-locked{opacity:.75;background:var(--bg3)}
     </div>
     <div class="aibox" id="trAi"></div>
   </div>
+  <div id="trLesson"></div>
   <button class="btn bbl bfu" id="trNxt" style="display:none;margin-top:10px" onclick="trNext()">Следующий →</button>
+  <button class="tr-replink" id="trRepLink" style="display:none" onclick="vReportQ()"><i class="ti ti-flag"></i> Нашёл ошибку в вопросе?</button>
 </div>
 <div id="pg-exam" class="page">
   <div id="exSetup">
-    <div class="ph"><div class="pt">Экзамен</div><div class="ps">Таймер, без подсказок</div></div>
-    <div class="card" style="max-width:460px">
-      <div class="fg"><label class="fl">Предмет</label>
-        <select id="exS" onchange="exTopics()"><option value="all">Все предметы</option><option value="physics">Биофизика</option><option value="chemistry">Химия</option><option value="biology">Биология</option></select></div>
-      <div class="fg"><label class="fl">Тема</label>
-        <button id="exTbtn" class="btn bgh bsm" onclick="exPickTopics()" style="width:100%;justify-content:flex-start"><i class="ti ti-list-check"></i> <span id="exTbtnLbl">Все темы</span></button></div>
-      <div class="fg"><label class="fl">Вопросов: <b id="exCL">25</b></label>
-        <input type="range" min="10" max="80" step="5" value="25" id="exC" oninput="document.getElementById('exCL').textContent=this.value"></div>
-      <div class="fg"><label class="fl">Время: <b id="exTL">30</b> мин</label>
-        <input type="range" min="10" max="120" step="5" value="30" id="exT" oninput="document.getElementById('exTL').textContent=this.value"></div>
-      <button class="btn bam bfu" onclick="exStart()"><i class="ti ti-certificate"></i>Начать</button>
+    <div class="ph"><div class="pt">Экзамен</div><div class="ps">Как на настоящем: таймер и ответы только в конце</div></div>
+    <div class="ex-ticket">
+      <div class="ex-tk-top"><i class="ti ti-certificate"></i><b>Экзаменационный билет</b></div>
+      <div class="ex-tk-body">
+        <div class="ex-f"><label class="ex-l" for="exS">Предмет</label>
+          <select id="exS" onchange="exTopics()"><option value="all">Все предметы</option><option value="physics">Биофизика</option><option value="chemistry">Химия</option><option value="biology">Биология</option></select></div>
+        <div class="ex-f"><span class="ex-l">Тема</span>
+          <button id="exTbtn" class="ex-pick" onclick="exPickTopics()"><i class="ti ti-list-check"></i> <span id="exTbtnLbl">Все темы</span><i class="ti ti-chevron-right"></i></button></div>
+        <div class="ex-f"><span class="ex-l">Вопросов</span>
+          <div class="ex-chips" id="exCChips" role="radiogroup" aria-label="Число вопросов"></div></div>
+        <div class="ex-f"><span class="ex-l">Время</span>
+          <div class="ex-chips" id="exTChips" role="radiogroup" aria-label="Время в минутах"></div></div>
+        <input type="hidden" id="exC" value="25"><input type="hidden" id="exT" value="30">
+        <span id="exCL" hidden>25</span><span id="exTL" hidden>30</span>
+      </div>
+      <div class="ex-tk-tear" aria-hidden="true"></div>
+      <div class="ex-tk-foot">
+        <div class="ex-sum" id="exSum"></div>
+        <button class="ex-go" onclick="exStart()">Начать экзамен</button>
+      </div>
     </div>
   </div>
   <div id="exRun" style="display:none">
@@ -1761,9 +1942,8 @@ input.v-locked{opacity:.75;background:var(--bg3)}
 <div id="pg-progress" class="page">
   <div class="ph"><div class="pt">Прогресс</div><div class="ps">Статистика и история</div></div>
   <div id="progS" style="margin-bottom:20px"></div>
-  <div style="font-size:15px;font-weight:600;margin-bottom:12px" id="achHdr">Достижения</div>
-  <div id="achGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-bottom:24px"></div>
-  <div style="font-size:15px;font-weight:600;margin-bottom:12px">История экзаменов</div>
+  <div class="lb-h2"><h2 id="achHdr">Достижения</h2></div>
+  <div id="achGrid" class="ach-grid"></div>
   <div id="progH"></div>
 </div>
 <div id="pg-leaderboard" class="page">
@@ -1771,29 +1951,13 @@ input.v-locked{opacity:.75;background:var(--bg3)}
   <div id="lbList"></div>
 </div>
 <div id="pg-duels" class="page">
-  <div class="ph"><div class="pt">Дуэли</div><div class="ps">Брось вызов другому студенту</div></div>
-  <div style="position:relative;overflow:hidden;background:var(--hero);border-radius:18px;padding:22px 24px;margin-bottom:14px;box-shadow:0 16px 36px -18px rgba(75,54,184,.55)">
-    <div style="position:absolute;right:-20px;top:-30px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.1)"></div>
-    <div style="position:relative;display:flex;align-items:center;gap:18px;flex-wrap:wrap">
-      <div style="display:flex;align-items:center;gap:14px;flex:1;min-width:230px">
-        <div style="width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;font-weight:800"><i class="ti ti-swords"></i></div>
-        <div><div style="font-size:18px;font-weight:800;color:#fff;line-height:1.2">Сразись 1 на 1</div><div style="font-size:13px;color:rgba(255,255,255,.9);margin-top:3px">10 вопросов · кто быстрее и точнее — забирает победу и монеты</div></div>
-      </div>
-      <button class="btn" style="background:#fff;color:var(--hero);font-weight:800;flex-shrink:0" onclick="duelNewChallenge()"><i class="ti ti-bolt"></i> Вызвать соперника</button>
-    </div>
-  </div>
-  <div id="jackpotZone"></div>
+  <div class="ph"><div class="pt">Дуэли</div><div class="ps">Один на один: кто точнее и быстрее</div></div>
+  <div id="duelHead"></div>
   <div id="duelActive"></div>
   <div id="duelIncoming"></div>
   <div id="roomActive"></div>
-  <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
-    <button class="btn bbl" onclick="duelNewChallenge()"><i class="ti ti-swords"></i> Дуэль 1 на 1</button>
-    <button class="btn bgh" onclick="duelShowHistory()"><i class="ti ti-history"></i> История</button>
-  </div>
-  <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
-    <button class="btn bam" onclick="roomCreate()"><i class="ti ti-users"></i> Создать комнату (ставка)</button>
-    <button class="btn bgh" onclick="roomJoinPrompt()"><i class="ti ti-login"></i> Войти по коду</button>
-  </div>
+  <div id="duelMenu"></div>
+  <div id="jackpotZone"></div>
   <div id="duelBody"></div>
 </div>
 <div id="pg-profile" class="page">
@@ -2003,7 +2167,62 @@ function vDirect(method,table,filter,body,headers){
     return method==='DELETE'?true:r.json();
   });
 }
+// ===== ЧТЕНИЕ ЧЕРЕЗ ВХОД =====
+// Вопросы, список студентов, прогресс, дуэли читаются через функцию user_read: сервер сам решает, что кому видно.
+// VITA_UR: null — ещё не знаем, true — сервер новый (v10), false — старая база (читаем по-старому).
+var VITA_READ_TABLES=['users','custom_questions','progress','exam_history','daily_progress','bookmarks','study_progress','gift_notifications','duels','duel_rooms','duel_room_players','poll_votes','student_activity','pending_actions','admin_sessions'];
+var VITA_UR=null;
+function vDec(s){try{return decodeURIComponent(s);}catch(e){return s;}}
+// 'a=eq.x&select=b,c&order=d.desc&limit=5' → {w:[['a','eq','x']],sel:['b','c'],ord:[['d','desc']],lim:5}; не разобрали — null
+function vParseQuery(filter){
+  var q={w:[]};if(!filter)return q;
+  var parts=String(filter).split('&');
+  for(var i=0;i<parts.length;i++){
+    var p=parts[i];if(!p)continue;
+    var eq=p.indexOf('=');if(eq<0)return null;
+    var k=p.slice(0,eq),v=p.slice(eq+1);
+    if(k==='select'){if(v&&v!=='*')q.sel=v.split(',');}
+    else if(k==='order'){q.ord=v.split(',').map(function(x){var a=x.split('.');return [a[0],a[1]==='desc'?'desc':'asc'];});}
+    else if(k==='limit')q.lim=+v;
+    else if(k==='offset')q.off=+v;
+    else if(k==='or'){
+      var m=/^\((.*)\)$/.exec(v);if(!m)return null;q.or=[];
+      var items=m[1].split(',');
+      for(var j=0;j<items.length;j++){var mm=/^([a-z_]+)\.eq\.(.*)$/.exec(items[j]);if(!mm)return null;q.or.push([mm[1],'eq',vDec(mm[2])]);}
+    }
+    else{
+      if(!/^[a-z_]+$/.test(k))return null;
+      if(v==='is.null')q.w.push([k,'isnull']);
+      else if(v==='not.is.null')q.w.push([k,'notnull']);
+      else if(v.indexOf('eq.')===0)q.w.push([k,'eq',vDec(v.slice(3))]);
+      else if(v.indexOf('neq.')===0)q.w.push([k,'neq',vDec(v.slice(4))]);
+      else if(/^in\.\(.*\)$/.test(v))q.w.push([k,'in',v.slice(4,-1).split(',').map(vDec)]);
+      else return null;
+    }
+  }
+  return q;
+}
+function vReadToken(){return S.isAdm?vAdminToken():(S.token||'');}
+async function vUserRead(table,filter){
+  var q=vParseQuery(filter);
+  if(q===null){var eu=new Error('filter');eu.missing=true;throw eu;}
+  var r=await fetch(SB_URL+'/rest/v1/rpc/user_read',{method:'POST',headers:SBH,body:JSON.stringify({p_token:vReadToken(),p_table:table,p_q:q})});
+  var j=null;try{j=await r.json();}catch(e){}
+  if(r.ok){VITA_UR=true;return j||[];}
+  if(r.status===404||(j&&j.code==='PGRST202')){VITA_UR=false;var e0=new Error('user_read missing');e0.missing=true;throw e0;}
+  VITA_UR=true;
+  var msg=(j&&j.message)||('Ошибка '+r.status);
+  if(msg==='Нужен вход'&&S.user)vSessionLost();
+  var er=new Error(msg);er.code=j&&j.code;er.status=r.status;throw er;
+}
 function sbFetch(method,table,filter,body){
+  if(method==='GET'&&VITA_UR!==false&&VITA_READ_TABLES.indexOf(table)>=0){
+    var f0=filter;
+    return vUserRead(table,filter).catch(function(e){
+      if(e.missing)return vDirect('GET',table==='users'?'users_public':table,f0,null);
+      throw e;
+    });
+  }
   if(method!=='GET'&&VITA_ADMIN_TABLES.indexOf(table)>=0)return vAdminWrite(method==='POST'?'insert':method==='PATCH'?'update':'delete',table,filter,body);
   if(method!=='GET'&&VITA_USER_TABLES.indexOf(table)>=0)return vRouted(method,table,filter,body,null,function(){return vDirect(method,table,filter,body);});
   if(table==='users'){
@@ -2026,6 +2245,42 @@ function sbFetch(method,table,filter,body){
   }
   return vDirect(method,table,filter,body);
 }
+// ===== напоминание о плане на сегодня (бот пишет вечером, если есть что повторить и сегодня не занимался) =====
+function vRemindLabel(){
+  if(!S.user)return '';
+  if(!S.user.has_tg)return 'нужен Telegram';
+  var h=S.user.remind_hour;return h===-1?'выключено':'в '+h+':00';
+}
+function vRemindOpen(){
+  if(!S.user.has_tg){
+    showModal('Напоминание о плане','<div class="ap"><div class="ap-ic"><i class="ti ti-bell"></i></div><h3>Нужен Telegram</h3>'
+      +'<p>Напоминания присылает бот Vita. Открой приложение через бота в Telegram — и напоминания включатся сами.</p>'
+      +'<button class="btn bbl bfu" onclick="vOpenTgLink(\'https://t.me/'+(S.tgBot||VITA_BOT_NAME)+'\')"><i class="ti ti-brand-telegram"></i> Открыть бота</button>'
+      +'<button class="btn bgh bfu" onclick="closeModal()">Не сейчас</button></div>');
+    return;
+  }
+  var cur=S.user.remind_hour,hours=[8,12,15,17,19,20,21,22];
+  if(cur>=0&&hours.indexOf(cur)<0)hours.push(cur);
+  hours.sort(function(a,b){return a-b;});
+  showModal('Напоминание о плане','<div class="adm-rej rm">'
+    +'<p>Бот напишет в Telegram, только если есть что повторить и сегодня ты ещё не занимался. Не чаще раза в день.</p>'
+    +'<div class="rm-l">Во сколько напоминать</div>'
+    +'<div class="rm-hours" role="radiogroup">'+hours.map(function(h){return '<button class="rm-h'+(h===cur?' on':'')+'" role="radio" aria-checked="'+(h===cur)+'" onclick="vRemindSet('+h+',this)">'+h+':00</button>';}).join('')+'</div>'
+    +'<button class="rm-off'+(cur===-1?' on':'')+'" onclick="vRemindSet(-1,this)"><i class="ti ti-bell-off"></i> Не напоминать</button>'
+    +'<div id="rmErr" class="adm-msg-err" role="alert"></div>'
+    +'<button class="btn bgh bfu" onclick="closeModal()">Готово</button></div>');
+  vModalX(true);
+}
+async function vRemindSet(h,btn){
+  var er=document.getElementById('rmErr');if(er)er.textContent='';
+  try{
+    await sbRpc('set_reminder',{p_token:S.token||'',p_hour:h});
+    S.user.remind_hour=h;sv();
+    document.querySelectorAll('.rm .rm-h,.rm .rm-off').forEach(function(b){b.classList.remove('on');b.setAttribute('aria-checked','false');});
+    btn.classList.add('on');btn.setAttribute('aria-checked','true');
+    try{renderProfile();}catch(e){}
+  }catch(e){if(er)er.textContent=e.missing?'Напоминания появятся после обновления базы.':e.message;}
+}
 // мои монеты и покупки — как их видит сервер
 var V_SYNC_T=null;
 function vSyncMeSoon(){if(V_SYNC_T)clearTimeout(V_SYNC_T);V_SYNC_T=setTimeout(vSyncMe,1500);}
@@ -2035,6 +2290,8 @@ async function vSyncMe(){
   try{
     var m=await sbRpc('vita_me',{p_token:S.token});if(!m)return;
     S.user.coins=m.coins||0;S.user.owned_items=m.owned_items||'';S.user.frames=m.frames||'';
+    if(m.remind_hour!==undefined){var rh0=S.user.remind_hour;S.user.remind_hour=m.remind_hour;S.user.has_tg=!!m.has_tg;
+      if(rh0===undefined){var pp=document.getElementById('pg-profile');if(pp&&pp.classList.contains('on')){try{renderProfile();}catch(e){}}}}
     sv();updateCoinDisplay();
   }catch(e){if(e.message==='Нужен вход')vSessionLost();}
 }
@@ -2510,7 +2767,7 @@ async function init(){
     ]);
     if(r[0]&&r[0].length)newsCache=r[0];
     if(r[1]&&r[1].length)schedCache=r[1];
-    CQS=(r[2]||[]).map(function(q){return{id:q.id,s:q.subject,t:q.topic,q:q.question,o:q.options,a:q.correct_index,batch:q.batch};});
+    CQS=(r[2]||[]).map(vMapQ);
     // Register any custom subjects not in SM
     CQS.forEach(function(q){vEnsureSubject(q.s);});
     refreshSubjectDropdowns();
@@ -2621,6 +2878,7 @@ async function saveProg(qid,ok){
     var d2=new Date();p.due=d2.toISOString().slice(0,10);
   }
   S.prog[qid]=p;
+  try{vPlanMark(qid);}catch(e){}
   bumpDaily();
   // +1 монета ТОЛЬКО за первое верное решение вопроса (защита от фарма повторами)
   if(ok&&p.c===1&&p.a<=2)addCoins(1);
@@ -2718,6 +2976,8 @@ async function pushActivity(action){
 }
 function go(pg,btn){
   if(PROTECTED.indexOf(pg)>=0&&!S.user&&!S.isAdm){showLoginWall();return;}
+  // вошёл, а в памяти только счётчики вопросов (их видит гость) — догружаем сами вопросы и перерисовываем экран
+  if((S.user||S.isAdm)&&vQsAreStubs()&&!go._qs){go._qs=true;vEnsureQs().then(function(ok){go._qs=false;if(ok){try{go(pg,btn);}catch(e){}}});}
   if(navigator.vibrate)navigator.vibrate(8); // лёгкий тактильный отклик
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('on');});
   document.querySelectorAll('.nb,.bni').forEach(function(b){b.classList.remove('on');});
@@ -3014,11 +3274,19 @@ async function doAuth(){
         var icode=vCodeNorm(val('mCode'));
         if(VITA_UW&&VITA_REQ_INVITE&&!icode){showErr('Нужен код группы — спроси его у старосты или администратора.');btn.disabled=false;btn.textContent='Отправить заявку';return;}
         if(VITA_UW&&icode)row.invite_code=icode;
-        try{await sbPost('users',row);}
-        catch(e1){
-          var m1=String(e1.message);
-          if(/apply_key|invite_code/.test(m1)&&/column|schema|Could not find/i.test(m1)){delete row.apply_key;delete row.invite_code;key='';await sbPost('users',row);}
-          else{showErr(m1);btn.disabled=false;btn.textContent='Отправить заявку';return;}
+        var regDone=false;
+        if(VITA_UR!==false){
+          // новая база: заявку принимает функция на сервере (сама проверяет код группы, почту и лимиты)
+          try{await sbRpc('register_user',{p_email:email,p_name:name,p_group:group,p_password:pass,p_key:key,p_code:icode||null});regDone=true;}
+          catch(eR){if(!eR.missing){showErr(eR.message);btn.disabled=false;btn.textContent='Отправить заявку';return;}}
+        }
+        if(!regDone){
+          try{await sbPost('users',row);}
+          catch(e1){
+            var m1=String(e1.message);
+            if(/apply_key|invite_code/.test(m1)&&/column|schema|Could not find/i.test(m1)){delete row.apply_key;delete row.invite_code;key='';await sbPost('users',row);}
+            else{showErr(m1);btn.disabled=false;btn.textContent='Отправить заявку';return;}
+          }
         }
         if(S.inviteCode){delete S.inviteCode;sv();}
         S.apply={via:'email',email:email,key:key,name:name,at:Date.now(),status:'pending'};sv();
@@ -3064,12 +3332,27 @@ async function doAuth(){
   }
 }
 // вход выполнен: сохранить пользователя, роль, прогресс
+function vMapQ(q){return{id:q.id,s:q.subject,t:q.topic,q:q.question,o:q.options,a:q.correct_index,batch:q.batch};}
+// гость получает от сервера только id/предмет/тему (для счётчиков). Вошёл — подгружаем сами вопросы.
+function vQsAreStubs(){return CQS.length>0&&CQS.every(function(q){return q.q==null;});}
+var V_QS_LOADING=null;
+function vEnsureQs(){
+  if(!(S.user||S.isAdm)||!dbOK||!vQsAreStubs())return Promise.resolve(false);
+  if(V_QS_LOADING)return V_QS_LOADING;
+  V_QS_LOADING=sbGetAll('custom_questions','order=created_at.asc').then(function(rows){
+    V_QS_LOADING=null;
+    if(rows&&rows.length&&rows[0].question!=null){CQS=rows.map(vMapQ);CQS.forEach(function(q){vEnsureSubject(q.s);});try{refreshSubjectDropdowns();}catch(e){}return true;}
+    return false;
+  }).catch(function(){V_QS_LOADING=null;return false;});
+  return V_QS_LOADING;
+}
 async function vFinishLogin(user,email){
   S.user={name:user?user.name:email,email:email,group:user?user.group_name:'',avatar:user?(user.avatar||''):'',frames:user?(user.frames||''):'',frame:user?(user.frame||''):'',coins:user?(user.coins||0):0,owned_items:user?(user.owned_items||''):'',profile_bg:user?(user.profile_bg||''):'',private_profile:user?(user.private_profile||false):false};
   S.viaTg=false;S.mustChange=!!(user&&user.must_change);
   if(user&&S.token)vApplyRole(user.role,email);
   vApplyClear();
   sv();closeModal();renderAuthHdr();
+  try{await vEnsureQs();}catch(e){}
   // если вошёл с сайта внутри Telegram — привяжем Telegram к аккаунту (через бота, с проверкой подписи)
   if(typeof isTG==='function'&&isTG()&&TG_USER&&email.indexOf('tg_')!==0){
     try{await vTgLink();}catch(e){}
@@ -3307,12 +3590,8 @@ function renderAchievements(){
   el.innerHTML=ACHIEVEMENTS.map(function(a){
     var got=a.check(st);
     if(got)earned++;
-    return '<div class="card" style="text-align:center;padding:14px;opacity:'+(got?'1':'0.4')+';border-color:'+(got?'var(--am)':'var(--bor)')+'">'
-      +'<div style="font-size:32px;margin-bottom:6px;filter:'+(got?'none':'grayscale(1)')+'">'+a.icon+'</div>'
-      +'<div style="font-size:12px;font-weight:600">'+a.name+'</div>'
-      +'<div style="font-size:10px;color:var(--tx3);margin-top:3px">'+a.desc+'</div>'
-      +(got?'<div style="font-size:9px;color:var(--gr);margin-top:4px;font-weight:600">ПОЛУЧЕНО</div>':'')
-      +'</div>';
+    return '<div class="ach'+(got?' got':'')+'"><span class="ach-ic">'+a.icon+'</span><b>'+esc(a.name)+'</b><small>'+esc(a.desc)+'</small>'
+      +(got?'<span class="ach-ok" aria-label="получено"><i class="ti ti-check"></i></span>':'')+'</div>';
   }).join('');
   var hdr=document.getElementById('achHdr');
   if(hdr)hdr.textContent='Достижения ('+earned+'/'+ACHIEVEMENTS.length+')';
@@ -3344,11 +3623,8 @@ async function renderJackpot(){
   if(!z)return;
   var amt=await loadJackpot();
   if(amt<=0){z.innerHTML='';return;}
-  z.innerHTML='<div class="card" style="background:linear-gradient(120deg,#5c4400,#d4af37,#fff3b0,#d4af37,#5c4400);background-size:300% 300%;animation:bgshift 6s ease infinite;text-align:center;padding:16px;margin-bottom:14px;box-shadow:0 0 24px rgba(212,175,55,.4);position:relative;overflow:hidden">'
-    +'<div style="font-size:40px;margin-bottom:2px;animation:giftBounce 1.5s ease infinite;display:inline-block"></div>'
-    +'<div style="font-size:11px;color:rgba(0,0,0,.75);font-weight:700;letter-spacing:1px">КОПИЛКА ДЖЕКПОТА</div>'
-    +'<div style="font-size:32px;font-weight:800;color:#3a2800;text-shadow:0 1px 2px rgba(255,255,255,.4)">'+amt+' <i class="ti ti-coin"></i></div>'
-    +'<div style="font-size:10px;color:rgba(0,0,0,.65)">Копится с каждой игры · разыгрывает админ</div></div>';
+  z.innerHTML='<div class="du-jack"><span class="lb-blob iod"><i class="ti ti-coins"></i></span>'
+    +'<span class="du-jack-t"><b>Джекпот: '+amt+' '+vplural(amt,'монета','монеты','монет')+'</b><small>10% с каждой игры на ставку. Разыгрывает администратор.</small></span></div>';
 }
 async function addToJackpot(n){
   if(!dbOK||n<=0)return;
@@ -3735,6 +4011,7 @@ async function admResetJackpot(){
 
 
 function renderDuels(){
+  try{vDuelsHead();}catch(e){}
   if(!S.user){showLoginWall();return;}
   document.getElementById('duelActive').innerHTML='';
   document.getElementById('duelIncoming').innerHTML='';
@@ -3945,6 +4222,7 @@ function duelEnterMatch(d){
   var pgOn=document.getElementById('pg-duels');
   if(!pgOn||!pgOn.classList.contains('on'))go('duels');
   duelStopPolling(); // остановим общий опрос, запустим матч-опрос
+  try{vDuelsHead();}catch(e){}
   duelResume();
 }
 // показать то место матча, где я остановился: вопрос или ожидание соперника
@@ -4383,6 +4661,7 @@ function applyGlobalBg(pg){
   }else gb.style.display='none';
 }
 async function renderProfile(){
+  if(S.user&&S.user.remind_hour===undefined&&VITA_UW!==false)vSyncMeSoon(); // узнать у сервера настройку напоминаний
   if(!S.user){showLoginWall();return;}
   var b=document.getElementById('profileBody');
   b.innerHTML='<div style="color:var(--tx3);padding:10px">Загрузка профиля...</div>';
@@ -4471,6 +4750,7 @@ async function renderProfile(){
   html+='<div class="lb-h2"><h2>Настройки</h2></div><div class="pf-set">'
     +'<button onclick="go(\'shop\')"><i class="ti ti-shopping-bag"></i>Магазин<span class="r">рамки и фоны</span></button>'
     +'<button onclick="profTogglePrivacy()"><i class="ti '+(me.private_profile?'ti-lock':'ti-lock-open')+'"></i>Статистика в профиле<span class="r">'+(me.private_profile?'скрыта':'видна всем')+'</span></button>'
+    +(typeof S.user.remind_hour==='number'?'<button onclick="vRemindOpen()"><i class="ti ti-bell"></i>Напоминание о плане<span class="r">'+vRemindLabel()+'</span></button>':'')
     +'<button onclick="toggleSound()"><i class="ti ti-volume"></i>Звуки<span class="r" id="sndBtn">'+(S.sound===false?'выключены':'включены')+'</span></button>'
     +'<button onclick="toggleTheme()"><i class="ti ti-moon"></i>Тема<span class="r">'+(S.dark?'тёмная':'светлая')+'</span></button>'
     +(String(me.email||'').indexOf('tg_')!==0?'<button onclick="openChangePassword(false)"><i class="ti ti-key"></i>Сменить пароль</button>':'')
@@ -4478,6 +4758,7 @@ async function renderProfile(){
     +'<button class="danger" onclick="doLogout()"><i class="ti ti-logout"></i>Выйти</button>'
     +'</div>'+link+'<div style="height:12px"></div>';
   b.innerHTML=html;
+  if(S.user&&S.user.remind_hour===undefined&&S.token){try{vSyncMeSoon();}catch(e){}}
 }
 
 async function viewProfile(emailEnc){
@@ -4492,7 +4773,15 @@ async function viewProfile(emailEnc){
     // Закрытый профиль: НЕ грузим тяжёлую статистику (быстро, без лагов)
     var canSeeStats=!u.private_profile||S.isSuper||S.isAdm;
     var prog=[],tA=0,tC=0,mastered=0,acc=0,solved=0,exams=[],dW=0,dL=0,dT=0;
-    if(canSeeStats){
+    var PS=null;
+    if(canSeeStats&&VITA_UR!==false){try{PS=await sbRpc('profile_stats',{p_token:vReadToken(),p_email:email});}catch(eP){if(!eP.missing)throw eP;}}
+    if(PS&&PS.private)canSeeStats=false;
+    else if(PS){
+      // итоги посчитал сервер
+      tA=+PS.attempts||0;tC=+PS.correct||0;mastered=+PS.mastered||0;solved=+PS.solved||0;acc=tA?Math.round(tC/tA*100):0;
+      exams=new Array(+PS.exams||0);dW=+PS.wins||0;dL=+PS.losses||0;dT=+PS.ties||0;
+    }
+    if(canSeeStats&&!PS){
       prog=await sbGet('progress','user_email=eq.'+encodeURIComponent(email)+'&select=correct_count,attempt_count');
       prog.forEach(function(p){tA+=p.attempt_count;tC+=p.correct_count;if(p.attempt_count>=2&&p.correct_count/p.attempt_count>=0.8)mastered++;});
       acc=tA?Math.round(tC/tA*100):0;
@@ -4955,14 +5244,14 @@ function fcFilter(){
   var selT=SELECTED_TOPICS.flashcards||[];
   FCP=getQS().filter(function(q){return(s==='all'||q.s===s)&&(selT.length===0||selT.indexOf(q.t)>=0);});
   FCI=0;FCf=false;
-  document.getElementById('fcCnt').textContent=FCP.length+' карточек';
+  document.getElementById('fcCnt').textContent=FCP.length+' '+vplural(FCP.length,'карточка','карточки','карточек');
   fcRender();
 }
 function fcRender(){
   if(!FCP.length){document.getElementById('fcQ').textContent='Нет карточек';return;}
   var q=FCP[FCI];var p=S.prog[q.id]||{c:0,a:0};
   var n=Math.min(FCP.length,50);
-  document.getElementById('fcDots').innerHTML=FCP.slice(0,n).map(function(fq,i){var cl='pd';if(i===FCI%n)cl+=' cur';else if(S.prog[fq.id]&&S.prog[fq.id].a>0)cl+=' done';return '<div class="'+cl+'"></div>';}).join('');
+  document.getElementById('fcDots').innerHTML='<i style="width:'+(FCP.length?Math.max(2,Math.round((FCI+1)/FCP.length*100)):0)+'%"></i>';
   document.getElementById('fcPos').textContent=(FCI+1)+'/'+FCP.length;
   document.getElementById('fcTp').textContent=q.t;
   document.getElementById('fcQ').textContent=q.q;
@@ -5152,7 +5441,6 @@ function trPickTopics(){
     trInit();
   });
 }
-function trInit(){TRss={c:0,w:0};trNext();}
 function shuffleOpts(q){
   // Returns {opts:[...], correctIdx:N} with options in random order
   var idx=q.o.map(function(_,i){return i;});
@@ -5170,6 +5458,14 @@ function trSetMode(m){
   });
   var active={all:'trModeAll',errors:'trModeErr',fav:'trModeFav'}[m];
   var ab=document.getElementById(active);if(ab)ab.className='btn bbl bsm';
+  trNext();
+}
+function trInit(){
+  TRss={c:0,w:0};
+  // не в плане — подсветить выбранный режим
+  if(TR_MODE!=='plan'){['All','Err','Fav'].forEach(function(suf){var b=document.getElementById('trMode'+suf);if(b)b.className='btn bgh bsm';});
+    var ab=document.getElementById({all:'trModeAll',errors:'trModeErr',fav:'trModeFav'}[TR_MODE]);if(ab)ab.className='btn bbl bsm';}
+  try{vLoadLessonLinks();}catch(e){}
   trNext();
 }
 async function trToggleFav(){
@@ -5197,7 +5493,13 @@ function trNext(){
   var s=document.getElementById('trS')?document.getElementById('trS').value:'all';
   var selT=SELECTED_TOPICS.trainer||[];
   var QS=getQS();
-  var pool=QS.filter(function(q){return (s==='all'||q.s===s)&&(selT.length===0||selT.indexOf(q.t)>=0);});
+  // режим «План на сегодня»: вопросы идут по списку плана, фильтры не действуют
+  var forced=null;
+  if(TR_MODE==='plan'){forced=vPlanNextQ();if(!forced){vPlanFinish();vTrModeUi();if(TR_MODE==='plan')return;}}
+  var pool=forced?[forced]:QS.filter(function(q){return (s==='all'||q.s===s)&&(selT.length===0||selT.indexOf(q.t)>=0);});
+  try{vTrModeUi();}catch(e){}
+  var tl=document.getElementById('trLesson');if(tl)tl.innerHTML='';
+  var rl=document.getElementById('trRepLink');if(rl)rl.style.display='none';
   // Режим: errors = где ошибался (точность<100% или streak сброшен), fav = закладки
   if(TR_MODE==='errors'){
     pool=pool.filter(function(q){var p=S.prog[q.id];return p&&p.a>0&&(p.c<p.a);});
@@ -5249,6 +5551,12 @@ async function trAns(idx){
   document.getElementById('trAiWrap').style.display='';
   document.getElementById('trNxt').style.display='';
   if(!ok)document.getElementById('trAi').textContent='Нажми «Почему так?» — объясню, в чём ошибка.';
+  var rl=document.getElementById('trRepLink');if(rl)rl.style.display='';
+  // ошибся — предложим прочитать урок по этой теме, если он есть
+  if(!ok){
+    var les=vLessonFor(TRC),tl=document.getElementById('trLesson');
+    if(les&&tl)tl.innerHTML='<button class="tr-lesson" onclick="vOpenLesson('+(+les.id)+','+(+les.subject_id)+')"><i class="ti ti-book-2"></i><span><b>Прочитать тему</b><small>'+esc(les.title)+'</small></span><i class="ti ti-chevron-right"></i></button>';
+  }
   // Показать прогресс освоения вопроса
   var p=S.prog[TRC.id];var st=p?(p.streak||0):0;
   var trTbdg=document.getElementById('trTbdg');
@@ -5283,6 +5591,7 @@ async function trExplain(){
 
 var EXP=[],EXA={},EXI=0,EXtmr=null,EXsecs=0;
 function exTopics(){
+  try{vExInit();}catch(e){}
   SELECTED_TOPICS.exam=[];
   var lbl=document.getElementById('exTbtnLbl');if(lbl)lbl.textContent='Все темы';
 }
@@ -5310,6 +5619,7 @@ function exStart(){
   document.getElementById('exSetup').style.display='none';
   document.getElementById('exRun').style.display='';
   document.getElementById('exRes').style.display='none';
+  var t0=document.getElementById('exTimer');if(t0){t0.textContent=String(mins).padStart(2,'0')+':00';t0.className='timer';}
   EXtmr=setInterval(function(){
     EXsecs--;
     var mm=String(Math.floor(EXsecs/60)).padStart(2,'0');
@@ -5405,10 +5715,10 @@ function renderProg(){
 
   // bento статы
   h+='<div class="prog-bento">'
-    +'<div class="pgb pgb-g"><div class="pgb-v">'+tC+'</div><div class="pgb-l">верно</div></div>'
-    +'<div class="pgb pgb-r"><div class="pgb-v">'+tWrong+'</div><div class="pgb-l">ошибок</div></div>'
-    +'<div class="pgb pgb-b"><div class="pgb-v">'+tSolved+'</div><div class="pgb-l">вопросов</div></div>'
-    +'<div class="pgb pgb-a"><div class="pgb-v">'+S.hist.length+'</div><div class="pgb-l">экзаменов</div></div>'
+    +'<div class="pgb pgb-g"><span class="lb-blob mal"><i class="ti ti-check"></i></span><div class="pgb-v">'+vNum(tC)+'</div><div class="pgb-l">верных ответов</div></div>'
+    +'<div class="pgb pgb-r"><span class="lb-blob eos"><i class="ti ti-x"></i></span><div class="pgb-v">'+vNum(tWrong)+'</div><div class="pgb-l">ошибок</div></div>'
+    +'<div class="pgb pgb-b"><span class="lb-blob meth"><i class="ti ti-list-check"></i></span><div class="pgb-v">'+vNum(tSolved)+'</div><div class="pgb-l">вопросов решено</div></div>'
+    +'<div class="pgb pgb-a"><span class="lb-blob iod"><i class="ti ti-certificate"></i></span><div class="pgb-v">'+S.hist.length+'</div><div class="pgb-l">'+vplural(S.hist.length,'экзамен','экзамена','экзаменов')+'</div></div>'
   +'</div>';
 
   // предметы с кольцами
@@ -5451,8 +5761,11 @@ async function renderLB(){
   if(dbOK){
     try{
       var users=await sbGet('users','status=eq.active&select=email,name,avatar,group_name,frame,frames,owned_items,profile_bg,hidden_from_lb,private_profile,bonus_score');
-      var prog=await sbGetAll('progress','select=user_email,correct_count,attempt_count');
-      var exams=await sbGetAll('exam_history','select=user_email');
+      // новая база: сервер отдаёт готовые суммы по каждому студенту (чужой прогресс целиком больше не читается)
+      var LBS=null;
+      if(VITA_UR!==false){try{LBS=await sbRpc('leaderboard_stats',{p_token:vReadToken()});}catch(eL){if(!eL.missing)throw eL;}}
+      var prog=LBS?[]:await sbGetAll('progress','select=user_email,correct_count,attempt_count');
+      var exams=LBS?[]:await sbGetAll('exam_history','select=user_email');
       var byUser={};
       prog.forEach(function(p){
         if(!byUser[p.user_email])byUser[p.user_email]={c:0,a:0};
@@ -5465,10 +5778,14 @@ async function renderLB(){
       prog.forEach(function(p){solvedCount[p.user_email]=(solvedCount[p.user_email]||0)+1;});
       // Победы в дуэлях — бонус к рейтингу
       var duelWins={};
-      try{
-        var fduels=await sbGet('duels','status=eq.finished&select=winner_email');
-        fduels.forEach(function(d){if(d.winner_email)duelWins[d.winner_email]=(duelWins[d.winner_email]||0)+1;});
-      }catch(e){}
+      if(LBS){
+        LBS.forEach(function(r){byUser[r.user_email]={c:+r.c||0,a:+r.a||0};solvedCount[r.user_email]=+r.solved||0;examCount[r.user_email]=+r.exams||0;duelWins[r.user_email]=+r.wins||0;});
+      }else{
+        try{
+          var fduels=await sbGet('duels','status=eq.finished&select=winner_email');
+          fduels.forEach(function(d){if(d.winner_email)duelWins[d.winner_email]=(duelWins[d.winner_email]||0)+1;});
+        }catch(e){}
+      }
       users.forEach(function(u){
         if(u.hidden_from_lb)return; // убран из рейтинга админом
         var st=byUser[u.email]||{c:0,a:0};
@@ -6038,7 +6355,9 @@ var ADM_SECTIONS={
 var ADM_GROUPS=[['people','Люди','заявки и доступ'],['content','Контент','что видят студенты'],['shop','Награды и магазин',''],['data','Цифры','']];
 function admHome(){
   var el=document.getElementById('admHome');if(!el)return;
-  var cnt={pending:(document.getElementById('pendCnt')||{}).textContent||'',requests:(document.getElementById('reqCnt')||{}).textContent||''};
+  var cnt={pending:(document.getElementById('pendCnt')||{}).textContent||'',requests:(document.getElementById('reqCnt')||{}).textContent||'',questions:(typeof ADM_REPORTS!=='undefined'&&ADM_REPORTS.length)||''};
+  // сообщения студентов об ошибках в вопросах — подгружаем один раз и показываем число на карточке «Вопросы»
+  if(!admHome._rep&&dbOK&&S.isAdm){admHome._rep=1;admReportsLoad().then(function(){if(ADM_REPORTS.length)admHome();}).catch(function(){});}
   el.innerHTML=ADM_GROUPS.map(function(g){
     var keys=Object.keys(ADM_SECTIONS).filter(function(k){var s=ADM_SECTIONS[k];return s.g===g[0]&&(!s.sup||S.isSuper);});
     if(!keys.length)return '';
@@ -7081,7 +7400,39 @@ async function admApproveReq(id,action,email){
 async function admDenyReq(id){
   try{await sbDel('pending_actions','id=eq.'+id);admRequests();}catch(e){vAlert(e.message);}
 }
+// ===== Сообщения студентов об ошибках в вопросах =====
+var ADM_REPORTS=[],ADM_V11=null;
+var V_REP_LABEL={answer:'не тот ответ отмечен правильным',typo:'опечатка',unclear:'вопрос непонятный',other:'другое'};
+async function admReportsLoad(){
+  try{ADM_REPORTS=(await vRpc('admin_reports',{p_token:vAdminToken()}))||[];ADM_V11=true;}
+  catch(e){if(e.missing)ADM_V11=false;ADM_REPORTS=[];}
+  var b=document.getElementById('repCnt');if(b)b.textContent=ADM_REPORTS.length||'';
+  return ADM_REPORTS;
+}
+function admReportsCard(){
+  if(ADM_V11===false||!ADM_REPORTS.length)return '';
+  var h='<div class="adm-auto adm-reports"><div class="adm-auto-t" style="width:100%"><b><i class="ti ti-flag" style="color:var(--eos-t)"></i> Студенты нашли ошибки · '+ADM_REPORTS.length+'</b>'
+    +'<span>Проверь вопрос. «Исправлено» — закроет сообщения и поблагодарит студентов (+5 монет каждому). «Не ошибка» — просто закроет.</span>';
+  h+='<div class="adm-code-list">'+ADM_REPORTS.map(function(r){
+    var q=r.q||{},opts=q.options||[],qid=esc(String(r.question_id)).replace(/'/g,'');
+    return '<div class="adm-code adm-rep"><div class="adm-rep-q">'+(q.question?esc(q.question):'<i>Вопрос удалён</i>')+'</div>'
+      +(opts.length?'<ol class="adm-rep-o">'+opts.map(function(o,i){return '<li'+(i===q.correct_index?' class="ok"':'')+'>'+esc(String(o))+(i===q.correct_index?' <span>— отмечен верным</span>':'')+'</li>';}).join('')+'</ol>':'')
+      +'<div class="adm-rep-who">'+(r.items||[]).map(function(it){return '<div><b>'+esc(it.name||it.email)+'</b>: '+esc(V_REP_LABEL[it.reason]||it.reason)+(it.comment?' — «'+esc(it.comment)+'»':'')+'</div>';}).join('')+'</div>'
+      +'<div class="adm-code-a">'
+      +(q.question?'<button class="btn bbl bsm" onclick="admEditQM(\''+qid+'\')"><i class="ti ti-pencil"></i>Открыть вопрос</button>':'')
+      +'<button class="btn bgr bsm" onclick="admReportDone(\''+qid+'\',\'fixed\')"><i class="ti ti-check"></i>Исправлено</button>'
+      +'<button class="btn bgh bsm" onclick="admReportDone(\''+qid+'\',\'dismissed\')">Не ошибка</button></div></div>';
+  }).join('')+'</div>';
+  return h+'</div></div>';
+}
+async function admReportDone(qid,action){
+  try{var n=await vRpc('admin_report_resolve',{p_token:vAdminToken(),p_qid:qid,p_action:action});
+    toast2(action==='fixed'?'Закрыто. Поблагодарили студентов: '+n:'Закрыто');await admQuestions();}
+  catch(e){vAlert(e.message);}
+}
 async function admQuestions(keep){
+  if(vQsAreStubs()){try{await vEnsureQs();}catch(e){}} // админ вошёл по паролю: в памяти были только счётчики
+  if(dbOK)await admReportsLoad();
   var prevF=val('qFs')||'all',prevS=val('qSr')||'',prevB=val('qBatch')||'all';
   if(keep&&keep.subject)prevF=keep.subject;
   var QS=getQS();var cqs=[];if(dbOK){try{cqs=await sbGetAll('custom_questions','order=created_at.asc');}catch(e){}}
@@ -7090,8 +7441,8 @@ async function admQuestions(keep){
   var batchOpts='<option value="all">— партия (массовые) —</option>';
   batches.forEach(function(bn){batchOpts+='<option value="'+bn.replace(/"/g,'')+'">'+bn+'</option>';});
   var delOpen=!!(document.getElementById('qDelDet')||{}).open;
-  document.getElementById('admQuestions').innerHTML=
-    '<div class="adm-qbar"><button class="btn bbl bsm" onclick="admAddQM()"><i class="ti ti-plus"></i>Добавить вопрос</button><button class="btn bgr bsm" onclick="admBulkM()"><i class="ti ti-upload"></i>Массово</button><span style="font-size:13px;color:var(--tx3);margin-left:auto">Всего '+vNum(QS.length)+'</span></div>'
+  document.getElementById('admQuestions').innerHTML=admReportsCard()
+    +'<div class="adm-qbar"><button class="btn bbl bsm" onclick="admAddQM()"><i class="ti ti-plus"></i>Добавить вопрос</button><button class="btn bgr bsm" onclick="admBulkM()"><i class="ti ti-upload"></i>Массово</button><span style="font-size:13px;color:var(--tx3);margin-left:auto">Всего '+vNum(QS.length)+'</span></div>'
     +'<div class="adm-qbar"><select id="qFs" onchange="admQF()" aria-label="Предмет">'+vSubjOptions('<option value="all">Все предметы</option>','<option value="custom">Только добавленные вручную</option>')+'</select><input id="qSr" placeholder="Поиск по вопросу или теме" oninput="admQF()" aria-label="Поиск"></div>'
     +'<details class="adm-qdet" id="qStatDet" ontoggle="if(this.open)admQStatLoad()"><summary><i class="ti ti-chart-bar"></i> Сводка по предметам</summary><div id="qStatBox" style="padding-top:10px;color:var(--tx3);font-size:13px">Считаю…</div></details>'
     +'<div id="qAiCard"></div>'
@@ -8189,6 +8540,13 @@ function renderTopicReader(el){
     h+='<div class="final-test" id="finalTest"><div class="ft-head"><div class="ft-ic"><i class="ti ti-checklist"></i></div><div><div class="ft-t">Проверь себя</div><div class="ft-s">'+quizzes.length+' '+vplural(quizzes.length,'вопрос','вопроса','вопросов')+' · ответь чтобы закрепить</div></div></div><div id="ftQuestions"></div></div>';
   }
   h+='<div id="finalTestZone"></div>';
+  // вопросы из тестов по этой теме (связь задаёт админ или совпадает название)
+  var tf=vTestFor(t);
+  if(tf){
+    var tfDone=getQS().filter(function(q){var p=S.prog[q.id];return q.s===tf.s&&q.t===tf.t&&p&&p.a>0;}).length;
+    h+='<button class="study-train" onclick="vTrainTopic(\''+esc(tf.s).replace(/'/g,'')+'\',\''+esc(tf.t).replace(/'/g,'')+'\')"><span class="st-ic"><i class="ti ti-target-arrow"></i></span>'
+      +'<span class="st-tx"><b>Закрепи тему в тестах</b><small>'+tf.n+' '+vplural(tf.n,'вопрос','вопроса','вопросов')+' по этой теме'+(tfDone?' · решено '+tfDone:'')+'</small></span><i class="ti ti-chevron-right"></i></button>';
+  }
   // навигация
   var idx=ST.topics.findIndex(function(x){return x.id===t.id;});
   var nextT=idx>=0&&idx<ST.topics.length-1?ST.topics[idx+1]:null;
@@ -8708,14 +9066,42 @@ function saEditTopic(id){
     +'<div class="field"><label>Надзаголовок (категория)</label><input id="saTopKicker" value="'+esc(t.kicker)+'" placeholder="Клеточная патология"></div>'
     +'<div class="field"><label>Краткое описание</label><textarea id="saTopLede" placeholder="О чём тема в двух словах">'+esc(t.lede)+'</textarea></div>'
     +'<div class="field"><label>Время чтения (мин)</label><input id="saTopMins" type="number" value="'+(t.read_minutes||5)+'"></div>'
+    +'<div class="field sa-link"><label>Вопросы в тестах по этой теме</label>'
+    +'<p class="sa-link-n">После урока студент увидит кнопку «Закрепи тему в тестах», а при ошибке в тесте — «Прочитать тему». Если не выбирать, связь найдётся сама, когда название урока совпадает с темой в тестах.</p>'
+    +'<select id="saTopTS" onchange="saTopicLinkTopics(\'\')" aria-label="Предмет в тестах">'+saTopicSubjOpts(t.test_subject||'')+'</select>'
+    +'<select id="saTopTT" aria-label="Тема в тестах" style="margin-top:8px"></select></div>'
     +'<button class="btn-main" onclick="saSaveTopic('+(id||0)+')"><i class="ti ti-device-floppy"></i> Сохранить</button></div></div>';
   document.getElementById('modalRoot').innerHTML=h;
+  saTopicLinkTopics(t.test_topic||'');
+}
+// списки для связи урока с тестами: предметы и темы берём из банка вопросов
+function saTopicSubjOpts(cur){
+  var keys={};getQS().forEach(function(q){keys[q.s]=1;});
+  return '<option value="">— не связывать (искать по названию) —</option>'+Object.keys(keys).map(function(k){return '<option value="'+esc(k)+'"'+(k===cur?' selected':'')+'>'+esc(vSubjLabel(k))+'</option>';}).join('');
+}
+function saTopicLinkTopics(cur){
+  var s=val('saTopTS'),el=document.getElementById('saTopTT');if(!el)return;
+  if(!s){el.innerHTML='';el.style.display='none';return;}
+  var cnt={};getQS().forEach(function(q){if(q.s===s)cnt[q.t]=(cnt[q.t]||0)+1;});
+  el.style.display='';
+  el.innerHTML='<option value="">— выбери тему —</option>'+Object.keys(cnt).sort().map(function(t){return '<option value="'+esc(t)+'"'+(t===cur?' selected':'')+'>'+esc(t)+' · '+cnt[t]+'</option>';}).join('');
 }
 function saSaveTopic(id){
   var rec={subject_id:SA.subject.id,number:parseInt(val('saTopNum'))||1,title:val('saTopTitle'),kicker:val('saTopKicker'),lede:val('saTopLede'),read_minutes:parseInt(val('saTopMins'))||5};
+  var lts=val('saTopTS'),ltt=val('saTopTT');
+  if(lts&&!ltt){toast2('Выбери тему в тестах или сними связь');return;}
+  rec.test_subject=lts||null;rec.test_topic=lts?ltt:null;
+  V_LINKS=null;
   if(!rec.title){toast2('Введите название');return;}
-  if(id){sbPatch('topics','id=eq.'+id,rec).then(function(){closeModal();admStudyRender();toast2('Сохранено');});}
-  else{rec.sort_order=rec.number;sbPost('topics',rec).then(function(){closeModal();admStudyRender();toast2('Добавлено');});}
+  if(!id)rec.sort_order=rec.number;
+  var save=function(r){return id?sbPatch('topics','id=eq.'+id,r):sbPost('topics',r);};
+  save(rec).catch(function(e){
+    if(/test_subject|test_topic/.test(String(e.message))){var r2=Object.assign({},rec);delete r2.test_subject;delete r2.test_topic;
+      return save(r2).then(function(){if(lts)vAlert('Тема сохранена, но связь с тестами появится после обновления базы (security_v11.sql).');});}
+    throw e;
+  }).then(function(){closeModal();admStudyRender();toast2(id?'Сохранено':'Добавлено');
+      if(lts)vLoadLessonLinks(true).then(function(){if(V_LINK_COLS===false)vAlert('Тема сохранена, но связь с тестами появится после обновления базы (security_v11.sql).');});})
+    .catch(function(e){vAlert('Не сохранилось: '+e.message);});
 }
 function saDelTopic(id){if(!confirm('Удалить тему и её материал?'))return;sbDel('topics','id=eq.'+id).then(function(){admStudyRender();toast2('Удалено');});}
 
@@ -8963,6 +9349,224 @@ function vRankBadge(r,size){
   return '<span class="lb-badge rk-'+r.tone+'" style="'+(size?'width:'+size+'px;height:'+size+'px':'')+'"><i class="ti '+r.icon+'"></i></span>';
 }
 
+// ===== ПЛАН НА СЕГОДНЯ: что повторить и сколько новых =====
+var PLAN_REVIEW_CAP=20,PLAN_NEW_CAP=10;
+function vHash(s){var h=0;for(var i=0;i<s.length;i++){h=(h*31+s.charCodeAt(i))|0;}return h;}
+function vPlanBuild(){
+  var QS=getQS().filter(function(q){return q.q!=null;}),today=new Date().toISOString().slice(0,10),day=vDayKey();
+  // 1) повторение: всё, чему подошёл срок. Сначала ошибки, потом самые давние.
+  var rev=QS.filter(function(q){var p=S.prog[q.id];return p&&p.a>0&&p.due&&p.due<=today;});
+  rev.sort(function(a,b){var pa=S.prog[a.id],pb=S.prog[b.id],sa=(pa.streak||0)>0?1:0,sb=(pb.streak||0)>0?1:0;
+    if(sa!==sb)return sa-sb;return pa.due<pb.due?-1:pa.due>pb.due?1:0;});
+  rev=rev.slice(0,PLAN_REVIEW_CAP);
+  // 2) новые: сначала из тем, которые уже начал; порядок на день один и тот же
+  var started={};QS.forEach(function(q){var p=S.prog[q.id];if(p&&p.a)started[q.s+'|'+q.t]=1;});
+  var fresh=QS.filter(function(q){var p=S.prog[q.id];return !p||!p.a;});
+  fresh.sort(function(a,b){var sa=started[a.s+'|'+a.t]?0:1,sb=started[b.s+'|'+b.t]?0:1;
+    if(sa!==sb)return sa-sb;return vHash(a.id+day)-vHash(b.id+day);});
+  fresh=fresh.slice(0,PLAN_NEW_CAP);
+  return {date:day,ids:rev.map(function(q){return q.id;}).concat(fresh.map(function(q){return q.id;})),
+    rev:rev.length,neu:fresh.length,done:{},pn:Object.keys(S.prog||{}).length};
+}
+function vPlan(){
+  if(!S.user)return null;
+  var pn=Object.keys(S.prog||{}).length;
+  var stale=!S.plan||!S.plan.ids||S.plan.date!==vDayKey()
+    ||(!Object.keys(S.plan.done||{}).length&&S.plan.pn!==pn);   // прогресс подгрузился позже — пересобрать
+  if(stale){
+    if(!getQS().length||(typeof vQsAreStubs==='function'&&vQsAreStubs()))return null;
+    S.plan=vPlanBuild();sv();
+  }
+  return S.plan;
+}
+function vPlanLeft(pl){pl=pl||vPlan();return pl?pl.ids.filter(function(id){return !pl.done[id];}):[];}
+function vPlanNextQ(){
+  var pl=vPlan(),left=vPlanLeft(pl);if(!left.length)return null;
+  var by={};getQS().forEach(function(q){by[q.id]=q;});
+  for(var i=0;i<left.length;i++){if(by[left[i]]&&by[left[i]].q!=null)return by[left[i]];pl.done[left[i]]=1;} // вопрос удалили — пропускаем
+  sv();return null;
+}
+// ответил на вопрос из плана (в любом режиме) — отмечаем
+function vPlanMark(qid){
+  var pl=S.plan;if(!pl||!pl.ids||pl.date!==vDayKey()||pl.ids.indexOf(qid)<0||pl.done[qid])return;
+  pl.done[qid]=1;sv();
+}
+function vPlanStart(){
+  if(vIsLocked('trainer')){showLoginWall();return;}
+  var pl=vPlan();
+  if(!pl||!pl.ids.length||!vPlanLeft(pl).length){vTrainerFree();return;}
+  TR_MODE='plan';vGo('trainer');
+}
+function vTrainerFree(){
+  if(vIsLocked('trainer')){showLoginWall();return;}
+  if(typeof TR_MODE!=='undefined'&&TR_MODE==='plan')TR_MODE='all';
+  vGo('trainer');
+}
+// план закончился: поздравить один раз и выйти в обычный режим
+function vPlanFinish(){
+  var pl=S.plan;TR_MODE='all';
+  if(pl&&!pl.fin&&pl.ids.length){
+    pl.fin=1;sv();
+    var days=S.daily?(S.daily.streakDays||0):0;
+    try{playSound('correct');}catch(e){}
+    showModal('План выполнен','<div class="ap"><div class="ap-ic ok"><i class="ti ti-circle-check"></i></div>'
+      +'<h3>На сегодня всё</h3><p>'+(pl.rev?'Повторено: <b>'+pl.rev+'</b>. ':'')+(pl.neu?'Новых вопросов: <b>'+pl.neu+'</b>. ':'')
+      +(days>1?'Серия — <b>'+days+' '+vplural(days,'день','дня','дней')+'</b> подряд.':'Завтра план соберётся заново — повторишь то, что пора.')+'</p>'
+      +'<button class="btn bgr bfu" onclick="closeModal();vGo(\'home\')">На главную</button>'
+      +'<button class="btn bgh bfu" onclick="closeModal();vTrainerFree()">Порешать ещё</button></div>');
+    return;
+  }
+  vGo('home');
+}
+// полоска плана над вопросом в тренажёре + скрытие фильтров
+function vTrModeUi(){
+  var bar=document.getElementById('trPlanBar'),fl=document.getElementById('trFilters');
+  var on=(typeof TR_MODE!=='undefined'&&TR_MODE==='plan');
+  if(fl)fl.style.display=on?'none':'';
+  if(!bar)return;
+  if(!on){bar.style.display='none';bar.innerHTML='';return;}
+  var pl=vPlan()||{ids:[],done:{}},total=pl.ids.length,done=total-vPlanLeft(pl).length;
+  bar.style.display='';
+  bar.innerHTML='<div class="tr-plan-h"><b>План на сегодня</b><span>'+(done+1>total?total:done+1)+' из '+total+'</span>'
+    +'<button onclick="trSetMode(\'all\')" aria-label="Выйти из плана"><i class="ti ti-x"></i></button></div>'
+    +'<div class="tr-plan-bar" role="progressbar" aria-valuemin="0" aria-valuemax="'+total+'" aria-valuenow="'+done+'"><i style="width:'+(total?Math.round(done/total*100):0)+'%"></i></div>';
+}
+// карточка плана на главной
+function vPlanCta(QS){
+  var pl=vPlan(),solved=QS.filter(function(q){var p=S.prog[q.id];return p&&p.a>0;}).length;
+  var deco='<svg class="deco" width="150" height="130" viewBox="0 0 150 130" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3"><path d="M45 10l26 15v30l-26 15-26-15V25z"/><path d="M97 40l26 15v30l-26 15-26-15V55z"/><path d="M45 70l26 15v30l-26 15-26-15V85z"/></svg>';
+  var play='<span class="lb-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5.2v13.6a1 1 0 0 0 1.5.86l11-6.8a1 1 0 0 0 0-1.72l-11-6.8A1 1 0 0 0 7 5.2z"/></svg></span>';
+  if(!pl||!pl.ids.length){
+    // плана нет (гость, вопросы ещё не загрузились или всё решено и повторять нечего)
+    return '<button class="lb-cta" onclick="vTrainerFree()">'+deco
+      +'<span class="lb-cta-t"><span class="lb-pill">Тренажёр</span><b>'+(solved?'Продолжить тест':'Начать тест')+'</b>'
+      +'<span>'+(solved?'Решено '+vNum(solved)+' из '+vNum(QS.length):vNum(QS.length)+' '+vplural(QS.length,'вопрос','вопроса','вопросов')+' · все предметы')+'</span></span>'+play+'</button>';
+  }
+  var total=pl.ids.length,left=vPlanLeft(pl).length,done=total-left,mins=Math.max(1,Math.round(left*25/60));
+  if(!left){
+    return '<button class="lb-cta done" onclick="vTrainerFree()">'+deco
+      +'<span class="lb-cta-t"><span class="lb-pill"><i class="ti ti-check"></i> План выполнен</span><b>На сегодня всё</b>'
+      +'<span>'+total+' '+vplural(total,'вопрос','вопроса','вопросов')+' · можно порешать ещё</span></span>'+play+'</button>';
+  }
+  var parts=[];
+  if(pl.rev)parts.push(pl.rev+' повторить');
+  if(pl.neu)parts.push(pl.neu+' '+vplural(pl.neu,'новый','новых','новых'));
+  return '<button class="lb-cta" onclick="vPlanStart()" aria-label="План на сегодня: '+parts.join(', ')+', сделано '+done+' из '+total+'">'+deco
+    +'<span class="lb-cta-t"><span class="lb-pill">План на сегодня</span><b>'+(done?'Осталось '+left+' '+vplural(left,'вопрос','вопроса','вопросов'):total+' '+vplural(total,'вопрос','вопроса','вопросов'))+'</b>'
+    +'<span>'+(done?'Сделано '+done+' из '+total:parts.join(' и '))+', около '+mins+' '+vplural(mins,'минуты','минут','минут')+'</span>'
+    +'<span class="lb-cta-bar" role="presentation"><i style="width:'+Math.round(done/total*100)+'%"></i></span></span>'+play+'</button>';
+}
+// ===== УРОК ↔ ТЕМА В ТЕСТАХ =====
+var V_LINKS=null,V_LINKS_AT=0,V_LINK_COLS=null; // V_LINK_COLS=false — база ещё без security_v11.sql
+function vLinkKey(s,t){return String(s||'').toLowerCase()+'|'+String(t||'').trim().toLowerCase();}
+async function vLoadLessonLinks(force){
+  if(!force&&V_LINKS&&Date.now()-V_LINKS_AT<300000)return V_LINKS;
+  var rows=[];
+  try{rows=await sbGet('topics','select=id,title,subject_id,test_subject,test_topic');V_LINK_COLS=true;}
+  catch(e){V_LINK_COLS=false;try{rows=await sbGet('topics','select=id,title,subject_id');}catch(e2){rows=[];}}
+  var map={},byTitle={};
+  rows.forEach(function(t){
+    if(t.test_subject&&t.test_topic)map[vLinkKey(t.test_subject,t.test_topic)]=t;          // связь задал админ
+    byTitle[String(t.title||'').trim().toLowerCase()]=t;                                   // иначе — по совпадению названия
+  });
+  V_LINKS={map:map,byTitle:byTitle,rows:rows};V_LINKS_AT=Date.now();
+  return V_LINKS;
+}
+// урок для вопроса (или null)
+function vLessonFor(q){
+  if(!q||!V_LINKS)return null;
+  return V_LINKS.map[vLinkKey(q.s,q.t)]||V_LINKS.byTitle[String(q.t||'').trim().toLowerCase()]||null;
+}
+// тема тестов для урока: {s,t,n} или null
+function vTestFor(topic){
+  if(!topic)return null;
+  var QS=getQS(),s=topic.test_subject,t=topic.test_topic;
+  if(!(s&&t)){
+    var name=String(topic.title||'').trim().toLowerCase(),hit=QS.filter(function(q){return String(q.t||'').trim().toLowerCase()===name;})[0];
+    if(!hit)return null;s=hit.s;t=hit.t;
+  }
+  var n=QS.filter(function(q){return q.s===s&&q.t===t;}).length;
+  return n?{s:s,t:t,n:n}:null;
+}
+function vOpenLesson(id,subjectId){
+  vGo('study');
+  setTimeout(function(){try{studyOpenSearchTopic(id,subjectId);}catch(e){}},150);
+}
+// открыть тренажёр на одной теме
+function vTrainTopic(s,t){
+  if(vIsLocked('trainer')){showLoginWall();return;}
+  TR_MODE='all';vGo('trainer');
+  setTimeout(function(){
+    var sel=document.getElementById('trS');if(sel&&SM[s])sel.value=s;
+    SELECTED_TOPICS.trainer=[t];
+    var lbl=document.getElementById('trTbtnLbl');if(lbl)lbl.textContent=(typeof topicBtnLabel==='function')?topicBtnLabel('trainer'):t;
+    trInit();
+  },140);
+}
+// ===== ОШИБКА В ВОПРОСЕ =====
+var V_REP_REASONS=[['answer','Правильным отмечен не тот ответ'],['typo','Опечатка или ошибка в тексте'],['unclear','Вопрос непонятный или неполный'],['other','Другое']];
+function vReportQ(){
+  if(!S.user){showLoginWall();return;}
+  if(typeof TRC==='undefined'||!TRC)return;
+  var q=TRC;
+  showModal('Ошибка в вопросе','<div class="adm-rej rq">'
+    +'<p class="rq-q">'+esc(String(q.q||'').slice(0,220))+(String(q.q||'').length>220?'…':'')+'</p>'
+    +'<div class="rq-l">Что не так?</div>'
+    +'<div class="adm-chips" role="radiogroup">'+V_REP_REASONS.map(function(r,i){return '<button class="adm-chip" role="radio" aria-checked="false" data-r="'+r[0]+'" onclick="vRepPick(this)">'+r[1]+'</button>';}).join('')+'</div>'
+    +'<textarea id="rqC" rows="3" maxlength="500" placeholder="Если знаешь, как правильно — напиши (необязательно)" aria-label="Комментарий"></textarea>'
+    +'<div id="rqErr" class="adm-msg-err" role="alert"></div>'
+    +'<button class="btn bbl bfu" onclick="vReportSend(\''+esc(String(q.id)).replace(/'/g,'')+'\',this)"><i class="ti ti-send"></i> Отправить</button>'
+    +'<button class="btn bgh bfu" onclick="closeModal()">Отмена</button></div>');
+  if(typeof vModalX==='function')vModalX(true);
+}
+function vRepPick(btn){
+  document.querySelectorAll('.rq .adm-chip').forEach(function(b){b.classList.remove('on');b.setAttribute('aria-checked','false');});
+  btn.classList.add('on');btn.setAttribute('aria-checked','true');
+}
+async function vReportSend(qid,btn){
+  var on=document.querySelector('.rq .adm-chip.on'),er=document.getElementById('rqErr');
+  if(!on){if(er)er.textContent='Выбери, что не так';return;}
+  btn.disabled=true;if(er)er.textContent='';
+  try{
+    var r=await sbRpc('report_question',{p_token:S.token||'',p_qid:qid,p_reason:on.getAttribute('data-r'),p_comment:val('rqC')||null});
+    closeModal();
+    vAlert(r==='dup'?'Ты уже сообщал об этом вопросе — админ посмотрит.':'Спасибо! Админ проверит вопрос. Если ошибка подтвердится — получишь 5 монет.');
+  }catch(e){
+    btn.disabled=false;
+    if(er)er.textContent=e.missing?'Сообщения об ошибках пока не включены.':e.message;
+  }
+}
+// ===== ДУЭЛИ: шапка «я против соперника» и меню =====
+function vDuelsHead(){
+  var h=document.getElementById('duelHead'),m=document.getElementById('duelMenu');if(!h||!m)return;
+  var busy=(typeof CUR_DUEL!=='undefined'&&CUR_DUEL)||(typeof ROOM!=='undefined'&&ROOM&&ROOM.status==='playing');
+  if(busy||!S.user){h.innerHTML='';m.innerHTML='';return;}
+  var first=String(S.user.name||'Ты').split(' ')[0];
+  h.innerHTML='<button class="du-vs" onclick="duelNewChallenge()" aria-label="Вызвать соперника на дуэль">'
+    +'<span class="du-vs-row"><span class="du-p"><span class="du-av">'+renderAvatar(S.user,60)+'</span><small>'+esc(first)+'</small></span>'
+    +'<span class="du-bolt"><i class="ti ti-bolt"></i></span>'
+    +'<span class="du-p"><span class="du-av du-q">?</span><small>соперник</small></span></span>'
+    +'<span class="du-vs-t"><b>Вызвать соперника</b><span>10 вопросов. При равном счёте побеждает тот, кто быстрее.</span></span></button>';
+  var row=function(fn,tone,icon,t,s){return '<button class="lb-row" onclick="'+fn+'"><span class="lb-blob '+tone+'"><i class="ti '+icon+'"></i></span><span class="lb-row-t"><b>'+t+'</b><span>'+s+'</span></span><i class="ti ti-chevron-right end"></i></button>';};
+  m.innerHTML='<div class="lb-modes du-menu">'
+    +row('roomCreate()','iod','ti-users-group','Комната на несколько человек','На ставку: победители делят банк')
+    +row('roomJoinPrompt()','meth','ti-login-2','Войти в комнату по коду','Код из 6 цифр даёт создатель комнаты')+'</div>';
+}
+// ===== ЭКЗАМЕН: билет — число вопросов и время выбираются кнопками =====
+var EX_CNT=[10,25,50,80],EX_MIN=[15,30,60,90];
+function vExInit(){
+  var c=document.getElementById('exC'),t=document.getElementById('exT'),cc=document.getElementById('exCChips'),tc=document.getElementById('exTChips');
+  if(!c||!t||!cc||!tc)return;
+  var cv=+c.value||25,tv=+t.value||30;
+  var chip=function(kind,v,cur,unit){return '<button class="ex-chip'+(v===cur?' on':'')+'" role="radio" aria-checked="'+(v===cur)+'" onclick="vExSet(\''+kind+'\','+v+')">'+v+(unit?'<small> '+unit+'</small>':'')+'</button>';};
+  cc.innerHTML=EX_CNT.map(function(v){return chip('c',v,cv,'');}).join('');
+  tc.innerHTML=EX_MIN.map(function(v){return chip('t',v,tv,'мин');}).join('');
+  var per=Math.round(tv*60/cv),s=document.getElementById('exSum');
+  if(s)s.innerHTML='<b>'+cv+' '+vplural(cv,'вопрос','вопроса','вопросов')+' за '+tv+' '+vplural(tv,'минуту','минуты','минут')+'</b><span>'
+    +(per>=60?Math.floor(per/60)+' мин '+(per%60?per%60+' с':''):per+' секунд')+' на вопрос. Правильные ответы покажем в конце.</span>';
+  var a=document.getElementById('exCL'),b=document.getElementById('exTL');if(a)a.textContent=cv;if(b)b.textContent=tv;
+}
+function vExSet(kind,v){var el=document.getElementById(kind==='c'?'exC':'exT');if(el)el.value=v;vExInit();}
 function renderHome(){
   renderAuthHdr();
   var QS=getQS();
@@ -8986,12 +9590,7 @@ function renderHome(){
     h+='<div class="lb-guest"><p>Войди через Telegram или почту — прогресс сохранится, появится звание, рейтинг и дуэли.</p><button class="btn bbl" onclick="openModal(\'login\')">Войти</button></div>';
   }
 
-  var solved=QS.filter(function(q){var p=S.prog[q.id];return p&&p.a>0;}).length;
-  h+='<button class="lb-cta" onclick="vOpen(\'trainer\')">'
-    +'<svg class="deco" width="150" height="130" viewBox="0 0 150 130" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3"><path d="M45 10l26 15v30l-26 15-26-15V25z"/><path d="M97 40l26 15v30l-26 15-26-15V55z"/><path d="M45 70l26 15v30l-26 15-26-15V85z"/><path d="M30 34v22M60 34v22"/></svg>'
-    +'<span class="lb-cta-t"><span class="lb-pill">Тренажёр</span><b>'+(solved?'Продолжить тест':'Начать тест')+'</b>'
-    +'<span>'+(solved?'Решено '+vNum(solved)+' из '+vNum(QS.length):vNum(QS.length)+' '+vplural(QS.length,'вопрос','вопроса','вопросов')+' · все предметы')+'</span></span>'
-    +'<span class="lb-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5.2v13.6a1 1 0 0 0 1.5.86l11-6.8a1 1 0 0 0 0-1.72l-11-6.8A1 1 0 0 0 7 5.2z"/></svg></span></button>';
+  h+=vPlanCta(QS);
 
   var duelWaiting=document.getElementById('duelBadge')&&document.getElementById('duelBadge').style.display!=='none';
   h+='<div class="lb-duo">'
@@ -9027,7 +9626,7 @@ function renderTests(){
   var solvedQ=QS.filter(function(q){var p=S.prog[q.id];return p&&p.a>0;}).length;
   var h='<div class="v-home">';
   h+='<div class="ph"><div class="pt">Тесты</div><div class="ps">'+(S.user?'Решено '+vNum(solvedQ)+' из '+vNum(QS.length)+(solvedQ?' · точность '+st.acc+'%':''):vNum(QS.length)+' '+vplural(QS.length,'вопрос','вопроса','вопросов')+' по '+Object.keys(SM).length+' '+vplural(Object.keys(SM).length,'предмету','предметам','предметам'))+'</div></div>';
-  h+='<button class="lb-cta" style="margin-top:4px" onclick="vOpen(\'trainer\')">'
+  h+='<button class="lb-cta" style="margin-top:4px" onclick="vTrainerFree()">'
     +'<span class="lb-cta-t"><span class="lb-pill">Тренажёр</span><b>'+(st.solved?'Продолжить':'Начать')+'</b><span>Ошибки возвращаются, пока не запомнишь</span></span>'
     +'<span class="lb-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5.2v13.6a1 1 0 0 0 1.5.86l11-6.8a1 1 0 0 0 0-1.72l-11-6.8A1 1 0 0 0 7 5.2z"/></svg></span></button>';
   h+='<div class="lb-h2"><h2>Режимы</h2></div><div class="lb-modes">';
