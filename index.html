@@ -1704,6 +1704,62 @@ input.v-locked{opacity:.75;background:var(--bg3)}
 #pg-flashcards .fcard.fc-premium .swipemark{background-image:none;letter-spacing:0;font-weight:800;border:none}
 #pg-flashcards .fcard.fc-premium .swipemark.know{background:var(--mal);color:var(--mal-ink)}
 #pg-flashcards .fcard.fc-premium .swipemark.dunno{background:var(--eos);color:var(--eos-ink)}
+/* ===== ДУЭЛЬ: экран боя ===== */
+#pg-duels.in-match #duelHead,#pg-duels.in-match #duelMenu,#pg-duels.in-match #jackpotZone,#pg-duels.in-match #duelMine,
+#pg-duels.in-match #duelActive,#pg-duels.in-match #duelIncoming,#pg-duels.in-match .pgsub{display:none}
+.dmx{background:var(--bg2);border-radius:24px;box-shadow:0 5px 0 var(--edge);padding:16px 16px 12px}
+.dmx-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.dmx-vs{display:inline-flex;align-items:center;gap:7px;min-width:0;color:var(--vio-t);font-size:14px;font-weight:600}
+.dmx-vs i{font-size:19px;flex-shrink:0}
+.dmx-vs b{color:var(--tx);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dmx-clock{flex-shrink:0;min-width:74px;text-align:center;padding:7px 12px;border-radius:12px;background:var(--bg3);color:var(--tx);font:800 18px var(--f);font-variant-numeric:tabular-nums}
+.dmx-clock.low{background:var(--eos-s);color:var(--eos-t)}
+.dmx-bars{display:flex;flex-direction:column;gap:6px;margin:14px 0 4px}
+.dmx-bar{display:grid;grid-template-columns:72px 1fr 44px;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:var(--tx2)}
+.dmx-bar i{display:block;height:8px;border-radius:99px;background:var(--bg3);overflow:hidden}
+.dmx-bar i b{display:block;height:100%;border-radius:99px;transition:width .35s}
+.dmx-bar.me i b{background:var(--mal)}
+.dmx-bar.opp i b{background:var(--vio)}
+.dmx-bar em{font-style:normal;text-align:right;color:var(--tx3);font-variant-numeric:tabular-nums}
+.dmx-q{font-size:18px;font-weight:600;line-height:1.4;color:var(--tx);margin:16px 0 14px}
+.dmx-q small{display:block;font-size:12.5px;font-weight:700;color:var(--tx3);margin-bottom:4px}
+.dmx-leave{display:block;margin:10px auto 0;min-height:44px;padding:0 14px;border:none;background:none;color:var(--tx3);font:600 13.5px var(--f);cursor:pointer;border-radius:12px}
+.dmx-leave:hover{color:var(--eos-t)}
+/* карточка «моя дуэль» */
+.du-card{display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border-radius:20px;box-shadow:0 4px 0 var(--edge);padding:14px;margin:0 0 12px}
+.du-card .lb-blob{width:42px;height:42px;border-radius:13px;font-size:22px;flex-shrink:0}
+.du-card-t{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
+.du-card-t b{font-size:15px;font-weight:700;color:var(--tx);line-height:1.3}
+.du-card-t>span{font-size:13px;color:var(--tx2);line-height:1.4}
+.du-card-b{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}
+#duelMine:not(:empty){margin-top:14px}
+/* ===== ЦЕЛЬ НА ДЕНЬ ===== */
+.lb-goal{display:flex;align-items:center;gap:8px;width:100%;min-height:44px;margin:8px 0 0;padding:0 6px;border:none;background:none;color:var(--tx2);font:500 14px var(--f);cursor:pointer;text-align:left;border-radius:12px}
+.lb-goal i{font-size:19px;color:var(--mal-t)}
+.lb-goal span{flex:1;min-width:0}
+.lb-goal em{font-style:normal;font-weight:700;color:var(--mal-t)}
+.gl-list{display:flex;flex-direction:column;gap:8px;margin:4px 0 12px}
+.gl-o{display:flex;align-items:center;gap:12px;width:100%;padding:10px 12px;border:none;border-radius:16px;background:var(--bg3);cursor:pointer;text-align:left;font-family:var(--f);color:var(--tx)}
+.gl-o>b{width:48px;height:48px;border-radius:14px;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:800;flex-shrink:0;font-variant-numeric:tabular-nums}
+.gl-o>span{display:flex;flex-direction:column;gap:1px;flex:1;min-width:0}
+.gl-o strong{font-size:15px;font-weight:700}
+.gl-o small{font-size:12.5px;color:var(--tx2)}
+.gl-o>i{font-size:20px;color:var(--mal-ink);opacity:0}
+.gl-o.on{background:var(--mal);color:var(--mal-ink);box-shadow:0 3px 0 var(--mal-e)}
+.gl-o.on>b{background:rgba(255,255,255,.35);color:var(--mal-ink)}
+.gl-o.on small{color:var(--mal-ink);opacity:.85}
+.gl-o.on>i{opacity:1}
+/* импорт: что делать с похожим вопросом */
+.adm-dup{display:flex;flex-direction:column;gap:4px;cursor:default}
+.adm-dup-lead{font-size:12.5px;color:var(--tx2);margin:8px 0 2px;line-height:1.45}
+.adm-dup-all{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:4px 0 6px;font-size:12px;color:var(--tx3)}
+.adm-dup-all .btn{margin:0}
+.adm-dup-seg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:5px;padding:3px;border-radius:12px;background:var(--bg2)}
+.adm-dup-seg button{min-height:38px;border:none;border-radius:9px;background:none;color:var(--tx2);font:600 12.5px var(--f);cursor:pointer;padding:0 4px}
+.adm-dup-seg button.on{background:var(--bg4);color:var(--tx)}
+.adm-dup-seg button.on[data-v=add]{background:var(--mal);color:var(--mal-ink)}
+.adm-dup-seg button.on[data-v=rep]{background:var(--iod);color:var(--iod-ink)}
+#vAlertWrap .v-alert-t{white-space:pre-line}
 </style>
 </head>
 <body>
@@ -1954,6 +2010,7 @@ input.v-locked{opacity:.75;background:var(--bg3)}
   <div class="ph"><div class="pt">Дуэли</div><div class="ps">Один на один: кто точнее и быстрее</div></div>
   <div id="duelHead"></div>
   <div id="duelActive"></div>
+  <div id="duelMine"></div>
   <div id="duelIncoming"></div>
   <div id="roomActive"></div>
   <div id="duelMenu"></div>
@@ -2290,6 +2347,8 @@ async function vSyncMe(){
   try{
     var m=await sbRpc('vita_me',{p_token:S.token});if(!m)return;
     S.user.coins=m.coins||0;S.user.owned_items=m.owned_items||'';S.user.frames=m.frames||'';
+    if(m.daily_goal!=null){var g0=vGoal();S.user.daily_goal=+m.daily_goal;V_GOAL_SRV=true;
+      if(vGoal()!==g0){try{vGoalApply();}catch(e){}}}
     if(m.remind_hour!==undefined){var rh0=S.user.remind_hour;S.user.remind_hour=m.remind_hour;S.user.has_tg=!!m.has_tg;
       if(rh0===undefined){var pp=document.getElementById('pg-profile');if(pp&&pp.classList.contains('on')){try{renderProfile();}catch(e){}}}}
     sv();updateCoinDisplay();
@@ -2911,7 +2970,7 @@ function renderAuthHdr(){
     av.innerHTML=renderAvatar(S.user,32);
     av.setAttribute('role','button');av.setAttribute('aria-label','Профиль');av.tabIndex=0;
     av.addEventListener('click',function(){go('profile');});
-    var days=S.daily?(S.daily.streakDays||0):0;
+    var days=vStreakNow();
     var pills=document.createElement('span');pills.className='lb-pills';
     pills.innerHTML='<span class="lb-stat fire" title="Дней подряд"><i class="ti ti-flame"></i>'+days+'</span><span class="lb-stat coin" title="Монеты"><i class="ti ti-coin"></i><span class="coinDisp">'+myCoins()+'</span></span>';
     el.innerHTML='';el.appendChild(pills);el.appendChild(av);el.style.display='flex';el.style.alignItems='center';el.style.gap='8px';
@@ -3485,7 +3544,25 @@ function refreshSubjectDropdowns(){
   var qf=document.getElementById('qFs');
   if(qf){var c2=qf.value;qf.innerHTML=vSubjOptions('<option value="all">Все предметы</option>','<option value="custom">Только добавленные вручную</option>');qf.value=(c2&&(SM[c2]||c2==='custom'))?c2:'all';}
 }
-var DAILY_GOAL=20;
+var DAILY_GOAL=20;   // цель по умолчанию; свою студент выбирает сам
+function vGoal(){var g=(S.user&&+S.user.daily_goal)||+S.goal||DAILY_GOAL;return Math.min(100,Math.max(5,Math.round(g)||DAILY_GOAL));}
+// серия на сегодня: считается, только если цель выполнена сегодня или вчера
+function vStreakNow(){
+  if(!S.daily||!S.daily.lastDay)return 0;
+  var y=new Date();y.setDate(y.getDate()-1);
+  return (S.daily.lastDay===todayStr()||S.daily.lastDay===y.toLocaleDateString('ru-RU'))?(S.daily.streakDays||0):0;
+}
+// цель на сегодня выполнена — день идёт в серию (один раз за день)
+function vDailyCredit(){
+  if(!S.daily)return false;
+  var today=todayStr();
+  if(S.daily.date!==today||S.daily.count<vGoal()||S.daily.lastDay===today)return false;
+  var y2=new Date();y2.setDate(y2.getDate()-1);
+  var yStr2=y2.toLocaleDateString('ru-RU');
+  S.daily.streakDays=S.daily.lastDay===yStr2?(S.daily.streakDays||0)+1:1;
+  S.daily.lastDay=today;
+  return true;
+}
 function todayStr(){return new Date().toLocaleDateString('ru-RU');}
 function bumpDaily(){
   if(!S.daily)S.daily={date:todayStr(),count:0,streakDays:0,lastDay:''};
@@ -3494,23 +3571,12 @@ function bumpDaily(){
     // Новый день. Проверяем серию: был ли вчера выполнен план
     var y=new Date();y.setDate(y.getDate()-1);
     var yStr=y.toLocaleDateString('ru-RU');
-    if(S.daily.date===yStr&&S.daily.count>=DAILY_GOAL){
-      // вчера план выполнен — серия продолжается
-    }else if(S.daily.date!==yStr||S.daily.count<DAILY_GOAL){
-      // пропуск или план не выполнен — серия сбросится при достижении плана сегодня
-    }
     S.daily.date=today;S.daily.count=0;
   }
   S.daily.count++;
   try{vLogAnswer();}catch(e){}
   // Достигли цели сегодня — засчитываем день в серию (один раз)
-  if(S.daily.count===DAILY_GOAL){
-    var y2=new Date();y2.setDate(y2.getDate()-1);
-    var yStr2=y2.toLocaleDateString('ru-RU');
-    if(S.daily.lastDay===yStr2)S.daily.streakDays=(S.daily.streakDays||0)+1;
-    else S.daily.streakDays=1;
-    S.daily.lastDay=today;
-  }
+  vDailyCredit();
   sv();
   saveDaily();
   renderDaily();
@@ -3536,12 +3602,12 @@ function renderDaily(){
   // Сброс счётчика если новый день (для отображения)
   if(S.daily.date!==todayStr()){S.daily.date=todayStr();S.daily.count=0;sv();}
   var cnt=S.daily.count||0;
-  var pct=Math.min(100,Math.round(cnt/DAILY_GOAL*100));
-  var done=cnt>=DAILY_GOAL;
+  var pct=Math.min(100,Math.round(cnt/vGoal()*100));
+  var done=cnt>=vGoal();
   var days=S.daily.streakDays||0;
   var R=50,circ=2*Math.PI*R,off=circ*(1-pct/100);
   var name=(S.user&&S.user.name)?S.user.name:'друг';
-  var left=Math.max(0,DAILY_GOAL-cnt);
+  var left=Math.max(0,vGoal()-cnt);
   var msg=done?'Дневная цель выполнена — ты сегодня в ударе! <i class="ti ti-flame"></i>':'До дневной цели осталось <b>'+left+'</b> '+vplural(left,'вопрос','вопроса','вопросов')+'.';
   el.innerHTML='<div style="position:relative;background:var(--hero);border-radius:20px;padding:24px 26px;color:#fff;overflow:hidden;display:flex;align-items:center;gap:22px;margin-bottom:20px;box-shadow:0 16px 36px -16px rgba(109,94,240,.55)">'
     +'<div style="position:absolute;right:-30px;top:-40px;width:170px;height:170px;border-radius:50%;background:rgba(255,255,255,.1)"></div>'
@@ -3552,7 +3618,7 @@ function renderDaily(){
     +'</div>'
     +'<div style="position:relative;width:112px;height:112px;flex-shrink:0">'
       +'<svg width="112" height="112" viewBox="0 0 112 112" style="transform:rotate(-90deg)"><circle cx="56" cy="56" r="50" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="10"/><circle cx="56" cy="56" r="50" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-dasharray="'+circ+'" stroke-dashoffset="'+off+'" style="transition:stroke-dashoffset .5s"/></svg>'
-      +'<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center"><div style="font-size:24px;font-weight:800;font-family:var(--fm);line-height:1">'+(done?'✓':cnt)+'</div><div style="font-size:11px;opacity:.85">'+(done?'готово':'из '+DAILY_GOAL)+'</div></div>'
+      +'<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center"><div style="font-size:24px;font-weight:800;font-family:var(--fm);line-height:1">'+(done?'✓':cnt)+'</div><div style="font-size:11px;opacity:.85">'+(done?'готово':'из '+vGoal())+'</div></div>'
     +'</div>'
   +'</div>';
 }
@@ -3579,7 +3645,7 @@ function getMyStats(){
   return {
     totalAttempts:totalA,solved:Object.keys(S.prog).length,
     acc:totalA?Math.round(totalC/totalA*100):0,mastered:mastered,
-    streakDays:S.daily?(S.daily.streakDays||0):0,exams:S.hist.length,bestExam:bestExam
+    streakDays:vStreakNow(),exams:S.hist.length,bestExam:bestExam
   };
 }
 // уровни и звания — см. блок «ЛАБОРАТОРИЯ» (vitaLevel, V_RANKS)
@@ -4020,9 +4086,14 @@ function renderDuels(){
   // если уже в комнате — возобновить
   if(ROOM){roomPollStart();roomRenderLobby();}
   if(CUR_DUEL){duelResume();return;} // вернулся во время матча — продолжаем с того же места
-  duelCheckState();
-  duelStartPolling();
-  duelShowHistory();
+  duelMatchUi(false);
+  var dm=document.getElementById('duelMine');if(dm){dm.innerHTML='';DUEL_MINE_HTML='';}
+  duelSweep().then(function(){
+    if(CUR_DUEL)return;
+    duelCheckState();
+    duelStartPolling();
+    duelShowHistory();
+  });
 }
 
 function duelStartPolling(){
@@ -4062,9 +4133,7 @@ async function duelPoll(){
     // проверить мои активные дуэли (принятые, идущие)
     if(!CUR_DUEL){
       var active=await sbGet('duels','or=(challenger_email.eq.'+encodeURIComponent(S.user.email)+',opponent_email.eq.'+encodeURIComponent(S.user.email)+')&status=eq.accepted&order=created_at.desc');
-      if(active.length){
-        duelEnterMatch(active[0]);
-      }
+      if(!CUR_DUEL)duelMineCards(active);
     }
   }catch(e){console.warn('duel poll',e.message);}
 }
@@ -4116,10 +4185,11 @@ async function duelNewChallenge(preEmail){
     +'<select id="duelOpp">'+userOpts+'</select></div>'
     +'<div class="fg"><label class="fl">Предмет</label><select id="duelSubj" onchange="duelChTopics()">'+subjOpts+'</select></div>'
     +'<div class="fg"><label class="fl">Тема</label><select id="duelTopic"><option value="all">Все темы</option></select></div>'
-    +'<div class="fg"><label class="fl">Вопросов: <b id="duelCntL">10</b></label><input type="range" min="10" max="80" step="5" value="10" id="duelCnt" oninput="duelCntUpd()"></div>'
-    +'<div class="fg"><label class="fl">Общее время: <b id="duelTimeL">10</b> мин</label><input type="range" min="5" max="60" step="5" value="10" id="duelTime" oninput="duelTimeUpd()"></div>'
-    +'<div class="fg"><label class="fl">Ставка (монеты) — 0 без ставки</label><input id="duelStake" type="number" value="0" min="0"></div>'
-    +'<div style="font-size:11px;color:var(--tx3);margin-bottom:8px">У тебя: '+myCoins()+' <i class="ti ti-coin"></i>. Победитель забирает ставки обоих (минус 10% в джекпот).</div>'
+    +'<div class="fg"><label class="fl">Вопросов</label>'+duelChipsHtml('c',[10,15,20,30],10,'')+'<input type="hidden" id="duelCnt" value="10"></div>'
+    +'<div class="fg"><label class="fl">Время на всю дуэль</label>'+duelChipsHtml('t',[5,10,15,20],10,'мин')+'<input type="hidden" id="duelTime" value="10">'
+    +'<div style="font-size:12px;color:var(--tx3);margin-top:6px">Время идёт у обоих с момента, когда соперник принял вызов. Кто не успел — остаётся с тем счётом, что набрал.</div></div>'
+    +'<div class="fg"><label class="fl">Ставка (монеты) — 0 без ставки</label><input id="duelStake" type="number" value="0" min="0" inputmode="numeric"></div>'
+    +'<div style="font-size:12px;color:var(--tx3);margin-bottom:8px">У тебя: '+myCoins()+' <i class="ti ti-coin"></i>. Ставка списывается у обоих, когда соперник принимает вызов. Победитель забирает обе (минус 10% в джекпот), при ничьей ставки возвращаются.</div>'
     +'<button class="btn bbl" onclick="duelSendChallenge()" style="width:100%;margin-top:8px">Отправить вызов</button>';
   showModal('Бросить вызов ',body);
   duelChTopics();
@@ -4153,7 +4223,8 @@ async function duelSendChallenge(){
   var topic=document.getElementById('duelTopic').value;
   var cnt=+document.getElementById('duelCnt').value;
   var timeLimit=+document.getElementById('duelTime').value;
-  var stake=+document.getElementById('duelStake').value||0;
+  var stake=Math.floor(+document.getElementById('duelStake').value||0);
+  if(stake<0)stake=0;
   if(stake>myCoins()){vAlert('Недостаточно монет для ставки');return;}
   var pool=getQS().filter(function(q){return q.s===subj&&(topic==='all'||q.t===topic);});
   if(pool.length<cnt){vAlert('В этой теме только '+pool.length+' вопросов. Выберите меньше или другую тему.');return;}
@@ -4181,9 +4252,10 @@ async function duelSendChallenge(){
       try{var rec2={title:' Тебя вызвали на дуэль!',body:S.user.name+' бросил тебе вызов!',kind:'duel',target_group:'',target_email:opp[0],sent:false};await sbPost('notifications_queue',rec2);notifyOk=true;}catch(e2){vAlert('Уведомление НЕ создано: '+e2.message);}
     }
     closeModal();
-    vAlert('Вызов отправлен! Соперник увидит его в Vita'+(notifyOk?' и получит сообщение от бота.':'.'));
+    if(duelId)DUEL_AUTO=duelId; // когда соперник примет — сразу начнём
+    vAlert('Вызов отправлен! Соперник увидит его в Vita'+(notifyOk?' и получит сообщение от бота.':'.')+' У него 5 минут, чтобы принять.');
     duelCheckState();
-  }catch(e){vAlert('Ошибка: '+e.message);}
+  }catch(e){vAlert(e.message||'Не получилось отправить вызов');}
 }
 async function duelCancel(id){
   try{await sbPatch('duels','id=eq.'+id,{status:'expired'});document.getElementById('duelActive').innerHTML='';}catch(e){}
@@ -4194,8 +4266,10 @@ async function duelAccept(id){
     // убрать неотправленные уведомления о бое (бой уже принят)
     try{if(S.user)await sbDel('notifications_queue','kind=eq.duel&sent=eq.false&target_email=eq.'+encodeURIComponent(S.user.email));}catch(e){}
     var d=await sbGet('duels','id=eq.'+id);
-    if(d.length)duelEnterMatch(d[0]);
-  }catch(e){vAlert('Ошибка: '+e.message);}
+    vSyncMeSoon(); // ставка списывается при принятии
+    if(d.length&&d[0].status==='accepted')duelEnterMatch(d[0]);
+    else{vAlert('Вызов уже недоступен — он истёк или отменён.');duelPoll();}
+  }catch(e){vAlert(e.message||'Не получилось принять вызов');duelPoll();}
 }
 async function duelDecline(id){
   try{
@@ -4208,19 +4282,26 @@ async function duelDecline(id){
 // состояние моего матча хранится на устройстве: вопрос, счёт, время — чтобы дуэль не сбрасывалась
 function duelStKey(id){return 'duelst_'+id+'_'+(S.user?S.user.email:'');}
 function duelStLoad(id){try{return JSON.parse(localStorage.getItem(duelStKey(id))||'null');}catch(e){return null;}}
-function duelStSave(){if(!CUR_DUEL)return;try{localStorage.setItem(duelStKey(CUR_DUEL.id),JSON.stringify({qi:DUEL_QI,score:DUEL_SCORE,time:DUEL_TOTALTIME,qs:DUEL_START,fin:DUEL_FIN||0}));}catch(e){}}
+function duelStSave(){if(!CUR_DUEL)return;try{localStorage.setItem(duelStKey(CUR_DUEL.id),JSON.stringify({qi:DUEL_QI,score:DUEL_SCORE,time:DUEL_TOTALTIME,qs:DUEL_START,fin:DUEL_FIN||0,t0:DUEL_T0||0}));}catch(e){}}
 function duelStClear(id){try{localStorage.removeItem(duelStKey(id));}catch(e){}}
-var DUEL_FIN=0;
+var DUEL_FIN=0,DUEL_T0=0;
 function duelEnterMatch(d){
   CUR_DUEL=d;
-  DUEL_Q=JSON.parse(d.questions_json);
-  DUEL_QI=0;DUEL_SCORE=0;DUEL_TOTALTIME=0;DUEL_START=0;DUEL_FIN=0;
+  try{DUEL_Q=JSON.parse(d.questions_json)||[];}catch(e){DUEL_Q=[];}
+  DUEL_QI=0;DUEL_SCORE=0;DUEL_TOTALTIME=0;DUEL_START=0;DUEL_FIN=0;DUEL_T0=0;
   var amChal=d.challenger_email===S.user.email;
   var st=duelStLoad(d.id),dbProg=(amChal?d.challenger_progress:d.opponent_progress)||0;
-  if(st){DUEL_QI=st.qi||0;DUEL_SCORE=st.score||0;DUEL_TOTALTIME=st.time||0;DUEL_START=st.qs||0;DUEL_FIN=st.fin||0;}
-  if(dbProg>DUEL_QI){DUEL_QI=dbProg;DUEL_START=0;} // отвечал с другого устройства — назад не возвращаем
+  if(st){DUEL_QI=st.qi||0;DUEL_SCORE=st.score||0;DUEL_TOTALTIME=st.time||0;DUEL_START=st.qs||0;DUEL_FIN=st.fin||0;DUEL_T0=st.t0||0;}
+  if(dbProg>DUEL_QI){ // отвечал с другого устройства — назад не возвращаем, счёт берём с сервера
+    DUEL_QI=dbProg;DUEL_START=0;
+    DUEL_SCORE=Math.max(DUEL_SCORE,(amChal?d.challenger_score:d.opponent_score)||0);
+    DUEL_TOTALTIME=Math.max(DUEL_TOTALTIME,(amChal?d.challenger_time:d.opponent_time)||0);
+  }
+  if(!DUEL_T0)DUEL_T0=Date.now();
+  duelStSave();
   var pgOn=document.getElementById('pg-duels');
   if(!pgOn||!pgOn.classList.contains('on'))go('duels');
+  if((d.stake||0)>0)vSyncMeSoon(); // ставка списана при принятии — покажем настоящие монеты
   duelStopPolling(); // остановим общий опрос, запустим матч-опрос
   try{vDuelsHead();}catch(e){}
   duelResume();
@@ -4231,6 +4312,8 @@ function duelResume(){
   var d=CUR_DUEL,amChal=d.challenger_email===S.user.email;
   var inEl=document.getElementById('duelIncoming');if(inEl)inEl.innerHTML='';
   var aEl=document.getElementById('duelActive');if(aEl)aEl.innerHTML='';
+  var mEl=document.getElementById('duelMine');if(mEl){mEl.innerHTML='';DUEL_MINE_HTML='';}
+  duelMatchUi(true);
   if(amChal?d.challenger_done:d.opponent_done){
     DUEL_SCORE=(amChal?d.challenger_score:d.opponent_score)||0;duelWaitOpponent();return;
   }
@@ -4251,14 +4334,15 @@ function duelRenderQuestion(resume){
   duelStSave();
   var amChal=CUR_DUEL.challenger_email===S.user.email;
   var oppName=amChal?CUR_DUEL.opponent_name:CUR_DUEL.challenger_name;
-  body.innerHTML='<div class="card">'
-    +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">'
-    +'<span class="bdg bbl2">Вопрос '+(DUEL_QI+1)+'/'+DUEL_Q.length+'</span>'
-    +'<span style="font-size:13px;color:var(--tx2)"><i class="ti ti-swords"></i> против '+oppName+'</span>'
-    +'<span class="bdg" id="duelTimer" style="font-family:var(--fm)">0с</span></div>'
-    +'<div id="duelOppProg" style="font-size:11px;color:var(--tx3);margin-bottom:10px"></div>'
-    +'<div style="font-size:16px;font-weight:600;margin-bottom:16px">'+q.q+'</div>'
-    +'<div id="duelOpts"></div></div>';
+  if(duelLeftMs()<=0){duelTimeUp();return;}
+  body.innerHTML='<div class="dmx">'
+    +'<div class="dmx-top"><span class="dmx-vs"><i class="ti ti-swords"></i><b>'+esc(oppName||'Соперник')+'</b></span>'
+    +'<span class="dmx-clock" id="duelTimer" role="timer" aria-label="Осталось времени">'+duelFmtLeft(duelLeftMs())+'</span></div>'
+    +'<div class="dmx-bars"><div class="dmx-bar me"><span>Ты</span><i><b style="width:'+Math.round(DUEL_QI/DUEL_Q.length*100)+'%"></b></i><em>'+DUEL_QI+'/'+DUEL_Q.length+'</em></div>'
+    +'<div class="dmx-bar opp"><span>Соперник</span><i><b id="duelOppBar" style="width:0%"></b></i><em id="duelOppProg">0/'+DUEL_Q.length+'</em></div></div>'
+    +'<div class="dmx-q"><small>Вопрос '+(DUEL_QI+1)+' из '+DUEL_Q.length+'</small>'+esc(q.q)+'</div>'
+    +'<div id="duelOpts"></div>'
+    +'<button class="dmx-leave" onclick="duelLeave()">Выйти из дуэли</button></div>';
   var od=document.getElementById('duelOpts');
   opts.opts.forEach(function(opt,i){
     var btn=document.createElement('button');
@@ -4269,8 +4353,9 @@ function duelRenderQuestion(resume){
   // таймер вопроса
   if(window._duelTmr)clearInterval(window._duelTmr);
   window._duelTmr=setInterval(function(){
-    var el=document.getElementById('duelTimer');
-    if(el)el.textContent=Math.round((Date.now()-DUEL_START)/1000)+'с';
+    var left=duelLeftMs(),el=document.getElementById('duelTimer');
+    if(el){el.textContent=duelFmtLeft(left);el.classList.toggle('low',left<60000);}
+    if(left<=0)duelTimeUp();
   },500);
   // опрос прогресса соперника
   duelMatchPoll();
@@ -4294,9 +4379,10 @@ async function duelAnswer(chosen,correct,btn){
   });
   // обновить прогресс в БД
   var amChal=CUR_DUEL.challenger_email===S.user.email;
-  var patch=amChal?{challenger_progress:DUEL_QI+1}:{opponent_progress:DUEL_QI+1};
-  try{if(dbOK)await sbPatch('duels','id=eq.'+CUR_DUEL.id,patch);}catch(e){}
+  var tt=Math.round(DUEL_TOTALTIME);
+  var patch=amChal?{challenger_progress:DUEL_QI+1,challenger_score:DUEL_SCORE,challenger_time:tt}:{opponent_progress:DUEL_QI+1,opponent_score:DUEL_SCORE,opponent_time:tt};
   DUEL_QI++;DUEL_START=0;duelStSave();
+  try{if(dbOK&&CUR_DUEL)await sbPatch('duels','id=eq.'+CUR_DUEL.id,patch);}catch(e){}
   setTimeout(function(){if(CUR_DUEL)duelRenderQuestion();},800);
 }
 
@@ -4311,20 +4397,26 @@ async function duelMatchPoll(){
     var oppProg=amChal?d.opponent_progress:d.challenger_progress;
     var oppDone=amChal?d.opponent_done:d.challenger_done;
     var el=document.getElementById('duelOppProg');
-    if(el)el.textContent=oppDone?'Соперник закончил ✓':'Соперник: '+(oppProg||0)+'/'+DUEL_Q.length;
+    if(el)el.textContent=oppDone?'закончил':(oppProg||0)+'/'+DUEL_Q.length;
+    var ob=document.getElementById('duelOppBar');
+    if(ob)ob.style.width=(oppDone?100:Math.round((oppProg||0)/DUEL_Q.length*100))+'%';
     // если оба закончили — показать результат
     if(d.status==='finished'){duelShowResult(d);}
   }catch(e){}
 }
 
-async function duelFinishMine(){
+async function duelFinishMine(leave){
   if(window._duelTmr)clearInterval(window._duelTmr);
+  if(!CUR_DUEL)return;
   var amChal=CUR_DUEL.challenger_email===S.user.email;
   var patch=amChal?
     {challenger_score:DUEL_SCORE,challenger_time:Math.round(DUEL_TOTALTIME),challenger_done:true}:
     {opponent_score:DUEL_SCORE,opponent_time:Math.round(DUEL_TOTALTIME),opponent_done:true};
-  try{await sbPatch('duels','id=eq.'+CUR_DUEL.id,patch);}catch(e){}
+  try{var fr=await sbPatch('duels','id=eq.'+CUR_DUEL.id,patch);if(fr&&fr.length&&fr[0].id)CUR_DUEL=fr[0];}catch(e){}
+  if(!CUR_DUEL)return;
   if(!DUEL_FIN){DUEL_FIN=Date.now();duelStSave();}
+  if(CUR_DUEL.status==='finished'){duelShowResult(CUR_DUEL);return;}
+  if(leave){duelExitToList();return;}
   duelWaitOpponent();
 }
 // я закончил — ждём соперника. Если он не доиграл за 10 минут, дуэль закрывается по текущему счёту.
@@ -4337,7 +4429,9 @@ function duelWaitOpponent(){
   if(body)body.innerHTML='<div class="card" style="text-align:center"><div style="font-size:40px;margin-bottom:10px"><i class="ti ti-hourglass-high"></i></div>'
     +'<div style="font-weight:700;font-size:16px">Ты закончил! Счёт: '+DUEL_SCORE+'/'+DUEL_Q.length+'</div>'
     +'<div id="duelWaitOpp" style="font-size:13px;color:var(--tx2);margin-top:6px">Ждём, пока соперник завершит…</div>'
-    +'<div id="duelWaitLeft" style="font-size:12px;color:var(--tx3);margin-top:8px"></div></div>';
+    +'<div id="duelWaitLeft" style="font-size:12px;color:var(--tx3);margin-top:8px"></div>'
+    +'<button class="btn bgh" style="margin-top:14px" onclick="duelExitToList()">К дуэлям</button>'
+    +'<div style="font-size:12px;color:var(--tx3);margin-top:8px">Ждать не обязательно — результат появится в истории.</div></div>';
   var tick=async function(){
     if(!CUR_DUEL)return;
     try{
@@ -4347,9 +4441,15 @@ function duelWaitOpponent(){
       if(d.challenger_done&&d.opponent_done){clearInterval(window._duelWait);await duelComputeWinner(d);return;}
       var amChal=d.challenger_email===S.user.email;
       var op=(amChal?d.opponent_progress:d.challenger_progress)||0;
-      var left=DUEL_WAIT_MS-(Date.now()-DUEL_FIN);
       var w=document.getElementById('duelWaitOpp');if(w)w.textContent='Соперник ответил на '+op+' из '+DUEL_Q.length+'. Ждём, пока завершит…';
       var l=document.getElementById('duelWaitLeft');
+      if(d.deadline_at){ // у дуэли есть срок: после него сервер закроет её сам
+        CUR_DUEL=d;var dl=duelLeftMs();
+        if(dl<=-22000){await duelSweep();return;}
+        if(l)l.textContent=dl>0?'У соперника осталось '+duelFmtLeft(dl)+'. Потом дуэль закроется по текущему счёту.':'Время вышло — подводим итог…';
+        return;
+      }
+      var left=DUEL_WAIT_MS-(Date.now()-DUEL_FIN);
       if(left<=0){
         // соперник бросил дуэль: закрываем по тому, что есть
         clearInterval(window._duelWait);
@@ -4445,6 +4545,7 @@ function duelShowResult(d){
     +'<button class="btn bbl" onclick="CUR_DUEL=null;renderDuels()" style="margin-top:16px">К дуэлям</button></div>';
   duelStClear(d.id);
   CUR_DUEL=null;
+  if(window._duelTmr)clearInterval(window._duelTmr);
   LB_CACHE=null; // обновить рейтинг
 }
 
@@ -4750,6 +4851,7 @@ async function renderProfile(){
   html+='<div class="lb-h2"><h2>Настройки</h2></div><div class="pf-set">'
     +'<button onclick="go(\'shop\')"><i class="ti ti-shopping-bag"></i>Магазин<span class="r">рамки и фоны</span></button>'
     +'<button onclick="profTogglePrivacy()"><i class="ti '+(me.private_profile?'ti-lock':'ti-lock-open')+'"></i>Статистика в профиле<span class="r">'+(me.private_profile?'скрыта':'видна всем')+'</span></button>'
+    +'<button onclick="vGoalOpen()"><i class="ti ti-target-arrow"></i>Цель на день<span class="r">'+vGoal()+' '+vplural(vGoal(),'вопрос','вопроса','вопросов')+'</span></button>'
     +(typeof S.user.remind_hour==='number'?'<button onclick="vRemindOpen()"><i class="ti ti-bell"></i>Напоминание о плане<span class="r">'+vRemindLabel()+'</span></button>':'')
     +'<button onclick="toggleSound()"><i class="ti ti-volume"></i>Звуки<span class="r" id="sndBtn">'+(S.sound===false?'выключены':'включены')+'</span></button>'
     +'<button onclick="toggleTheme()"><i class="ti ti-moon"></i>Тема<span class="r">'+(S.dark?'тёмная':'светлая')+'</span></button>'
@@ -5261,7 +5363,9 @@ function fcRender(){
   document.getElementById('fcHint').style.display=FCf?'none':'';
   document.getElementById('fcPrev').disabled=FCI===0;
   document.getElementById('fcNext').disabled=FCI===FCP.length-1;
-  document.getElementById('fcStat').textContent=p.a>0?'Статистика: '+p.c+'/'+p.a+' ('+Math.round(p.c/p.a*100)+'%)':'';
+  var ses=FC_SES||{know:0,again:0};
+  document.getElementById('fcStat').textContent=(ses.know||ses.again?'Сейчас: знаю '+ses.know+', повторить '+ses.again+'. ':'')
+    +(p.a>0?'В тестах на этот вопрос: '+p.c+' из '+p.a+' верно.':'В тестах этот вопрос ещё не решал.');
 }
 function fcFlip(){FCf=!FCf;fcRender();}
 function fcPrev(){if(FCI>0){FCI--;FCf=false;fcRender();}}
@@ -5293,6 +5397,7 @@ function playSound(type){
   }catch(e){}
 }
 // Свайп вправо = знаю (освоено), влево = повтор
+var FC_SES=null;   // счёт текущего захода в карточки (только на экране)
 async function fcSwipe(dir){
   if(!FCP.length)return;
   var q=FCP[FCI];
@@ -5302,8 +5407,10 @@ async function fcSwipe(dir){
   card.style.opacity='0';
   // звук
   playSound(dir==='know'?'correct':'wrong');
-  // записываем результат: знаю = правильно, повтор = неправильно
-  await saveProg(q.id,dir==='know');
+  // карточки — для запоминания: «Знаю» ты ставишь себе сам, поэтому в прогресс, рейтинг и монеты это не идёт
+  FC_SES=FC_SES||{know:0,again:0};
+  if(dir==='know')FC_SES.know++;
+  else{FC_SES.again++;if(FCP.indexOf(q,FCI+1)<0)FCP.push(q);}   // «Повторить» — карточка вернётся в конце колоды
   setTimeout(function(){
     card.style.transition='none';
     card.style.transform='';card.style.opacity='1';
@@ -7567,7 +7674,7 @@ async function delQuestionIds(ids){
 }
 // ===== МАССОВЫЙ ИМПОРТ ВОПРОСОВ =====
 function admBulkM(){
-  BK_FORCE=null;
+  BK_FORCE=null;BK_ASKED=false;
   document.getElementById('mdT').textContent='Массовое добавление';
   var b=document.getElementById('mdBody');b.innerHTML='';
   // \u0412\u044B\u0431\u043E\u0440 \u043F\u0440\u0435\u0434\u043C\u0435\u0442\u0430 \u0438 \u0442\u0435\u043C\u044B \u0441\u0432\u0435\u0440\u0445\u0443 (\u043E\u0434\u0438\u043D \u0440\u0430\u0437 \u043D\u0430 \u0432\u0441\u044E \u043F\u0430\u0447\u043A\u0443)
@@ -7607,7 +7714,7 @@ function admBulkM(){
   var pb=document.createElement('button');pb.className='btn bgh bfu';pb.innerHTML='<i class="ti ti-eye"></i> Проверить';
   pb.addEventListener('click',admBulkPreview);
   var sb=document.createElement('button');sb.className='btn bbl bfu';sb.innerHTML='<i class="ti ti-device-floppy"></i> Добавить все';
-  sb.addEventListener('click',admBulkSave);
+  sb.id='bkSaveBtn';sb.addEventListener('click',admBulkSave);
   row.appendChild(pb);row.appendChild(sb);b.appendChild(row);
   document.getElementById('modal').style.display='flex';
 }
@@ -7683,7 +7790,7 @@ function vSameAns(a,b){var x=vStems(a),y=vStems(b);if(!x.length||!y.length)retur
 var V_DUPIDX=null;
 function vDupIndex(){
   if(V_DUPIDX&&V_DUPIDX.n===getQS().length)return V_DUPIDX;
-  var list=getQS().map(function(x){return {st:vStems(x.q),q:x.q,ans:(x.o||[])[x.a],o:x.o||[],s:x.s};}).filter(function(x){return x.st.length;});
+  var list=getQS().map(function(x){return {st:vStems(x.q),q:x.q,ans:(x.o||[])[x.a],o:x.o||[],s:x.s,t:x.t,id:x.id};}).filter(function(x){return x.st.length;});
   V_DUPIDX={n:getQS().length,list:list};return V_DUPIDX;
 }
 // new — нет в базе; dup — уже есть (тот же вопрос и ответ); conflict — такой же вопрос, но ответ другой
@@ -7704,7 +7811,8 @@ function vOptKey(o){return (o||[]).map(function(s){return vStems(s).sort().join(
 // варианты ответа у нового вопроса не такие, как у того, что в базе
 function vOptsDiffer(a,b){if(!a||!a.length||!b||!b.length)return false;return vOptKey(a)!==vOptKey(b);}
 function vBulkKey(x){return x.q+'\u0001'+(vBulkAns(x)||'');}
-var BK_FORCE=null;   // какие повторы админ отметил «добавить всё равно» (по ключу вопроса)
+var BK_FORCE=null;   // что делать с похожими (по ключу вопроса): 'add' — добавить ещё одним, 'rep' — заменить тот, что в базе; нет записи — пропустить
+var BK_ASKED=false;  // админа уже спросили про похожие
 // разбор + проверка на повторы для массового добавления
 function vBulkClassify(qa){
   var seen=[],res={add:[],dup:[],conf:[],self:0};
@@ -7831,7 +7939,7 @@ async function admBulkRun(idxs){
       var key=nk(it.q);if(!key||seen[key]){pg.dup++;return;}seen[key]=1;
       var ca=it.correct!==null&&it.correct!==undefined?it.options[it.correct]:(it.answer||null);
       var dc=vDupCheck(it.q,ca);
-      if(dc.st==='dup'&&!vOptsDiffer(it.options,dc.m.o)){inDb++;pg.dup++;return;}
+      if(dc.st!=='new')inDb++;   // уже есть в базе — в поле всё равно попадёт, что с ним делать, решает админ
       if(it.options.length>=2&&(it.correct===null||it.correct===undefined)){pg.noAns.push(it);return;}
       ok.push(it);pg.added++;
     });
@@ -7858,7 +7966,7 @@ function admBkReport(added,inDb,ran,useSel){
   var labels=function(a){return a.slice(0,40).map(function(i){return pages[i].label;}).join(', ')+(a.length>40?' и ещё '+(a.length-40):'');};
   var good=pages.length-fail.length;
   var h='<span style="display:block;margin-top:4px;font-weight:600;color:'+(added?'var(--mal-t)':'var(--tx2)')+'">'
-    +(ran<pages.length?'Перечитал '+ran+' стр. — ':'')+'Добавил в поле вопросов: '+added+(inDb?' · уже есть в базе: '+inDb:'')
+    +(ran<pages.length?'Перечитал '+ran+' стр. — ':'')+'Добавил в поле вопросов: '+added+(inDb?' · из них похожие уже есть в базе: '+inDb+' (выбери ниже, что с ними делать)':'')
     +' · прочитано страниц: '+good+' из '+pages.length+'</span>';
   if(fail.length){
     var e=pages[fail[0]].err;
@@ -7882,36 +7990,67 @@ function admBkReport(added,inDb,ran,useSel){
     return '<span>'+esc(p.label)+' — '+t+'</span>';}).join('')+'</div></details>';
   st.innerHTML=h;
 }
+function vBkChoice(c){var v=BK_FORCE&&BK_FORCE[vBulkKey(c.x)];return v==='rep'?'rep':(v?'add':'skip');}
+function vBkSplit(cls){
+  var all=cls.dup.concat(cls.conf),r={add:[],rep:[],skip:[]};
+  all.forEach(function(c){r[vBkChoice(c)].push(c);});
+  return r;
+}
 function admDupHtml(cls){
-  var row=function(c,kind){
-    var k=esc(vBulkKey(c.x)),on=BK_FORCE&&BK_FORCE[vBulkKey(c.x)];
+  var row=function(c){
+    var k=esc(vBulkKey(c.x)),ch=vBkChoice(c);
     var opts=function(o,ans){return (o&&o.length?o:[ans]).map(function(s){return esc(s)+(s===ans?' ✓':'');}).join(' · ');};
-    return '<label class="adm-dup"><input type="checkbox" class="bkForce" data-k="'+k+'"'+(on?' checked':'')+' onchange="admBkForce(this)">'
-      +'<span><b>'+esc(c.x.q)+'</b>'
+    var b=function(v,t){return '<button type="button" class="'+(ch===v?'on':'')+'" role="radio" aria-checked="'+(ch===v)+'" data-v="'+v+'" onclick="admBkPick(this)">'+t+'</button>';};
+    return '<div class="adm-dup" data-k="'+k+'"><b>'+esc(c.x.q)+'</b>'
       +'<span class="adm-dup-n">новый: '+opts(c.x.opts,vBulkAns(c.x))+'</span>'
-      +'<span class="adm-dup-o">в базе: '+opts(c.m.o,c.m.ans)+' <i>('+esc(vSubjLabel(c.m.s))+')</i></span></span></label>';
+      +'<span class="adm-dup-o">в базе: '+opts(c.m.o,c.m.ans)+' <i>('+esc(vSubjLabel(c.m.s))+(c.m.t?', '+esc(c.m.t):'')+')</i></span>'
+      +'<div class="adm-dup-seg" role="radiogroup" aria-label="Что сделать с этим вопросом">'+b('skip','Пропустить')+b('add','Добавить')+b('rep','Заменить старый')+'</div></div>';
+  };
+  var group=function(list,title,note,open){
+    if(!list.length)return '';
+    return '<details class="adm-dupbox"'+(open?' open':'')+'><summary>'+title+'</summary>'
+      +(note?'<p>'+note+'</p>':'')
+      +'<div class="adm-dup-all"><span>Для всех в этой группе:</span><button type="button" class="btn bgh bsm" onclick="admBkPickAll(this,\'skip\')">Пропустить</button>'
+      +'<button type="button" class="btn bgh bsm" onclick="admBkPickAll(this,\'add\')">Добавить</button><button type="button" class="btn bgh bsm" onclick="admBkPickAll(this,\'rep\')">Заменить</button></div>'
+      +list.map(row).join('')+'</details>';
   };
   var diff=cls.dup.filter(function(c){return c.diff;}),same=cls.dup.filter(function(c){return !c.diff;});
-  var forced=cls.dup.concat(cls.conf).filter(function(c){return BK_FORCE&&BK_FORCE[vBulkKey(c.x)];}).length;
-  var h='<div style="margin-top:6px;font-size:13px;line-height:1.5"><b style="color:var(--mal-t)">Новых — добавятся: '+cls.add.length+(forced?' + отмеченных повторов: '+forced:'')+'</b>';
-  if(cls.self)h+='<br><span style="color:var(--tx3)">Повторяются внутри текста — пропущу: '+cls.self+'</span>';
-  if(cls.conf.length)h+='<details class="adm-dupbox" open><summary><b style="color:var(--iod-t)">Такой вопрос уже есть, но правильный ответ другой: '+cls.conf.length+'</b></summary>'
-    +'<p>Сверь ответы. Отметь галочкой те, что всё равно нужно добавить (как отдельный вопрос).</p>'
-    +'<button type="button" class="btn bgh bsm" onclick="admBkForceAll(this,true)">Отметить все</button> <button type="button" class="btn bgh bsm" onclick="admBkForceAll(this,false)">Снять</button>'
-    +cls.conf.map(function(c){return row(c);}).join('')+'</details>';
-  if(diff.length)h+='<details class="adm-dupbox"><summary><b style="color:var(--meth-t)">Уже есть с тем же ответом, но варианты другие: '+diff.length+'</b> — пропущу, если не отметишь</summary>'
-    +'<button type="button" class="btn bgh bsm" onclick="admBkForceAll(this,true)">Отметить все</button> <button type="button" class="btn bgh bsm" onclick="admBkForceAll(this,false)">Снять</button>'
-    +diff.map(function(c){return row(c);}).join('')+'</details>';
-  if(same.length)h+='<details class="adm-dupbox"><summary><span style="color:var(--tx3)">Точно такие уже есть — пропущу: '+same.length+'</span></summary>'
-    +same.map(function(c){return row(c);}).join('')+'</details>';
+  var h='<div style="margin-top:6px;font-size:13px;line-height:1.5"><b id="bkSum" style="color:var(--mal-t)">'+admBkSumText(cls)+'</b>';
+  if(cls.self)h+='<br><span style="color:var(--tx3)">Повторяются внутри самого текста — возьму по одному: '+cls.self+'</span>';
+  if(cls.dup.length+cls.conf.length)h+='<p class="adm-dup-lead">Похожие вопросы уже есть в базе. Сам я их не добавляю и не выбрасываю — решаешь ты: пропустить, добавить ещё одним вопросом или заменить тот, что в базе (ответы студентов по нему сохранятся).</p>';
+  h+=group(cls.conf,'<b style="color:var(--iod-t)">Вопрос тот же, а правильный ответ другой: '+cls.conf.length+'</b>','Сверь ответы: возможно, в базе ошибка — тогда выбери «Заменить старый».',true);
+  h+=group(diff,'<b style="color:var(--meth-t)">Вопрос и ответ те же, варианты другие: '+diff.length+'</b>','',true);
+  h+=group(same,'<b>Точно такие уже есть: '+same.length+'</b>','',cls.add.length===0||same.length<=20);
   return h+'</div>';
 }
-function admBkForce(cb){BK_FORCE=BK_FORCE||{};var k=cb.getAttribute('data-k');
-  if(cb.checked)BK_FORCE[k]=1;else delete BK_FORCE[k];admBkCount();}
-function admBkForceAll(btn,on){btn.closest('details').querySelectorAll('.bkForce').forEach(function(cb){cb.checked=on;admBkForce(cb);});}
-function admBkCount(){var b=document.querySelector('#bulkPrev b[style*="mal-t"]');if(!b)return;
-  var qa=parseBulkQA(val('bulkTxt')),cls=vBulkClassify(qa),f=cls.dup.concat(cls.conf).filter(function(c){return BK_FORCE&&BK_FORCE[vBulkKey(c.x)];}).length;
-  b.textContent='Новых — добавятся: '+cls.add.length+(f?' + отмеченных повторов: '+f:'');}
+function admBkSumText(cls){
+  var s=vBkSplit(cls),t='Новых — добавятся: '+cls.add.length;
+  if(s.add.length)t+=' · похожих добавлю: '+s.add.length;
+  if(s.rep.length)t+=' · заменю в базе: '+s.rep.length;
+  if(s.skip.length)t+=' · пропущу: '+s.skip.length;
+  return t;
+}
+function admBkSet(k,v){BK_FORCE=BK_FORCE||{};if(v==='skip')delete BK_FORCE[k];else BK_FORCE[k]=v;}
+function admBkPaint(row,v){row.querySelectorAll('.adm-dup-seg button').forEach(function(b){var on=b.getAttribute('data-v')===v;b.classList.toggle('on',on);b.setAttribute('aria-checked',on);});}
+function admBkPick(btn){var row=btn.closest('.adm-dup'),v=btn.getAttribute('data-v');admBkSet(row.getAttribute('data-k'),v);admBkPaint(row,v);admBkCount();}
+function admBkPickAll(btn,v){btn.closest('details').querySelectorAll('.adm-dup').forEach(function(row){admBkSet(row.getAttribute('data-k'),v);admBkPaint(row,v);});admBkCount();}
+function admBkCount(){var b=document.getElementById('bkSum');if(!b)return;
+  b.textContent=admBkSumText(vBulkClassify(parseBulkQA(val('bulkTxt'))));}
+// спросить, что делать с похожими (если админ ещё не решал)
+function vBkAsk(nNew,nDup){
+  return new Promise(function(done){
+    var w=document.getElementById('vAlertWrap');
+    if(!w){w=document.createElement('div');w.id='vAlertWrap';w.className='v-alert-wrap';document.body.appendChild(w);}
+    var box=document.createElement('div');box.className='v-alert';box.setAttribute('role','alertdialog');
+    var t=document.createElement('div');t.className='v-alert-t';
+    t.textContent='Похожих вопросов в базе: '+nDup+(nNew?'. Новых: '+nNew:'')+'.\nЧто сделать с похожими?';
+    box.appendChild(t);
+    var fin=function(v){box.remove();if(!w.children.length)w.classList.remove('on');done(v);};
+    [['add','Добавить и их тоже','bbl'],['rep','Заменить те, что в базе','bgh'],['skip',nNew?'Добавить только новые':'Ничего не добавлять','bgh'],['look','Посмотреть и выбрать по одному','bgh']].forEach(function(o){
+      var b=document.createElement('button');b.className='btn '+o[2]+' bfu';b.textContent=o[1];b.onclick=function(){fin(o[0]);};box.appendChild(b);});
+    w.appendChild(box);w.classList.add('on');
+  });
+}
 function admBulkPreview(){
   var qa=parseBulkQA(document.getElementById('bulkTxt').value);
   var prev=document.getElementById('bulkPrev');
@@ -7944,16 +8083,27 @@ async function admBulkSave(){
   }
   if(!t){showErr('\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0442\u0435\u043C\u0443');return;}
   var cls=vBulkClassify(qa),bad0=qa._bad;
-  var forced=cls.dup.concat(cls.conf).filter(function(c){return BK_FORCE&&BK_FORCE[vBulkKey(c.x)];}).map(function(c){return c.x;});
+  var sim=cls.dup.concat(cls.conf);
+  // похожие есть, а админ ещё ничего не выбирал — спрашиваем, сами не решаем
+  if(sim.length&&!(BK_FORCE&&Object.keys(BK_FORCE).length)&&!BK_ASKED){
+    var ans=await vBkAsk(cls.add.length,sim.length);
+    if(ans==='look'){admBulkPreview();var pv=document.getElementById('bulkPrev');if(pv&&pv.scrollIntoView)pv.scrollIntoView({block:'start',behavior:'smooth'});return;}
+    BK_ASKED=true;
+    if(ans==='add'||ans==='rep')sim.forEach(function(c){admBkSet(vBulkKey(c.x),ans);});
+    if(ans==='skip'&&!cls.add.length){BK_ASKED=false;return;}
+  }
+  var split=vBkSplit(cls);
+  var forced=split.add.map(function(c){return c.x;});
+  var repl=split.rep.filter(function(c){return c.m&&c.m.id;});
   qa=cls.add.concat(forced);qa._bad=bad0;
-  if(!qa.length){showErr('Все вопросы уже есть в базе — добавлять нечего'+(cls.conf.length?' (у '+cls.conf.length+' в базе другой ответ — см. «Проверить»)':'')+'.');return;}
+  if(!qa.length&&!repl.length){showErr('Добавлять нечего: все похожие вопросы отмечены «Пропустить». Нажми «Проверить» и выбери «Добавить» или «Заменить старый».');return;}
   var BATCH_ID=t+' · '+new Date().toLocaleDateString('ru-RU')+' '+new Date().toLocaleTimeString('ru-RU').slice(0,5);
   // Пул ответов для авто-вариантов (только для формата вопрос:ответ)
   var ownAnswers=qa.filter(function(x){return x.a;}).map(function(x){return x.a;});
   var subjAnswers=getQS().filter(function(q){return q.s===s;}).map(function(q){return q.o[q.a];});
   var pool=ownAnswers.concat(subjAnswers);
-  var btn=document.querySelectorAll('#mdBody .btn')[1];btn.disabled=true;
-  var saved=0,failed=0,aiOk=0,aiFail=0,aiErr=null;
+  var btn=document.getElementById('bkSaveBtn')||document.querySelectorAll('#mdBody .btn')[1];btn.disabled=true;
+  var saved=0,failed=0,aiOk=0,aiFail=0,aiErr=null,replaced=0;
   // ИИ придумывает неверные варианты (по 3 запроса одновременно)
   var need=qa.filter(function(x){return !x.opts;});
   if(need.length&&document.getElementById('bkAi')&&document.getElementById('bkAi').checked){
@@ -8007,12 +8157,30 @@ async function admBulkSave(){
       saved++;
     }catch(e){failed++;if(!window._bulkErr)window._bulkErr=e.message;}
   }
+  // замена: вопрос в базе остаётся тем же (id, предмет, тема, ответы студентов), меняются текст, варианты и правильный ответ
+  for(var ri=0;ri<repl.length;ri++){
+    btn.textContent='Замена '+(ri+1)+'/'+repl.length+'...';
+    var rx=repl[ri].x,rm=repl[ri].m,ro,rc;
+    if(rx.opts){var rco=rx.opts[rx.correct];ro=rx.opts.slice().sort(function(){return Math.random()-.5;});rc=ro.indexOf(rco);}
+    else{ // формат «вопрос: ответ» — старые неверные варианты остаются, меняется правильный
+      ro=(rm.o||[]).slice();rc=ro.indexOf(rm.ans);
+      if(rc<0){ro=[rx.a].concat(ro.filter(function(o){return o!==rx.a;}).slice(0,3));rc=0;}else ro[rc]=rx.a;
+    }
+    try{
+      if(dbOK)await sbPatch('custom_questions','id=eq.'+encodeURIComponent(rm.id),{question:rx.q,options:ro,correct_index:rc});
+      var cq=CQS.filter(function(z){return String(z.id)===String(rm.id);})[0];
+      if(cq){cq.q=rx.q;cq.o=ro;cq.a=rc;}
+      replaced++;
+    }catch(e){failed++;if(!window._bulkErr)window._bulkErr=e.message;}
+  }
+  V_DUPIDX=null;BK_FORCE=null;BK_ASKED=false;
   closeModal();refreshSubjectDropdowns();admQuestions({subject:s});
   var bad=qa._bad||[];
   var msg='Готово! Добавлено: '+saved;
-  var fd=forced.length,skipD=cls.dup.length+cls.conf.length-fd;
-  if(fd)msg+='\nИз них повторов, которые ты отметил: '+fd;
-  if(skipD||cls.self)msg+='\nПропущены (уже есть в базе): '+(skipD+cls.self);
+  var fd=forced.length,skipD=split.skip.length+(split.rep.length-repl.length);
+  if(fd)msg+='\nИз них похожих, которые ты решил добавить: '+fd;
+  if(replaced)msg+='\nЗаменено в базе: '+replaced;
+  if(skipD||cls.self)msg+='\nПропущено (уже есть в базе): '+(skipD+cls.self);
   if(aiOk||aiFail)msg+='\nНеверные варианты от ИИ: '+aiOk+(aiFail?', не получилось: '+aiFail+' — для них взяты ответы из других вопросов'+(aiErr?' ('+vAdminAiErr(aiErr)+')':''):'');
   if(failed){msg+=', ошибок сохранения: '+failed;if(window._bulkErr){msg+='\nПричина: '+window._bulkErr.slice(0,150);window._bulkErr=null;}}
   if(bad.length)msg+='\n\n НЕ распознано ('+bad.length+'): №'+bad.map(function(x){return x.num;}).join(', №')+'\nЭти вопросы НЕ добавлены — проверьте формат (нужен ? или :).';
@@ -9350,7 +9518,8 @@ function vRankBadge(r,size){
 }
 
 // ===== ПЛАН НА СЕГОДНЯ: что повторить и сколько новых =====
-var PLAN_REVIEW_CAP=20,PLAN_NEW_CAP=10;
+// размер плана = цель на день: около двух третей — повторение, остальное — новые вопросы
+var V_GOAL_SRV=false;   // сервер умеет хранить цель (security_v12.sql)
 function vHash(s){var h=0;for(var i=0;i<s.length;i++){h=(h*31+s.charCodeAt(i))|0;}return h;}
 function vPlanBuild(){
   var QS=getQS().filter(function(q){return q.q!=null;}),today=new Date().toISOString().slice(0,10),day=vDayKey();
@@ -9358,19 +9527,70 @@ function vPlanBuild(){
   var rev=QS.filter(function(q){var p=S.prog[q.id];return p&&p.a>0&&p.due&&p.due<=today;});
   rev.sort(function(a,b){var pa=S.prog[a.id],pb=S.prog[b.id],sa=(pa.streak||0)>0?1:0,sb=(pb.streak||0)>0?1:0;
     if(sa!==sb)return sa-sb;return pa.due<pb.due?-1:pa.due>pb.due?1:0;});
-  rev=rev.slice(0,PLAN_REVIEW_CAP);
+  var goal=vGoal(),freshN=QS.filter(function(q){var p=S.prog[q.id];return !p||!p.a;}).length;
+  rev=rev.slice(0,goal-Math.min(freshN,Math.max(1,Math.round(goal/3))));
   // 2) новые: сначала из тем, которые уже начал; порядок на день один и тот же
   var started={};QS.forEach(function(q){var p=S.prog[q.id];if(p&&p.a)started[q.s+'|'+q.t]=1;});
   var fresh=QS.filter(function(q){var p=S.prog[q.id];return !p||!p.a;});
   fresh.sort(function(a,b){var sa=started[a.s+'|'+a.t]?0:1,sb=started[b.s+'|'+b.t]?0:1;
     if(sa!==sb)return sa-sb;return vHash(a.id+day)-vHash(b.id+day);});
-  fresh=fresh.slice(0,PLAN_NEW_CAP);
+  fresh=fresh.slice(0,Math.max(0,goal-rev.length));
   return {date:day,ids:rev.map(function(q){return q.id;}).concat(fresh.map(function(q){return q.id;})),
-    rev:rev.length,neu:fresh.length,done:{},pn:Object.keys(S.prog||{}).length};
+    rev:rev.length,neu:fresh.length,done:{},pn:Object.keys(S.prog||{}).length,goal:goal};
 }
+// цель изменилась: план на сегодня пересобирается, уже сделанное остаётся сделанным
+function vGoalApply(){
+  var old=S.plan&&S.plan.date===vDayKey()?S.plan:null,goal=vGoal();
+  if(getQS().length&&!(typeof vQsAreStubs==='function'&&vQsAreStubs())){
+    var np=vPlanBuild();
+    if(old){
+      var doneIds=old.ids.filter(function(id){return old.done[id];});
+      var rest=np.ids.filter(function(id){return doneIds.indexOf(id)<0;}).slice(0,Math.max(0,goal-doneIds.length));
+      np.ids=doneIds.concat(rest);doneIds.forEach(function(id){np.done[id]=1;});
+    }
+    S.plan=np;
+  }else S.plan=null;
+  vDailyCredit();sv();
+  try{saveDaily();}catch(e){}
+  try{if(typeof renderStreak==='function')renderStreak();}catch(e){}
+  var h=document.getElementById('pg-home');if(h&&h.classList.contains('on')){try{renderHome();}catch(e){}}
+  var pf=document.getElementById('pg-profile');if(pf&&pf.classList.contains('on')){try{renderProfile();}catch(e){}}
+}
+var V_GOALS=[[10,'Лёгкая'],[20,'Обычная'],[30,'Серьёзная'],[50,'Интенсив']];
+function vGoalOpen(){
+  if(!S.user){showLoginWall();return;}
+  var cur=vGoal(),list=V_GOALS.slice();
+  if(!list.some(function(g){return g[0]===cur;}))list.push([cur,'Своя']);
+  list.sort(function(a,b){return a[0]-b[0];});
+  showModal('Цель на день','<div class="adm-rej gl">'
+    +'<p>Столько вопросов будет в плане на сегодня. Выполнил цель — день идёт в серию.</p>'
+    +'<div class="gl-list" role="radiogroup">'+list.map(function(g){var m=Math.max(1,Math.round(g[0]*25/60));
+      return '<button class="gl-o'+(g[0]===cur?' on':'')+'" role="radio" aria-checked="'+(g[0]===cur)+'" onclick="vGoalSet('+g[0]+',this)">'
+        +'<b>'+g[0]+'</b><span><strong>'+g[1]+'</strong><small>'+g[0]+' '+vplural(g[0],'вопрос','вопроса','вопросов')+' в день, около '+m+' '+vplural(m,'минуты','минут','минут')+'</small></span><i class="ti ti-check"></i></button>';}).join('')+'</div>'
+    +'<div id="glErr" class="adm-msg-err" role="alert"></div>'
+    +'<button class="btn bgh bfu" onclick="closeModal()">Готово</button></div>');
+  vModalX(true);
+}
+async function vGoalSet(g,btn){
+  var err=document.getElementById('glErr');if(err)err.textContent='';
+  if(S.token&&dbOK){
+    try{await sbRpc('set_goal',{p_token:S.token,p_goal:g});V_GOAL_SRV=true;}
+    catch(e){if(!e.missing){if(err)err.textContent=e.message||'Не получилось сохранить';return;}}  // база без v12 — цель живёт на этом устройстве
+  }
+  S.goal=g;if(S.user)S.user.daily_goal=g;
+  document.querySelectorAll('.gl-o').forEach(function(b){var on=b===btn;b.classList.toggle('on',on);b.setAttribute('aria-checked',on);});
+  vGoalApply();
+  toast2('Цель: '+g+' '+vplural(g,'вопрос','вопроса','вопросов')+' в день');
+}
+function vGoalRow(){
+  var g=vGoal();
+  return '<button class="lb-goal" onclick="vGoalOpen()"><i class="ti ti-target-arrow"></i><span>Цель: '+g+' '+vplural(g,'вопрос','вопроса','вопросов')+' в день</span><em>Изменить</em></button>';
+}
+var V_GOAL_BUSY=false;
 function vPlan(){
   if(!S.user)return null;
   var pn=Object.keys(S.prog||{}).length;
+  if(S.plan&&S.plan.ids&&S.plan.date===vDayKey()&&S.plan.goal&&S.plan.goal!==vGoal()&&!V_GOAL_BUSY){V_GOAL_BUSY=true;try{vGoalApply();}catch(e){}V_GOAL_BUSY=false;}
   var stale=!S.plan||!S.plan.ids||S.plan.date!==vDayKey()
     ||(!Object.keys(S.plan.done||{}).length&&S.plan.pn!==pn);   // прогресс подгрузился позже — пересобрать
   if(stale){
@@ -9407,7 +9627,7 @@ function vPlanFinish(){
   var pl=S.plan;TR_MODE='all';
   if(pl&&!pl.fin&&pl.ids.length){
     pl.fin=1;sv();
-    var days=S.daily?(S.daily.streakDays||0):0;
+    var days=vStreakNow();
     try{playSound('correct');}catch(e){}
     showModal('План выполнен','<div class="ap"><div class="ap-ic ok"><i class="ti ti-circle-check"></i></div>'
       +'<h3>На сегодня всё</h3><p>'+(pl.rev?'Повторено: <b>'+pl.rev+'</b>. ':'')+(pl.neu?'Новых вопросов: <b>'+pl.neu+'</b>. ':'')
@@ -9546,11 +9766,125 @@ function vDuelsHead(){
     +'<span class="du-vs-row"><span class="du-p"><span class="du-av">'+renderAvatar(S.user,60)+'</span><small>'+esc(first)+'</small></span>'
     +'<span class="du-bolt"><i class="ti ti-bolt"></i></span>'
     +'<span class="du-p"><span class="du-av du-q">?</span><small>соперник</small></span></span>'
-    +'<span class="du-vs-t"><b>Вызвать соперника</b><span>10 вопросов. При равном счёте побеждает тот, кто быстрее.</span></span></button>';
+    +'<span class="du-vs-t"><b>Вызвать соперника</b><span>Выбери тему, время и ставку. При равном счёте побеждает тот, кто быстрее.</span></span></button>';
   var row=function(fn,tone,icon,t,s){return '<button class="lb-row" onclick="'+fn+'"><span class="lb-blob '+tone+'"><i class="ti '+icon+'"></i></span><span class="lb-row-t"><b>'+t+'</b><span>'+s+'</span></span><i class="ti ti-chevron-right end"></i></button>';};
   m.innerHTML='<div class="lb-modes du-menu">'
     +row('roomCreate()','iod','ti-users-group','Комната на несколько человек','На ставку: победители делят банк')
     +row('roomJoinPrompt()','meth','ti-login-2','Войти в комнату по коду','Код из 6 цифр даёт создатель комнаты')+'</div>';
+}
+// ===== ДУЭЛИ: срок, выход, карточки «моя дуэль» =====
+var V_SRV_OFF=0,DUEL_SWEEP_AT=0,DUEL_MINE_HTML='',DUEL_AUTO=null,DUEL_SEEN={},DUEL_OLDFIX={};
+// сервер закрывает мои просроченные дуэли и говорит точное время (часы телефона могут врать)
+async function duelSweep(){
+  if(!dbOK||!S.user||!S.token)return;
+  DUEL_SWEEP_AT=Date.now();
+  try{var r=await sbRpc('duel_sweep',{p_token:S.token});
+    if(r&&r.now)V_SRV_OFF=r.now-Date.now();
+    if(r&&r.closed){vSyncMeSoon();LB_CACHE=null;}
+  }catch(e){}
+}
+// сколько осталось до конца дуэли, мс
+function duelLeftMs(d){
+  d=d||CUR_DUEL;if(!d)return 0;
+  var lim=Math.min(60,Math.max(1,+d.time_limit||10))*60000;
+  if(d.deadline_at)return Date.parse(d.deadline_at)-20000-(Date.now()+V_SRV_OFF);
+  if(d===CUR_DUEL&&DUEL_T0)return DUEL_T0+lim-Date.now();
+  var st=duelStLoad(d.id);return st&&st.t0?st.t0+lim-Date.now():lim;
+}
+function duelFmtLeft(ms){var s=Math.max(0,Math.ceil(ms/1000));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
+function duelTimeUp(){
+  if(window._duelUp||!CUR_DUEL)return;window._duelUp=true;
+  if(window._duelTmr)clearInterval(window._duelTmr);
+  toast2('Время дуэли вышло');
+  duelFinishMine().then(function(){window._duelUp=false;},function(){window._duelUp=false;});
+}
+function duelLeave(){
+  if(!CUR_DUEL)return;
+  vConfirm('Выйти из дуэли? Твой счёт останется как есть: '+DUEL_SCORE+' из '+DUEL_Q.length+'. Вернуться в неё уже нельзя.','Выйти',true)
+    .then(function(ok){if(ok&&CUR_DUEL)duelFinishMine(true);});
+}
+function duelExitToList(){
+  if(window._duelWait)clearInterval(window._duelWait);
+  if(window._duelTmr)clearInterval(window._duelTmr);
+  CUR_DUEL=null;renderDuels();
+}
+// во время боя на странице остаётся только бой
+function duelMatchUi(on){
+  var pg=document.getElementById('pg-duels');if(pg)pg.classList.toggle('in-match',!!on);
+  try{vDuelsHead();}catch(e){}
+}
+// дуэль «свежая» — её только что приняли, можно сразу начинать. Старую показываем карточкой и спрашиваем.
+function duelIsFresh(d){
+  var ch=d.challenger_email===S.user.email;
+  if((ch?d.challenger_progress:d.opponent_progress)>0)return false;
+  var st=duelStLoad(d.id);if(st&&st.qi>0)return false;
+  if(d.accepted_at)return Date.now()+V_SRV_OFF-Date.parse(d.accepted_at)<120000;
+  return Date.now()-Date.parse(d.created_at)<7*60000;
+}
+function duelMineCards(list){
+  var el=document.getElementById('duelMine');if(!el||!S.user)return;
+  var me=S.user.email,todo=null,html='',needSweep=false,ids={};
+  list.forEach(function(d){ids[d.id]=1;var ch=d.challenger_email===me;if(!(ch?d.challenger_done:d.opponent_done)&&!todo)todo=d;});
+  // дуэль пропала из активных — значит, закрылась: обновим историю и монеты
+  var gone=Object.keys(DUEL_SEEN).some(function(id){return !ids[id];});DUEL_SEEN=ids;
+  if(gone){vSyncMeSoon();try{duelShowHistory();}catch(e){}}
+  if(todo&&duelLeftMs(todo)>0&&(DUEL_AUTO===String(todo.id)||duelIsFresh(todo))){DUEL_AUTO=null;duelEnterMatch(todo);return;}
+  list.forEach(function(d){
+    var ch=d.challenger_email===me,done=ch?d.challenger_done:d.opponent_done,opp=esc((ch?d.opponent_name:d.challenger_name)||'соперником');
+    var n=d.question_count||0,prog=(ch?d.challenger_progress:d.opponent_progress)||0,left=duelLeftMs(d),hasDl=!!d.deadline_at;
+    var mins=Math.max(1,Math.ceil(left/60000)),inMin='ещё '+mins+' '+vplural(mins,'минуту','минуты','минут');
+    if(hasDl&&left<=-22000)needSweep=true;
+    if(!done){
+      var over=hasDl&&left<=0;
+      html+='<div class="du-card"><span class="lb-blob vio"><i class="ti ti-swords"></i></span><div class="du-card-t"><b>Дуэль с '+opp+' не закончена</b>'
+        +'<span>'+(over?'Время вышло — подводим итог.':'Ты на вопросе '+Math.min(n,prog+1)+' из '+n+(hasDl?'. Можно доиграть '+inMin+'.':'.'))+'</span>'
+        +(over?'':'<div class="du-card-b"><button class="btn bbl bsm" onclick="duelContinue('+d.id+')">Продолжить</button>'
+          +'<button class="btn bgh bsm" onclick="duelLeaveById('+d.id+')">Выйти из дуэли</button></div>')+'</div></div>';
+    }else{
+      html+='<div class="du-card"><span class="lb-blob meth"><i class="ti ti-hourglass-high"></i></span><div class="du-card-t"><b>Дуэль с '+opp+': ты ответил, счёт '+((ch?d.challenger_score:d.opponent_score)||0)+' из '+n+'</b>'
+        +'<span>'+(hasDl?(left>0?'Соперник может доиграть '+inMin+'. Результат появится в истории.':'Подводим итог…'):'Ждём соперника. Результат появится в истории.')+'</span></div></div>';
+      if(!hasDl)duelTryCloseOld(d);
+    }
+  });
+  if(needSweep&&Date.now()-DUEL_SWEEP_AT>15000)duelSweep();
+  if(html!==DUEL_MINE_HTML){el.innerHTML=html;DUEL_MINE_HTML=html;}
+}
+async function duelContinue(id){
+  try{var d=await sbGet('duels','id=eq.'+id);
+    if(d.length&&d[0].status==='accepted'){duelEnterMatch(d[0]);return;}
+  }catch(e){}
+  toast2('Эта дуэль уже закрыта');duelPoll();duelShowHistory();
+}
+async function duelLeaveById(id){
+  if(!await vConfirm('Выйти из дуэли? Счёт останется таким, какой есть. Вернуться в неё уже нельзя.','Выйти',true))return;
+  try{
+    var d=(await sbGet('duels','id=eq.'+id))[0];
+    if(d&&d.status==='accepted'){
+      var ch=d.challenger_email===S.user.email,st=duelStLoad(id)||{},p={};
+      p[ch?'challenger_done':'opponent_done']=true;
+      if(st.score!=null){p[ch?'challenger_score':'opponent_score']=st.score;p[ch?'challenger_time':'opponent_time']=Math.round(st.time||0);}
+      await sbPatch('duels','id=eq.'+id,p);
+    }
+    duelStClear(id);
+  }catch(e){vAlert(e.message||'Не получилось выйти из дуэли');}
+  DUEL_MINE_HTML='';duelPoll();duelShowHistory();
+}
+// база без security_v12.sql: соперник бросил дуэль — через 10 минут после моего финиша просим закрыть её по счёту
+function duelTryCloseOld(d){
+  var ch=d.challenger_email===S.user.email,fin=ch?d.challenger_fin_at:d.opponent_fin_at;
+  if(!fin||Date.now()+V_SRV_OFF-Date.parse(fin)<10*60000)return;
+  if(DUEL_OLDFIX[d.id]&&Date.now()-DUEL_OLDFIX[d.id]<60000)return;
+  DUEL_OLDFIX[d.id]=Date.now();
+  sbPatch('duels','id=eq.'+d.id,ch?{opponent_done:true}:{challenger_done:true}).catch(function(){});
+}
+// число вопросов и время в окне вызова — кнопками
+function duelChip(kind,v){
+  var el=document.getElementById(kind==='c'?'duelCnt':'duelTime');if(el)el.value=v;
+  document.querySelectorAll('#duel'+(kind==='c'?'Cnt':'Time')+'Chips .ex-chip').forEach(function(b){var on=+b.getAttribute('data-v')===v;b.classList.toggle('on',on);b.setAttribute('aria-checked',on);});
+}
+function duelChipsHtml(kind,vals,cur,unit){
+  return '<div class="ex-chips" id="duel'+(kind==='c'?'Cnt':'Time')+'Chips" role="radiogroup">'+vals.map(function(v){
+    return '<button type="button" class="ex-chip'+(v===cur?' on':'')+'" role="radio" aria-checked="'+(v===cur)+'" data-v="'+v+'" onclick="duelChip(\''+kind+'\','+v+')">'+v+(unit?'<small> '+unit+'</small>':'')+'</button>';}).join('')+'</div>';
 }
 // ===== ЭКЗАМЕН: билет — число вопросов и время выбираются кнопками =====
 var EX_CNT=[10,25,50,80],EX_MIN=[15,30,60,90];
@@ -9568,6 +9902,8 @@ function vExInit(){
 }
 function vExSet(kind,v){var el=document.getElementById(kind==='c'?'exC':'exT');if(el)el.value=v;vExInit();}
 function renderHome(){
+  // раз за запуск сверяемся с сервером: монеты, цель на день, напоминание
+  if(S.user&&S.token&&window._meSynced!==S.user.email){window._meSynced=S.user.email;try{vSyncMeSoon();}catch(e){}}
   renderAuthHdr();
   var QS=getQS();
   var st=getMyStats(),lv=vitaLevel(st);
@@ -9591,6 +9927,7 @@ function renderHome(){
   }
 
   h+=vPlanCta(QS);
+  if(S.user)h+=vGoalRow();
 
   var duelWaiting=document.getElementById('duelBadge')&&document.getElementById('duelBadge').style.display!=='none';
   h+='<div class="lb-duo">'
