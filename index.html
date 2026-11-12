@@ -1778,6 +1778,17 @@ input.v-locked{opacity:.75;background:var(--bg3)}
 @media(max-width:560px){.adm-ai-ba{grid-template-columns:1fr}}
 
 .adm-dup-seg.two{grid-template-columns:repeat(2,1fr)}
+
+/* рейтинг: разрыв после топ-10 и «сколько осталось» */
+.lb-gap{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 0}
+.lb-gap i{width:5px;height:5px;border-radius:50%;background:var(--tx3);opacity:.6}
+.lb-goal-card{display:flex;gap:12px;align-items:center;margin:14px 0 4px;padding:14px;border-radius:20px;background:var(--iod-s)}
+.lb-goal-card .lb-blob{width:44px;height:44px;border-radius:14px;font-size:24px;background:var(--iod);color:var(--iod-ink);flex-shrink:0}
+.lb-goal-card>div{display:flex;flex-direction:column;gap:3px;min-width:0}
+.lb-goal-card b{font-size:16px;font-weight:800;color:var(--tx);letter-spacing:-.01em}
+.lb-goal-card span{font-size:13px;color:var(--tx2);line-height:1.45}
+.lb-all{margin-top:12px}
+.lb-goal-card .lb-goal-far{display:flex;align-items:center;gap:5px;margin-top:4px;font-weight:700;color:var(--iod-t)}
 </style>
 </head>
 <body>
@@ -5957,6 +5968,7 @@ function lbRowBg(e){
   }
   return {layer:'',hasBg:false};
 }
+var LB_TOP=10,LB_ALL=false;   // студентам — топ-10 и своё место; админ может раскрыть всех
 function renderLBList(data){
   var lb=document.getElementById('lbList');
   var ranked=data.ranked||[],notYet=data.notYet||[];
@@ -5982,13 +5994,8 @@ function renderLBList(data){
     html+='</div>';
   }
 
-  // ===== СПИСОК =====
-  if(ranked.length){
-    var listStart=ranked.length>=3?3:0;
-    if(ranked.slice(listStart).length){
-      html+='<div class="lb-list">';
-      html+=ranked.slice(listStart).map(function(e,i0){
-        var i=i0+listStart;
+  // ===== СПИСОК: топ-10, а ниже — я и тот, кто прямо передо мной =====
+  var row=function(e,i){
         var bg=lbRowBg(e);
         var hasBg=bg.hasBg;
         return '<div class="lb-row'+(e.isMe?' me':'')+(hasBg?' has-bg':'')+'" onclick="viewProfile(\''+encodeURIComponent(e.email)+'\')">'
@@ -5998,9 +6005,36 @@ function renderLBList(data){
           +'<div class="lb-info"><div class="lb-name">'+esc(e.name)+(e.isMe?' <span class="lb-you">вы</span>':'')+'</div>'
           +'<div class="lb-sub">'+((e.priv&&!e.isMe&&!S.isSuper&&!S.isAdm)?'<i class="ti ti-lock"></i> закрыт':(e.solved+' решено · '+e.acc+'%'+(e.duelWins?' · <i class="ti ti-swords"></i>'+e.duelWins:'')))+'</div></div>'
           +'<div class="lb-score">'+e.score+'</div></div>';
-      }).join('');
-      html+='</div>';
+  };
+  if(ranked.length){
+    var listStart=ranked.length>=3?3:0;
+    var showN=LB_ALL?ranked.length:Math.min(LB_TOP,ranked.length);
+    var myI=-1;ranked.forEach(function(e,i){if(e.isMe)myI=i;});
+    if(showN>listStart){
+      html+='<div class="lb-list">'+ranked.slice(listStart,showN).map(function(e,i0){return row(e,i0+listStart);}).join('')+'</div>';
     }
+    if(myI>=showN){
+      html+='<div class="lb-gap" aria-hidden="true"><i></i><i></i><i></i></div>';
+      html+='<div class="lb-list">'+(myI-1>=showN?row(ranked[myI-1],myI-1):'')+row(ranked[myI],myI)+'</div>';
+    }
+    // сколько осталось: до топ-10, а в топе — до следующего места
+    if(myI>0){
+      var pts=function(n){return n+' '+vplural(n,'очко','очка','очков');};
+      var gapTo=function(t){return Math.max(1,ranked[t].score-ranked[myI].score+1);};
+      var need=gapTo(myI-1),duels=Math.ceil(need/10),exams=Math.ceil(need/5);   // ближняя цель — обойти того, кто прямо передо мной
+      var far=myI>LB_TOP;                                                      // топ-10 ещё далеко — покажем и его
+      html+='<div class="lb-goal-card"><span class="lb-blob iod"><i class="ti ti-'+(myI===LB_TOP?'target-arrow':'arrow-big-up-lines')+'"></i></span><div>'
+        +'<b>'+(myI===LB_TOP?'До топ-10: '+pts(need):'До '+myI+'-го места: '+pts(need))+'</b>'
+        +'<span>Ты на '+(myI+1)+'-м месте. Это '+(duels<=1?'одна победа в дуэли':duels+' '+vplural(duels,'победа','победы','побед')+' в дуэлях')
+        +' или '+(exams<=1?'один экзамен':exams+' '+vplural(exams,'экзамен','экзамена','экзаменов'))+'. Точные ответы в тестах тоже поднимают счёт.</span>'
+        +(far?'<span class="lb-goal-far"><i class="ti ti-target-arrow"></i> До топ-10: '+pts(gapTo(LB_TOP-1))+'</span>':'')+'</div></div>';
+    }else if(myI===0&&ranked.length>1){
+      var lead=ranked[0].score-ranked[1].score;
+      html+='<div class="lb-goal-card"><span class="lb-blob iod"><i class="ti ti-crown"></i></span><div><b>Ты на первом месте</b>'
+        +'<span>'+(lead>0?'Отрыв от второго места: '+lead+' '+vplural(lead,'очко','очка','очков')+'.':'Второе место идёт вровень с тобой.')+' Не сбавляй темп.</span></div></div>';
+    }
+    if(ranked.length>LB_TOP&&(S.isAdm||S.isSuper))
+      html+='<button class="btn bgh bfu lb-all" onclick="LB_ALL=!LB_ALL;renderLBList(LB_CACHE)">'+(LB_ALL?'Показать только топ-10':'Показать всех ('+ranked.length+')')+'</button>';
   }else{
     html+='<div class="lb-empty"><div class="lb-empty-ic"><i class="ti ti-target"></i></div><div>Никто не решил 50+ вопросов. Будь первым!</div></div>';
   }
