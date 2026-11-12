@@ -3748,7 +3748,7 @@ function roomRenderTopics(){
   var QS=getQS();
   var topics=[];
   QS.forEach(function(q){if(q.t&&(s==='all'||q.s===s)&&topics.indexOf(q.t)<0)topics.push(q.t);});
-  topics.sort();
+  vSortTopics(topics);
   ROOM_TOPICS=[]; // сброс при смене предмета
   if(!topics.length){cont.innerHTML='<div style="font-size:12px;color:var(--tx3);padding:6px">Нет тем — будут все вопросы предмета</div>';return;}
   cont.innerHTML=topics.map(function(t){
@@ -4216,7 +4216,7 @@ function duelChTopics(){
   var s=document.getElementById('duelSubj').value;
   var topEl=document.getElementById('duelTopic');
   var topics=[];getQS().forEach(function(q){if(q.s===s&&topics.indexOf(q.t)<0)topics.push(q.t);});
-  topics.sort();
+  vSortTopics(topics);
   topEl.innerHTML='<option value="all">Все темы</option>'+topics.map(function(t){return '<option value="'+t+'">'+t+'</option>';}).join('');
 }
 function duelCntUpd(){document.getElementById('duelCntL').textContent=document.getElementById('duelCnt').value;}
@@ -5492,7 +5492,7 @@ function openTopicPicker(mode,subjVal,onDone){
   var QS=getQS();
   var topics=[];
   QS.forEach(function(q){if((subjVal==='all'||q.s===subjVal)&&topics.indexOf(q.t)<0)topics.push(q.t);});
-  topics.sort();
+  vSortTopics(topics);
   if(!topics.length){vAlert('Нет тем для этого предмета');return;}
   var sel=SELECTED_TOPICS[mode]||[];
   var rows=topics.map(function(t){
@@ -6096,7 +6096,7 @@ async function admRewards(){
   try{students=await sbGet('users','status=eq.active&select=email,name,group_name&order=name.asc');}catch(e){}
   // группы
   var groups=[];students.forEach(function(s){if(s.group_name&&groups.indexOf(s.group_name)<0)groups.push(s.group_name);});
-  groups.sort();
+  groups.sort(function(a,b){return String(a).localeCompare(String(b),"ru",{numeric:true});});
   var html='<div class="alert ali" style="margin-bottom:14px;font-size:12px"><i class="ti ti-info-circle"></i> Отметь студентов и выбери награду. Можно выбрать всех или по группе.</div>';
   // Баннер
   html+='<div class="card" style="margin-bottom:14px"><div style="font-size:13px;font-weight:600;margin-bottom:8px"><i class="ti ti-confetti"></i> Баннер-поздравление на сайте</div>'
@@ -6238,7 +6238,7 @@ async function admAddBanner(){
   // собрать список групп
   var groups=[];
   try{var us=await sbGet('users','status=eq.active&select=group_name');us.forEach(function(u){if(u.group_name&&groups.indexOf(u.group_name)<0)groups.push(u.group_name);});}catch(e){}
-  groups.sort();
+  groups.sort(function(a,b){return String(a).localeCompare(String(b),"ru",{numeric:true});});
   var grpOpts='<option value="">Всем студентам</option>'+groups.map(function(g){return '<option value="'+g+'">Только группа '+g+'</option>';}).join('');
   var body='<div class="fg"><label class="fl">Заголовок</label><input id="bnT" placeholder="Поздравляем с экзаменом по биологии! <i class="ti ti-confetti"></i>" maxlength="80"></div>'
     +'<div class="fg"><label class="fl">Текст (необязательно)</label><textarea id="bnB" rows="3" placeholder="Молодцы все, кто сдал! Так держать <i class="ti ti-barbell"></i>"></textarea></div>'
@@ -9336,7 +9336,7 @@ function saTopicLinkTopics(cur){
   if(!s){el.innerHTML='';el.style.display='none';return;}
   var cnt={};getQS().forEach(function(q){if(q.s===s)cnt[q.t]=(cnt[q.t]||0)+1;});
   el.style.display='';
-  el.innerHTML='<option value="">— выбери тему —</option>'+Object.keys(cnt).sort().map(function(t){return '<option value="'+esc(t)+'"'+(t===cur?' selected':'')+'>'+esc(t)+' · '+cnt[t]+'</option>';}).join('');
+  el.innerHTML='<option value="">— выбери тему —</option>'+vSortTopics(Object.keys(cnt)).map(function(t){return '<option value="'+esc(t)+'"'+(t===cur?' selected':'')+'>'+esc(t)+' · '+cnt[t]+'</option>';}).join('');
 }
 function saSaveTopic(id){
   var rec={subject_id:SA.subject.id,number:parseInt(val('saTopNum'))||1,title:val('saTopTitle'),kicker:val('saTopKicker'),lede:val('saTopLede'),read_minutes:parseInt(val('saTopMins'))||5};
@@ -9985,6 +9985,20 @@ function vExInit(){
   var a=document.getElementById('exCL'),b=document.getElementById('exTL');if(a)a.textContent=cv;if(b)b.textContent=tv;
 }
 function vExSet(kind,v){var el=document.getElementById(kind==='c'?'exC':'exT');if(el)el.value=v;vExInit();}
+// ===== Порядок тем: «Тема 2» раньше «Тема 10», сначала 1-й семестр, потом 2-й =====
+function vTopicKey(t){
+  var s=String(t||'').toLowerCase();
+  var sem=(s.match(/(\d+)\s*(?:-?\s*(?:й|ый|ой))?\s*семестр/)||[])[1];     // «(1 семестр)», «2-й семестр»
+  if(!sem){var m2=s.match(/семестр\s*(\d+)/);if(m2)sem=m2[1];}
+  var rest=sem?s.replace(/\(?\s*\d+\s*(?:-?\s*(?:й|ый|ой))?\s*семестр\s*\)?/,'').replace(/\(?\s*семестр\s*\d+\s*\)?/,''):s;
+  return {sem:sem?+sem:0,rest:rest.trim()};
+}
+function vTopicCmp(a,b){
+  var ka=vTopicKey(a),kb=vTopicKey(b);
+  if(ka.sem!==kb.sem)return ka.sem-kb.sem;
+  return ka.rest.localeCompare(kb.rest,'ru',{numeric:true,sensitivity:'base'})||String(a).localeCompare(String(b),'ru');
+}
+function vSortTopics(arr){return arr.sort(vTopicCmp);}
 function renderHome(){
   // раз за запуск сверяемся с сервером: монеты, цель на день, напоминание
   if(S.user&&S.token&&window._meSynced!==S.user.email){window._meSynced=S.user.email;try{vSyncMeSoon();}catch(e){}}
