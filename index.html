@@ -1787,8 +1787,210 @@ input.v-locked{opacity:.75;background:var(--bg3)}
 .lb-goal-card>div{display:flex;flex-direction:column;gap:3px;min-width:0}
 .lb-goal-card b{font-size:16px;font-weight:800;color:var(--tx);letter-spacing:-.01em}
 .lb-goal-card span{font-size:13px;color:var(--tx2);line-height:1.45}
-.lb-all{margin-top:12px}
 .lb-goal-card .lb-goal-far{display:flex;align-items:center;gap:5px;margin-top:4px;font-weight:700;color:var(--iod-t)}
+
+/* =====================================================================
+   УРОК: читалка. Обычный текст лежит прямо на странице (без карточек),
+   а всё важное — цветными плашками. Так глаз сразу видит, где главное.
+   ===================================================================== */
+.sblk{background:var(--bg2);background-image:none;border:none;border-radius:20px;padding:16px 18px;margin:0 0 12px;box-shadow:0 4px 0 var(--edge)}
+.sblk.txt{background:none;box-shadow:none;padding:0 4px;margin-bottom:16px}
+.sblk p{font-family:var(--read);font-size:16.5px;line-height:1.72;color:var(--tx);margin:0}
+.sblk p+p,.sblk p+.sb-list,.sblk .sb-list+p{margin-top:12px}
+.sblk p b,.sblk li b{font-weight:700;color:var(--tx)}
+.sblk mark{background:var(--iod-s);color:inherit;border-radius:4px;padding:1px 3px;-webkit-box-decoration-break:clone;box-decoration-break:clone;box-shadow:inset 0 -2px 0 var(--iod)}
+.sblk .term,.sblk p .term{color:var(--meth-t);font-weight:600;border-bottom:1.5px dashed currentColor;cursor:pointer}
+.sb-drop::first-letter{font-family:var(--f);font-size:52px;float:left;line-height:.82;margin:5px 10px 0 0;color:var(--mal-t);font-weight:800}
+.sb-list{margin:0;padding-left:22px;font-family:var(--read);font-size:16px;line-height:1.6;color:var(--tx)}
+.sb-list li+li{margin-top:6px}
+.sb-list li::marker{color:var(--mal-t);font-weight:700}
+.sb-sub{font:700 17px/1.3 var(--f);color:var(--tx);margin:0 0 8px;letter-spacing:-.01em}
+.sb-h{display:flex;align-items:center;gap:10px;font:800 22px/1.2 var(--f);letter-spacing:-.02em;color:var(--tx);margin:28px 2px 12px;scroll-margin-top:76px}
+.sb-h:first-child{margin-top:4px}
+.sb-h span{width:30px;height:30px;border-radius:10px;background:var(--mal);color:var(--mal-ink);font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sblk .sb-eb{display:flex;align-items:center;gap:7px;font:700 13.5px/1.2 var(--f);letter-spacing:0;text-transform:none;color:var(--tx2);margin-bottom:9px}
+.sblk .sb-eb i{font-size:18px}
+/* плашки-акценты: короткий текст без засечек, чтобы отличался от основного */
+.sblk.key,.sblk.remember,.sblk.exam,.sblk.warn,.sblk.mnemo,.sblk.quiz{box-shadow:none}
+.sblk.key p,.sblk.remember p,.sblk.exam p,.sblk.warn p,.sblk.mnemo p,.sblk.clinic p,.sblk.term p,
+.sblk.key .sb-list,.sblk.remember .sb-list,.sblk.exam .sb-list,.sblk.warn .sb-list,.sblk.mnemo .sb-list,.sblk.clinic .sb-list{font-family:var(--f);font-size:15.5px;line-height:1.55;font-weight:500}
+.sblk.key{background:var(--mal-s)}.sblk.key .sb-eb{color:var(--mal-t)}
+.sblk.remember{background:var(--iod-s);border-color:transparent}.sblk.remember .sb-eb{color:var(--iod-t)}
+.sblk.exam{background:var(--vio-s)}.sblk.exam .sb-eb{color:var(--vio-t)}.sblk.exam .sb-list li::marker{color:var(--vio-t)}
+.sblk.warn{background:var(--eos-s)}.sblk.warn .sb-eb{color:var(--eos-t)}
+.sblk.mnemo{background:var(--meth-s)}.sblk.mnemo .sb-eb{color:var(--meth-t)}
+.sblk.clinic{background:var(--bg2);border-color:transparent}.sblk.clinic .sb-eb{color:var(--eos-t)}
+.sb-key{list-style:none;margin:0;padding:0;counter-reset:k;display:flex;flex-direction:column;gap:9px}
+.sb-key li{counter-increment:k;display:grid;grid-template-columns:26px 1fr;gap:8px;font:500 15.5px/1.5 var(--f);color:var(--tx)}
+.sb-key li::before{content:counter(k);font-weight:800;font-size:17px;color:var(--mal-t);line-height:1.35}
+.sblk.term{background:var(--bg2);background-image:none;align-items:flex-start}
+.sblk.term .sb-tic{background:var(--meth);color:var(--meth-ink);width:40px;height:40px;border-radius:12px}
+.sblk.term .sb-tw b{font:800 16px var(--f)}
+.sblk.term .sb-tw p{font-size:14.5px;color:var(--tx2)}
+/* этапы — сверху вниз, с номерами */
+.sblk.steps{background:var(--bg2);background-image:none}
+.sblk.steps .sb-flow{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.sblk.steps .sb-flow li{position:relative;display:flex;align-items:center;gap:12px;padding:6px 0;font:600 15px/1.35 var(--f);color:var(--tx)}
+.sblk.steps .sb-flow li:not(:last-child)::before{content:'';position:absolute;left:15px;top:38px;bottom:-6px;width:2px;background:var(--bor2)}
+.sblk.steps .sb-o{width:32px;height:32px;border-radius:50%;border:none;background:var(--meth);color:var(--meth-ink);font-size:14px;font-weight:800;margin:0;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;z-index:1}
+/* картинка: три размера, по нажатию — на весь экран */
+figure.sblk.img{padding:0;background:none;box-shadow:none;margin:4px auto 16px;overflow:visible}
+figure.sblk.img img{display:block;width:100%;height:auto;border-radius:16px;background:var(--bg3);cursor:zoom-in}
+figure.sblk.img.sz-s{max-width:46%}figure.sblk.img.sz-m{max-width:72%}
+.sblk.img .sb-cap{padding:8px 6px 0;font:500 13px/1.45 var(--f);color:var(--tx2);text-align:center}
+.sblk.img.todo{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;padding:18px;background:none;box-shadow:none;border:2px dashed var(--bor2);color:var(--tx2)}
+.sblk.img.todo i{font-size:28px;color:var(--vio-t)}
+.sblk.img.todo b{font-size:14.5px;color:var(--tx)}.sblk.img.todo span{font-size:13.5px;line-height:1.45}.sblk.img.todo small{font-size:12px;color:var(--tx3)}
+.v-zoom{position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;padding:12px;cursor:zoom-out}
+.v-zoom img{max-width:100%;max-height:100%;border-radius:8px}
+.v-zoom button{position:absolute;top:14px;right:14px;width:44px;height:44px;border:none;border-radius:50%;background:rgba(255,255,255,.16);color:#fff;font-size:22px;cursor:pointer}
+/* сравнение и таблица */
+.sblk-vs{border:none;box-shadow:0 4px 0 var(--edge);border-radius:20px}
+.sblk-vs .vs-sd{padding:16px 14px;min-width:0}
+.sblk-vs .vs-sd h4{font:800 15px var(--f);margin:0 0 8px}
+.sblk-vs .vs-sd.l h4{color:var(--eos-t)}.sblk-vs .vs-sd.r h4{color:var(--mal-t)}
+.sblk-vs .vs-sd p,.sblk-vs .sb-list{font:500 14px/1.5 var(--f);color:var(--tx2)}
+.sblk-vs .sb-list{padding-left:18px}
+.sblk-vs .vs-md{width:34px;background:var(--bg3);font:700 12px var(--f);font-style:normal;color:var(--tx3)}
+.sb-tw-scroll{overflow-x:auto;border-radius:14px;background:var(--bg3)}
+table.sb-t{width:100%;border-collapse:collapse;font:500 13.5px/1.45 var(--f);color:var(--tx)}
+table.sb-t th{background:var(--bg4);text-align:left;font-weight:700;padding:10px 12px;vertical-align:bottom}
+table.sb-t td{padding:10px 12px;border-top:1px solid var(--bor);vertical-align:top}
+table.sb-t td:first-child{font-weight:700}
+table.sb-t.c4{min-width:480px}table.sb-t.c5{min-width:580px}
+table.sb-t th,table.sb-t td{overflow-wrap:break-word;hyphens:auto}
+.sblk.quiz{background:var(--mal-s);background-image:none}.sblk.quiz .sb-eb{color:var(--mal-t)}
+.sblk.quiz .sb-opt{border:none;background:var(--bg2);box-shadow:0 3px 0 var(--edge);font:600 14.5px var(--f);color:var(--tx)}
+.sblk.quiz .sb-opt.correct{background:var(--mal);color:var(--mal-ink);box-shadow:0 3px 0 var(--mal-e)}
+.sblk.quiz .sb-opt.wrong{background:var(--eos);color:var(--eos-ink);box-shadow:0 3px 0 var(--eos-e)}
+.ft-why{margin-top:8px;padding:10px 12px;border-radius:12px;background:var(--bg3);font:500 13.5px/1.5 var(--f);color:var(--tx2)}
+/* содержание темы */
+.sb-toc{background:var(--bg2);border-radius:18px;box-shadow:0 4px 0 var(--edge);padding:14px 16px;margin:0 0 18px}
+.sb-toc b{display:block;font:700 13.5px var(--f);color:var(--tx2);margin-bottom:4px}
+.sb-toc ol{margin:0;padding-left:22px}
+.sb-toc li::marker{font-weight:800;color:var(--mal-t)}
+.sb-toc button{display:block;width:100%;min-height:38px;border:none;background:none;text-align:left;font:600 15px/1.3 var(--f);color:var(--tx);cursor:pointer;padding:4px 0}
+.sb-toc button:hover{color:var(--mal-t)}
+.study-reader-hero .srh-chip i{font-size:14px;vertical-align:-2px}
+
+/* ===== РЕДАКТОР УРОКА ===== */
+.sab-head{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap;margin:8px 0 18px}
+.sab-head-t small{display:block;font-size:12.5px;color:var(--tx3)}
+.sab-head-t h2{font:800 24px/1.2 var(--f);letter-spacing:-.02em;margin:3px 0;color:var(--tx)}
+.sab-head-t span{font-size:13px;color:var(--tx2)}
+.sab-head-a{display:flex;gap:8px;flex-wrap:wrap}
+.sab-head-a .btn{margin:0}
+.sab{display:grid;grid-template-columns:minmax(0,470px) minmax(250px,330px);gap:28px;align-items:start;justify-content:center}
+.sab-canvas{background:var(--bg);border-radius:28px;padding:14px;box-shadow:inset 0 0 0 2px var(--bor2)}
+.sab-hero{margin-bottom:14px;padding:20px 18px}
+.sab-hero h1{font-size:26px}
+.sab-b{position:relative;border-radius:16px;margin:0 -6px;padding:2px 6px 6px}
+.sab-b:hover,.sab-b:focus-within{background:var(--bg3)}
+.sab-b.flash{animation:sabFlash 1.4s ease-out}
+@keyframes sabFlash{0%{background:var(--mal-s)}100%{background:transparent}}
+.sab-tools{display:flex;align-items:center;gap:1px;min-height:34px}
+.sab-name{flex:1;min-width:0;display:flex;align-items:center;gap:5px;font:600 12px var(--f);color:var(--tx3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sab-name i{font-size:15px}
+.sab-tools button{min-width:34px;height:34px;border:none;background:none;border-radius:9px;color:var(--tx2);cursor:pointer;font-size:16px;display:inline-flex;align-items:center;justify-content:center;gap:4px}
+.sab-tools button:hover{background:var(--bg4);color:var(--tx)}
+.sab-tools button:disabled{opacity:.25;cursor:default}
+.sab-tools button.ed{padding:0 9px;font:700 12.5px var(--f);color:var(--meth-t)}
+.sab-body>.sblk:last-child,.sab-body>.sblk-vs:last-child,.sab-body>figure:last-child{margin-bottom:0}
+.sab-body .sb-h{margin:8px 2px 4px}
+.sab-ins{position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:30px;border:none;background:none;color:var(--tx3);cursor:pointer}
+.sab-ins::before{content:'';position:absolute;left:8px;right:8px;top:50%;border-top:2px dashed var(--bor2);opacity:0}
+.sab-ins i{position:relative;width:24px;height:24px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:14px;opacity:.55}
+.sab-ins:hover::before,.sab-ins:focus-visible::before{opacity:1}
+.sab-ins:hover i,.sab-ins:focus-visible i{opacity:1;background:var(--mal);color:var(--mal-ink)}
+.sab-empty{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;padding:40px 18px}
+.sab-empty .lb-blob{width:56px;height:56px;border-radius:18px;font-size:28px}
+.sab-empty b{font:800 19px var(--f);color:var(--tx)}
+.sab-empty p{font-size:14px;line-height:1.55;color:var(--tx2);margin:0 0 6px;max-width:340px}
+.sab-side{position:sticky;top:12px;background:var(--bg2);border-radius:22px;box-shadow:0 4px 0 var(--edge);padding:16px}
+.sab-side>b{font:800 16px var(--f);color:var(--tx)}
+.sab-side>p{font-size:13px;line-height:1.5;color:var(--tx2);margin:4px 0 2px}
+.sab-pg small{display:block;font:700 12px var(--f);color:var(--tx3);margin:12px 0 6px}
+.sab-pl{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.sab-pt{display:flex;align-items:center;gap:8px;min-height:44px;padding:4px 10px;border:none;border-radius:12px;background:var(--bg3);color:var(--tx);font:600 13px/1.25 var(--f);cursor:pointer;text-align:left}
+.sab-pt i{font-size:18px;color:var(--meth-t);flex-shrink:0}
+.sab-pt:hover{background:var(--bg4)}
+.sab-tip{margin-top:14px;padding:12px;border-radius:14px;background:var(--bg3);font-size:12.5px;line-height:1.8;color:var(--tx2)}
+.sab-tip b{display:block;font-size:13px;color:var(--tx);margin-bottom:2px}
+.sab-tip code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;background:var(--bg2);border-radius:5px;padding:1px 5px;color:var(--tx)}
+@media(max-width:880px){.sab{grid-template-columns:minmax(0,1fr)}.sab-side{position:static}.sab-canvas{border-radius:22px;padding:10px}}
+
+/* окно блока: поля слева, справа — как увидит студент */
+#modalRoot .modal.sbe{max-width:980px;width:100%;padding:0;border:none;display:flex;flex-direction:column;max-height:92vh;overflow:hidden}
+#modalRoot .modal.sbe.sbe-pal{max-width:520px;padding-bottom:16px;overflow-y:auto}
+#modalRoot .modal.sbe.sbe-ai{max-width:760px}
+.sbe-pal .sab-pg{padding:0 18px}
+.sbe-head{display:flex;align-items:center;gap:10px;padding:12px 10px 12px 18px;border-bottom:1px solid var(--bor)}
+.sbe-head .lb-blob{width:36px;height:36px;border-radius:11px;font-size:19px;flex-shrink:0}
+.sbe-head b{flex:1;font:800 18px var(--f);color:var(--tx);letter-spacing:-.01em}
+.sbe-x{width:44px;height:44px;border:none;background:none;border-radius:12px;color:var(--tx2);font-size:20px;cursor:pointer}
+.sbe-x:hover{background:var(--bg3)}
+.sbe-cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,410px);flex:1;min-height:0}
+.sbe-form{padding:16px 18px;overflow-y:auto}
+.sbe-prev{padding:14px 16px 18px;overflow-y:auto;background:var(--bg);border-left:1px solid var(--bor)}
+.sbe-prev>small{display:block;font:700 12.5px var(--f);color:var(--tx3);margin-bottom:10px}
+.sbe-empty{padding:26px 14px;text-align:center;font-size:13.5px;color:var(--tx3);border:2px dashed var(--bor2);border-radius:16px}
+.sbe-f{margin-bottom:14px;min-width:0}
+.sbe-f>label{display:block;font:700 13px var(--f);color:var(--tx2);margin-bottom:6px}
+.sbe-f input:not([type=radio]):not([type=file]),.sbe-f textarea{width:100%;border:none;border-radius:12px;background:var(--bg3);color:var(--tx);font:500 15px/1.5 var(--f);padding:11px 13px}
+.sbe-f textarea{resize:vertical;min-height:70px}
+.sbe-f input+textarea{margin-top:6px}
+.sbe-f input:focus-visible,.sbe-f textarea:focus-visible{outline:2px solid var(--meth);outline-offset:1px}
+.sbe-f>small{display:block;font-size:12.5px;line-height:1.45;color:var(--tx3);margin-top:5px}
+.sbe-bar{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px}
+.sbe-bar button{height:34px;padding:0 10px;border:none;border-radius:9px;background:var(--bg3);color:var(--tx);font:600 13px var(--f);cursor:pointer;display:inline-flex;align-items:center;gap:4px}
+.sbe-bar button:hover{background:var(--bg4)}
+.sbe-bar mark{background:var(--iod-s);box-shadow:inset 0 -2px 0 var(--iod);color:inherit;padding:0 3px;border-radius:3px}
+.sbe-bar u{color:var(--meth-t);text-decoration:underline dashed;text-underline-offset:3px}
+.sbe-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sbe-seg{display:flex;gap:4px;padding:3px;border-radius:12px;background:var(--bg3)}
+.sbe-seg button{flex:1;min-height:40px;border:none;border-radius:9px;background:none;color:var(--tx2);font:600 13.5px var(--f);cursor:pointer;padding:0 6px}
+.sbe-seg button.on{background:var(--bg2);color:var(--tx);box-shadow:0 2px 0 var(--edge)}
+.sbe-drop{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;border:2px dashed var(--bor2);border-radius:16px;padding:18px 14px}
+.sbe-drop.over{border-color:var(--meth);background:var(--meth-s)}
+.sbe-drop>i{font-size:30px;color:var(--meth-t)}
+.sbe-drop>b{font:700 14px/1.35 var(--f);color:var(--tx)}
+.sbe-drop>span{font-size:12.5px;line-height:1.4;color:var(--tx3)}
+.sbe-drop .btn{margin:4px 0 0;cursor:pointer}
+.sbe-url summary{font-size:13px;color:var(--tx3);cursor:pointer;margin:8px 0 6px}
+.sbe-opt{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.sbe-opt input[type=radio]{width:22px;height:22px;accent-color:var(--mal);flex-shrink:0}
+.sbe-opt button{width:38px;height:38px;border:none;background:none;border-radius:10px;color:var(--tx3);cursor:pointer;flex-shrink:0}
+.sbe-note{display:flex;gap:8px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:var(--vio-s);font-size:13px;line-height:1.5;color:var(--tx);margin-bottom:14px}
+.sbe-note>i{font-size:18px;color:var(--vio-t);flex-shrink:0;margin-top:1px}
+.sbe-note.warn{background:var(--iod-s)}.sbe-note.warn>i{color:var(--iod-t)}
+.sbe-note.bad{background:var(--eos-s)}.sbe-note.bad>i{color:var(--eos-t)}
+.sbe-note ul{margin:4px 0 0;padding-left:18px}.sbe-note li+li{margin-top:4px}
+.sbe-foot{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap;padding:12px 18px;border-top:1px solid var(--bor)}
+.sbe-foot>span{flex:1;min-width:120px;font:600 13px var(--f);color:var(--eos-t)}
+.sbe-foot #aiSaveSt{color:var(--tx2)}
+.sbe-foot .btn{margin:0}
+.sbe-ai-body{padding:16px 18px;overflow-y:auto;flex:1;min-height:0}
+.sbe-lead{font-size:14px;line-height:1.55;color:var(--tx2);margin:0 0 14px}
+.sbe-lead b{color:var(--tx)}
+.sbe-files{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--tx3)}
+.sbe-files .btn{margin:0;cursor:pointer}
+.sbe-link{border:none;background:none;color:var(--meth-t);font:600 13px var(--f);cursor:pointer;text-decoration:underline}
+.sbe-wait{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;padding:56px 16px}
+.sbe-wait b{font:800 18px var(--f);color:var(--tx)}
+.sbe-wait span{font-size:13.5px;color:var(--tx2)}
+.sbe-spin{width:44px;height:44px;border-radius:50%;border:4px solid var(--bg4);border-top-color:var(--vio);animation:sbeSpin .9s linear infinite}
+@keyframes sbeSpin{to{transform:rotate(360deg)}}
+.sbe-ai-prev{max-width:470px;margin:0 auto;background:var(--bg);border-radius:22px;padding:14px;box-shadow:inset 0 0 0 2px var(--bor2)}
+.sbe-lede{font:500 14.5px/1.5 var(--f);color:var(--tx);background:var(--bg2);border-radius:14px;padding:10px 12px;margin:0 0 12px}
+.sbe-lede small{display:block;font-size:12px;font-weight:700;color:var(--tx3);margin-bottom:2px}
+@media(max-width:760px){
+  #modalRoot .modal.sbe{max-height:94vh}
+  .sbe-cols{grid-template-columns:minmax(0,1fr);overflow-y:auto}
+  .sbe-form,.sbe-prev{overflow:visible}
+  .sbe-prev{border-left:none;border-top:1px solid var(--bor)}
+  .sbe-2{grid-template-columns:minmax(0,1fr)}
+}
+@media(prefers-reduced-motion:reduce){.sbe-spin{animation-duration:3s}.sab-b.flash{animation:none}}
 </style>
 </head>
 <body>
@@ -5894,6 +6096,21 @@ async function renderLB(){
   if(LB_CACHE&&Date.now()-LB_TIME<30000){renderLBList(LB_CACHE);return;}
   lb.innerHTML='<div style="color:var(--tx3);padding:10px">Загрузка рейтинга...</div>';
   var all=[];
+  // новая база: сервер сам считает баллы и отдаёт топ-10 + моё место — один маленький запрос
+  if(dbOK&&VITA_LBTOP!==false){
+    try{
+      var top=await sbRpc('leaderboard_top',{p_token:vReadToken(),p_top:LB_TOP});
+      if(top&&top.top){
+        VITA_LBTOP=true;
+        var conv=function(t){return {name:t.name,email:t.email,avatar:t.avatar||'',frame:t.frame||'',frames:t.frames||'',owned_items:t.owned_items||'',profile_bg:t.profile_bg||'',priv:!!t.priv,acc:t.acc,solved:t.solved,score:t.score,ex:t.ex,duelWins:t.wins,pos:t.pos,isMe:S.user&&t.email===S.user.email};};
+        var ranked=top.top.map(conv),notYet=[];
+        if(top.me){if(top.prev)ranked.push(conv(top.prev));ranked.push(conv(top.me));}
+        if(top.soon&&S.user)notYet.push({name:S.user.name,solved:+top.soon.solved||0,isMe:true});
+        LB_CACHE={ranked:ranked,notYet:notYet,total:top.total||ranked.length,srv:true};LB_TIME=Date.now();
+        renderLBList(LB_CACHE);return;
+      }
+    }catch(eT){if(eT.missing)VITA_LBTOP=false;}
+  }
   if(dbOK){
     try{
       var users=await sbGet('users','status=eq.active&select=email,name,avatar,group_name,frame,frames,owned_items,profile_bg,hidden_from_lb,private_profile,bonus_score');
@@ -5968,7 +6185,7 @@ function lbRowBg(e){
   }
   return {layer:'',hasBg:false};
 }
-var LB_TOP=10,LB_ALL=false;   // студентам — топ-10 и своё место; админ может раскрыть всех
+var LB_TOP=10,VITA_LBTOP=null;   // в рейтинге только топ-10 и своё место; VITA_LBTOP=false — база без leaderboard_top
 function renderLBList(data){
   var lb=document.getElementById('lbList');
   var ranked=data.ranked||[],notYet=data.notYet||[];
@@ -5996,6 +6213,7 @@ function renderLBList(data){
 
   // ===== СПИСОК: топ-10, а ниже — я и тот, кто прямо передо мной =====
   var row=function(e,i){
+        if(e.pos)i=e.pos-1;
         var bg=lbRowBg(e);
         var hasBg=bg.hasBg;
         return '<div class="lb-row'+(e.isMe?' me':'')+(hasBg?' has-bg':'')+'" onclick="viewProfile(\''+encodeURIComponent(e.email)+'\')">'
@@ -6008,8 +6226,9 @@ function renderLBList(data){
   };
   if(ranked.length){
     var listStart=ranked.length>=3?3:0;
-    var showN=LB_ALL?ranked.length:Math.min(LB_TOP,ranked.length);
+    var showN=Math.min(LB_TOP,ranked.length);
     var myI=-1;ranked.forEach(function(e,i){if(e.isMe)myI=i;});
+    var myPos=myI<0?-1:(ranked[myI].pos?ranked[myI].pos-1:myI);   // настоящее место (с сервера приходят только топ и мои две строки)
     if(showN>listStart){
       html+='<div class="lb-list">'+ranked.slice(listStart,showN).map(function(e,i0){return row(e,i0+listStart);}).join('')+'</div>';
     }
@@ -6022,10 +6241,10 @@ function renderLBList(data){
       var pts=function(n){return n+' '+vplural(n,'очко','очка','очков');};
       var gapTo=function(t){return Math.max(1,ranked[t].score-ranked[myI].score+1);};
       var need=gapTo(myI-1),duels=Math.ceil(need/10),exams=Math.ceil(need/5);   // ближняя цель — обойти того, кто прямо передо мной
-      var far=myI>LB_TOP;                                                      // топ-10 ещё далеко — покажем и его
-      html+='<div class="lb-goal-card"><span class="lb-blob iod"><i class="ti ti-'+(myI===LB_TOP?'target-arrow':'arrow-big-up-lines')+'"></i></span><div>'
-        +'<b>'+(myI===LB_TOP?'До топ-10: '+pts(need):'До '+myI+'-го места: '+pts(need))+'</b>'
-        +'<span>Ты на '+(myI+1)+'-м месте. Это '+(duels<=1?'одна победа в дуэли':duels+' '+vplural(duels,'победа','победы','побед')+' в дуэлях')
+      var far=myPos>LB_TOP;                                                    // топ-10 ещё далеко — покажем и его
+      html+='<div class="lb-goal-card"><span class="lb-blob iod"><i class="ti ti-'+(myPos===LB_TOP?'target-arrow':'arrow-big-up-lines')+'"></i></span><div>'
+        +'<b>'+(myPos===LB_TOP?'До топ-10: '+pts(need):'До '+myPos+'-го места: '+pts(need))+'</b>'
+        +'<span>Ты на '+(myPos+1)+'-м месте. Это '+(duels<=1?'одна победа в дуэли':duels+' '+vplural(duels,'победа','победы','побед')+' в дуэлях')
         +' или '+(exams<=1?'один экзамен':exams+' '+vplural(exams,'экзамен','экзамена','экзаменов'))+'. Точные ответы в тестах тоже поднимают счёт.</span>'
         +(far?'<span class="lb-goal-far"><i class="ti ti-target-arrow"></i> До топ-10: '+pts(gapTo(LB_TOP-1))+'</span>':'')+'</div></div>';
     }else if(myI===0&&ranked.length>1){
@@ -6033,8 +6252,6 @@ function renderLBList(data){
       html+='<div class="lb-goal-card"><span class="lb-blob iod"><i class="ti ti-crown"></i></span><div><b>Ты на первом месте</b>'
         +'<span>'+(lead>0?'Отрыв от второго места: '+lead+' '+vplural(lead,'очко','очка','очков')+'.':'Второе место идёт вровень с тобой.')+' Не сбавляй темп.</span></div></div>';
     }
-    if(ranked.length>LB_TOP&&(S.isAdm||S.isSuper))
-      html+='<button class="btn bgh bfu lb-all" onclick="LB_ALL=!LB_ALL;renderLBList(LB_CACHE)">'+(LB_ALL?'Показать только топ-10':'Показать всех ('+ranked.length+')')+'</button>';
   }else{
     html+='<div class="lb-empty"><div class="lb-empty-ic"><i class="ti ti-target"></i></div><div>Никто не решил 50+ вопросов. Будь первым!</div></div>';
   }
@@ -8817,9 +9034,10 @@ function renderTopicReader(el){
   // hero
   h+='<div class="study-reader-hero"><div class="srh-k">'+esc(t.kicker||ST.subject.name)+'</div><h1>'+esc(t.title)+'</h1>';
   if(t.lede)h+='<p class="srh-lede">'+esc(t.lede)+'</p>';
-  h+='<div class="srh-floats"><span class="srh-chip">⏱ '+(t.read_minutes||5)+' мин</span></div></div>';
-  // блоки (кроме quiz — они идут в финальный тест)
-  ST.blocks.forEach(function(b){if(b.type!=='quiz')h+=renderBlock(b);});
+  h+='<div class="srh-floats"><span class="srh-chip"><i class="ti ti-clock"></i> '+(t.read_minutes||studyReadMinutes(ST.blocks))+' мин чтения</span></div></div>';
+  // блоки (кроме quiz — они идут в финальный тест); из заголовков собирается содержание
+  var blist=studyBlockList(ST.blocks.filter(function(b){return b.type!=='quiz';}),false);
+  h+=studyToc(blist)+blist.map(function(x){return x.html;}).join('');
   // финальный тест по теме (из quiz-блоков)
   var quizzes=ST.blocks.filter(function(b){return b.type==='quiz';});
   if(quizzes.length){
@@ -8896,6 +9114,8 @@ function ftAnswer(qi,oi,correct,el){
     var opts=q.querySelectorAll('.ft-opt');
     if(opts[d.correct])opts[d.correct].classList.add('correct');
   }
+  try{var dw=sbData(ST.blocks.filter(function(b){return b.type==='quiz';})[qi]);
+    if(dw.why&&!q.querySelector('.ft-why')){var wy=document.createElement('div');wy.className='ft-why';wy.textContent=dw.why;q.appendChild(wy);}}catch(e){}
   ST._ftAnswers[qi]=correct?1:0;
   if(Object.keys(ST._ftAnswers).length>=ST._ftTotal){
     var right=Object.values(ST._ftAnswers).filter(Boolean).length;
@@ -8963,61 +9183,7 @@ function initReadProgress(){
 }
 
 // рендер одного блока по типу
-function renderBlock(b){
-  var d=b.data||{};
-  if(typeof d==='string'){try{d=JSON.parse(d);}catch(e){d={};}}
-  if(b.type==='text'){
-    return '<div class="sblk"><div class="sb-eb">◆ '+esc(b.title||'')+'</div><p class="sb-drop">'+fmtText(b.body)+'</p></div>';
-  }
-  if(b.type==='term'){
-    return '<div class="sblk term"><div class="sb-tic"><i class="ti ti-pin"></i></div><div class="sb-tw"><b>'+esc(b.title)+'</b><p>'+esc(b.body)+'</p></div></div>';
-  }
-  if(b.type==='steps'){
-    var steps=d.steps||[];
-    var inner='';
-    steps.forEach(function(s,i){
-      inner+='<div class="sb-st"><div class="sb-o">'+(s.emoji||'●')+'</div><small>'+esc(s.label||'')+'</small></div>';
-      if(i<steps.length-1)inner+='<div class="sb-ar">→</div>';
-    });
-    return '<div class="sblk steps"><div class="sb-eb">◆ '+esc(b.title||'Этапы')+'</div><div class="sb-flow">'+inner+'</div></div>';
-  }
-  if(b.type==='image'){
-    if(!b.image_url)return ''; // не показывать пустой блок картинки
-    return '<div class="sblk img"><img src="'+esc(b.image_url)+'" style="width:100%;display:block">'+(b.caption?'<div class="sb-cap">'+esc(b.caption)+'</div>':'')+'</div>';
-  }
-  if(b.type==='remember'){
-    return '<div class="sblk remember"><div class="sb-eb"><i class="ti ti-bolt"></i> '+esc(b.title||'Запомни')+'</div><p>'+fmtText(b.body)+'</p></div>';
-  }
-  if(b.type==='compare'){
-    var l=d.left||{},r=d.right||{};
-    return '<div class="sblk-vs"><div class="vs-sd l"><h4>'+esc(l.title||'')+'</h4><p>'+esc(l.text||'')+'</p></div><div class="vs-md">vs</div><div class="vs-sd r"><h4>'+esc(r.title||'')+'</h4><p>'+esc(r.text||'')+'</p></div></div>';
-  }
-  if(b.type==='clinic'){
-    return '<div class="sblk clinic"><div class="sb-ci"><i class="ti ti-bulb"></i></div><div class="sb-eb">'+esc(b.title||'Клинический пример')+'</div><p>'+fmtText(b.body)+'</p></div>';
-  }
-  if(b.type==='table'){
-    var rows=d.rows||[];var head=d.head||['',''];
-    var tb='<div class="sb-tr head"><div class="sb-td">'+esc(head[0])+'</div><div class="sb-td">'+esc(head[1])+'</div></div>';
-    rows.forEach(function(row){tb+='<div class="sb-tr"><div class="sb-td">'+esc(row[0]||'')+'</div><div class="sb-td">'+esc(row[1]||'')+'</div></div>';});
-    return '<div class="sblk"><div class="sb-eb">◆ '+esc(b.title||'Таблица')+'</div><div class="sb-table">'+tb+'</div></div>';
-  }
-  if(b.type==='quiz'){
-    var opts=d.options||[];var correct=d.correct;
-    var oh='';
-    opts.forEach(function(o,i){oh+='<div class="sb-opt" onclick="studyQuizAnswer(this,'+(i===correct?1:0)+')">'+esc(o)+'</div>';});
-    return '<div class="sblk quiz"><div class="sb-eb"><i class="ti ti-help"></i> Проверь понимание</div><div class="sb-q">'+esc(b.title)+'</div><div class="sb-opts">'+oh+'</div></div>';
-  }
-  return '';
-}
-function fmtText(s){
-  // **жирный** и *термин*
-  s=esc(s||'');
-  s=s.replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');
-  s=s.replace(/\*(.+?)\*/g,function(m,word){
-    return '<span class="term" onclick="showTermDef(this,\''+encodeURIComponent(word)+'\')">'+word+'</span>';
-  });
-  return s;
-}
+// renderBlock, fmtText, fmtRich — см. блок «УЧЁБА» (study.js)
 // показать определение термина при клике
 function showTermDef(el,wordEnc){
   var word=decodeURIComponent(wordEnc);
@@ -9397,146 +9563,7 @@ function saOpenBuilder(topicId){
   SA.level='builder';
   admStudyRender();
 }
-function admStudyBuilder(el){
-  el.innerHTML=saCrumb()+'<div class="sa-loading">Загрузка блоков…</div>';
-  sbGet('blocks','topic_id=eq.'+SA.topic.id+'&select=*&order=sort_order.asc').then(function(rows){
-    SA.blocks=rows||[];
-    var h=saCrumb();
-    h+='<div class="sa-builder-topic"><div class="sbt-k">Тема · собери из блоков</div><h2>'+esc(SA.topic.title)+'</h2></div>';
-    // список блоков
-    h+='<div class="sa-blocks">';
-    if(!SA.blocks.length)h+='<div class="sa-empty" style="padding:24px">Пока нет блоков. Добавь первый ниже ↓</div>';
-    SA.blocks.forEach(function(b,i){
-      var info=saBlockInfo(b);
-      h+='<div class="sa-blk"><span class="sa-grip">⋮⋮</span><div class="sa-blk-ic '+b.type+'">'+info.icon+'</div><div class="sa-blk-t"><b>'+info.name+'</b><span>'+esc(info.preview)+'</span></div><div class="sa-blk-act">'
-        +(i>0?'<button onclick="saMoveBlock('+b.id+',-1)">↑</button>':'')
-        +(i<SA.blocks.length-1?'<button onclick="saMoveBlock('+b.id+',1)">↓</button>':'')
-        +'<button onclick="saEditBlock('+b.id+')"><i class="ti ti-pencil"></i></button><button onclick="saDelBlock('+b.id+')"><i class="ti ti-trash"></i></button></div></div>';
-    });
-    h+='</div>';
-    // меню добавления
-    h+='<div class="sa-addblock"><div class="sa-ab-t">+ Добавить блок</div><div class="sa-types">';
-    var types=[['text','📝','Текст'],['term','📌','Термин'],['image','🖼️','Картинка'],['steps','🔢','Этапы'],['remember','⚡','Запомни'],['compare','🆚','Сравнение'],['table','📊','Таблица'],['clinic','💡','Пример'],['quiz','❓','Вопрос']];
-    types.forEach(function(t){h+='<div class="sa-type" onclick="saAddBlock(\''+t[0]+'\')"><span class="sa-type-e">'+t[1]+'</span><small>'+t[2]+'</small></div>';});
-    h+='</div></div>';
-    // предпросмотр для студента
-    h+='<button class="sa-preview-btn" onclick="saPreviewTopic()"><i class="ti ti-eye"></i> Посмотреть как студент</button>';
-    el.innerHTML=h;
-  });
-}
-function saBlockInfo(b){
-  var d=b.data||{};if(typeof d==='string'){try{d=JSON.parse(d);}catch(e){d={};}}
-  var map={text:{icon:'📝',name:'Текст'},term:{icon:'📌',name:'Термин'},image:{icon:'🖼️',name:'Картинка'},steps:{icon:'🔢',name:'Этапы'},remember:{icon:'⚡',name:'Запомни'},compare:{icon:'🆚',name:'Сравнение'},table:{icon:'📊',name:'Таблица'},clinic:{icon:'💡',name:'Пример'},quiz:{icon:'❓',name:'Вопрос'}};
-  var m=map[b.type]||{icon:'▪️',name:b.type};
-  var preview=b.body||b.title||'';
-  if(b.type==='steps'&&d.steps)preview=d.steps.map(function(s){return s.label;}).join(' → ');
-  if(b.type==='compare'&&d.left)preview=(d.left.title||'')+' / '+(d.right.title||'');
-  if(b.type==='quiz')preview=b.title||'Вопрос';
-  if(b.type==='image')preview=b.caption||'Изображение';
-  return {icon:m.icon,name:m.name,preview:String(preview).slice(0,50)};
-}
-function saMoveBlock(id,dir){
-  var idx=SA.blocks.findIndex(function(b){return b.id===id;});
-  var swap=idx+dir;
-  if(swap<0||swap>=SA.blocks.length)return;
-  var a=SA.blocks[idx],b=SA.blocks[swap];
-  // поменять sort_order
-  var ao=a.sort_order,bo=b.sort_order;
-  Promise.all([sbPatch('blocks','id=eq.'+a.id,{sort_order:bo}),sbPatch('blocks','id=eq.'+b.id,{sort_order:ao})]).then(function(){admStudyRender();});
-}
-function saDelBlock(id){if(!confirm('Удалить блок?'))return;sbDel('blocks','id=eq.'+id).then(function(){admStudyRender();});}
-
-// добавить/редактировать блок
-function saAddBlock(type){saBlockEditor(type,null);}
-function saEditBlock(id){var b=SA.blocks.find(function(x){return x.id===id;});saBlockEditor(b.type,b);}
-function saBlockEditor(type,b){
-  var d=(b&&b.data)||{};if(typeof d==='string'){try{d=JSON.parse(d);}catch(e){d={};}}
-  var isEdit=!!b;
-  var icons={text:'📝',term:'📌',image:'🖼️',steps:'🔢',remember:'⚡',compare:'🆚',table:'📊',clinic:'💡',quiz:'❓'};
-  var names={text:'Текст',term:'Термин',image:'Картинка',steps:'Этапы',remember:'Запомни',compare:'Сравнение',table:'Таблица',clinic:'Пример',quiz:'Вопрос'};
-  var body='<div class="be-head"><div class="be-ic">'+(icons[type]||'▪️')+'</div><div class="be-title">Блок «'+(names[type]||type)+'»</div></div>';
-
-  if(type==='text'||type==='remember'||type==='clinic'){
-    body+='<div class="field"><label>Заголовок блока</label><input id="beTitle" value="'+esc(b?b.title:'')+'" placeholder="'+(type==='remember'?'Запомни на экзамен':type==='clinic'?'Клинический пример':'Заголовок')+'"></div>';
-    body+='<div class="field"><label>Текст</label><textarea id="beBody" placeholder="Используй **жирный** и *термин*">'+esc(b?b.body:'')+'</textarea></div>';
-  }
-  else if(type==='term'){
-    body+='<div class="field"><label>Термин</label><input id="beTitle" value="'+esc(b?b.title:'')+'" placeholder="Некроз"></div>';
-    body+='<div class="field"><label>Определение</label><textarea id="beBody" placeholder="Что это значит">'+esc(b?b.body:'')+'</textarea></div>';
-  }
-  else if(type==='image'){
-    body+='<div class="field"><label>Ссылка на картинку</label><input id="beImg" value="'+esc(b?b.image_url:'')+'" placeholder="https://..."></div>';
-    body+='<div class="field"><label>Подпись</label><input id="beCap" value="'+esc(b?b.caption:'')+'" placeholder="Рис. 1 — описание"></div>';
-  }
-  else if(type==='steps'){
-    body+='<div class="field"><label>Заголовок блока</label><input id="beTitle" value="'+esc(b?b.title:'')+'" placeholder="Как развивается"></div>';
-    body+='<div class="field"><label>Этапы (эмодзи + название)</label><div id="beSteps" class="sa-steps-ed">';
-    var steps=d.steps||[{emoji:'🟢',label:''},{emoji:'🟡',label:''}];
-    steps.forEach(function(s,i){body+=saStepRow(s.emoji,s.label,i);});
-    body+='</div><button class="sa-add" style="padding:10px;margin-top:8px" onclick="saAddStepRow()">+ Ещё этап</button></div>';
-  }
-  else if(type==='compare'){
-    var l=d.left||{},r=d.right||{};
-    body+='<div class="field"><label>Левая колонка — заголовок</label><input id="beLT" value="'+esc(l.title||'')+'" placeholder=" Некроз"></div>';
-    body+='<div class="field"><label>Левая — текст</label><textarea id="beLX" placeholder="Описание">'+esc(l.text||'')+'</textarea></div>';
-    body+='<div class="field"><label>Правая колонка — заголовок</label><input id="beRT" value="'+esc(r.title||'')+'" placeholder="<i class="ti ti-point-filled"></i> Апоптоз"></div>';
-    body+='<div class="field"><label>Правая — текст</label><textarea id="beRX" placeholder="Описание">'+esc(r.text||'')+'</textarea></div>';
-  }
-  else if(type==='table'){
-    body+='<div class="field"><label>Заголовок блока</label><input id="beTitle" value="'+esc(b?b.title:'')+'" placeholder="Формы некроза"></div>';
-    body+='<div class="field"><label>Шапка таблицы (2 колонки)</label><div class="row2"><input id="beH1" value="'+esc((d.head||[])[0]||'')+'" placeholder="Форма"><input id="beH2" value="'+esc((d.head||[])[1]||'')+'" placeholder="Где"></div></div>';
-    body+='<div class="field"><label>Строки</label><div id="beRows" class="sa-steps-ed">';
-    var trows=d.rows||[['',''],['','']];
-    trows.forEach(function(row,i){body+=saTableRow(row[0],row[1],i);});
-    body+='</div><button class="sa-add" style="padding:10px;margin-top:8px" onclick="saAddTableRow()">+ Ещё строка</button></div>';
-  }
-  else if(type==='quiz'){
-    body+='<div class="field"><label>Вопрос</label><input id="beTitle" value="'+esc(b?b.title:'')+'" placeholder="Какой некроз в мозге?"></div>';
-    body+='<div class="field"><label>Варианты (правильный отметь точкой)</label><div id="beOpts" class="sa-steps-ed">';
-    var opts=d.options||['',''];var correct=d.correct||0;
-    opts.forEach(function(o,i){body+=saQuizRow(o,i,correct===i);});
-    body+='</div><button class="sa-add" style="padding:10px;margin-top:8px" onclick="saAddQuizRow()">+ Ещё вариант</button></div>';
-  }
-
-  body+='<button class="btn-main" onclick="saSaveBlock(\''+type+'\','+(b?b.id:0)+')"><i class="ti ti-device-floppy"></i> Сохранить блок</button>';
-  body+='<div class="sa-prev-note">✓ После сохранения студент сразу увидит этот блок</div>';
-
-  document.getElementById('modalRoot').innerHTML='<div class="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal sa-block-modal" style="max-height:88vh;overflow-y:auto">'+body+'</div></div>';
-}
-function saStepRow(emoji,label,i){return '<div class="sa-step-row"><input class="sa-step-emoji" value="'+esc(emoji||'')+'" placeholder="<i class="ti ti-point-filled"></i>"><input class="sa-step-label" value="'+esc(label||'')+'" placeholder="название" style="flex:1"><button class="sa-step-del" onclick="this.parentNode.remove()">×</button></div>';}
-function saAddStepRow(){var c=document.getElementById('beSteps');c.insertAdjacentHTML('beforeend',saStepRow('⚪','',0));}
-function saTableRow(a,b,i){return '<div class="sa-step-row"><input value="'+esc(a||'')+'" placeholder="ячейка 1" style="flex:1"><input value="'+esc(b||'')+'" placeholder="ячейка 2" style="flex:1"><button class="sa-step-del" onclick="this.parentNode.remove()">×</button></div>';}
-function saAddTableRow(){var c=document.getElementById('beRows');c.insertAdjacentHTML('beforeend',saTableRow('','',0));}
-function saQuizRow(text,i,isCorrect){return '<div class="sa-step-row"><input type="radio" name="beCorrect" value="'+i+'" '+(isCorrect?'checked':'')+' style="width:20px;flex:none"><input class="sa-quiz-opt" value="'+esc(text||'')+'" placeholder="вариант ответа" style="flex:1"><button class="sa-step-del" onclick="this.parentNode.remove()">×</button></div>';}
-function saAddQuizRow(){var c=document.getElementById('beOpts');var n=c.querySelectorAll('.sa-step-row').length;c.insertAdjacentHTML('beforeend',saQuizRow('',n,false));}
-
-function saSaveBlock(type,id){
-  var rec={topic_id:SA.topic.id,type:type};
-  var data={};
-  if(type==='text'||type==='remember'||type==='clinic'){rec.title=val('beTitle');rec.body=val('beBody');}
-  else if(type==='term'){rec.title=val('beTitle');rec.body=val('beBody');}
-  else if(type==='image'){rec.image_url=val('beImg');rec.caption=val('beCap');}
-  else if(type==='steps'){
-    rec.title=val('beTitle');
-    var steps=[];document.querySelectorAll('#beSteps .sa-step-row').forEach(function(r){var e=r.querySelector('.sa-step-emoji').value,l=r.querySelector('.sa-step-label').value;if(l)steps.push({emoji:e||'⚪',label:l});});
-    data.steps=steps;
-  }
-  else if(type==='compare'){data.left={title:val('beLT'),text:val('beLX')};data.right={title:val('beRT'),text:val('beRX')};}
-  else if(type==='table'){
-    rec.title=val('beTitle');data.head=[val('beH1'),val('beH2')];
-    var rows=[];document.querySelectorAll('#beRows .sa-step-row').forEach(function(r){var ins=r.querySelectorAll('input');if(ins[0].value||ins[1].value)rows.push([ins[0].value,ins[1].value]);});
-    data.rows=rows;
-  }
-  else if(type==='quiz'){
-    rec.title=val('beTitle');
-    var opts=[];document.querySelectorAll('#beOpts .sa-quiz-opt').forEach(function(o){if(o.value)opts.push(o.value);});
-    var correctEl=document.querySelector('input[name="beCorrect"]:checked');
-    data.options=opts;data.correct=correctEl?parseInt(correctEl.value):0;
-  }
-  rec.data=data;
-  if(id){sbPatch('blocks','id=eq.'+id,rec).then(function(){closeModal();admStudyRender();toast2('Блок сохранён');});}
-  else{rec.sort_order=(SA.blocks.length?Math.max.apply(null,SA.blocks.map(function(b){return b.sort_order||0;})):0)+1;sbPost('blocks',rec).then(function(){closeModal();admStudyRender();toast2('Блок добавлен');});}
-}
+// редактор урока (admStudyBuilder, saBlockEditor, saSaveBlock…) — см. блок «УЧЁБА» (study.js)
 
 // предпросмотр темы как студент
 function saPreviewTopic(){
@@ -10123,6 +10150,556 @@ function renderTests(){
   document.getElementById('testsBody').innerHTML=h;
 }
 
+// ===== УЧЁБА: блоки урока, редактор с живым просмотром, конспект из материала (ИИ) =====
+// Типы блоков. g — группа в палитре редактора, d — заголовок по умолчанию.
+var SB_TYPES={
+  heading:{n:'Заголовок раздела',i:'ti-heading',g:'Структура',hint:'Делит тему на части и попадает в содержание'},
+  text:{n:'Текст',i:'ti-align-left',g:'Структура',hint:'Абзацы и списки'},
+  key:{n:'Главное за минуту',i:'ti-bolt',g:'Структура',d:'Главное за минуту',hint:'3–6 пунктов в начале темы'},
+  remember:{n:'Запомни',i:'ti-star',g:'Акценты',d:'Запомни',hint:'То, что учат наизусть'},
+  exam:{n:'Спросят на экзамене',i:'ti-school',g:'Акценты',d:'Спросят на экзамене',hint:'Как это спрашивают'},
+  warn:{n:'Частая ошибка',i:'ti-alert-triangle',g:'Акценты',d:'Частая ошибка',hint:'Где обычно путаются'},
+  mnemo:{n:'Как запомнить',i:'ti-bulb',g:'Акценты',d:'Как запомнить',hint:'Мнемоника'},
+  term:{n:'Термин',i:'ti-pin',g:'Акценты',hint:'Слово и определение'},
+  clinic:{n:'Клинический пример',i:'ti-stethoscope',g:'Акценты',d:'Клинический пример',hint:'Случай из практики'},
+  image:{n:'Картинка',i:'ti-photo',g:'Наглядно',hint:'Рисунок, схема, препарат'},
+  steps:{n:'Этапы',i:'ti-arrows-right',g:'Наглядно',hint:'Процесс по шагам'},
+  compare:{n:'Сравнение',i:'ti-arrows-diff',g:'Наглядно',hint:'Два понятия рядом'},
+  table:{n:'Таблица',i:'ti-table',g:'Наглядно',hint:'До 5 столбцов'},
+  quiz:{n:'Вопрос',i:'ti-help-circle',g:'Проверка',hint:'Попадёт в тест в конце темы'}
+};
+function sbData(b){var d=(b&&b.data)||{};if(typeof d==='string'){try{d=JSON.parse(d);}catch(e){d={};}}return d||{};}
+function sbLines(s){return String(s||'').split('\n').map(function(x){return x.replace(/^\s*[-•–]\s+/,'').trim();}).filter(Boolean);}
+
+// **жирный**, ==важное==, *термин*
+function fmtInline(s){
+  s=esc(s||'');
+  s=s.replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');
+  s=s.replace(/==(.+?)==/g,'<mark>$1</mark>');
+  s=s.replace(/\*([^*\n]+?)\*/g,function(m,word){
+    return '<span class="term" onclick="showTermDef(this,\''+encodeURIComponent(word)+'\')">'+word+'</span>';
+  });
+  return s;
+}
+function fmtText(s){return fmtInline(s);}   // старое имя — им пользуются другие экраны
+// абзацы (пустая строка между ними), списки («- » или «1. » в начале строки)
+function fmtRich(s,firstCls){
+  var out='',first=true;
+  String(s||'').replace(/\r/g,'').split(/\n{2,}/).forEach(function(par){
+    var buf=[],list=null;
+    var flushP=function(){if(buf.length){out+='<p'+(first&&firstCls?' class="'+firstCls+'"':'')+'>'+buf.map(fmtInline).join('<br>')+'</p>';first=false;buf=[];}};
+    var flushL=function(){if(list){out+='<'+list.tag+' class="sb-list">'+list.items.map(function(x){return '<li>'+fmtInline(x)+'</li>';}).join('')+'</'+list.tag+'>';list=null;first=false;}};
+    par.split('\n').forEach(function(l){
+      l=l.trim();if(!l)return;
+      var m=l.match(/^[-•–]\s+(.*)$/),n=l.match(/^\d+[.)]\s+(.*)$/);
+      if(m||n){flushP();var tag=m?'ul':'ol';if(!list||list.tag!==tag){flushL();list={tag:tag,items:[]};}list.items.push((m||n)[1]);}
+      else{flushL();buf.push(l);}
+    });
+    flushP();flushL();
+  });
+  return out;
+}
+// один блок так, как его видит студент. o.first — буквица, o.sec — номер раздела, o.admin — показывать заготовки
+function renderBlock(b,o){
+  o=o||{};var d=sbData(b),t=b.type,title=esc(b.title||''),T=SB_TYPES[t]||{};
+  var eb=function(icon,def){return '<div class="sb-eb"><i class="ti '+icon+'"></i>'+(title||def)+'</div>';};
+  if(t==='heading'){
+    if(!b.title)return '';
+    return '<h2 class="sb-h"'+(o.sec?' id="sec'+o.sec+'"':'')+'>'+(o.sec?'<span>'+o.sec+'</span>':'')+title+'</h2>';
+  }
+  if(t==='text'){
+    if(!b.body&&!b.title)return '';
+    return '<div class="sblk txt">'+(b.title?'<h3 class="sb-sub">'+title+'</h3>':'')+fmtRich(b.body,o.first?'sb-drop':'')+'</div>';
+  }
+  if(t==='key'||t==='exam'){
+    var it=sbLines(b.body);if(!it.length)return '';
+    var li=it.map(function(x){return '<li><span>'+fmtInline(x)+'</span></li>';}).join('');
+    return '<div class="sblk '+t+'">'+eb(T.i,T.d)+(t==='key'?'<ol class="sb-key">'+li+'</ol>':'<ul class="sb-list">'+li+'</ul>')+'</div>';
+  }
+  if(t==='remember'||t==='warn'||t==='mnemo'){
+    if(!b.body)return '';
+    return '<div class="sblk '+t+'">'+eb(T.i,T.d)+fmtRich(b.body)+'</div>';
+  }
+  if(t==='clinic'){
+    if(!b.body)return '';
+    return '<div class="sblk clinic">'+eb(T.i,T.d)+fmtRich(b.body)+'</div>';
+  }
+  if(t==='term'){
+    if(!b.title&&!b.body)return '';
+    return '<div class="sblk term"><div class="sb-tic"><i class="ti ti-pin"></i></div><div class="sb-tw"><b>'+title+'</b><p>'+fmtInline(b.body)+'</p></div></div>';
+  }
+  if(t==='steps'){
+    var steps=(d.steps||[]).filter(function(s){return s&&s.label;});if(!steps.length)return '';
+    return '<div class="sblk steps">'+(b.title?'<h3 class="sb-sub">'+title+'</h3>':'')+'<ol class="sb-flow">'+steps.map(function(s,i){
+      return '<li><span class="sb-o">'+(s.emoji?esc(s.emoji):(i+1))+'</span><span>'+fmtInline(s.label)+'</span></li>';}).join('')+'</ol></div>';
+  }
+  if(t==='image'){
+    if(!b.image_url)return o.admin?'<div class="sblk img todo"><i class="ti ti-photo-plus"></i><b>Здесь нужна картинка</b><span>'+esc(d.todo||'Нажми «Изменить» и добавь изображение')+'</span><small>Пока картинки нет, студент этот блок не видит</small></div>':'';
+    return '<figure class="sblk img sz-'+(d.size==='s'||d.size==='m'?d.size:'l')+'"><img src="'+esc(b.image_url)+'" alt="'+esc(b.caption||'')+'" loading="lazy" onclick="vImgZoom(this.src)">'
+      +(b.caption?'<figcaption class="sb-cap">'+esc(b.caption)+'</figcaption>':'')+'</figure>';
+  }
+  if(t==='compare'){
+    var l=d.left||{},r=d.right||{};if(!l.title&&!r.title)return '';
+    var side=function(x){var ls=sbLines(x.text);return '<h4>'+esc(x.title||'')+'</h4>'+(ls.length>1?'<ul class="sb-list">'+ls.map(function(v){return '<li>'+fmtInline(v)+'</li>';}).join('')+'</ul>':'<p>'+fmtInline(x.text||'')+'</p>');};
+    return '<div class="sblk-vs"><div class="vs-sd l">'+side(l)+'</div><div class="vs-md">vs</div><div class="vs-sd r">'+side(r)+'</div></div>';
+  }
+  if(t==='table'){
+    var head=d.head||[],rows=d.rows||[];if(!rows.length)return '';
+    var n=Math.max(head.length,2);
+    var tr=function(row,cls){var s='<tr'+(cls?' class="'+cls+'"':'')+'>';for(var i=0;i<n;i++)s+=(cls?'<th>':'<td>')+fmtInline(row[i]||'')+(cls?'</th>':'</td>');return s+'</tr>';};
+    return '<div class="sblk tbl">'+(b.title?'<h3 class="sb-sub">'+title+'</h3>':'')+'<div class="sb-tw-scroll"><table class="sb-t c'+n+'"><thead>'+tr(head,'head')+'</thead><tbody>'+rows.map(function(r){return tr(r,'');}).join('')+'</tbody></table></div></div>';
+  }
+  if(t==='quiz'){
+    var opts=d.options||[],correct=d.correct;if(!b.title||!opts.length)return '';
+    return '<div class="sblk quiz">'+eb('ti-help-circle','Проверь понимание')+'<div class="sb-q">'+title+'</div><div class="sb-opts">'
+      +opts.map(function(x,i){return '<div class="sb-opt" onclick="studyQuizAnswer(this,'+(i===correct?1:0)+')">'+esc(x)+'</div>';}).join('')+'</div>'
+      +(d.why&&o.admin?'<div class="ft-why">'+esc(d.why)+'</div>':'')+'</div>';
+  }
+  return '';
+}
+// блоки темы с номерами разделов и буквицей у первого абзаца
+function studyBlockList(blocks,admin){
+  var sec=0,firstText=true;
+  return (blocks||[]).map(function(b){
+    var o={admin:admin};
+    if(b.type==='heading'&&b.title){sec++;o.sec=sec;}
+    if(b.type==='text'&&b.body&&firstText){
+      // буквица — только у настоящего абзаца: не у списка, не у короткой строки, не у выделенного слова
+      var p1=String(b.body).split(/\n{2,}/)[0].trim();
+      o.first=p1.length>=140&&/^[A-Za-zА-Яа-яЁё]/.test(p1)&&p1.indexOf('\n')<0;firstText=false;}
+    return {b:b,html:renderBlock(b,o),sec:o.sec||0};
+  });
+}
+function studyToc(list){
+  var hs=list.filter(function(x){return x.sec;});
+  if(hs.length<2)return '';
+  return '<nav class="sb-toc" aria-label="Содержание темы"><b>В этой теме</b><ol>'+hs.map(function(x){
+    return '<li><button onclick="studyGoSec('+x.sec+')">'+esc(x.b.title)+'</button></li>';}).join('')+'</ol></nav>';
+}
+function studyGoSec(n){var e=document.getElementById('sec'+n);if(e)e.scrollIntoView({behavior:'smooth',block:'start'});}
+function studyReadMinutes(blocks){
+  var w=0;(blocks||[]).forEach(function(b){var d=sbData(b);
+    w+=(String(b.title||'')+' '+String(b.body||'')+' '+JSON.stringify(d.rows||'')+JSON.stringify(d.left||'')+JSON.stringify(d.right||'')).split(/\s+/).length;});
+  return Math.max(1,Math.ceil(w/150));
+}
+// картинка на весь экран
+function vImgZoom(src){
+  var o=document.createElement('div');o.className='v-zoom';o.setAttribute('role','dialog');o.setAttribute('aria-label','Картинка');
+  o.innerHTML='<img src="'+esc(src)+'" alt=""><button aria-label="Закрыть"><i class="ti ti-x"></i></button>';
+  o.onclick=function(){o.remove();};document.body.appendChild(o);
+}
+
+// ---------- РЕДАКТОР УРОКА: тема видна так же, как у студента ----------
+function admStudyBuilder(el){
+  el.innerHTML=saCrumb()+'<div class="sa-loading">Загрузка блоков…</div>';
+  sbGet('blocks','topic_id=eq.'+SA.topic.id+'&select=*&order=sort_order.asc,id.asc').then(function(rows){
+    SA.blocks=rows||[];saBuilderDraw();
+  }).catch(function(e){el.innerHTML=saCrumb()+'<div class="sa-empty">Не получилось загрузить тему: '+esc(e.message||'')+'</div>';});
+}
+function saReload(keepScroll){
+  var sc=document.querySelector('.main'),top=sc?sc.scrollTop:0;
+  return sbGet('blocks','topic_id=eq.'+SA.topic.id+'&select=*&order=sort_order.asc,id.asc').then(function(rows){
+    SA.blocks=rows||[];saBuilderDraw();
+    if(keepScroll&&sc)sc.scrollTop=top;
+  });
+}
+function saPalette(fn){
+  var groups=[];Object.keys(SB_TYPES).forEach(function(k){var g=SB_TYPES[k].g;if(groups.indexOf(g)<0)groups.push(g);});
+  return groups.map(function(g){
+    return '<div class="sab-pg"><small>'+g+'</small><div class="sab-pl">'+Object.keys(SB_TYPES).filter(function(k){return SB_TYPES[k].g===g;}).map(function(k){
+      var T=SB_TYPES[k];return '<button class="sab-pt" onclick="'+fn+'(\''+k+'\')" title="'+esc(T.hint||'')+'"><i class="ti '+T.i+'"></i><span>'+T.n+'</span></button>';}).join('')+'</div></div>';
+  }).join('');
+}
+function saBuilderDraw(){
+  var el=document.getElementById('admStudyAdmin');if(!el||SA.level!=='builder')return;
+  var list=studyBlockList(SA.blocks,true),mins=studyReadMinutes(SA.blocks);
+  var h=saCrumb();
+  h+='<div class="sab-head"><div class="sab-head-t"><small>Редактор темы — слева она выглядит так же, как у студента</small><h2>'+esc(SA.topic.title)+'</h2>'
+    +'<span>'+SA.blocks.length+' '+vplural(SA.blocks.length,'блок','блока','блоков')+', около '+mins+' мин чтения</span></div>'
+    +'<div class="sab-head-a"><button class="btn bvio" onclick="saAiOpen()"><i class="ti ti-sparkles"></i>Конспект из материала</button>'
+    +'<button class="btn bgh" onclick="saPreviewTopic()"><i class="ti ti-eye"></i>Открыть как студент</button></div></div>';
+  h+='<div class="sab"><div class="sab-canvas" id="sabCanvas">';
+  if(!SA.blocks.length){
+    h+='<div class="sab-empty"><span class="lb-blob vio"><i class="ti ti-sparkles"></i></span><b>В теме пока пусто</b>'
+      +'<p>Самый быстрый путь: вставь лекцию или шпаргалку — ИИ соберёт из неё конспект, а ты поправишь. Или добавляй блоки сам из списка справа.</p>'
+      +'<button class="btn bvio" onclick="saAiOpen()"><i class="ti ti-sparkles"></i>Собрать конспект из материала</button></div>';
+  }else{
+    h+='<div class="study-reader-hero sab-hero"><div class="srh-k">'+esc(SA.topic.kicker||(SA.subject&&SA.subject.name)||'')+'</div><h1>'+esc(SA.topic.title)+'</h1>'
+      +(SA.topic.lede?'<p class="srh-lede">'+esc(SA.topic.lede)+'</p>':'')+'</div>'+studyToc(list);
+    h+='<button class="sab-ins" onclick="saInsert(0)" aria-label="Добавить блок в начало"><i class="ti ti-plus"></i></button>';
+    list.forEach(function(x,i){
+      var b=x.b,T=SB_TYPES[b.type]||{n:b.type,i:'ti-square'};
+      h+='<div class="sab-b'+(SA.flash===b.id?' flash':'')+'" id="sabB'+b.id+'"><div class="sab-tools"><span class="sab-name"><i class="ti '+T.i+'"></i>'+T.n+(b.type==='quiz'?' · в тест в конце':'')+'</span>'
+        +'<button onclick="saMoveBlock('+b.id+',-1)" aria-label="Выше"'+(i===0?' disabled':'')+'><i class="ti ti-arrow-up"></i></button>'
+        +'<button onclick="saMoveBlock('+b.id+',1)" aria-label="Ниже"'+(i===list.length-1?' disabled':'')+'><i class="ti ti-arrow-down"></i></button>'
+        +'<button onclick="saDupBlock('+b.id+')" aria-label="Сделать копию"><i class="ti ti-copy"></i></button>'
+        +'<button onclick="saDelBlock('+b.id+')" aria-label="Удалить"><i class="ti ti-trash"></i></button>'
+        +'<button class="ed" onclick="saEditBlock('+b.id+')"><i class="ti ti-pencil"></i>Изменить</button></div>'
+        +'<div class="sab-body" ondblclick="saEditBlock('+b.id+')">'+(x.html||'<div class="sblk img todo"><i class="ti ti-alert-circle"></i><b>Пустой блок</b><span>Студент его не видит. Заполни или удали.</span></div>')+'</div></div>'
+        +'<button class="sab-ins" onclick="saInsert('+b.id+')" aria-label="Добавить блок сюда"><i class="ti ti-plus"></i></button>';
+    });
+  }
+  h+='</div><aside class="sab-side"><b>Добавить блок</b><p>Нажми на тип — блок добавится в конец темы. Чтобы вставить в середину, нажми «+» между блоками.</p>'+saPalette('saAddBlock')
+    +'<div class="sab-tip"><b>Как выделять в тексте</b><span><code>**жирный**</code> — ключевой факт<br><code>==важное==</code> — жёлтый маркер<br><code>*термин*</code> — подсказка по нажатию<br>строка с «- » — пункт списка</span></div></aside></div>';
+  el.innerHTML=h;SA.flash=null;
+}
+function saInsert(afterId){
+  SA.insertAfter=afterId;
+  document.getElementById('modalRoot').innerHTML='<div class="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal sbe sbe-pal">'
+    +'<div class="sbe-head"><b>Что добавить сюда?</b><button class="sbe-x" onclick="closeModal()" aria-label="Закрыть"><i class="ti ti-x"></i></button></div>'+saPalette('saAddBlockAt')+'</div></div>';
+}
+function saAddBlockAt(type){saBlockEditor(type,null);}
+function saAddBlock(type){SA.insertAfter=null;saBlockEditor(type,null);}
+function saEditBlock(id){var b=SA.blocks.find(function(x){return x.id===id;});if(b)saBlockEditor(b.type,b);}
+async function saRenumber(order){
+  // order — блоки в нужном порядке; записываем только изменившиеся номера
+  var jobs=[];order.forEach(function(b,i){if(b.sort_order!==i+1){b.sort_order=i+1;jobs.push(sbPatch('blocks','id=eq.'+b.id,{sort_order:i+1}));}});
+  await Promise.all(jobs);
+}
+async function saMoveBlock(id,dir){
+  var idx=SA.blocks.findIndex(function(b){return b.id===id;}),sw=idx+dir;
+  if(idx<0||sw<0||sw>=SA.blocks.length)return;
+  var arr=SA.blocks.slice();var x=arr[idx];arr[idx]=arr[sw];arr[sw]=x;
+  try{await saRenumber(arr);}catch(e){vAlert(e.message);}
+  SA.flash=id;await saReload(true);
+  var e2=document.getElementById('sabB'+id);if(e2)e2.scrollIntoView({block:'nearest'});
+}
+async function saDelBlock(id){
+  if(!await vConfirm('Удалить этот блок? Вернуть его будет нельзя.','Удалить',true))return;
+  try{await sbDel('blocks','id=eq.'+id);}catch(e){vAlert(e.message);}
+  saReload(true);
+}
+async function saDupBlock(id){
+  var b=SA.blocks.find(function(x){return x.id===id;});if(!b)return;
+  try{await saInsertRec({type:b.type,title:b.title,body:b.body,image_url:b.image_url,caption:b.caption,data:sbData(b)},id);toast2('Копия добавлена ниже');}
+  catch(e){vAlert(e.message);}
+  saReload(true);
+}
+// вставить блок после afterId (null — в конец, 0 — в начало)
+async function saInsertRec(rec,afterId){
+  rec.topic_id=SA.topic.id;
+  var arr=SA.blocks.slice(),pos=arr.length;
+  if(afterId===0)pos=0;
+  else if(afterId){var i=arr.findIndex(function(b){return b.id===afterId;});if(i>=0)pos=i+1;}
+  var ph={};arr.splice(pos,0,ph);
+  // освобождаем номер под новый блок: всё, что ниже, сдвигаем на 1
+  var jobs=[];arr.forEach(function(b,i){if(b!==ph&&b.sort_order!==i+1){b.sort_order=i+1;jobs.push(sbPatch('blocks','id=eq.'+b.id,{sort_order:i+1}));}});
+  await Promise.all(jobs);
+  rec.sort_order=pos+1;
+  var r=await sbPost('blocks',rec);
+  return r&&r[0]&&r[0].id;
+}
+
+// ---------- окно блока: слева поля, справа — как увидит студент ----------
+function saFmtBar(id){
+  var b=function(k,t,tip){return '<button type="button" onclick="saFmt(\''+id+'\',\''+k+'\')" title="'+tip+'">'+t+'</button>';};
+  return '<div class="sbe-bar">'+b('b','<b>Ж</b>','Жирный: ключевой факт')+b('m','<mark>важное</mark>','Жёлтый маркер: часто спрашивают')+b('t','<u>термин</u>','Термин с подсказкой')+b('l','<i class="ti ti-list"></i> список','Сделать выделенные строки списком')+'</div>';
+}
+function saFmt(id,kind){
+  var ta=document.getElementById(id);if(!ta)return;
+  var s=ta.selectionStart,e=ta.selectionEnd,v=ta.value,sel=v.slice(s,e);
+  if(kind==='l'){
+    var ls=s;while(ls>0&&v[ls-1]!=='\n')ls--;
+    var chunk=v.slice(ls,e)||'';
+    var out=chunk.split('\n').map(function(l){return l.trim()?(/^[-•–]\s/.test(l.trim())?l:'- '+l.trim()):l;}).join('\n');
+    if(!chunk.trim())out='- ';
+    ta.value=v.slice(0,ls)+out+v.slice(e);ta.selectionStart=ta.selectionEnd=ls+out.length;
+  }else{
+    var w={b:'**',m:'==',t:'*'}[kind],txt=sel||'текст';
+    ta.value=v.slice(0,s)+w+txt+w+v.slice(e);
+    ta.selectionStart=s+w.length;ta.selectionEnd=s+w.length+txt.length;
+  }
+  ta.focus();saEdLive();
+}
+function saField(label,inner,hint){return '<div class="sbe-f"><label>'+label+'</label>'+inner+(hint?'<small>'+hint+'</small>':'')+'</div>';}
+function saBlockEditor(type,b){
+  var d=sbData(b),T=SB_TYPES[type]||{n:type,i:'ti-square'};
+  SA.ed={type:type,id:b?b.id:0,upload:null};
+  var v=function(x){return esc(x==null?'':x);};
+  var inp=function(id,val,ph){return '<input id="'+id+'" value="'+v(val)+'" placeholder="'+esc(ph||'')+'">';};
+  var ta=function(id,val,ph,rows){return '<textarea id="'+id+'" rows="'+(rows||6)+'" placeholder="'+esc(ph||'')+'">'+v(val)+'</textarea>';};
+  var f='';
+  if(type==='heading')f+=saField('Название раздела',inp('beTitle',b&&b.title,'Патогенез'),'Разделы нумеруются сами и собираются в содержание в начале темы.');
+  else if(type==='text'){
+    f+=saField('Подзаголовок (не обязательно)',inp('beTitle',b&&b.title,''));
+    f+=saField('Текст',saFmtBar('beBody')+ta('beBody',b&&b.body,'Пиши короткими абзацами. Пустая строка — новый абзац.',9),'Абзац — не длиннее 3–4 предложений: с телефона длинный текст не читают.');
+  }
+  else if(type==='key'||type==='exam'){
+    f+=saField('Заголовок',inp('beTitle',b&&b.title,T.d));
+    f+=saField(type==='key'?'Пункты — по одному на строку':'Что и как спрашивают — по одному на строку',saFmtBar('beBody')+ta('beBody',b&&b.body,type==='key'?'Некроз — гибель клеток в живом организме\nВсегда сопровождается воспалением':'Назовите виды некроза\nЧем некроз отличается от апоптоза',6));
+  }
+  else if(type==='remember'||type==='warn'||type==='mnemo'||type==='clinic'){
+    f+=saField('Заголовок',inp('beTitle',b&&b.title,T.d));
+    f+=saField('Текст',saFmtBar('beBody')+ta('beBody',b&&b.body,'',6));
+  }
+  else if(type==='term'){
+    f+=saField('Термин',inp('beTitle',b&&b.title,'Некроз'));
+    f+=saField('Определение',ta('beBody',b&&b.body,'Одно-два предложения',4),'Если в тексте написать *некроз*, по нажатию на слово покажется это определение.');
+  }
+  else if(type==='steps'){
+    f+=saField('Заголовок',inp('beTitle',b&&b.title,'Как развивается'));
+    f+=saField('Этапы — по одному на строку',ta('beSteps',(d.steps||[]).map(function(s){return s.label;}).join('\n'),'Паранекроз\nНекробиоз\nСмерть клетки\nАутолиз',6),'Коротко: 1–4 слова на этап.');
+  }
+  else if(type==='compare'){
+    var l=d.left||{},r=d.right||{};
+    f+='<div class="sbe-2">'+saField('Слева',inp('beLT',l.title,'Некроз')+ta('beLX',l.text,'Признаки — по одному на строку',5))+saField('Справа',inp('beRT',r.title,'Апоптоз')+ta('beRX',r.text,'Признаки — по одному на строку',5))+'</div>';
+  }
+  else if(type==='table'){
+    var rowsTxt=(d.head&&d.head.length?[d.head].concat(d.rows||[]):[]).map(function(r){return r.join(' | ');}).join('\n');
+    f+=saField('Заголовок',inp('beTitle',b&&b.title,'Формы некроза'));
+    f+=saField('Таблица',ta('beTable',rowsTxt,'Форма | Где встречается | Пример\nКоагуляционный | Ткани, богатые белком | Инфаркт миокарда\nКолликвационный | Ткани, богатые жидкостью | Инфаркт мозга',8),'Строка — это строка таблицы, ячейки разделяй знаком |. Первая строка — шапка. Можно вставить таблицу из Excel или Word — табуляция тоже подойдёт.');
+  }
+  else if(type==='image'){
+    var sz=d.size==='s'||d.size==='m'?d.size:'l';
+    f+='<div class="sbe-f"><label>Картинка</label><div class="sbe-drop" id="beDrop" ondragover="event.preventDefault();this.classList.add(\'over\')" ondragleave="this.classList.remove(\'over\')" ondrop="event.preventDefault();this.classList.remove(\'over\');saImgPick(event.dataTransfer.files)">'
+      +'<i class="ti ti-photo-up"></i><b>Выбери файл, перетащи сюда или вставь из буфера (Ctrl+V)</b><span id="beImgSt">'+(b&&b.image_url?'Картинка уже есть — можно заменить':'Подойдёт фото, скриншот или схема')+'</span>'
+      +'<label class="btn bgh bsm">Выбрать файл<input type="file" accept="image/*" style="display:none" onchange="saImgPick(this.files);this.value=\'\'"></label></div>'
+      +'<details class="sbe-url"><summary>или вставить ссылку на картинку</summary>'+inp('beImgUrl',b&&b.image_url&&b.image_url.indexOf('data:')!==0?b.image_url:'','https://…')+'</details>'
+      +'<input type="hidden" id="beImg" value="'+v(b&&b.image_url)+'"><input type="hidden" id="beTodo" value="'+v(d.todo)+'"></div>';
+    if(d.todo&&!(b&&b.image_url))f+='<div class="sbe-note"><i class="ti ti-sparkles"></i>ИИ советует сюда: '+esc(d.todo)+'</div>';
+    f+='<div class="sbe-f"><label>Размер</label><div class="sbe-seg" id="beSizeSeg" role="radiogroup">'
+      +[['s','Небольшая'],['m','Средняя'],['l','Во всю ширину']].map(function(o){return '<button type="button" role="radio" aria-checked="'+(o[0]===sz)+'" class="'+(o[0]===sz?'on':'')+'" onclick="saImgSize(\''+o[0]+'\')">'+o[1]+'</button>';}).join('')
+      +'</div><input type="hidden" id="beSize" value="'+sz+'"></div>';
+    f+=saField('Подпись под картинкой',inp('beCap',b&&b.caption,'Рис. 1. Коагуляционный некроз миокарда'),'Напиши, на что смотреть: без подписи картинку пролистывают.');
+  }
+  else if(type==='quiz'){
+    var opts=d.options&&d.options.length?d.options:['','','',''],cor=d.correct||0;
+    f+=saField('Вопрос',inp('beTitle',b&&b.title,'Какой некроз развивается в головном мозге?'));
+    f+='<div class="sbe-f"><label>Варианты — отметь правильный</label><div id="beOpts">'+opts.map(function(o,i){return saQuizRow(o,i,i===cor);}).join('')+'</div>'
+      +'<button type="button" class="btn bgh bsm" onclick="saAddQuizRow()"><i class="ti ti-plus"></i>Ещё вариант</button></div>';
+    f+=saField('Почему так (покажется после ответа)',ta('beWhy',d.why,'Одно предложение',2));
+  }
+  document.getElementById('modalRoot').innerHTML='<div class="modal-bg" onclick="if(event.target===this)saEdClose()"><div class="modal sbe">'
+    +'<div class="sbe-head"><span class="lb-blob meth"><i class="ti '+T.i+'"></i></span><b>'+T.n+'</b><button class="sbe-x" onclick="saEdClose()" aria-label="Закрыть"><i class="ti ti-x"></i></button></div>'
+    +'<div class="sbe-cols"><div class="sbe-form" id="sbeForm" oninput="saEdLive()" onpaste="saEdPaste(event)">'+f+'</div>'
+    +'<div class="sbe-prev"><small>Так увидит студент</small><div id="sbePrev" class="sbe-prev-body"></div></div></div>'
+    +'<div class="sbe-foot"><span id="sbeErr" role="alert"></span><button class="btn bgh" onclick="saEdClose()">Отмена</button><button class="btn bbl" id="sbeSave" onclick="saSaveBlock()"><i class="ti ti-check"></i>'+(b?'Сохранить':'Добавить')+'</button></div></div></div>';
+  saEdLive();
+  var first=document.querySelector('#sbeForm input:not([type=hidden]):not([type=file]),#sbeForm textarea');if(first&&!b)try{first.focus();}catch(e){}
+}
+function saEdClose(){SA.ed=null;closeModal();}
+function saQuizRow(text,i,isCorrect){
+  return '<div class="sbe-opt"><input type="radio" name="beCorrect" '+(isCorrect?'checked':'')+' aria-label="Правильный ответ"><input class="sa-quiz-opt" value="'+esc(text||'')+'" placeholder="Вариант ответа"><button type="button" onclick="this.parentNode.remove();saEdLive()" aria-label="Убрать вариант"><i class="ti ti-x"></i></button></div>';
+}
+function saAddQuizRow(){var c=document.getElementById('beOpts');if(c.children.length>=6)return;c.insertAdjacentHTML('beforeend',saQuizRow('',0,false));}
+// собрать блок из полей окна
+function saCollect(){
+  var type=SA.ed.type,rec={type:type,title:'',body:'',image_url:'',caption:'',data:{}};
+  var raw=function(id){var e=document.getElementById(id);return e?e.value.replace(/\s+$/,''):'';};
+  if(type==='heading')rec.title=val('beTitle');
+  else if(type==='steps'){rec.title=val('beTitle');rec.data.steps=sbLines(raw('beSteps')).slice(0,10).map(function(l){return {label:l};});}
+  else if(type==='compare')rec.data={left:{title:val('beLT'),text:raw('beLX')},right:{title:val('beRT'),text:raw('beRX')}};
+  else if(type==='table'){
+    rec.title=val('beTitle');
+    var rows=raw('beTable').split('\n').map(function(l){return l.split(l.indexOf('|')>=0?'|':'\t').map(function(c){return c.trim();});}).filter(function(r){return r.some(Boolean);});
+    var n=Math.min(5,Math.max.apply(null,rows.map(function(r){return r.length;}).concat([2])));
+    rows=rows.map(function(r){r=r.slice(0,n);while(r.length<n)r.push('');return r;});
+    rec.data={head:rows[0]||[],rows:rows.slice(1)};
+  }
+  else if(type==='image'){
+    var url=val('beImgUrl');
+    rec.image_url=url||raw('beImg');rec.caption=val('beCap');
+    rec.data={size:val('beSize')||'l'};if(!rec.image_url&&val('beTodo'))rec.data.todo=val('beTodo');
+  }
+  else if(type==='quiz'){
+    rec.title=val('beTitle');var opts=[],cor=0;
+    document.querySelectorAll('#beOpts .sbe-opt').forEach(function(r){var t=r.querySelector('.sa-quiz-opt').value.trim();if(!t)return;if(r.querySelector('input[type=radio]').checked)cor=opts.length;opts.push(t);});
+    rec.data={options:opts,correct:cor};var why=val('beWhy');if(why)rec.data.why=why;
+  }
+  else{rec.title=val('beTitle');rec.body=raw('beBody');}
+  return rec;
+}
+function saEdLive(){
+  if(!SA.ed)return;
+  var p=document.getElementById('sbePrev');if(!p)return;
+  var rec=saCollect(),html=renderBlock(rec,{admin:true,sec:rec.type==='heading'?1:0});
+  p.innerHTML=html||'<div class="sbe-empty">Заполни поля — здесь появится блок</div>';
+}
+function saEdPaste(ev){
+  if(!SA.ed||SA.ed.type!=='image')return;
+  var fs=ev.clipboardData&&ev.clipboardData.files;
+  if(fs&&fs.length&&/^image\//.test(fs[0].type)){ev.preventDefault();saImgPick(fs);}
+}
+function saImgSize(s){
+  document.getElementById('beSize').value=s;
+  document.querySelectorAll('#beSizeSeg button').forEach(function(b,i){var on=['s','m','l'][i]===s;b.classList.toggle('on',on);b.setAttribute('aria-checked',on);});
+  saEdLive();
+}
+// сжать картинку: длинная сторона не больше max
+function vImgCompress(file,max,q){
+  return new Promise(function(done,fail){
+    var url=URL.createObjectURL(file),img=new Image();
+    img.onload=function(){
+      var k=Math.min(1,max/Math.max(img.width,img.height)),cv=document.createElement('canvas');
+      cv.width=Math.max(1,Math.round(img.width*k));cv.height=Math.max(1,Math.round(img.height*k));
+      var cx=cv.getContext('2d');cx.fillStyle='#fff';cx.fillRect(0,0,cv.width,cv.height);cx.imageSmoothingQuality='high';cx.drawImage(img,0,0,cv.width,cv.height);
+      URL.revokeObjectURL(url);
+      var du=cv.toDataURL('image/jpeg',q);done({dataUrl:du,b64:du.slice(du.indexOf(',')+1),w:cv.width,h:cv.height});
+    };
+    img.onerror=function(){URL.revokeObjectURL(url);fail(new Error('Этот файл не открывается как картинка'));};
+    img.src=url;
+  });
+}
+function saImgSay(t,bad){var s=document.getElementById('beImgSt');if(s){s.textContent=t;s.style.color=bad?'var(--eos-t)':'';}}
+function saImgPick(files){
+  var f=files&&files[0];if(!f||!SA.ed)return;
+  if(!/^image\//.test(f.type)){saImgSay('Это не картинка. Подойдёт JPG, PNG или WebP.',true);return;}
+  saImgSay('Готовлю картинку…');
+  var ed=SA.ed;
+  ed.upload=vImgCompress(f,1600,0.84).then(async function(r){
+    if(SA.ed!==ed)return;
+    var set=function(u){var i=document.getElementById('beImg');if(i)i.value=u;var u2=document.getElementById('beImgUrl');if(u2)u2.value='';saEdLive();};
+    set(r.dataUrl);saImgSay('Загружаю…');
+    var url=vBotUrl('/admin/upload');
+    try{
+      if(!url)throw new Error('no bot');
+      var resp=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:vAdminToken(),data:r.b64,media_type:'image/jpeg'})});
+      var j=await resp.json();
+      if(j.status==='ok'&&j.url){if(SA.ed===ed){set(j.url);saImgSay('Загружено ('+r.w+'×'+r.h+')');}return;}
+      throw new Error(j.status||'upload');
+    }catch(e){
+      // хранилище недоступно — картинка поедет внутри урока, поэтому делаем её легче
+      if(r.dataUrl.length>330000){try{var s2=await vImgCompress(f,1100,0.72);if(SA.ed===ed)set(s2.dataUrl);}catch(e2){}}
+      if(SA.ed===ed)saImgSay('Хранилище картинок недоступно — картинка сохранится внутри урока (уменьшил её, чтобы тема открывалась быстро).');
+    }
+  }).catch(function(e){saImgSay(e.message||'Не получилось открыть картинку',true);});
+}
+async function saSaveBlock(){
+  if(!SA.ed)return;
+  var err=document.getElementById('sbeErr'),btn=document.getElementById('sbeSave');err.textContent='';
+  if(SA.ed.upload){btn.disabled=true;try{await SA.ed.upload;}catch(e){}btn.disabled=false;}
+  var rec=saCollect(),t=rec.type;
+  var bad=(t==='heading'&&!rec.title)?'Напиши название раздела'
+    :(t==='term'&&(!rec.title||!rec.body))?'Нужны и термин, и определение'
+    :(t==='steps'&&rec.data.steps.length<2)?'Нужно хотя бы два этапа'
+    :(t==='compare'&&(!rec.data.left.title||!rec.data.right.title))?'Назови обе стороны сравнения'
+    :(t==='table'&&!rec.data.rows.length)?'Нужна шапка и хотя бы одна строка'
+    :(t==='image'&&!rec.image_url)?'Добавь картинку или ссылку на неё'
+    :(t==='quiz'&&(!rec.title||rec.data.options.length<2))?'Нужен вопрос и хотя бы два варианта'
+    :(['text','key','exam','remember','warn','mnemo','clinic'].indexOf(t)>=0&&!rec.body)?'Блок пустой — напиши текст':'';
+  if(bad){err.textContent=bad;return;}
+  btn.disabled=true;
+  try{
+    var id=SA.ed.id;
+    if(id)await sbPatch('blocks','id=eq.'+id,rec);
+    else id=await saInsertRec(rec,SA.insertAfter);
+    SA.insertAfter=null;SA.flash=id||null;SA.ed=null;closeModal();
+    await saReload(true);
+    var e2=id&&document.getElementById('sabB'+id);if(e2)e2.scrollIntoView({block:'center'});
+    toast2('Сохранено');
+  }catch(e){btn.disabled=false;err.textContent=e.message||'Не получилось сохранить';}
+}
+
+// ---------- КОНСПЕКТ ИЗ МАТЕРИАЛА (ИИ) ----------
+var SA_AI=null;   // {images:[b64], detail, quiz, job, blocks, notes, meta, timer}
+function saAiOpen(){
+  SA_AI={images:[],detail:'full',quiz:4};
+  saAiForm();
+}
+function saAiShell(inner,foot){
+  document.getElementById('modalRoot').innerHTML='<div class="modal-bg"><div class="modal sbe sbe-ai">'
+    +'<div class="sbe-head"><span class="lb-blob vio"><i class="ti ti-sparkles"></i></span><b>Конспект из материала</b><button class="sbe-x" onclick="saAiClose()" aria-label="Закрыть"><i class="ti ti-x"></i></button></div>'
+    +'<div class="sbe-ai-body">'+inner+'</div>'+(foot?'<div class="sbe-foot">'+foot+'</div>':'')+'</div></div>';
+}
+function saAiClose(){if(SA_AI&&SA_AI.timer)clearInterval(SA_AI.timer);SA_AI=null;closeModal();}
+function saAiSeg(key,opts){
+  return '<div class="sbe-seg" role="radiogroup">'+opts.map(function(o){var on=SA_AI[key]===o[0];
+    return '<button type="button" role="radio" aria-checked="'+on+'" class="'+(on?'on':'')+'" onclick="SA_AI.'+key+'='+JSON.stringify(o[0]).replace(/"/g,'\'')+';saAiKeep();saAiForm()">'+o[1]+'</button>';}).join('')+'</div>';
+}
+function saAiKeep(){var m=document.getElementById('aiMat');if(m&&SA_AI)SA_AI.material=m.value;}
+function saAiForm(msg){
+  var A=SA_AI;
+  saAiShell('<p class="sbe-lead">Вставь лекцию, шпаргалку или главу методички. ИИ соберёт из неё конспект блоками: главное, разделы, термины, таблицы, «запомни», вопросы для проверки. '
+    +'Он берёт только то, что есть в материале, а где сомневается — напишет тебе замечание. После этого любой блок можно поправить.</p>'
+    +'<div class="sbe-f"><label>Материал</label><textarea id="aiMat" rows="10" placeholder="Вставь сюда текст темы…" oninput="saAiCount()">'+esc(A.material||'')+'</textarea><small id="aiCnt"></small></div>'
+    +'<div class="sbe-f"><label>Или страницы: фото конспекта, сканы, PDF</label><div class="sbe-files"><label class="btn bgh bsm"><i class="ti ti-paperclip"></i>Приложить<input type="file" accept="image/*,application/pdf" multiple style="display:none" onchange="saAiFiles(this)"></label>'
+    +'<span id="aiFilesInfo">'+(A.images.length?'Приложено страниц: '+A.images.length+' <button type="button" class="sbe-link" onclick="SA_AI.images=[];saAiKeep();saAiForm()">убрать</button>':'до 10 страниц')+'</span></div></div>'
+    +'<div class="sbe-2"><div class="sbe-f"><label>Объём</label>'+saAiSeg('detail',[['full','Полный конспект'],['brief','Шпаргалка']])+'</div>'
+    +'<div class="sbe-f"><label>Вопросы в конце</label>'+saAiSeg('quiz',[[0,'Без вопросов'],[4,'4'],[6,'6']])+'</div></div>'
+    +(msg?'<div class="sbe-note bad" role="alert"><i class="ti ti-alert-triangle"></i>'+esc(msg)+'</div>':''),
+    '<span></span><button class="btn bgh" onclick="saAiClose()">Отмена</button><button class="btn bvio" onclick="saAiRun()"><i class="ti ti-sparkles"></i>Собрать конспект</button>');
+  saAiCount();
+}
+function saAiCount(){var m=document.getElementById('aiMat'),c=document.getElementById('aiCnt');if(!m||!c)return;
+  var n=m.value.length;c.textContent=n?(n>80000?'Слишком длинно: '+n+' знаков. ИИ прочитает первые 80 000 — лучше раздели тему на две.':n+' '+vplural(n,'знак','знака','знаков')):'Чем полнее материал, тем точнее конспект.';
+  c.style.color=n>80000?'var(--eos-t)':'';}
+async function saAiFiles(inp){
+  var files=Array.prototype.slice.call(inp.files||[]);inp.value='';if(!files.length||!SA_AI)return;
+  saAiKeep();var info=document.getElementById('aiFilesInfo');
+  try{
+    for(var i=0;i<files.length&&SA_AI.images.length<10;i++){
+      var f=files[i];
+      if(/pdf$/i.test(f.type)||/\.pdf$/i.test(f.name)){
+        if(info)info.textContent='Открываю '+f.name+'…';
+        var ps=await vPdfPages(f,function(a,n){if(info)info.textContent='Готовлю страницы: '+a+' из '+n+'…';});
+        ps.forEach(function(p){if(SA_AI.images.length<10)SA_AI.images.push(p);});
+      }else SA_AI.images.push(await vImgJpeg(f));
+    }
+    // бот принимает до 12 МБ за запрос — лишние страницы не берём
+    var tot=0,keep=[];SA_AI.images.forEach(function(x){if(tot+x.length<9e6){tot+=x.length;keep.push(x);}});
+    var cut=SA_AI.images.length-keep.length;SA_AI.images=keep;
+    if(cut){saAiForm('Слишком тяжёлые страницы: взял '+keep.length+', ещё '+cut+' не поместились. Раздели материал на две темы или вставь текст.');return;}
+    saAiForm();
+  }catch(e){saAiForm('Не получилось открыть файл: '+(e.message||e));}
+}
+async function saAiRun(){
+  saAiKeep();var A=SA_AI,mat=(A.material||'').trim();
+  if(mat.length<200&&!A.images.length){saAiForm('Материала слишком мало. Вставь текст темы (хотя бы пару абзацев) или приложи страницы.');return;}
+  var url=vBotUrl('/ai/lesson');if(!url){saAiForm('Бот не подключён — ИИ работает через него.');return;}
+  saAiShell('<div class="sbe-wait"><div class="sbe-spin" aria-hidden="true"></div><b>ИИ читает материал и собирает конспект</b><span id="aiWait">Обычно это 1–3 минуты. Окно можно не закрывать.</span></div>','');
+  try{
+    var r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:vAdminToken(),material:mat,images:A.images,detail:A.detail,quiz:A.quiz,title:SA.topic.title,subject:(SA.subject&&SA.subject.name)||''})});
+    var j=await r.json();
+    if(j.status!=='run'||!j.job){if(SA_AI===A)saAiForm(saAiErr(j));return;}
+    A.job=j.job;
+    A.timer=setInterval(async function(){
+      if(SA_AI!==A){clearInterval(A.timer);return;}
+      try{
+        var r2=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:vAdminToken(),job:A.job})}),j2=await r2.json();
+        if(SA_AI!==A)return;
+        if(j2.status==='run'){var w=document.getElementById('aiWait');if(w)w.textContent='Идёт '+(j2.seconds||0)+' с. Обычно это 1–3 минуты. Окно можно не закрывать.';return;}
+        clearInterval(A.timer);A.timer=null;
+        if(j2.status==='ok'){A.blocks=j2.blocks||[];A.notes=j2.notes||[];A.meta=j2.meta||{};saAiResult();}
+        else saAiForm(saAiErr(j2));
+      }catch(e){}
+    },3000);
+  }catch(e){if(SA_AI===A)saAiForm('Нет связи с ботом. Проверь интернет и попробуй ещё раз.');}
+}
+function saAiErr(j){
+  return ({ai_not_configured:'ИИ не подключён: на Railway нет ключа ANTHROPIC_API_KEY.',forbidden:'Войди заново как администратор.'}[j.status])
+    ||(j.reason?(typeof vAiReason==='function'?vAiReason(j.reason):j.reason):'ИИ не ответил — попробуй ещё раз.');
+}
+function saAiResult(){
+  var A=SA_AI,cnt={};A.blocks.forEach(function(b){cnt[b.type]=(cnt[b.type]||0)+1;});
+  var parts=Object.keys(cnt).map(function(k){return (SB_TYPES[k]?SB_TYPES[k].n.toLowerCase():k)+' — '+cnt[k];}).join(', ');
+  var list=studyBlockList(A.blocks,true);
+  saAiShell((A.notes.length?'<div class="sbe-note warn"><i class="ti ti-alert-triangle"></i><div><b>ИИ просит проверить</b><ul>'+A.notes.map(function(n){return '<li>'+esc(n)+'</li>';}).join('')+'</ul></div></div>':'')
+    +'<p class="sbe-lead"><b>Готово: '+A.blocks.length+' '+vplural(A.blocks.length,'блок','блока','блоков')+'.</b> '+esc(parts)+'. Прочитай перед тем, как добавлять: это медицина, а ИИ мог понять материал не так. Каждый блок потом можно изменить.</p>'
+    +'<div class="sbe-ai-prev">'+(A.meta.lede?'<p class="sbe-lede"><small>Описание темы</small>'+esc(A.meta.lede)+'</p>':'')+studyToc(list)+list.map(function(x){return x.html;}).join('')+'</div>',
+    '<span id="aiSaveSt"></span><button class="btn bgh" onclick="SA_AI.blocks=null;saAiForm()">Собрать заново</button>'
+    +(SA.blocks.length?'<button class="btn bgh" onclick="saAiApply(true)">Заменить всё в теме</button>':'')
+    +'<button class="btn bbl" onclick="saAiApply(false)"><i class="ti ti-check"></i>'+(SA.blocks.length?'Добавить в конец темы':'Добавить в тему')+'</button>');
+}
+async function saAiApply(replace){
+  var A=SA_AI;if(!A||!A.blocks||A.busy)return;
+  if(replace&&!await vConfirm('Заменить всё в теме? Сейчас в ней '+SA.blocks.length+' '+vplural(SA.blocks.length,'блок','блока','блоков')+' — они будут удалены.','Заменить',true))return;
+  A.busy=true;var st=document.getElementById('aiSaveSt');
+  document.querySelectorAll('.sbe-ai .sbe-foot .btn').forEach(function(b){b.disabled=true;});
+  try{
+    if(replace)await sbDel('blocks','topic_id=eq.'+SA.topic.id);
+    var base=replace?0:(SA.blocks.length?Math.max.apply(null,SA.blocks.map(function(b){return b.sort_order||0;})):0);
+    for(var i=0;i<A.blocks.length;i++){
+      if(st)st.textContent='Сохраняю '+(i+1)+' из '+A.blocks.length+'…';
+      var b=A.blocks[i];
+      await sbPost('blocks',{topic_id:SA.topic.id,type:b.type,title:b.title||'',body:b.body||'',image_url:b.image_url||'',caption:b.caption||'',data:b.data||{},sort_order:base+i+1});
+    }
+    // описание и время чтения темы
+    var all=replace?A.blocks:SA.blocks.concat(A.blocks),patch={read_minutes:studyReadMinutes(all)};
+    if(A.meta&&A.meta.lede&&(replace||!SA.topic.lede))patch.lede=A.meta.lede;
+    try{await sbPatch('topics','id=eq.'+SA.topic.id,patch);Object.assign(SA.topic,patch);}catch(e){}
+    saAiClose();await saReload(false);toast2('Конспект добавлен — теперь проверь и поправь');
+  }catch(e){A.busy=false;if(st)st.textContent='';vAlert('Не всё сохранилось: '+(e.message||e)+'. Открой тему заново и проверь, что добавилось.');saAiClose();saReload(false);}
+}
 function renderLevels(){
   var st=getMyStats(),lv=vitaLevel(st),r=lv.r;
   var nowIdx=V_RANKS.indexOf(r);
