@@ -1776,6 +1776,8 @@ input.v-locked{opacity:.75;background:var(--bg3)}
 .adm-ai-note{width:100%;height:40px;border:none;border-radius:10px;background:var(--bg2);color:var(--tx);font:500 13px var(--f);padding:0 10px;margin-top:2px}
 .adm-aiset{align-items:center}
 @media(max-width:560px){.adm-ai-ba{grid-template-columns:1fr}}
+
+.adm-dup-seg.two{grid-template-columns:repeat(2,1fr)}
 </style>
 </head>
 <body>
@@ -7888,13 +7890,18 @@ var BK_FORCE=null;   // что делать с похожими (по ключу
 var BK_ASKED=false;  // админа уже спросили про похожие
 // разбор + проверка на повторы для массового добавления
 function vBulkClassify(qa){
-  var seen=[],res={add:[],dup:[],conf:[],self:0};
+  // selfs — вопросы, похожие на другой вопрос из этого же текста: по умолчанию берём первый, но админ может добавить оба
+  var seen=[],res={add:[],dup:[],conf:[],self:0,selfs:[]};
   qa.forEach(function(x){
     var a=vBulkAns(x),r=vDupCheck(x.q,a);
-    if(r.st==='new'){var st=vStems(x.q),rep=seen.some(function(y){return vSameQ(st,y.st);});if(rep){res.self++;return;}}
+    if(r.st==='new'){var st=vStems(x.q),twin=seen.filter(function(y){return vSameQ(st,y.st);})[0];
+      if(twin){
+        res.selfs.push({x:x,m:{q:twin.q,ans:twin.ans,o:twin.o||[],self:true}});
+        if(BK_FORCE&&BK_FORCE[vBulkKey(x)]==='add'){res.add.push(x);return;}
+        res.self++;return;}}
     if(r.st==='dup')res.dup.push({x:x,m:r.m,diff:vOptsDiffer(x.opts,r.m.o)});
     else if(r.st==='conflict')res.conf.push({x:x,m:r.m});
-    else{res.add.push(x);seen.push({st:vStems(x.q),q:x.q,ans:a});}
+    else{res.add.push(x);seen.push({st:vStems(x.q),q:x.q,ans:a,o:x.opts||[]});}
   });
   return res;
 }
@@ -8076,31 +8083,34 @@ function admDupHtml(cls){
     var b=function(v,t){return '<button type="button" class="'+(ch===v?'on':'')+'" role="radio" aria-checked="'+(ch===v)+'" data-v="'+v+'" onclick="admBkPick(this)">'+t+'</button>';};
     return '<div class="adm-dup" data-k="'+k+'"><b>'+esc(c.x.q)+'</b>'
       +'<span class="adm-dup-n">новый: '+opts(c.x.opts,vBulkAns(c.x))+'</span>'
-      +'<span class="adm-dup-o">в базе: '+opts(c.m.o,c.m.ans)+' <i>('+esc(vSubjLabel(c.m.s))+(c.m.t?', '+esc(c.m.t):'')+')</i></span>'
-      +'<div class="adm-dup-seg" role="radiogroup" aria-label="Что сделать с этим вопросом">'+b('skip','Пропустить')+b('add','Добавить')+b('rep','Заменить старый')+'</div></div>';
+      +(c.m.self
+        ?'<span class="adm-dup-o">выше в этом же тексте: «'+esc(c.m.q)+'» — '+opts(c.m.o,c.m.ans)+'</span>'
+         +'<div class="adm-dup-seg two" role="radiogroup" aria-label="Что сделать с этим вопросом">'+b('skip','Пропустить')+b('add','Добавить оба')+'</div></div>'
+        :'<span class="adm-dup-o">в базе: '+opts(c.m.o,c.m.ans)+' <i>('+esc(vSubjLabel(c.m.s))+(c.m.t?', '+esc(c.m.t):'')+')</i></span>'
+         +'<div class="adm-dup-seg" role="radiogroup" aria-label="Что сделать с этим вопросом">'+b('skip','Пропустить')+b('add','Добавить')+b('rep','Заменить старый')+'</div></div>');
   };
-  var group=function(list,title,note,open){
+  var group=function(list,title,note,open,noRep){
     if(!list.length)return '';
     return '<details class="adm-dupbox"'+(open?' open':'')+'><summary>'+title+'</summary>'
       +(note?'<p>'+note+'</p>':'')
       +'<div class="adm-dup-all"><span>Для всех в этой группе:</span><button type="button" class="btn bgh bsm" onclick="admBkPickAll(this,\'skip\')">Пропустить</button>'
-      +'<button type="button" class="btn bgh bsm" onclick="admBkPickAll(this,\'add\')">Добавить</button><button type="button" class="btn bgh bsm" onclick="admBkPickAll(this,\'rep\')">Заменить</button></div>'
+      +'<button type="button" class="btn bgh bsm" onclick="admBkPickAll(this,\'add\')">Добавить</button>'+(noRep?'':'<button type="button" class="btn bgh bsm" onclick="admBkPickAll(this,\'rep\')">Заменить</button>')+'</div>'
       +list.map(row).join('')+'</details>';
   };
   var diff=cls.dup.filter(function(c){return c.diff;}),same=cls.dup.filter(function(c){return !c.diff;});
   var h='<div style="margin-top:6px;font-size:13px;line-height:1.5"><b id="bkSum" style="color:var(--mal-t)">'+admBkSumText(cls)+'</b>';
-  if(cls.self)h+='<br><span style="color:var(--tx3)">Повторяются внутри самого текста — возьму по одному: '+cls.self+'</span>';
-  if(cls.dup.length+cls.conf.length)h+='<p class="adm-dup-lead">Похожие вопросы уже есть в базе. Сам я их не добавляю и не выбрасываю — решаешь ты: пропустить, добавить ещё одним вопросом или заменить тот, что в базе (ответы студентов по нему сохранятся).</p>';
+  if(cls.dup.length+cls.conf.length+cls.selfs.length)h+='<p class="adm-dup-lead">Нашёл похожие вопросы — в базе или в самом тексте. Сам я их не добавляю и не выбрасываю, решаешь ты: пропустить, добавить ещё одним вопросом или заменить тот, что в базе (ответы студентов по нему сохранятся).</p>';
   h+=group(cls.conf,'<b style="color:var(--iod-t)">Вопрос тот же, а правильный ответ другой: '+cls.conf.length+'</b>','Сверь ответы: возможно, в базе ошибка — тогда выбери «Заменить старый».',true);
   h+=group(diff,'<b style="color:var(--meth-t)">Вопрос и ответ те же, варианты другие: '+diff.length+'</b>','',true);
   h+=group(same,'<b>Точно такие уже есть: '+same.length+'</b>','',cls.add.length===0||same.length<=20);
+  h+=group(cls.selfs,'<b>Похожи на другой вопрос в этом же тексте: '+cls.selfs.length+'</b>','Вопросы похожи по формулировке. Если это разные вопросы — выбери «Добавить оба».',true,true);
   return h+'</div>';
 }
 function admBkSumText(cls){
   var s=vBkSplit(cls),t='Новых — добавятся: '+cls.add.length;
   if(s.add.length)t+=' · похожих добавлю: '+s.add.length;
   if(s.rep.length)t+=' · заменю в базе: '+s.rep.length;
-  if(s.skip.length)t+=' · пропущу: '+s.skip.length;
+  if(s.skip.length+cls.self)t+=' · пропущу: '+(s.skip.length+cls.self);
   return t;
 }
 function admBkSet(k,v){BK_FORCE=BK_FORCE||{};if(v==='skip')delete BK_FORCE[k];else BK_FORCE[k]=v;}
@@ -8116,7 +8126,7 @@ function vBkAsk(nNew,nDup){
     if(!w){w=document.createElement('div');w.id='vAlertWrap';w.className='v-alert-wrap';document.body.appendChild(w);}
     var box=document.createElement('div');box.className='v-alert';box.setAttribute('role','alertdialog');
     var t=document.createElement('div');t.className='v-alert-t';
-    t.textContent='Похожих вопросов в базе: '+nDup+(nNew?'. Новых: '+nNew:'')+'.\nЧто сделать с похожими?';
+    t.textContent='Похожих вопросов (в базе или в самом тексте): '+nDup+(nNew?'. Новых: '+nNew:'')+'.\nЧто сделать с похожими?';
     box.appendChild(t);
     var fin=function(v){box.remove();if(!w.children.length)w.classList.remove('on');done(v);};
     [['add','Добавить и их тоже','bbl'],['rep','Заменить те, что в базе','bgh'],['skip',nNew?'Добавить только новые':'Ничего не добавлять','bgh'],['look','Посмотреть и выбрать по одному','bgh']].forEach(function(o){
@@ -8155,15 +8165,16 @@ async function admBulkSave(){
     s=vEnsureSubject(vSubjKey(nn),nn);
   }
   if(!t){showErr('\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0442\u0435\u043C\u0443');return;}
-  var cls=vBulkClassify(qa),bad0=qa._bad;
-  var sim=cls.dup.concat(cls.conf);
+  var qa0=qa,cls=vBulkClassify(qa),bad0=qa._bad;
+  var sim=cls.dup.concat(cls.conf).concat(cls.selfs);
   // похожие есть, а админ ещё ничего не выбирал — спрашиваем, сами не решаем
   if(sim.length&&!(BK_FORCE&&Object.keys(BK_FORCE).length)&&!BK_ASKED){
     var ans=await vBkAsk(cls.add.length,sim.length);
     if(ans==='look'){admBulkPreview();var pv=document.getElementById('bulkPrev');if(pv&&pv.scrollIntoView)pv.scrollIntoView({block:'start',behavior:'smooth'});return;}
     BK_ASKED=true;
-    if(ans==='add'||ans==='rep')sim.forEach(function(c){admBkSet(vBulkKey(c.x),ans);});
+    if(ans==='add'||ans==='rep')sim.forEach(function(c){admBkSet(vBulkKey(c.x),c.m.self?(ans==='add'?'add':'skip'):ans);});
     if(ans==='skip'&&!cls.add.length){BK_ASKED=false;return;}
+    cls=vBulkClassify(qa0);   // выбор мог вернуть в список вопросы, похожие на соседние
   }
   var split=vBkSplit(cls);
   var forced=split.add.map(function(c){return c.x;});
