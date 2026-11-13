@@ -2059,9 +2059,9 @@ table.sb-t th,table.sb-t td{overflow-wrap:break-word;hyphens:auto}
 .sbe-cand.on{box-shadow:0 0 0 3px var(--mal)}
 
 /* ===== Чтение по разделам ===== */
-.rd-nav{position:sticky;top:-20px;z-index:20;margin:0 -20px 18px;padding:10px 20px 10px;background:var(--bg);transition:transform .2s ease}
-.rd-nav.hid{transform:translateY(-110%)}
-.rd-tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:2px 0 4px}
+.rd-nav{margin:0 0 18px}
+.rd-tabs{position:relative;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:2px 2px 6px;scroll-padding:0 24px;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 22px),transparent);mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 22px),transparent)}
 .rd-tabs::-webkit-scrollbar{display:none}
 .rd-tab{position:relative;flex:none;display:inline-flex;align-items:center;gap:7px;max-width:230px;min-height:40px;padding:0 13px 0 6px;border:none;border-radius:13px;background:var(--bg2);box-shadow:0 3px 0 var(--edge);color:var(--tx2);font:600 13.5px var(--f);cursor:pointer}
 .rd-tab .rd-n{flex:none;width:26px;height:26px;border-radius:9px;background:var(--bg4);color:var(--tx2);display:inline-flex;align-items:center;justify-content:center;font:800 12.5px var(--f)}
@@ -2084,8 +2084,7 @@ table.sb-t th,table.sb-t td{overflow-wrap:break-word;hyphens:auto}
 .rd-next span{overflow:hidden}
 .rd-foot i{font-size:20px;flex:none}
 .rd-next:active{transform:translateY(3px);box-shadow:0 1px 0 var(--mal-e)}
-@media(max-width:760px){.rd-nav{top:-12px;margin:0 -12px 14px;padding:8px 12px}}
-@media(prefers-reduced-motion:reduce){.rd-nav{transition:none}}
+@media(max-width:760px){.rd-nav{margin:0 0 14px}.rd-tab{min-height:38px;font-size:13px}}
 
 /* ===== ИИ: материал по темам ===== */
 .ai-split{display:flex;flex-direction:column;gap:6px;margin:12px 0 4px}
@@ -9306,9 +9305,7 @@ function initReadProgress(){
     if(!stb){if(scroller)scroller.removeEventListener('scroll',upd);return;}
     var st=scroller?scroller.scrollTop:window.scrollY,sh=scroller?scroller.scrollHeight:document.body.scrollHeight,ch=scroller?scroller.clientHeight:window.innerHeight;
     stb.classList.toggle('show',st>600);
-    // переключатель разделов прячется, пока листаешь вниз, и возвращается, когда листаешь вверх
-    var nav=document.getElementById('rdNav');
-    if(nav){var d=st-(ST._lastSt||0),sec=document.querySelector('#studyBody .rd-sec:not([hidden])');if(Math.abs(d)>6){nav.classList.toggle('hid',d>0&&!!sec&&sec.getBoundingClientRect().top<0);ST._lastSt=st;}}
+
     // тема без разделов: дочитал до конца — отмечаем
     if(!document.querySelector('#studyBody .rd-sec')&&sh>ch&&st/(sh-ch)>=.9&&ST.topic&&!ST._marked90){ST._marked90=true;studyMarkReading(ST.topic.id,90);}
   }
@@ -11243,12 +11240,14 @@ function studyShowSec(i,noScroll){
   i=Math.max(0,Math.min(all.length-1,i));
   all.forEach(function(s,k){if(k===i)s.removeAttribute('hidden');else s.setAttribute('hidden','');});
   document.querySelectorAll('#rdNav .rd-tab').forEach(function(t,k){t.classList.toggle('on',k===i);t.setAttribute('aria-selected',k===i);if(k<i)t.classList.add('was');});
-  var tab=document.querySelector('#rdNav .rd-tab.on');if(tab&&tab.scrollIntoView)tab.scrollIntoView({block:'nearest',inline:'center'});
-  var f=document.getElementById('rdBarFill');if(f)f.style.width=Math.round((i+1)/all.length*100)+'%';
+  // активная вкладка — по центру ленты (только по горизонтали, страницу не двигаем)
+  var tab=document.querySelector('#rdNav .rd-tab.on'),row=tab&&tab.parentNode;
+  if(tab&&row)row.scrollLeft=tab.offsetLeft-(row.clientWidth-tab.offsetWidth)/2;
   ST.sec=i;try{S.readSec=S.readSec||{};S.readSec[ST.topic.id]=i;sv();}catch(e){}
   if(i===all.length-1&&ST.topic&&!ST._marked90){ST._marked90=true;studyMarkReading(ST.topic.id,90);}
   if(!noScroll){var nav=document.getElementById('rdNav'),sc=document.querySelector('.main');
-    if(nav&&sc){var top=nav.getBoundingClientRect().top-sc.getBoundingClientRect().top+sc.scrollTop;if(sc.scrollTop>top)sc.scrollTop=top;}}
+    // новый раздел начинается сверху: лента разделов — под шапкой Telegram, не под ней
+    if(nav&&sc){var pad=parseFloat(getComputedStyle(sc).paddingTop)||0,top=nav.getBoundingClientRect().top-sc.getBoundingClientRect().top+sc.scrollTop-pad-(document.documentElement.hasAttribute('data-tg-fs')?40:0);/* ниже кнопки темы в Telegram */if(sc.scrollTop>top)sc.scrollTop=Math.max(0,top);}}
   try{studyImpUpd();}catch(e){}
 }
 
