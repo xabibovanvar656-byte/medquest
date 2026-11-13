@@ -1991,6 +1991,77 @@ table.sb-t th,table.sb-t td{overflow-wrap:break-word;hyphens:auto}
   .sbe-2{grid-template-columns:minmax(0,1fr)}
 }
 @media(prefers-reduced-motion:reduce){.sbe-spin{animation-duration:3s}.sab-b.flash{animation:none}}
+
+/* ===== УРОК: блоки внимания ===== */
+/* зацепка — вопрос, ради которого читают тему */
+.sblk.hook{position:relative;overflow:hidden;background:var(--bg2);box-shadow:0 4px 0 var(--edge);padding:18px 18px 18px}
+.sblk.hook .hk-q{position:absolute;right:-6px;top:-34px;font:900 150px/1 var(--f);color:var(--iod);opacity:.32;pointer-events:none}
+.sblk.hook small{position:relative;display:block;font:700 13px var(--f);color:var(--iod-t);margin-bottom:6px}
+.sblk.hook .hk-t{position:relative;padding-right:34px;font:800 20px/1.35 var(--f);letter-spacing:-.015em;color:var(--tx);margin:0}
+.sblk.hook .hk-t+p{position:relative;margin-top:10px;font:500 15px/1.5 var(--f);color:var(--tx2)}
+/* «Представь» — окуляр микроскопа: тёмный в любой теме */
+.sblk.imagine{position:relative;overflow:hidden;background:#101631;box-shadow:0 4px 0 #070a1c;padding:20px 20px 20px;color:#e9ecff}
+.sblk.imagine .im-lens{position:absolute;width:260px;height:260px;right:-90px;top:-110px;border-radius:50%;
+  background:radial-gradient(circle,rgba(160,180,255,.28) 0,rgba(160,180,255,.08) 45%,transparent 70%);pointer-events:none}
+.sblk.imagine .sb-eb{position:relative;color:#aebcff}
+.sblk.imagine p,.sblk.imagine .sb-list{position:relative;font-family:var(--read);font-size:17px;line-height:1.7;color:#e9ecff}
+.sblk.imagine p b,.sblk.imagine li b{color:#fff}
+.sblk.imagine mark{background:rgba(255,214,102,.18);box-shadow:inset 0 -2px 0 #ffd666;color:#fff}
+.sblk.imagine .term{color:#9fd8ff}
+/* «Стоп, подумай» */
+.sblk.think{background:var(--vio-s);box-shadow:none}
+.sblk.think .sb-eb{color:var(--vio-t)}
+.sblk.think .th-q{font:700 17px/1.45 var(--f);color:var(--tx);margin:0}
+.th-btn{margin-top:12px;min-height:44px;padding:0 18px;border:none;border-radius:14px;background:var(--vio);color:var(--vio-ink);box-shadow:0 3px 0 var(--vio-e);font:700 14.5px var(--f);cursor:pointer}
+.th-btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--vio-e)}
+.th-a{margin-top:12px;padding:12px 14px;border-radius:14px;background:var(--bg2)}
+.th-a p,.th-a .sb-list{font:500 15.5px/1.55 var(--f);color:var(--tx)}
+/* схема: нажимаешь на часть — остальное гаснет, снизу пояснение */
+.sblk.schema{background:var(--bg2);box-shadow:0 4px 0 var(--edge);padding:14px 14px 14px}
+.sc-svg svg{display:block;width:100%;height:auto;font-family:var(--f)}
+.sc-svg [data-k]{cursor:pointer;transition:opacity .2s}
+.sblk.schema[data-on] .sc-svg [data-k]:not(.on){opacity:.18}
+.sc-hint{font:500 12.5px var(--f);color:var(--tx3);margin:10px 2px 6px}
+.sc-chips{display:flex;flex-wrap:wrap;gap:6px}
+.sc-chip{min-height:36px;padding:0 12px;border:none;border-radius:99px;background:var(--bg3);color:var(--tx);font:600 13px var(--f);cursor:pointer}
+.sc-chip.on{background:var(--vio);color:var(--vio-ink)}
+.sc-info:not(:empty){margin-top:10px;padding:12px 14px;border-radius:14px;background:var(--bg3)}
+.sc-info>b{display:block;font:800 15.5px var(--f);color:var(--tx);margin-bottom:4px}
+.sc-info p b{color:var(--tx)}
+.sc-info p,.sc-info .sb-list{font:500 14.5px/1.55 var(--f);color:var(--tx2)}
+.sb-credit{display:block;margin-top:3px;font-size:11.5px;color:var(--tx3)}
+@media(prefers-reduced-motion:reduce){.sc-svg [data-k]{transition:none}}
+
+/* ===== важные места: счётчик и список пропущенного ===== */
+.sblk.key,.sblk.remember,.sblk.warn,.sblk.exam,.sblk.think{position:relative}
+#studyBody .sblk.seen .sb-eb::after{content:'\ea5e';font-family:'tabler-icons';margin-left:auto;font-size:17px;color:var(--mal-t);opacity:.9}
+.imp-pill{position:fixed;left:16px;bottom:92px;z-index:60;display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 16px;border:none;border-radius:99px;
+  background:var(--iod);color:var(--iod-ink);box-shadow:0 4px 0 var(--iod-e),0 10px 24px -10px rgba(0,0,0,.4);font:700 14px var(--f);cursor:pointer}
+.imp-pill i{font-size:18px}.imp-pill b{font-weight:800}
+.imp-pill.done{background:var(--mal);color:var(--mal-ink);box-shadow:0 4px 0 var(--mal-e)}
+.imp-end{display:flex;flex-direction:column;gap:6px;margin:6px 0 14px;padding:14px;border-radius:20px;background:var(--iod-s)}
+.imp-end>b{display:flex;align-items:center;gap:7px;font:800 16px var(--f);color:var(--tx)}
+.imp-end>b i{font-size:20px;color:var(--iod-t)}
+.imp-end>span{font-size:13.5px;line-height:1.45;color:var(--tx2);margin-bottom:4px}
+.imp-end button{display:flex;align-items:center;gap:8px;min-height:44px;padding:6px 12px;border:none;border-radius:12px;background:var(--bg2);color:var(--tx);font:600 14px/1.3 var(--f);text-align:left;cursor:pointer;box-shadow:0 3px 0 var(--edge)}
+.imp-end button i{color:var(--iod-t);font-size:17px;flex-shrink:0}
+.imp-end.ok{background:var(--mal-s)}.imp-end.ok>b i{color:var(--mal-t)}
+.imp-flash{animation:impFlash 1.6s ease-out}
+@keyframes impFlash{0%,30%{box-shadow:0 0 0 4px var(--iod)}100%{box-shadow:0 0 0 0 transparent}}
+/* редактор: проверка фактов и картинки с Wikimedia */
+.ai-chk{border-radius:18px;box-shadow:0 0 0 3px var(--iod);margin:0 0 12px;padding:8px}
+.ai-chk>.sblk,.ai-chk>.sblk-vs,.ai-chk>figure,.ai-chk>.sb-h{margin-bottom:0}
+.ai-chk-n{display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap;padding:4px 4px 10px;font:500 13px/1.45 var(--f);color:var(--tx)}
+.ai-chk-n>i{color:var(--iod-t);font-size:17px;flex-shrink:0;margin-top:1px}
+.ai-chk-n>span{flex:1;min-width:160px}
+.ai-chk-n button{min-height:34px;padding:0 10px;border:none;border-radius:10px;background:var(--iod);color:var(--iod-ink);font:700 12.5px var(--f);cursor:pointer}
+.sbe-search{display:flex;gap:6px}.sbe-search input{flex:1}.sbe-search .btn{margin:0;flex-shrink:0}
+.sbe-cands{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.sbe-cand{position:relative;padding:0;border:none;border-radius:12px;overflow:hidden;background:var(--bg3);cursor:pointer;aspect-ratio:4/3;box-shadow:0 0 0 2px transparent}
+.sbe-cand img{width:100%;height:100%;object-fit:cover;display:block}
+.sbe-cand span{position:absolute;left:0;right:0;bottom:0;padding:2px 6px;font:600 10.5px var(--f);color:#fff;background:rgba(0,0,0,.55);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sbe-cand.on{box-shadow:0 0 0 3px var(--mal)}
+.imp-pill.gone{display:none}
 </style>
 </head>
 <body>
@@ -9037,7 +9108,9 @@ function renderTopicReader(el){
   h+='<div class="srh-floats"><span class="srh-chip"><i class="ti ti-clock"></i> '+(t.read_minutes||studyReadMinutes(ST.blocks))+' мин чтения</span></div></div>';
   // блоки (кроме quiz — они идут в финальный тест); из заголовков собирается содержание
   var blist=studyBlockList(ST.blocks.filter(function(b){return b.type!=='quiz';}),false);
-  h+=studyToc(blist)+blist.map(function(x){return x.html;}).join('');
+  // зацепка в начале идёт до содержания: сначала вопрос, потом план
+  var hk=0;while(hk<blist.length&&blist[hk].b.type==='hook')hk++;
+  h+=blist.slice(0,hk).map(function(x){return x.html;}).join('')+studyToc(blist)+blist.slice(hk).map(function(x){return x.html;}).join('');
   // финальный тест по теме (из quiz-блоков)
   var quizzes=ST.blocks.filter(function(b){return b.type==='quiz';});
   if(quizzes.length){
@@ -9056,7 +9129,7 @@ function renderTopicReader(el){
   var nextT=idx>=0&&idx<ST.topics.length-1?ST.topics[idx+1]:null;
   var alreadyDone=ST.progress[t.id]&&ST.progress[t.id].completed;
   // зона завершения — если есть тест, заполнится после сдачи; если нет — сразу кнопка
-  h+='<div id="completeZone">';
+  h+='<div id="impEnd"></div><div id="completeZone">';
   if(!quizzes.length||alreadyDone){
     // нет теста или уже пройдено — обычная кнопка
     h+='<div class="study-cta" onclick="studyFinishTopic('+t.id+')"><div class="sct-inner"><div class="sct-ic">✓</div><div class="sct-t"><b>'+(alreadyDone?'Тема пройдена':'Отметить пройденным')+'</b><span>'+(alreadyDone?'можешь идти дальше':'+50 баллов к рейтингу')+'</span></div><div class="sct-arr">→</div></div></div>';
@@ -9080,6 +9153,7 @@ function renderTopicReader(el){
   studyCheckBookmark(t.id);
   // запустить отслеживание прогресса чтения
   initReadProgress();
+  try{studyImpInit(t.id);}catch(e){}
   // отрисовать финальный тест
   renderFinalTest();
 }
@@ -9229,8 +9303,9 @@ function studyMarkReading(topicId,pct){
   ST.progress[topicId]={read_pct:newPct,completed:false};
   upsertStudyProgress(topicId,{read_pct:newPct,completed:false});
 }
-function studyFinishTopic(topicId){
+async function studyFinishTopic(topicId){
   if(!S.user){if(typeof showLoginWall==='function')showLoginWall();return;}
+  try{if(await studyImpGuard())return;}catch(e){}
   ST.progress[topicId]={read_pct:100,completed:true,test_passed:(ST.progress[topicId]||{}).test_passed||false};
   upsertStudyProgress(topicId,{read_pct:100,completed:true});
   // награда баллами (переиспользуем механизм Vita если есть)
@@ -10153,6 +10228,10 @@ function renderTests(){
 // ===== УЧЁБА: блоки урока, редактор с живым просмотром, конспект из материала (ИИ) =====
 // Типы блоков. g — группа в палитре редактора, d — заголовок по умолчанию.
 var SB_TYPES={
+  hook:{n:'Зацепка',i:'ti-question-mark',g:'Внимание',d:'Вопрос, на который ответит тема',hint:'Вопрос или загадка в начале — зачем читать дальше'},
+  imagine:{n:'Представь',i:'ti-eye',g:'Внимание',d:'Представь',hint:'Картинка в голове: ведёшь студента внутрь ткани'},
+  think:{n:'Стоп, подумай',i:'ti-hand-stop',g:'Внимание',d:'Стоп, подумай',hint:'Вопрос посреди текста, ответ — по нажатию'},
+  schema:{n:'Схема',i:'ti-schema',g:'Наглядно',hint:'Рисунок-схема: нажимаешь на часть — видишь, что это'},
   heading:{n:'Заголовок раздела',i:'ti-heading',g:'Структура',hint:'Делит тему на части и попадает в содержание'},
   text:{n:'Текст',i:'ti-align-left',g:'Структура',hint:'Абзацы и списки'},
   key:{n:'Главное за минуту',i:'ti-bolt',g:'Структура',d:'Главное за минуту',hint:'3–6 пунктов в начале темы'},
@@ -10236,6 +10315,28 @@ function renderBlock(b,o){
   if(t==='image'){
     if(!b.image_url)return o.admin?'<div class="sblk img todo"><i class="ti ti-photo-plus"></i><b>Здесь нужна картинка</b><span>'+esc(d.todo||'Нажми «Изменить» и добавь изображение')+'</span><small>Пока картинки нет, студент этот блок не видит</small></div>':'';
     return '<figure class="sblk img sz-'+(d.size==='s'||d.size==='m'?d.size:'l')+'"><img src="'+esc(b.image_url)+'" alt="'+esc(b.caption||'')+'" loading="lazy" onclick="vImgZoom(this.src)">'
+      +(b.caption||d.credit?'<figcaption class="sb-cap">'+esc(b.caption||'')+(d.credit?'<small class="sb-credit">'+esc(d.credit)+'</small>':'')+'</figcaption>':'')+'</figure>';
+  }
+  if(t==='hook'){
+    if(!b.title)return '';
+    return '<div class="sblk hook"><span class="hk-q" aria-hidden="true">?</span><small>'+esc(T.d)+'</small><p class="hk-t">'+fmtInline(b.title)+'</p>'+(b.body?fmtRich(b.body):'')+'</div>';
+  }
+  if(t==='imagine'){
+    if(!b.body)return '';
+    return '<div class="sblk imagine"><div class="im-lens" aria-hidden="true"></div><div class="sb-eb"><i class="ti ti-eye"></i>'+(title||'Представь')+'</div>'+fmtRich(b.body)+'</div>';
+  }
+  if(t==='think'){
+    if(!b.title)return '';
+    return '<div class="sblk think"><div class="sb-eb"><i class="ti ti-hand-stop"></i>Стоп, подумай</div><p class="th-q">'+fmtInline(b.title)+'</p>'
+      +(b.body?'<button class="th-btn" onclick="sbThink(this)" aria-expanded="false">Показать ответ</button><div class="th-a" hidden>'+fmtRich(b.body)+'</div>':'')+'</div>';
+  }
+  if(t==='schema'){
+    var svg=sbSafeSvg(d.svg||'');if(!svg)return o.admin?'<div class="sblk img todo"><i class="ti ti-schema"></i><b>Схема пустая</b><span>Вставь SVG в окне блока</span></div>':'';
+    var parts=(d.parts||[]).filter(function(x){return x&&x.k&&x.title;});
+    return '<figure class="sblk schema" data-parts="'+esc(JSON.stringify(parts))+'">'+(b.title?'<h3 class="sb-sub">'+title+'</h3>':'')
+      +'<div class="sc-svg" onclick="sbSchemaTap(event)">'+svg+'</div>'
+      +(parts.length?'<div class="sc-hint">Нажми на часть схемы или на название ниже</div><div class="sc-chips">'+parts.map(function(x){
+        return '<button class="sc-chip" data-k="'+esc(x.k)+'" onclick="sbSchemaPick(this,this.getAttribute(\'data-k\'))">'+esc(x.title)+'</button>';}).join('')+'</div><div class="sc-info" aria-live="polite"></div>':'')
       +(b.caption?'<figcaption class="sb-cap">'+esc(b.caption)+'</figcaption>':'')+'</figure>';
   }
   if(t==='compare'){
@@ -10257,6 +10358,50 @@ function renderBlock(b,o){
   }
   return '';
 }
+// SVG от админа или ИИ: оставляем только рисование — без скриптов, ссылок и обработчиков
+var SB_SVG_TAGS=['svg','g','path','rect','circle','ellipse','line','polyline','polygon','text','tspan','defs','lineargradient','radialgradient','stop','marker','title','clippath'];
+function sbSafeSvg(src){
+  src=String(src||'').trim();if(!src||src.length>120000||src.indexOf('<svg')<0)return '';
+  try{
+    var doc=new DOMParser().parseFromString(src,'image/svg+xml'),root=doc.documentElement;
+    if(!root||root.nodeName.toLowerCase()!=='svg'||doc.getElementsByTagName('parsererror').length)return '';
+    var walk=function(el){
+      Array.prototype.slice.call(el.children).forEach(function(ch){
+        if(SB_SVG_TAGS.indexOf(ch.nodeName.toLowerCase())<0){ch.remove();return;}
+        walk(ch);
+      });
+      Array.prototype.slice.call(el.attributes).forEach(function(a){
+        var n=a.name.toLowerCase(),v=String(a.value);
+        if(n.indexOf('on')===0||n==='href'||n==='xlink:href'||/javascript:|url\s*\((?!\s*#)|expression\s*\(|@import/i.test(v))el.removeAttribute(a.name);
+      });
+    };
+    walk(root);
+    root.removeAttribute('width');root.removeAttribute('height');
+    root.setAttribute('role','img');root.setAttribute('class','sc-art');
+    return new XMLSerializer().serializeToString(root);
+  }catch(e){return '';}
+}
+function sbSchemaPick(src,k){
+  var fig=src.closest('.sblk.schema');if(!fig)return;
+  var parts=[];try{parts=JSON.parse(fig.getAttribute('data-parts')||'[]');}catch(e){}
+  var p=parts.filter(function(x){return x.k===k;})[0],same=fig.getAttribute('data-on')===k;
+  if(same||!p){fig.removeAttribute('data-on');}else fig.setAttribute('data-on',k);
+  fig.querySelectorAll('[data-k]').forEach(function(el){el.classList.toggle('on',!same&&!!p&&el.getAttribute('data-k')===k);});
+  fig.querySelectorAll('.sc-chip').forEach(function(ch){ch.setAttribute('aria-pressed',ch.classList.contains('on'));});
+  var info=fig.querySelector('.sc-info');
+  if(info)info.innerHTML=(!same&&p)?'<b>'+esc(p.title)+'</b>'+fmtRich(p.text||''):'';
+}
+function sbSchemaTap(ev){
+  var el=ev.target.closest&&ev.target.closest('[data-k]');
+  if(el&&!el.classList.contains('sc-chip'))sbSchemaPick(el,el.getAttribute('data-k'));
+}
+function sbThink(btn){
+  var a=btn.nextElementSibling;if(!a)return;
+  var open=a.hasAttribute('hidden');
+  if(open)a.removeAttribute('hidden');else a.setAttribute('hidden','');
+  btn.setAttribute('aria-expanded',open);btn.textContent=open?'Скрыть ответ':'Показать ответ';
+  var blk=btn.closest('.sblk.think');if(open&&blk&&blk.closest('#studyBody'))studyImpMark(blk);   // ответ открыт — место прочитано
+}
 // блоки темы с номерами разделов и буквицей у первого абзаца
 function studyBlockList(blocks,admin){
   var sec=0,firstText=true;
@@ -10267,7 +10412,9 @@ function studyBlockList(blocks,admin){
       // буквица — только у настоящего абзаца: не у списка, не у короткой строки, не у выделенного слова
       var p1=String(b.body).split(/\n{2,}/)[0].trim();
       o.first=p1.length>=140&&/^[A-Za-zА-Яа-яЁё]/.test(p1)&&p1.indexOf('\n')<0;firstText=false;}
-    return {b:b,html:renderBlock(b,o),sec:o.sec||0};
+    var html=renderBlock(b,o);
+    if(html&&b.id)html=html.replace(/^<(\w+)/,'<$1 data-bid="'+b.id+'"');
+    return {b:b,html:html,sec:o.sec||0};
   });
 }
 function studyToc(list){
@@ -10335,7 +10482,7 @@ function saBuilderDraw(){
         +'<button onclick="saDupBlock('+b.id+')" aria-label="Сделать копию"><i class="ti ti-copy"></i></button>'
         +'<button onclick="saDelBlock('+b.id+')" aria-label="Удалить"><i class="ti ti-trash"></i></button>'
         +'<button class="ed" onclick="saEditBlock('+b.id+')"><i class="ti ti-pencil"></i>Изменить</button></div>'
-        +'<div class="sab-body" ondblclick="saEditBlock('+b.id+')">'+(x.html||'<div class="sblk img todo"><i class="ti ti-alert-circle"></i><b>Пустой блок</b><span>Студент его не видит. Заполни или удали.</span></div>')+'</div></div>'
+        +'<div class="sab-body" ondblclick="saEditBlock('+b.id+')">'+(x.html?saChkWrap(x):'<div class="sblk img todo"><i class="ti ti-alert-circle"></i><b>Пустой блок</b><span>Студент его не видит. Заполни или удали.</span></div>')+'</div></div>'
         +'<button class="sab-ins" onclick="saInsert('+b.id+')" aria-label="Добавить блок сюда"><i class="ti ti-plus"></i></button>';
     });
   }
@@ -10455,12 +10602,36 @@ function saBlockEditor(type,b){
       +'<i class="ti ti-photo-up"></i><b>Выбери файл, перетащи сюда или вставь из буфера (Ctrl+V)</b><span id="beImgSt">'+(b&&b.image_url?'Картинка уже есть — можно заменить':'Подойдёт фото, скриншот или схема')+'</span>'
       +'<label class="btn bgh bsm">Выбрать файл<input type="file" accept="image/*" style="display:none" onchange="saImgPick(this.files);this.value=\'\'"></label></div>'
       +'<details class="sbe-url"><summary>или вставить ссылку на картинку</summary>'+inp('beImgUrl',b&&b.image_url&&b.image_url.indexOf('data:')!==0?b.image_url:'','https://…')+'</details>'
-      +'<input type="hidden" id="beImg" value="'+v(b&&b.image_url)+'"><input type="hidden" id="beTodo" value="'+v(d.todo)+'"></div>';
+      +'<input type="hidden" id="beImg" value="'+v(b&&b.image_url)+'"><input type="hidden" id="beTodo" value="'+v(d.todo)+'">'
+      +'<input type="hidden" id="beCredit" value="'+v(d.credit)+'"><input type="hidden" id="beSrc" value="'+v(d.src)+'"><input type="hidden" id="beQ" value="'+v(d.q)+'"></div>';
     if(d.todo&&!(b&&b.image_url))f+='<div class="sbe-note"><i class="ti ti-sparkles"></i>ИИ советует сюда: '+esc(d.todo)+'</div>';
+    SA.ed.cands=d.cands||[];
+    f+='<div class="sbe-f"><label>Найти на Wikimedia Commons (свободные картинки)</label><div class="sbe-search"><input id="beQq" value="'+v(d.q||'')+'" placeholder="по-английски: cerebellum cortex histology" onkeydown="if(event.key===\'Enter\'){event.preventDefault();saImgSearch();}">'
+      +'<button type="button" class="btn bgh bsm" onclick="saImgSearch()"><i class="ti ti-search"></i>Найти</button></div>'
+      +'<small id="beCandSt">'+(SA.ed.cands.length?'ИИ нашёл варианты — нажми, чтобы поставить другой':'По-английски находится намного больше.')+'</small>'
+      +'<div class="sbe-cands" id="beCands">'+saCandsHtml(SA.ed.cands,b&&b.image_url)+'</div></div>';
     f+='<div class="sbe-f"><label>Размер</label><div class="sbe-seg" id="beSizeSeg" role="radiogroup">'
       +[['s','Небольшая'],['m','Средняя'],['l','Во всю ширину']].map(function(o){return '<button type="button" role="radio" aria-checked="'+(o[0]===sz)+'" class="'+(o[0]===sz?'on':'')+'" onclick="saImgSize(\''+o[0]+'\')">'+o[1]+'</button>';}).join('')
       +'</div><input type="hidden" id="beSize" value="'+sz+'"></div>';
     f+=saField('Подпись под картинкой',inp('beCap',b&&b.caption,'Рис. 1. Коагуляционный некроз миокарда'),'Напиши, на что смотреть: без подписи картинку пролистывают.');
+  }
+  else if(type==='hook'){
+    f+=saField('Вопрос или загадка',ta('beTitle',b&&b.title,'Мозжечок весит в 10 раз меньше большого мозга, а площадь его коры — половина. Как она туда помещается?',3),'Вопрос, на который тема даёт ответ. Факты — только из материала.');
+    f+=saField('Пояснение (не обязательно)',ta('beBody',b&&b.body,'',3));
+  }
+  else if(type==='imagine'){
+    f+=saField('Заголовок',inp('beTitle',b&&b.title,'Представь'));
+    f+=saField('Картинка словами',saFmtBar('beBody')+ta('beBody',b&&b.body,'Разрежь мозжечок вдоль, как батон хлеба…',7),'Веди студента внутрь: что он видит, где верх и низ, что на что похоже. Аналогия объясняет, но не добавляет новых фактов.');
+  }
+  else if(type==='think'){
+    f+=saField('Вопрос',ta('beTitle',b&&b.title,'Что будет, если…?',3));
+    f+=saField('Ответ (откроется по нажатию)',saFmtBar('beBody')+ta('beBody',b&&b.body,'',4));
+  }
+  else if(type==='schema'){
+    f+=saField('Заголовок',inp('beTitle',b&&b.title,'Слои коры мозжечка'));
+    f+=saField('Рисунок (SVG)',ta('beSvg',d.svg,'<svg viewBox="0 0 360 400">…</svg>',8),'Части, на которые можно нажать, помечаются атрибутом data-k="имя". Скрипты и ссылки внутри SVG вырезаются.');
+    f+=saField('Части схемы — по одной на строку',ta('beParts',(d.parts||[]).map(function(x){return x.k+' | '+x.title+' | '+(x.text||'');}).join('\n'),'purk | Клетка Пуркинье | Грушевидный нейрон ганглионарного слоя…',6),'Формат: имя | Название | Пояснение. Имя — то же, что в data-k на рисунке.');
+    f+=saField('Подпись',inp('beCap',b&&b.caption,''));
   }
   else if(type==='quiz'){
     var opts=d.options&&d.options.length?d.options:['','','',''],cor=d.correct||0;
@@ -10500,6 +10671,16 @@ function saCollect(){
     var url=val('beImgUrl');
     rec.image_url=url||raw('beImg');rec.caption=val('beCap');
     rec.data={size:val('beSize')||'l'};if(!rec.image_url&&val('beTodo'))rec.data.todo=val('beTodo');
+    var isC=(SA.ed.cands||[]).some(function(x){return x.url===rec.image_url;});
+    if(rec.image_url&&val('beCredit')&&(isC||rec.image_url===val('beImg')))rec.data.credit=val('beCredit');
+    if(rec.data.credit&&val('beSrc'))rec.data.src=val('beSrc');
+    if(val('beQ'))rec.data.q=val('beQ');
+    if(SA.ed.cands&&SA.ed.cands.length)rec.data.cands=SA.ed.cands.slice(0,12);
+  }
+  else if(type==='hook'||type==='think'){rec.title=raw('beTitle').trim();rec.body=raw('beBody');}
+  else if(type==='schema'){
+    rec.title=val('beTitle');rec.caption=val('beCap');
+    rec.data={svg:raw('beSvg').trim(),parts:raw('beParts').split('\n').map(function(l){var a=l.split('|').map(function(x){return x.trim();});return a[0]&&a[1]?{k:a[0],title:a[1],text:a.slice(2).join(' | ')}:null;}).filter(Boolean)};
   }
   else if(type==='quiz'){
     rec.title=val('beTitle');var opts=[],cor=0;
@@ -10519,6 +10700,30 @@ function saEdPaste(ev){
   if(!SA.ed||SA.ed.type!=='image')return;
   var fs=ev.clipboardData&&ev.clipboardData.files;
   if(fs&&fs.length&&/^image\//.test(fs[0].type)){ev.preventDefault();saImgPick(fs);}
+}
+function saCandsHtml(list,cur){
+  return (list||[]).map(function(x,i){
+    return '<button type="button" class="sbe-cand'+(x.url===cur?' on':'')+'" onclick="saCandPick('+i+')" title="'+esc(x.title||'')+'"><img src="'+esc(x.thumb||x.url)+'" alt="" loading="lazy"><span>'+esc((x.credit||'').split(' · ')[1]||'')+'</span></button>';}).join('');
+}
+function saCandPick(i){
+  var x=(SA.ed&&SA.ed.cands||[])[i];if(!x)return;
+  document.getElementById('beImg').value=x.url;var u=document.getElementById('beImgUrl');if(u)u.value='';
+  document.getElementById('beCredit').value=x.credit||'';document.getElementById('beSrc').value=x.src||'';
+  document.querySelectorAll('#beCands .sbe-cand').forEach(function(b,j){b.classList.toggle('on',j===i);});
+  saImgSay('Картинка с Wikimedia Commons. Автор и лицензия подпишутся под ней.');saEdLive();
+}
+async function saImgSearch(){
+  var q=val('beQq'),st=document.getElementById('beCandSt');if(!q){if(st)st.textContent='Напиши, что искать';return;}
+  var url=vBotUrl('/admin/images');if(!url){if(st)st.textContent='Поиск работает через бота — он не подключён.';return;}
+  if(st)st.textContent='Ищу…';
+  try{
+    var r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:vAdminToken(),q:q})}),j=await r.json();
+    if(!SA.ed)return;
+    if(j.status!=='ok'){if(st)st.textContent=j.status==='forbidden'?'Войди заново как администратор':'Поиск не ответил — попробуй ещё раз';return;}
+    SA.ed.cands=j.items||[];document.getElementById('beQ').value=q;
+    document.getElementById('beCands').innerHTML=saCandsHtml(SA.ed.cands,val('beImg'));
+    if(st)st.textContent=SA.ed.cands.length?'Найдено: '+SA.ed.cands.length+'. Нажми на подходящую.':'Ничего не нашлось. Попробуй другие слова по-английски.';
+  }catch(e){if(st)st.textContent='Нет связи с ботом';}
 }
 function saImgSize(s){
   document.getElementById('beSize').value=s;
@@ -10548,7 +10753,8 @@ function saImgPick(files){
   var ed=SA.ed;
   ed.upload=vImgCompress(f,1600,0.84).then(async function(r){
     if(SA.ed!==ed)return;
-    var set=function(u){var i=document.getElementById('beImg');if(i)i.value=u;var u2=document.getElementById('beImgUrl');if(u2)u2.value='';saEdLive();};
+    var set=function(u){var i=document.getElementById('beImg');if(i)i.value=u;var u2=document.getElementById('beImgUrl');if(u2)u2.value='';
+      var cr=document.getElementById('beCredit');if(cr)cr.value='';document.querySelectorAll('#beCands .sbe-cand').forEach(function(b){b.classList.remove('on');});saEdLive();};
     set(r.dataUrl);saImgSay('Загружаю…');
     var url=vBotUrl('/admin/upload');
     try{
@@ -10570,13 +10776,16 @@ async function saSaveBlock(){
   if(SA.ed.upload){btn.disabled=true;try{await SA.ed.upload;}catch(e){}btn.disabled=false;}
   var rec=saCollect(),t=rec.type;
   var bad=(t==='heading'&&!rec.title)?'Напиши название раздела'
+    :(t==='hook'&&!rec.title)?'Напиши вопрос'
+    :(t==='think'&&(!rec.title||!rec.body))?'Нужны вопрос и ответ'
+    :(t==='schema'&&!sbSafeSvg(rec.data.svg))?'Рисунок не читается: нужен SVG, начинающийся с <svg'
     :(t==='term'&&(!rec.title||!rec.body))?'Нужны и термин, и определение'
     :(t==='steps'&&rec.data.steps.length<2)?'Нужно хотя бы два этапа'
     :(t==='compare'&&(!rec.data.left.title||!rec.data.right.title))?'Назови обе стороны сравнения'
     :(t==='table'&&!rec.data.rows.length)?'Нужна шапка и хотя бы одна строка'
     :(t==='image'&&!rec.image_url)?'Добавь картинку или ссылку на неё'
     :(t==='quiz'&&(!rec.title||rec.data.options.length<2))?'Нужен вопрос и хотя бы два варианта'
-    :(['text','key','exam','remember','warn','mnemo','clinic'].indexOf(t)>=0&&!rec.body)?'Блок пустой — напиши текст':'';
+    :(['text','key','exam','remember','warn','mnemo','clinic','imagine'].indexOf(t)>=0&&!rec.body)?'Блок пустой — напиши текст':'';
   if(bad){err.textContent=bad;return;}
   btn.disabled=true;
   try{
@@ -10613,7 +10822,7 @@ function saAiForm(msg){
     +'Он берёт только то, что есть в материале, а где сомневается — напишет тебе замечание. После этого любой блок можно поправить.</p>'
     +'<div class="sbe-f"><label>Материал</label><textarea id="aiMat" rows="10" placeholder="Вставь сюда текст темы…" oninput="saAiCount()">'+esc(A.material||'')+'</textarea><small id="aiCnt"></small></div>'
     +'<div class="sbe-f"><label>Или страницы: фото конспекта, сканы, PDF</label><div class="sbe-files"><label class="btn bgh bsm"><i class="ti ti-paperclip"></i>Приложить<input type="file" accept="image/*,application/pdf" multiple style="display:none" onchange="saAiFiles(this)"></label>'
-    +'<span id="aiFilesInfo">'+(A.images.length?'Приложено страниц: '+A.images.length+' <button type="button" class="sbe-link" onclick="SA_AI.images=[];saAiKeep();saAiForm()">убрать</button>':'до 10 страниц')+'</span></div></div>'
+    +'<span id="aiFilesInfo">'+(A.images.length?'Приложено страниц: '+A.images.length+' <button type="button" class="sbe-link" onclick="SA_AI.images=[];saAiKeep();saAiForm()">убрать</button>':'до 40 страниц')+'</span></div></div>'
     +'<div class="sbe-2"><div class="sbe-f"><label>Объём</label>'+saAiSeg('detail',[['full','Полный конспект'],['brief','Шпаргалка']])+'</div>'
     +'<div class="sbe-f"><label>Вопросы в конце</label>'+saAiSeg('quiz',[[0,'Без вопросов'],[4,'4'],[6,'6']])+'</div></div>'
     +(msg?'<div class="sbe-note bad" role="alert"><i class="ti ti-alert-triangle"></i>'+esc(msg)+'</div>':''),
@@ -10627,16 +10836,16 @@ async function saAiFiles(inp){
   var files=Array.prototype.slice.call(inp.files||[]);inp.value='';if(!files.length||!SA_AI)return;
   saAiKeep();var info=document.getElementById('aiFilesInfo');
   try{
-    for(var i=0;i<files.length&&SA_AI.images.length<10;i++){
+    for(var i=0;i<files.length&&SA_AI.images.length<40;i++){
       var f=files[i];
       if(/pdf$/i.test(f.type)||/\.pdf$/i.test(f.name)){
         if(info)info.textContent='Открываю '+f.name+'…';
         var ps=await vPdfPages(f,function(a,n){if(info)info.textContent='Готовлю страницы: '+a+' из '+n+'…';});
-        ps.forEach(function(p){if(SA_AI.images.length<10)SA_AI.images.push(p);});
+        ps.forEach(function(p){if(SA_AI.images.length<40)SA_AI.images.push(p);});
       }else SA_AI.images.push(await vImgJpeg(f));
     }
-    // бот принимает до 12 МБ за запрос — лишние страницы не берём
-    var tot=0,keep=[];SA_AI.images.forEach(function(x){if(tot+x.length<9e6){tot+=x.length;keep.push(x);}});
+    // бот принимает до 40 МБ за запрос — лишние страницы не берём
+    var tot=0,keep=[];SA_AI.images.forEach(function(x){if(tot+x.length<24e6){tot+=x.length;keep.push(x);}});
     var cut=SA_AI.images.length-keep.length;SA_AI.images=keep;
     if(cut){saAiForm('Слишком тяжёлые страницы: взял '+keep.length+', ещё '+cut+' не поместились. Раздели материал на две темы или вставь текст.');return;}
     saAiForm();
@@ -10646,7 +10855,7 @@ async function saAiRun(){
   saAiKeep();var A=SA_AI,mat=(A.material||'').trim();
   if(mat.length<200&&!A.images.length){saAiForm('Материала слишком мало. Вставь текст темы (хотя бы пару абзацев) или приложи страницы.');return;}
   var url=vBotUrl('/ai/lesson');if(!url){saAiForm('Бот не подключён — ИИ работает через него.');return;}
-  saAiShell('<div class="sbe-wait"><div class="sbe-spin" aria-hidden="true"></div><b>ИИ читает материал и собирает конспект</b><span id="aiWait">Обычно это 1–3 минуты. Окно можно не закрывать.</span></div>','');
+  saAiShell('<div class="sbe-wait"><div class="sbe-spin" aria-hidden="true"></div><b>ИИ читает материал и собирает конспект</b><span id="aiWait">Пишет конспект. Всего обычно 2–5 минут, окно можно не закрывать.</span></div>','');
   try{
     var r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:vAdminToken(),material:mat,images:A.images,detail:A.detail,quiz:A.quiz,title:SA.topic.title,subject:(SA.subject&&SA.subject.name)||''})});
     var j=await r.json();
@@ -10657,9 +10866,10 @@ async function saAiRun(){
       try{
         var r2=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:vAdminToken(),job:A.job})}),j2=await r2.json();
         if(SA_AI!==A)return;
-        if(j2.status==='run'){var w=document.getElementById('aiWait');if(w)w.textContent='Идёт '+(j2.seconds||0)+' с. Обычно это 1–3 минуты. Окно можно не закрывать.';return;}
+        if(j2.status==='run'){var w=document.getElementById('aiWait');
+          if(w)w.textContent=({write:'Пишет конспект',check:'Сверяет каждый факт с твоим материалом',images:'Подбирает картинки на Wikimedia Commons'}[j2.stage]||'Работает')+' · '+(j2.seconds||0)+' с. Всего обычно 2–5 минут, окно можно не закрывать.';return;}
         clearInterval(A.timer);A.timer=null;
-        if(j2.status==='ok'){A.blocks=j2.blocks||[];A.notes=j2.notes||[];A.meta=j2.meta||{};saAiResult();}
+        if(j2.status==='ok'){A.blocks=j2.blocks||[];A.notes=j2.notes||[];A.meta=j2.meta||{};A.checked=j2.checked;A.flagged=j2.flagged||0;saAiResult();}
         else saAiForm(saAiErr(j2));
       }catch(e){}
     },3000);
@@ -10669,13 +10879,28 @@ function saAiErr(j){
   return ({ai_not_configured:'ИИ не подключён: на Railway нет ключа ANTHROPIC_API_KEY.',forbidden:'Войди заново как администратор.'}[j.status])
     ||(j.reason?(typeof vAiReason==='function'?vAiReason(j.reason):j.reason):'ИИ не ответил — попробуй ещё раз.');
 }
+// блок, где проверка нашла расхождение с материалом: жёлтая рамка и что не так (видит только админ)
+function saChkWrap(x){
+  var ck=sbData(x.b).check;if(!ck)return x.html;
+  return '<div class="ai-chk"><div class="ai-chk-n"><i class="ti ti-alert-triangle"></i><span><b>Проверь:</b> '+esc(ck)+'</span>'
+    +(x.b.id?'<button onclick="saChkOk('+x.b.id+')">Проверил, верно</button>':'')+'</div>'+x.html+'</div>';
+}
+async function saChkOk(id){
+  var b=SA.blocks.find(function(x){return x.id===id;});if(!b)return;
+  var d=sbData(b);delete d.check;
+  try{await sbPatch('blocks','id=eq.'+id,{data:d});}catch(e){vAlert(e.message);return;}
+  saReload(true);
+}
 function saAiResult(){
   var A=SA_AI,cnt={};A.blocks.forEach(function(b){cnt[b.type]=(cnt[b.type]||0)+1;});
   var parts=Object.keys(cnt).map(function(k){return (SB_TYPES[k]?SB_TYPES[k].n.toLowerCase():k)+' — '+cnt[k];}).join(', ');
   var list=studyBlockList(A.blocks,true);
   saAiShell((A.notes.length?'<div class="sbe-note warn"><i class="ti ti-alert-triangle"></i><div><b>ИИ просит проверить</b><ul>'+A.notes.map(function(n){return '<li>'+esc(n)+'</li>';}).join('')+'</ul></div></div>':'')
     +'<p class="sbe-lead"><b>Готово: '+A.blocks.length+' '+vplural(A.blocks.length,'блок','блока','блоков')+'.</b> '+esc(parts)+'. Прочитай перед тем, как добавлять: это медицина, а ИИ мог понять материал не так. Каждый блок потом можно изменить.</p>'
-    +'<div class="sbe-ai-prev">'+(A.meta.lede?'<p class="sbe-lede"><small>Описание темы</small>'+esc(A.meta.lede)+'</p>':'')+studyToc(list)+list.map(function(x){return x.html;}).join('')+'</div>',
+    +(A.checked===false?'<div class="sbe-note warn"><i class="ti ti-alert-triangle"></i><div>Проверка фактов не ответила — сверь конспект с материалом сам.</div></div>'
+      :A.flagged?'<div class="sbe-note warn"><i class="ti ti-zoom-check"></i><div><b>Проверка нашла расхождения с материалом: '+A.flagged+'</b> Эти блоки отмечены жёлтым — посмотри их в первую очередь. Отметка останется в редакторе, студенты её не видят.</div></div>'
+      :'<div class="sbe-note"><i class="ti ti-zoom-check"></i><div>Проверка сверила каждый блок с материалом и расхождений не нашла.</div></div>')
+    +'<div class="sbe-ai-prev">'+(A.meta.lede?'<p class="sbe-lede"><small>Описание темы</small>'+esc(A.meta.lede)+'</p>':'')+studyToc(list)+list.map(saChkWrap).join('')+'</div>',
     '<span id="aiSaveSt"></span><button class="btn bgh" onclick="SA_AI.blocks=null;saAiForm()">Собрать заново</button>'
     +(SA.blocks.length?'<button class="btn bgh" onclick="saAiApply(true)">Заменить всё в теме</button>':'')
     +'<button class="btn bbl" onclick="saAiApply(false)"><i class="ti ti-check"></i>'+(SA.blocks.length?'Добавить в конец темы':'Добавить в тему')+'</button>');
@@ -10699,6 +10924,76 @@ async function saAiApply(replace){
     try{await sbPatch('topics','id=eq.'+SA.topic.id,patch);Object.assign(SA.topic,patch);}catch(e){}
     saAiClose();await saReload(false);toast2('Конспект добавлен — теперь проверь и поправь');
   }catch(e){A.busy=false;if(st)st.textContent='';vAlert('Не всё сохранилось: '+(e.message||e)+'. Открой тему заново и проверь, что добавилось.');saAiClose();saReload(false);}
+}
+
+// ===== Важные места темы: «Главное», «Запомни», «Не перепутай», «Экзамен», «Стоп, подумай» =====
+// Место считается прочитанным, если оно было на экране хотя бы 1,5 секунды (а «Стоп, подумай» — когда открыт ответ).
+var IMP_SEL='.sblk.key,.sblk.remember,.sblk.warn,.sblk.exam,.sblk.think';
+var IMP={tid:null,obs:null,timers:{},els:[]};
+function studyImpSeen(tid){S.impSeen=S.impSeen||{};return S.impSeen[tid]=S.impSeen[tid]||[];}
+function studyImpName(el){
+  var k=['key','remember','warn','exam','think'].filter(function(t){return el.classList.contains(t);})[0];
+  var eb=el.querySelector('.sb-eb'),q=el.querySelector('.th-q');
+  return k==='think'?'Стоп, подумай: '+(q?q.textContent.slice(0,60)+(q.textContent.length>60?'…':''):''):(eb?eb.textContent.trim():'Важное');
+}
+function studyImpInit(tid){
+  if(IMP.obs){IMP.obs.disconnect();IMP.obs=null;}
+  Object.keys(IMP.timers).forEach(function(k){clearTimeout(IMP.timers[k]);});IMP.timers={};
+  IMP.tid=tid;IMP.els=Array.prototype.slice.call(document.querySelectorAll('#studyBody '+IMP_SEL)).filter(function(e){return e.getAttribute('data-bid');});
+  var old=document.getElementById('impPill');if(old)old.remove();
+  if(!IMP.els.length)return;
+  var seen=studyImpSeen(tid);
+  IMP.els.forEach(function(e){if(seen.indexOf(e.getAttribute('data-bid'))>=0)e.classList.add('seen');});
+  var pill=document.createElement('button');pill.id='impPill';pill.className='imp-pill';pill.onclick=studyImpNext;
+  document.getElementById('studyBody').appendChild(pill);
+  if('IntersectionObserver' in window){
+    IMP.obs=new IntersectionObserver(function(ents){
+      ents.forEach(function(en){
+        var e=en.target,id=e.getAttribute('data-bid');if(e.classList.contains('seen')||e.classList.contains('think'))return;
+        var vis=en.isIntersecting&&(en.intersectionRatio>=.6||en.intersectionRect.height>=window.innerHeight*.45);
+        if(vis&&!IMP.timers[id])IMP.timers[id]=setTimeout(function(){delete IMP.timers[id];studyImpMark(e);},1500);
+        if(!vis&&IMP.timers[id]){clearTimeout(IMP.timers[id]);delete IMP.timers[id];}
+      });
+    },{threshold:[0,.3,.6,.9]});
+    IMP.els.forEach(function(e){IMP.obs.observe(e);});
+  }
+  studyImpUpd();
+}
+function studyImpMark(e){
+  if(!e||e.classList.contains('seen'))return;
+  e.classList.add('seen');
+  var s=studyImpSeen(IMP.tid),id=e.getAttribute('data-bid');if(s.indexOf(id)<0){s.push(id);sv();}
+  studyImpUpd();
+}
+function studyImpLeft(){return IMP.els.filter(function(e){return !e.classList.contains('seen')&&document.body.contains(e);});}
+function studyImpUpd(){
+  var pill=document.getElementById('impPill'),left=studyImpLeft(),n=IMP.els.length,done=n-left.length;
+  if(pill){
+    pill.innerHTML=left.length?'<i class="ti ti-star"></i>Важное: <b>'+done+'</b> из '+n:'<i class="ti ti-circle-check"></i>Всё важное прочитано';
+    pill.classList.toggle('done',!left.length);
+    if(!left.length&&!pill.dataset.hid){pill.dataset.hid=1;setTimeout(function(){pill.classList.add('gone');},2500);}   // не закрываем текст
+    pill.setAttribute('aria-label',left.length?'Прочитано важных мест: '+done+' из '+n+'. Перейти к следующему':'Все важные места прочитаны');
+  }
+  var z=document.getElementById('impEnd');
+  if(z){
+    z.innerHTML=!n?'':left.length
+      ?'<div class="imp-end"><b><i class="ti ti-alert-circle"></i>Ты пропустил '+left.length+' '+vplural(left.length,'важное место','важных места','важных мест')+'</b><span>Это то, что спрашивают на занятиях и экзамене. Вернись — это займёт минуту.</span>'
+        +left.map(function(e){return '<button onclick="studyImpGo(\''+e.getAttribute('data-bid')+'\')"><i class="ti ti-arrow-up-right"></i>'+esc(studyImpName(e))+'</button>';}).join('')+'</div>'
+      :'<div class="imp-end ok"><b><i class="ti ti-circle-check"></i>Все важные места прочитаны</b></div>';
+  }
+}
+function studyImpGo(id){
+  var e=document.querySelector('#studyBody [data-bid="'+id+'"]');if(!e)return;
+  e.scrollIntoView({behavior:'smooth',block:'center'});
+  e.classList.remove('imp-flash');void e.offsetWidth;e.classList.add('imp-flash');
+}
+function studyImpNext(){var l=studyImpLeft();if(l.length)studyImpGo(l[0].getAttribute('data-bid'));}
+// «Отметить пройденным» при пропущенных местах — сначала предлагаем вернуться
+async function studyImpGuard(){
+  var l=studyImpLeft();if(!l.length)return false;
+  var go=await vConfirm('Ты пропустил '+l.length+' '+vplural(l.length,'важное место','важных места','важных мест')+'. Посмотреть их перед тем, как закончить тему?','Посмотреть');
+  if(go){studyImpNext();return true;}
+  return false;
 }
 function renderLevels(){
   var st=getMyStats(),lv=vitaLevel(st),r=lv.r;
