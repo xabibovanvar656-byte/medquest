@@ -2558,6 +2558,136 @@ body.sab-dragging .sab-ins i{opacity:.8}
 .sab-draft{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 12px;padding:12px 14px;border-radius:14px;background:var(--iod-s);color:var(--tx);font:500 13.5px/1.45 var(--f)}
 .sab-draft>i{flex:none;color:var(--iod-t);font-size:19px}
 .sab-draft>span{flex:1;min-width:220px}
+
+/* ===== «Учёба» понятнее: главная, панель темы, «Добавить» ===== */
+.sh-top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:4px 0 14px}
+.sh-h{margin:0;font:800 28px/1.05 var(--f);letter-spacing:-.02em;color:var(--tx)}
+.sh-where{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 12px;border:1px solid var(--bor);border-radius:12px;background:var(--bg2);color:var(--tx2);font:700 12.5px var(--f);cursor:pointer;max-width:100%}
+.sh-where span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sh-sec{margin:22px 0 10px;font:800 17px var(--f);color:var(--tx);letter-spacing:-.01em}
+.st-cont{display:flex;flex-direction:column;align-items:flex-start;gap:4px;width:100%;margin:0 0 16px;padding:18px;border:none;border-radius:22px;background:var(--bl);color:var(--on-bl);text-align:left;cursor:pointer;box-shadow:0 14px 34px -16px rgba(124,58,237,.55)}
+.stc-k{font:700 12.5px var(--f);opacity:.85}
+.stc-t{font:800 22px/1.2 var(--f);letter-spacing:-.01em}
+.stc-s{font:600 13px var(--f);opacity:.85}
+.stc-bar{display:block;width:100%;height:6px;margin:10px 0 2px;border-radius:3px;background:rgba(255,255,255,.25);overflow:hidden}
+.stc-bar i{display:block;height:100%;border-radius:3px;background:#fff}
+.stc-go{display:inline-flex;align-items:center;gap:8px;margin-top:8px;min-height:40px;padding:0 16px;border-radius:12px;background:#fff;color:#2b1d6b;font:800 14px var(--f)}
+.sh-mine{display:flex;flex-direction:column;gap:8px}
+.sh-mine #gqHome:empty{display:none}
+.sh-row{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border:1px solid var(--bor);border-radius:16px;background:var(--bg2);color:var(--tx);text-align:left;cursor:pointer}
+.sh-row>i{color:var(--tx3);font-size:18px}
+.sh-ic{flex:none;width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.sh-ic.bm{background:var(--iod-s);color:var(--iod-t)}
+.sh-ic.nt{background:var(--vio-s);color:var(--vio-t)}
+.sh-ic.er{background:var(--eos-s);color:var(--eos-t)}
+.sh-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.sh-t b{font:800 14.5px var(--f)}
+.sh-t small{font:500 12.5px/1.35 var(--f);color:var(--tx3)}
+#gpHome .gp-home{margin-top:0}
+.study-search[role=button]:focus-visible,.study-subj[role=button]:focus-visible{outline:2px solid var(--meth);outline-offset:2px}
+/* панель темы */
+.rd-wrap.has-bar{padding-bottom:110px}
+.rd-bar{position:fixed;z-index:260;left:50%;bottom:18px;transform:translateX(-50%);width:min(520px,calc(100vw - 20px));display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:6px;border-radius:20px;background:var(--bg2);border:1px solid var(--bor);box-shadow:0 14px 36px -14px rgba(0,0,0,.45)}
+.rb{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:54px;padding:4px 2px;border:none;border-radius:14px;background:none;color:var(--tx2);font:700 11.5px var(--f);cursor:pointer}
+.rb i{font-size:22px}
+.rb:hover{background:var(--bg3);color:var(--tx)}
+.rb-add{background:var(--mal);color:var(--mal-ink);box-shadow:0 3px 0 var(--mal-e)}
+.rb-add:hover{background:var(--mal);color:var(--mal-ink);filter:brightness(1.05)}
+.rb[hidden]{display:none}
+.rb-n{position:absolute;top:3px;left:calc(50% + 6px);min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--eos);color:#fff;font:800 10.5px/18px var(--f);text-align:center}
+.rb-n[hidden]{display:none}
+.rd-coach{position:fixed;z-index:270;transform:translateX(-50%);width:min(380px,calc(100vw - 24px));padding:16px;border-radius:18px;background:var(--bg2);border:1px solid var(--bor);box-shadow:0 18px 44px -14px rgba(0,0,0,.5);color:var(--tx)}
+.rd-coach::after{content:"";position:absolute;bottom:-8px;left:50%;width:16px;height:16px;margin-left:-8px;background:var(--bg2);border-right:1px solid var(--bor);border-bottom:1px solid var(--bor);transform:rotate(45deg)}
+.rc-h{display:block;font:800 15.5px var(--f);margin-bottom:8px}
+.rd-coach ul{margin:0 0 12px;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.rd-coach li{display:flex;gap:10px;align-items:flex-start;font:500 13.5px/1.4 var(--f);color:var(--tx2)}
+.rd-coach li i{flex:none;width:30px;height:30px;border-radius:9px;background:var(--bg3);color:var(--tx);display:flex;align-items:center;justify-content:center;font-size:17px}
+.rd-coach li b{color:var(--tx)}
+.rd-coach .btn{width:100%;justify-content:center}
+.rd-flash{animation:rdFlash 1.6s ease}
+@keyframes rdFlash{0%,100%{box-shadow:none}30%,70%{box-shadow:0 0 0 3px var(--meth)}}
+/* окно «Добавить» */
+.ad-list{display:flex;flex-direction:column;gap:8px}
+.ad-row{display:flex;align-items:center;gap:14px;width:100%;padding:12px 14px;border:none;border-radius:16px;background:var(--bg3);color:var(--tx);text-align:left;cursor:pointer}
+.ad-row:hover{filter:brightness(1.03)}
+.ad-row.off{opacity:.5;cursor:not-allowed}
+.ad-row>i{color:var(--tx3);font-size:18px}
+.ad-ic{flex:none;width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:23px}
+.ad-ic.ph{background:var(--meth-s);color:var(--meth-t)}
+.ad-ic.fl{background:var(--iod-s);color:var(--iod-t)}
+.ad-ic.yt{background:var(--eos-s);color:var(--eos-t)}
+.ad-ic.qq{background:var(--vio-s);color:var(--vio-t)}
+.ad-ic.nt{background:var(--mal-s);color:var(--mal-t)}
+.ad-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.ad-t b{font:800 15px var(--f)}
+.ad-t small{font:500 12.5px/1.4 var(--f);color:var(--tx3)}
+.ad-note{display:flex;gap:8px;align-items:flex-start}
+.gq-ai.bank{background:var(--bg3)}
+.gq-ai.bank .gq-ai-ic{background:var(--meth);color:#fff;box-shadow:0 3px 0 var(--edge)}
+@media(prefers-reduced-motion:reduce){.rd-flash{animation:none;outline:3px solid var(--meth)}}
+/* «кому видно»: только мне / группе / всем */
+.gp-scope-h{font:700 13px var(--f);color:var(--tx2);margin-bottom:-6px}
+.gp-scope3{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr))}
+.gp-scope3 button{justify-content:center;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gp-scope-why{margin-top:-4px}
+.gp-scope-ask{display:flex;flex-wrap:wrap;gap:6px;padding:8px;border-radius:12px;background:var(--bg2)}
+.gp-scope-ask button{display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:0 12px;border:1.5px solid var(--bor2);border-radius:11px;background:var(--bg3);color:var(--tx);font:700 13px var(--f);cursor:pointer}
+.gp-scope-ask button[aria-checked=true]{border-color:var(--mal);background:var(--mal-s)}
+/* главная «Учёбы» не растягивается на весь широкий экран */
+.sh-wrap{max-width:860px;margin:0 auto}
+/* ===== конструктор: большое окно поиска картинок ===== */
+#imgxRoot:empty{display:none}
+.ix-bg{position:fixed;inset:0;z-index:7000;background:rgba(8,10,20,.55);display:flex;align-items:center;justify-content:center;padding:2vh 2vw}
+.ix{width:min(1400px,96vw);height:min(940px,96vh);display:flex;flex-direction:column;border-radius:22px;background:var(--bg2);border:1px solid var(--bor);box-shadow:0 30px 80px -20px rgba(0,0,0,.6);overflow:hidden;color:var(--tx)}
+.ix-h{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--bor)}
+.ix-h>span{flex:1;min-width:0;display:flex;flex-direction:column}
+.ix-h b{font:800 18px var(--f)}
+.ix-h small{font:600 12.5px var(--f);color:var(--tx3)}
+.ix-search{display:flex;align-items:center;gap:10px;margin:14px 18px 0;padding:0 6px 0 14px;border-radius:14px;border:1.5px solid var(--bor2);background:var(--bg3)}
+.ix-search:focus-within{border-color:var(--meth)}
+.ix-search>i{font-size:20px;color:var(--tx3)}
+.ix-search input{flex:1;min-width:0;min-height:50px;border:none;background:none;color:var(--tx);font:600 16px var(--f);outline:none}
+.ix-tabs{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:10px 18px}
+.ix-tabs [role=tab]{display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:0 13px;border:1.5px solid var(--bor2);border-radius:11px;background:none;color:var(--tx2);font:700 13px var(--f);cursor:pointer}
+.ix-tabs [role=tab][aria-selected=true]{border-color:var(--meth);background:var(--meth-s);color:var(--tx)}
+.ix-sp{flex:1}
+.ix-g{display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:0 13px;border:none;border-radius:11px;background:var(--bg3);color:var(--tx);font:700 13px var(--f);cursor:pointer}
+.ix-main{flex:1;min-height:0;display:grid;grid-template-columns:1fr 380px;border-top:1px solid var(--bor)}
+.ix-grid{overflow-y:auto;padding:16px 18px;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;align-content:start}
+.ix-it{display:flex;flex-direction:column;gap:5px;padding:6px 6px 10px;border:2px solid transparent;border-radius:16px;background:var(--bg3);color:var(--tx);text-align:left;cursor:pointer;min-width:0}
+.ix-it:hover{border-color:var(--bor2)}
+.ix-it.on{border-color:var(--mal);background:var(--mal-s)}
+.ix-im{display:block;aspect-ratio:4/3;border-radius:11px;overflow:hidden;background:#fff}
+.ix-im img{width:100%;height:100%;object-fit:contain;display:block}
+.ix-tt{font:700 12.5px/1.3 var(--f);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;padding:0 4px}
+.ix-it small{font:500 11px/1.3 var(--f);color:var(--tx3);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;padding:0 4px}
+.ix-more{grid-column:1/-1;justify-self:center}
+.ix-empty,.ix-hint,.ix-drop{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;gap:8px;padding:40px 20px;text-align:center;color:var(--tx2)}
+.ix-empty i,.ix-hint i,.ix-drop>i{font-size:34px;color:var(--tx3)}
+.ix-empty b,.ix-hint b,.ix-drop b{font:800 16px var(--f);color:var(--tx)}
+.ix-empty p,.ix-hint p,.ix-drop p{margin:0;max-width:52ch;font:500 13.5px/1.5 var(--f)}
+.ix-drop{border:2px dashed var(--bor2);border-radius:18px;margin:4px 0}
+.ix-drop.over{border-color:var(--meth);background:var(--meth-s)}
+.ix-warn{display:flex;gap:6px;align-items:flex-start;padding:8px 10px;border-radius:10px;background:var(--iod-s);color:var(--tx)!important;font-size:12.5px!important;text-align:left}
+.ix-warn i{font-size:16px!important;color:var(--iod-t)!important}
+.ix-side{overflow-y:auto;padding:16px 18px;border-left:1px solid var(--bor);display:flex;flex-direction:column;gap:10px}
+.ix-side .ix-hint{padding:30px 6px}
+.ix-pv{border-radius:14px;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center;max-height:340px}
+.ix-pv img{max-width:100%;max-height:340px;object-fit:contain;display:block}
+.ix-pt{font:800 14px/1.35 var(--f)}
+.ix-pc{font:500 12px/1.4 var(--f);color:var(--tx3)}
+.ix-pc a{color:var(--meth-t)}
+.ix-l{font:700 12.5px var(--f);color:var(--tx2);margin-bottom:-4px}
+.ix-go{justify-content:center;min-height:48px;margin-top:4px}
+kbd{display:inline-block;padding:1px 6px;border-radius:5px;border:1px solid var(--bor2);background:var(--bg3);font:700 12px var(--f)}
+@media(max-width:760px){
+  .ix-bg{padding:0}
+  .ix{width:100vw;height:100vh;border-radius:0}
+  .ix-main{grid-template-columns:1fr;overflow-y:auto}
+  .ix-grid{overflow:visible;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ix-side{border-left:none;border-top:1px solid var(--bor);overflow:visible}
+  .ix-g{width:100%;justify-content:center}
+}
 </style>
 </head>
 <body>
@@ -9509,7 +9639,9 @@ function studyPickCourse(id){
   renderStudySubjects(document.getElementById('studyBody'));
 }
 
-// ===== ЭКРАН: ПРЕДМЕТЫ =====
+// ===== ЭКРАН: ГЛАВНАЯ «УЧЁБЫ» (предметы курса) =====
+// Сверху — одно главное действие: «Продолжить» (или «Начни отсюда»). Ниже — предметы с честным процентом
+// (растёт, пока читаешь), потом своё (ошибки, закладки, заметки) и фото с пар от группы.
 function renderStudySubjects(el){
   el.innerHTML='<div class="ph"><div class="pt">Загрузка…</div></div>';
   Promise.all([
@@ -9517,45 +9649,77 @@ function renderStudySubjects(el){
     loadStudyProgress()
   ]).then(function(r){
     ST.subjects=r[0]||[];
-    var h='';
-    h+='<div class="study-crumb">'+esc(ST.uni.name)+' <span class="sep">›</span> <span class="now">'+esc(ST.course.title||ST.course.number+' курс')+'</span></div>';
-    h+='<div class="study-h1">Предметы</div><div class="study-lead">'+esc(ST.course.title||(ST.course.number+' курс'))+(ST.course.description?', '+esc(ST.course.description).toLowerCase():'')+'</div>';
-    h+='<div class="study-quick"><div class="sq-btn" onclick="studyOpenSearch()"><i class="ti ti-search"></i> Поиск</div><div class="sq-btn" onclick="renderBookmarks()">☆ Закладки</div><div class="sq-btn" onclick="renderMyNotes()"><i class="ti ti-highlight"></i> Пометки</div></div><div id="gqHome"></div><div id="gpHome"></div>';
+    var cn=ST.course.title||(ST.course.number+' курс');
+    var h='<div class="sh-top"><h1 class="sh-h">Учёба</h1>'
+      +'<button type="button" class="sh-where" onclick="studyChangeUni()" aria-label="Вуз и курс: '+esc(ST.uni.name+', '+cn)+'. Нажми, чтобы сменить">'
+      +'<i class="ti ti-school" aria-hidden="true"></i><span>'+esc(ST.uni.name)+' · '+esc(cn)+'</span><i class="ti ti-chevron-down" aria-hidden="true"></i></button></div>';
+    h+='<div id="stCont"></div>';
+    h+='<div class="study-search" onclick="studyOpenSearch()" role="button" tabindex="0"><i class="ti ti-search"></i><span>Найти тему: некроз, нефрон…</span></div>';
+    h+='<h2 class="sh-sec">Предметы</h2>';
     if(!ST.subjects.length){
       h+='<div class="study-empty"><div class="se-ic"><i class="ti ti-book"></i></div><div class="se-t">Предметы ещё не добавлены</div></div>';
     }else{
-      // для каждого предмета посчитаем прогресс (нужны темы — упрощённо: загрузим число тем и пройденных)
       ST.subjects.forEach(function(s){
         var col=s.color||'violet';
-        h+='<div class="study-subj '+col+'" onclick="studyPickSubject('+s.id+')"><div class="ss-acc"></div><div class="ss-ic">'+(s.emoji||'<i class="ti ti-book"></i>')+'</div><div class="ss-t"><b>'+esc(s.name)+'</b><span id="subjMeta'+s.id+'">загрузка…</span></div><div class="ss-ring" id="subjRing'+s.id+'"></div></div>';
+        h+='<div class="study-subj '+col+'" onclick="studyPickSubject('+s.id+')" role="button" tabindex="0"><div class="ss-acc"></div><div class="ss-ic">'+(s.emoji||'<i class="ti ti-book"></i>')+'</div><div class="ss-t"><b>'+esc(s.name)+'</b><span id="subjMeta'+s.id+'">загрузка…</span></div><div class="ss-ring" id="subjRing'+s.id+'"></div></div>';
       });
     }
-    h+='<div class="study-back" onclick="studyChangeUni()"> Сменить вуз или курс</div>';
-    el.innerHTML=h;
+    h+='<h2 class="sh-sec">Твоё</h2><div class="sh-mine"><div id="gqHome"></div>'
+      +'<button type="button" class="sh-row" onclick="renderBookmarks()"><span class="sh-ic bm" aria-hidden="true"><i class="ti ti-star"></i></span><span class="sh-t"><b>Закладки</b><small>Темы, которые ты отметил звёздочкой</small></span><i class="ti ti-chevron-right" aria-hidden="true"></i></button>'
+      +'<button type="button" class="sh-row" onclick="renderMyNotes()"><span class="sh-ic nt" aria-hidden="true"><i class="ti ti-highlight"></i></span><span class="sh-t"><b>Мои заметки</b><small>Что ты выделил и записал в конспектах</small></span><i class="ti ti-chevron-right" aria-hidden="true"></i></button></div>';
+    h+='<div id="gpHome"></div>';
+    el.innerHTML='<div class="sh-wrap">'+h+'</div>';
+    try{stContinueCard();}catch(e){}
     try{gpHomeCard();}catch(e){}
     try{gqHomeCard();}catch(e){}
-    // подгрузим прогресс по каждому предмету
     ST.subjects.forEach(function(s){loadSubjectMeta(s);});
   }).catch(function(){el.innerHTML='<div class="study-empty"><div class="se-ic"><i class="ti ti-alert-triangle"></i></div><div class="se-t">Ошибка загрузки предметов</div></div>';});
 }
 // темы-черновики (собраны ботом для админа) студентам не показываем
 function stVisible(rows){return (rows||[]).filter(function(t){return !t.draft||S.isAdm;});}
+// сколько прочитано: пройденная тема — 100%, иначе — сколько дочитал
+function stTopicPct(t){var p=ST.progress[t.id];return p?(p.completed?100:Math.max(0,Math.min(100,+p.read_pct||0))):0;}
+function stSubjPct(topics){if(!topics.length)return 0;var s=0;topics.forEach(function(t){s+=stTopicPct(t);});return Math.round(s/topics.length);}
 function loadSubjectMeta(s){
   sbGet('topics','subject_id=eq.'+s.id+'&select=*').then(function(topics){
     topics=stVisible(topics);
-    var total=topics.length;
-    var done=0;
-    topics.forEach(function(t){if(ST.progress[t.id]&&ST.progress[t.id].completed)done++;});
-    var pct=total?Math.round(done/total*100):0;
+    var total=topics.length,pct=stSubjPct(topics);
+    var read=topics.filter(function(t){return stTopicPct(t)>=100;}).length,started=topics.some(function(t){return stTopicPct(t)>0;});
     var meta=document.getElementById('subjMeta'+s.id);
-    if(meta)meta.textContent=total+' тем · '+done+' пройдено';
+    if(meta)meta.textContent=total+' '+vplural(total,'тема','темы','тем')+' · '+(read?'прочитано '+read+' из '+total:started?'начал читать':'ещё не начинал');
     var ring=document.getElementById('subjRing'+s.id);
     if(ring){
       var col=s.color==='coral'?'var(--cap-red)':s.color==='mint'?'var(--cap-green)':'var(--cap-lav)';
       var off=125.6*(1-pct/100);
-      ring.innerHTML='<svg width="50" height="50" viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" fill="none" stroke="rgba(124,58,237,.12)" stroke-width="5"/><circle cx="25" cy="25" r="20" fill="none" stroke="'+col+'" stroke-width="5" stroke-linecap="round" stroke-dasharray="125.6" stroke-dashoffset="'+off+'" transform="rotate(-90 25 25)"/></svg><div class="ss-pc">'+pct+'%</div>';
+      ring.innerHTML='<svg width="50" height="50" viewBox="0 0 50 50" aria-hidden="true"><circle cx="25" cy="25" r="20" fill="none" stroke="rgba(124,58,237,.12)" stroke-width="5"/><circle cx="25" cy="25" r="20" fill="none" stroke="'+col+'" stroke-width="5" stroke-linecap="round" stroke-dasharray="125.6" stroke-dashoffset="'+off+'" transform="rotate(-90 25 25)"/></svg><div class="ss-pc">'+pct+'%</div>';
+      ring.setAttribute('aria-label','Прочитано '+pct+'%');
     }
   });
+}
+// «Продолжить чтение» — последняя тема, которую читал и не дочитал; если такой нет — «Начни отсюда»
+async function stContinueCard(){
+  var el=document.getElementById('stCont');if(!el||!S.user)return;
+  var t=null,pct=0,fresh=false;
+  try{
+    var rows=await sbGet('study_progress','user_email=eq.'+encodeURIComponent(S.user.email)+'&completed=eq.false&select=topic_id,read_pct,updated_at&order=updated_at.desc&limit=8');
+    rows=(rows||[]).filter(function(x){return (+x.read_pct||0)<100;});
+    if(rows.length){
+      var tops=stVisible(await sbGet('topics','id=in.('+rows.map(function(x){return +x.topic_id;}).join(',')+')&select=*'));
+      var mine=ST.subjects.map(function(x){return x.id;});
+      for(var i=0;i<rows.length&&!t;i++){var c=tops.find(function(x){return x.id===+rows[i].topic_id;});if(c&&mine.indexOf(c.subject_id)>=0){t=c;pct=+rows[i].read_pct||0;}}
+    }
+    if(!t&&ST.subjects.length){
+      var first=stVisible(await sbGet('topics','subject_id=eq.'+ST.subjects[0].id+'&select=*&order=sort_order.asc,number.asc&limit=5'));
+      t=first.find(function(x){return stTopicPct(x)<100;})||null;fresh=true;
+    }
+  }catch(e){return;}
+  if(!t||!document.getElementById('stCont'))return;
+  var sj=ST.subjects.find(function(x){return x.id===t.subject_id;})||{};
+  el.innerHTML='<button type="button" class="st-cont" onclick="studyOpenSearchTopic('+t.id+','+t.subject_id+')">'
+    +'<span class="stc-k">'+(fresh?'Начни отсюда':'Продолжить чтение')+'</span>'
+    +'<b class="stc-t">'+esc(t.title)+'</b><span class="stc-s">'+esc(sj.name||'')+(t.number?' · Тема '+t.number:'')+'</span>'
+    +(fresh?'':'<span class="stc-bar" aria-hidden="true"><i style="width:'+Math.max(4,pct)+'%"></i></span>')
+    +'<span class="stc-go">'+(fresh?'Открыть тему':'Продолжить · прочитано '+pct+'%')+'<i class="ti ti-arrow-right" aria-hidden="true"></i></span></button>';
 }
 function studyPickSubject(id){
   ST.subject=ST.subjects.find(function(s){return s.id===id;});
@@ -9570,24 +9734,23 @@ function renderStudyTopics(el){
     loadStudyProgress()
   ]).then(function(r){
     ST.topics=stVisible(r[0]);
-    var total=ST.topics.length,done=0;
-    ST.topics.forEach(function(t){if(ST.progress[t.id]&&ST.progress[t.id].completed)done++;});
-    var pct=total?Math.round(done/total*100):0;
+    var total=ST.topics.length,pct=stSubjPct(ST.topics);
     var h='';
     h+='<div class="study-crumb">'+esc(ST.course.title||ST.course.number+' курс')+' <span class="sep">›</span> <span class="now">'+esc(ST.subject.name)+'</span></div>';
-    h+='<div class="study-tprog"><div class="stp-top"><b>'+esc(ST.subject.name)+'</b><span>'+pct+'%</span></div><div class="stp-bar"><i style="width:'+pct+'%"></i></div></div>';
+    h+='<div class="study-tprog"><div class="stp-top"><b>'+esc(ST.subject.name)+'</b><span>прочитано '+pct+'%</span></div><div class="stp-bar"><i style="width:'+pct+'%"></i></div></div>';
     if(!ST.topics.length){
       h+='<div class="study-empty"><div class="se-ic"></div><div class="se-t">Темы ещё не добавлены</div></div>';
     }else{
       ST.topics.forEach(function(t){
         var p=ST.progress[t.id];
-        var cls=p&&p.completed?'done':(p&&p.read_pct>0?'active':'');
-        var sub=p&&p.completed?'Прочитано'+(p.test_passed?' · тест сдан':''):(p&&p.read_pct>0?'Читаешь · '+p.read_pct+'%':(t.read_minutes||5)+' мин чтения');
-        var mark=p&&p.completed?'✓':(p&&p.read_pct>0?'▸':'→');
+        var tp=stTopicPct(t);
+        var cls=tp>=100?'done':(tp>0?'active':'');
+        var sub=p&&p.completed?'Пройдена'+(p.test_passed?' · тест сдан':''):tp>=100?'Прочитана':(tp>0?'Читаешь · '+tp+'%':(t.read_minutes||5)+' мин чтения');
+        var mark=tp>=100?'✓':(tp>0?'▸':'→');
         h+='<div class="study-topic '+cls+'" onclick="studyOpenTopic('+t.id+')"><div class="st-d">'+(t.number||'•')+'</div><div class="st-t"><b>'+esc(t.title)+'</b><span>'+sub+'</span></div><div class="st-m">'+mark+'</div></div>';
       });
     }
-    h+='<div class="study-back" onclick="studyPickCourse('+ST.course.id+')">← Сменить предмет</div>';
+    h+='<div class="study-back" onclick="studyPickCourse('+ST.course.id+')">← Все предметы</div>';
     el.innerHTML=h;
   }).catch(function(){el.innerHTML='<div class="study-empty"><div class="se-ic"><i class="ti ti-alert-triangle"></i></div><div class="se-t">Ошибка загрузки тем</div></div>';});
 }
@@ -9606,13 +9769,11 @@ function renderTopicReader(el){
   var t=ST.topic;
   var h='';
   // топбар
-  h+='<div class="reader-top"><div class="r-back" onclick="renderStudyTopics(document.getElementById(\'studyBody\'))">←</div><div class="r-crumb">'+esc(ST.subject.name)+' <b>· Тема '+(t.number||'')+'</b></div><button type="button" class="r-nt" id="unBtn" onclick="unTopicSheet()" aria-label="Мои пометки в теме"><i class="ti ti-highlight"></i><span id="unCnt"></span></button><div class="r-bm" onclick="studyToggleBookmark('+t.id+')" id="bmBtn">☆</div></div>';
+  h+='<div class="reader-top"><div class="r-back" onclick="renderStudyTopics(document.getElementById(\'studyBody\'))">←</div><div class="r-crumb">'+esc(ST.subject.name)+' <b>· Тема '+(t.number||'')+'</b></div><div class="r-bm" onclick="studyToggleBookmark('+t.id+')" id="bmBtn" role="button" aria-label="Закладка">☆</div></div>';
   // hero
   h+='<div class="study-reader-hero"><div class="srh-k">'+esc(t.kicker||ST.subject.name)+'</div><h1>'+esc(t.title)+'</h1>';
   if(t.lede)h+='<p class="srh-lede">'+esc(t.lede)+'</p>';
-  h+='<div class="srh-floats"><span class="srh-chip"><i class="ti ti-clock"></i> '+(t.read_minutes||studyReadMinutes(ST.blocks))+' мин чтения</span>'
-    +'<button type="button" class="srh-chip gp-chip" id="gpChip" onclick="gpOpen()" hidden><i class="ti ti-users"></i> Материалы группы<b id="gpCnt" hidden></b></button>'
-    +'<button type="button" class="srh-chip gp-chip gq-chip" id="gqChip" onclick="gqOpen()" hidden><i class="ti ti-list-check"></i> Тесты<b id="gqCnt" hidden></b></button></div></div>';
+  h+='<div class="srh-floats"><span class="srh-chip"><i class="ti ti-clock"></i> '+(t.read_minutes||studyReadMinutes(ST.blocks))+' мин чтения</span></div></div>';
   // блоки (кроме quiz — они идут в финальный тест); из заголовков собирается содержание
   var blist=studyBlockList(ST.blocks.filter(function(b){return b.type!=='quiz';}),false);
   var quizzes=ST.blocks.filter(function(b){return b.type==='quiz';});
@@ -9661,8 +9822,10 @@ function renderTopicReader(el){
   }
   if(paged)h+=studySecFoot(secs.length,secs.concat([{title:finT}]),finT)+'</section>';
   else h+='<div class="study-end">конец темы</div>';
-  h+='<button class="scroll-top" id="scrollTopBtn" onclick="studyScrollTop()">↑</button>';
-  el.innerHTML='<div class="rd-wrap">'+h+'</div>';
+  h+='<button class="scroll-top" id="scrollTopBtn" onclick="studyScrollTop()" aria-label="Наверх">↑</button>';
+  // всё, что можно сделать с темой, — всегда под рукой: листать до конца не нужно
+  h+=rdBarHtml();
+  el.innerHTML='<div class="rd-wrap has-bar">'+h+'</div>';
   // отметить начало чтения
   studyMarkReading(t.id);
   studyCheckBookmark(t.id);
@@ -9675,6 +9838,7 @@ function renderTopicReader(el){
   if(paged){var last=(S.readSec||{})[t.id];studyShowSec(last>0&&last<=secs.length?last:0,true);}
   // отрисовать финальный тест
   renderFinalTest();
+  try{rdBarInit();}catch(e){}
 }
 // финальный тест из quiz-блоков
 function renderFinalTest(){
@@ -9755,15 +9919,18 @@ function studyCompleteByTest(topicId){
 // прогресс чтения по скроллу
 function initReadProgress(){
   var scroller=document.querySelector('.main');
-  ST._marked90=false;
+  ST._marked90=false;ST._readMax=0;
   function upd(){
     var stb=document.getElementById('scrollTopBtn');
     if(!stb){if(scroller)scroller.removeEventListener('scroll',upd);return;}
     var st=scroller?scroller.scrollTop:window.scrollY,sh=scroller?scroller.scrollHeight:document.body.scrollHeight,ch=scroller?scroller.clientHeight:window.innerHeight;
     stb.classList.toggle('show',st>600);
 
-    // тема без разделов: дочитал до конца — отмечаем
-    if(!document.querySelector('#studyBody .rd-sec')&&sh>ch&&st/(sh-ch)>=.9&&ST.topic&&!ST._marked90){ST._marked90=true;studyMarkReading(ST.topic.id,90);}
+    // тема без разделов: процент — по прокрутке, дочитал до конца — 100%
+    if(!document.querySelector('#studyBody .rd-sec')&&sh>ch&&ST.topic){
+      var f=Math.min(1,st/(sh-ch)),pc=f>=.9?100:Math.round(f*10)*10;
+      if(pc>(ST._readMax||0)){ST._readMax=pc;studyMarkReading(ST.topic.id,pc);}
+    }
   }
   if(scroller)scroller.addEventListener('scroll',upd);else window.addEventListener('scroll',upd);
   setTimeout(upd,100);
@@ -10981,6 +11148,7 @@ function saBuilderDraw(){
   h+='<div class="sab-head"><div class="sab-head-t"><small>Редактор темы — слева она выглядит так же, как у студента</small><h2>'+esc(SA.topic.title)+'</h2>'
     +'<span>'+SA.blocks.length+' '+vplural(SA.blocks.length,'блок','блока','блоков')+', около '+mins+' мин чтения</span></div>'
     +'<div class="sab-head-a"><button class="btn bvio" onclick="saAiOpen()"><i class="ti ti-sparkles"></i>Конспект из материала</button>'
+    +'<button class="btn bgh" onclick="saImgx(\'insert\')"><i class="ti ti-photo-search"></i>Найти картинку</button>'
     +'<button class="btn bgh" onclick="saPreviewTopic()"><i class="ti ti-eye"></i>Открыть как студент</button>'
     +'<button class="btn bgh" id="saGpBtn" onclick="saGpOpen()"'+(GP.missing?' hidden':'')+'><i class="ti ti-users"></i>Материалы групп<span id="saGpN">'+saGpCountText()+'</span></button>'
     +'<button class="btn bgh" id="saGqBtn" onclick="saGqOpen()"'+(GQ.missing?' hidden':'')+'><i class="ti ti-list-check"></i>Тесты студентов<span id="saGqN">'+saGqCountText()+'</span></button></div></div>';
@@ -11120,7 +11288,8 @@ function saBlockEditor(type,b){
     if(d.todo&&!(b&&b.image_url))f+='<div class="sbe-note"><i class="ti ti-sparkles"></i>ИИ советует сюда: '+esc(d.todo)+'</div>';
     SA.ed.cands=d.cands||[];
     f+='<div class="sbe-f"><label>Картинка — подбирается по смыслу этого места (Wikimedia Commons, свободные)</label><div class="sbe-search"><input id="beQq" value="" placeholder="подберу сам — или напиши, что искать" onkeydown="if(event.key===\'Enter\'){event.preventDefault();saImgSearch();}">'
-      +'<button type="button" class="btn bgh bsm" onclick="saImgSearch()"><i class="ti ti-search"></i>Найти</button></div>'
+      +'<button type="button" class="btn bgh bsm" onclick="saImgSearch()"><i class="ti ti-search"></i>Найти</button>'
+      +'<button type="button" class="btn bvio bsm" onclick="saImgx(\'block\')"><i class="ti ti-arrows-maximize"></i>Большой поиск</button></div>'
       +'<small id="beCandSt">'+(SA.ed.cands.length?'Найденные варианты — нажми, чтобы поставить другой':'Подбираю по смыслу этого места…')+'</small>'
       +'<div class="sbe-cands" id="beCands">'+saCandsHtml(SA.ed.cands,b&&b.image_url)+'</div></div>';
     f+='<div class="sbe-f"><label>Или своя картинка</label><div class="sbe-drop" id="beDrop" ondragover="event.preventDefault();this.classList.add(\'over\')" ondragleave="this.classList.remove(\'over\')" ondrop="event.preventDefault();this.classList.remove(\'over\');saImgPick(event.dataTransfer.files)">'
@@ -11710,7 +11879,7 @@ function studyShowSec(i,noScroll){
   var tab=document.querySelector('#rdNav .rd-tab.on'),row=tab&&tab.parentNode;
   if(tab&&row)row.scrollLeft=tab.offsetLeft-(row.clientWidth-tab.offsetWidth)/2;
   ST.sec=i;try{S.readSec=S.readSec||{};S.readSec[ST.topic.id]=i;sv();}catch(e){}
-  if(i===all.length-1&&ST.topic&&!ST._marked90){ST._marked90=true;studyMarkReading(ST.topic.id,90);}
+  if(ST.topic){var pc=Math.round((i+1)/all.length*100);if(pc>(ST._readMax||0)){ST._readMax=pc;studyMarkReading(ST.topic.id,pc);}}
   if(!noScroll){var nav=document.getElementById('rdNav'),sc=document.querySelector('.main');
     // новый раздел начинается сверху: лента разделов — под шапкой Telegram, не под ней
     if(nav&&sc){var pad=parseFloat(getComputedStyle(sc).paddingTop)||0,top=nav.getBoundingClientRect().top-sc.getBoundingClientRect().top+sc.scrollTop-pad-(document.documentElement.hasAttribute('data-tg-fs')?40:0);/* ниже кнопки темы в Telegram */if(sc.scrollTop>top)sc.scrollTop=Math.max(0,top);}}
@@ -11947,8 +12116,8 @@ function unPaint(){
 function unBadge(){
   var b=document.getElementById('unBtn');if(!b)return;
   var n=unLive().length;b.classList.toggle('has',n>0);
-  var c=document.getElementById('unCnt');if(c)c.textContent=n?String(n):'';
-  b.setAttribute('aria-label',n?'Мои пометки в теме: '+n:'Мои пометки в теме');
+  var c=document.getElementById('unCnt');if(c){c.textContent=n?String(n):'';c.hidden=!n;}
+  b.setAttribute('aria-label',n?'Мои заметки в теме: '+n:'Мои заметки в теме');
 }
 // --- выделение текста → панель ---
 function unBid(node){var el=node&&(node.nodeType===1?node:node.parentNode);return el&&el.closest?el.closest('[data-bid]'):null;}
@@ -12030,7 +12199,7 @@ function unEdit(n,o){
   o=o||{};
   var kind=n?n.kind:o.kind,color=n?(n.color||'y'):(S.unColor||'y'),quote=n?n.quote:o.sel.quote;
   UN.ed={n:n,sel:o.sel,kind:kind,color:color,fresh:!!o.fresh,sure:false};
-  var title=!n?'Заметка':o.fresh?'Отметил: не понял':'Пометка';
+  var title=!n?'Заметка':o.fresh?'Отметил: не понял':'Заметка';
   var foot=o.fresh?'<button type="button" class="btn bgh un-del" onclick="unEdDel()"><i class="ti ti-arrow-back-up"></i>Снять отметку</button><span class="un-sp"></span><button type="button" class="btn bbl" onclick="unEdSave()">Готово</button>'
     :(n?'<button type="button" class="btn bgh un-del" onclick="unEdDel()" aria-label="Удалить пометку"><i class="ti ti-trash"></i><span>Удалить</span></button>':'')
       +'<span class="un-sp"></span><button type="button" class="btn bgh" onclick="unEdClose()">Отмена</button><button type="button" class="btn bbl" onclick="unEdSave()">Сохранить</button>';
@@ -12088,7 +12257,7 @@ function unEdDel(){
 }
 // --- подсказка в первый раз ---
 function unTip(){
-  if(S.unTipDone||!S.user)return;
+  if(S.unTipDone||S.rdTip||!S.user||document.getElementById('rdBar'))return;
   var root=unRoot(),hero=root&&root.querySelector('.study-reader-hero');if(!hero||document.getElementById('unTip'))return;
   var d=document.createElement('div');d.id='unTip';d.className='un-tip';
   d.innerHTML='<i class="ti ti-highlight" aria-hidden="true"></i><p><b>Пометки прямо в тексте.</b> Выдели слова — появится панель: выделить, оставить заметку или отметить «не понял».</p>'
@@ -12132,13 +12301,13 @@ function unTopicSheet(){
   if(f!=='all'&&!cnt[f])f='all';
   var list=all.filter(function(n){return f==='all'||n.kind===f;});
   var h='<div class="modal-bg un-top" onclick="if(event.target===this)closeModal()"><div class="modal sbe un-dlg un-sheet" role="dialog" aria-modal="true" aria-labelledby="unShT">'
-    +'<div class="sbe-head"><b id="unShT">Мои пометки в теме</b><button type="button" class="sbe-x" onclick="closeModal()" aria-label="Закрыть"><i class="ti ti-x"></i></button></div><div class="un-ed">';
+    +'<div class="sbe-head"><b id="unShT">Мои заметки в теме</b><button type="button" class="sbe-x" onclick="closeModal()" aria-label="Закрыть"><i class="ti ti-x"></i></button></div><div class="un-ed">';
   if(!all.length){
-    h+='<div class="un-empty"><i class="ti ti-highlight" aria-hidden="true"></i><b>Пока пусто</b><p>Выдели любые слова в тексте — появится панель: выделить, заметка, «не понял». Все пометки соберутся здесь.</p></div>';
+    h+='<div class="un-empty"><i class="ti ti-highlight" aria-hidden="true"></i><b>Пока пусто</b><p>Зажми слово в тексте и выдели пару слов пальцем — появятся кнопки: <b>Выделить</b> маркером, <b>Заметка</b> — записать свою мысль, <b>Не понял</b> — отметить трудное место. Всё соберётся здесь, видишь только ты.</p></div>';
   }else{
     h+=unChips(cnt,f,'unTopicFilter')+'<div class="un-list">'+list.map(function(n){return unItem(n,'closeModal();unGo(\''+n.id+'\')',true);}).join('')+'</div>';
   }
-  h+='</div><div class="sbe-foot"><button type="button" class="btn bgh" onclick="closeModal();renderMyNotes()"><i class="ti ti-notes"></i>Все мои пометки</button></div></div></div>';
+  h+='</div><div class="sbe-foot"><button type="button" class="btn bgh" onclick="closeModal();renderMyNotes()"><i class="ti ti-notes"></i>Все мои заметки</button></div></div></div>';
   document.getElementById('modalRoot').innerHTML=h;
 }
 function unTopicFilter(f){UN.filter=f;unTopicSheet();}
@@ -12154,7 +12323,7 @@ async function renderMyNotes(){
   var el=document.getElementById('studyBody');if(!el)return;
   if(!S.user){if(typeof showLoginWall==='function')showLoginWall();return;}
   UN.topic=null;unBarHide();
-  var top='<div class="reader-top"><div class="r-back" onclick="renderStudy()" role="button" aria-label="Назад">←</div><div class="r-crumb"><b>Мои пометки</b></div><div style="width:42px"></div></div>';
+  var top='<div class="reader-top"><div class="r-back" onclick="renderStudy()" role="button" aria-label="Назад">←</div><div class="r-crumb"><b>Мои заметки</b></div><div style="width:42px"></div></div>';
   el.innerHTML=top+'<div class="ph"><div class="pt">Загрузка…</div></div>';
   var rows=null,c=unCache(),pend=[];
   Object.keys(c).forEach(function(k){(c[k].list||[]).forEach(function(n){if(n.sync)pend.push(n);});});
@@ -12170,8 +12339,8 @@ function unMyDraw(){
   var all=UN.all,f=UN.filter,cnt={all:all.length,note:0,q:0,hl:0};
   all.forEach(function(n){cnt[n.kind]=(cnt[n.kind]||0)+1;});
   if(f!=='all'&&!cnt[f])f='all';
-  var h='<div class="reader-top"><div class="r-back" onclick="renderStudy()" role="button" aria-label="Назад">←</div><div class="r-crumb"><b>Мои пометки</b>'+(all.length?' · '+all.length:'')+'</div><div style="width:42px"></div></div>';
-  h+='<div class="study-h1">Мои пометки</div>';
+  var h='<div class="reader-top"><div class="r-back" onclick="renderStudy()" role="button" aria-label="Назад">←</div><div class="r-crumb"><b>Мои заметки</b>'+(all.length?' · '+all.length:'')+'</div><div style="width:42px"></div></div>';
+  h+='<div class="study-h1">Мои заметки</div>';
   if(!all.length){
     h+='<div class="study-empty un-empty-pg"><div class="se-ic"><i class="ti ti-highlight"></i></div><div class="se-t">Пока нет пометок</div>'
       +'<div class="se-s">Открой любую тему и выдели слова — можно подсветить, оставить заметку или отметить «не понял». Всё соберётся здесь.</div></div>';
@@ -12284,11 +12453,11 @@ async function gpInit(tid){
     if(GP.openCs){var pc=GP.openCs;GP.openCs=null;gpCsOpen(pc,'topic');}}
 }
 function gpChip(){
-  var c=document.getElementById('gpChip');if(!c)return;
-  c.hidden=GP.missing||!S.user;
-  var n=GP.list.length,b=document.getElementById('gpCnt');
+  var c=document.getElementById('rbGp');if(!c)return;
+  c.hidden=!!GP.missing;
+  var n=GP.list.length,b=c.querySelector('.rb-n');
   if(b){b.textContent=n?String(n):'';b.hidden=!n;}
-  c.setAttribute('aria-label','Материалы группы'+(n?': '+n:''));
+  c.setAttribute('aria-label','Группа: фото и файлы с пар'+(n?', '+n:''));
 }
 function gpEndCard(){
   var el=document.getElementById('gpEnd');if(!el)return;
@@ -12315,13 +12484,13 @@ function gpOpen(){
   var h='';
   if(!GP.list.length){
     h+='<div class="un-empty gp-empty"><i class="ti ti-camera" aria-hidden="true"></i><b>Пока пусто</b>'
-      +'<p>Сфотографируй доску или слайды на занятии и выложи сюда — одногруппники скажут спасибо.</p>'
+      +'<p>Здесь собираются фото доски, слайды, PDF и видео к этой теме — от тебя и одногруппников. Сфоткай доску на паре и выложи — кнопка ниже.</p>'
       +'<p class="gp-bot">Ещё проще: перешли фото или PDF боту <b>@'+esc(gpBotName())+'</b> — он спросит тему и положит сам.</p></div>';
   }else{
     h+='<div class="gp-list">'+GP.list.map(function(p){return gpPostHtml(p,{});}).join('')+'</div>';
   }
   gpSheet(h,'<span class="gp-foot-n">'+(grp?'Группа '+esc(grp):'')+'</span><button type="button" class="btn bbl" onclick="gpAdd()"><i class="ti ti-plus"></i>Добавить материал</button>',
-    'Материалы группы',esc((t.number?'Тема '+t.number+' · ':'')+(t.title||'')));
+    'Фото и файлы с пар',esc((t.number?'Тема '+t.number+' · ':'')+(t.title||'')));
 }
 // --- карточка материала ---
 function gpPostHtml(p,o){
@@ -12330,7 +12499,7 @@ function gpPostHtml(p,o){
   var h='<article class="gp-post'+(p.hidden?' hid':'')+'" id="gpP'+p.id+'" data-o="'+(o.admin?'admin':o.topic?'topic':'')+'">';
   if(o.topic)h+='<button type="button" class="gp-topic" onclick="gpGoTopic('+p.topic_id+','+(+p.subject_id||0)+')"><small>'+esc(p.subject_name||'')+(p.topic_number?' · Тема '+p.topic_number:'')+'</small><b>'+esc(p.topic_title||'Тема')+'</b><i class="ti ti-chevron-right" aria-hidden="true"></i></button>';
   h+='<header class="gp-h"><span class="gp-av" aria-hidden="true">'+esc(gpInitials(p.author))+'</span><span class="gp-who"><b>'+esc(p.author||'Студент')+(p.mine?' <em>· ты</em>':'')+'</b>'
-    +'<small>'+gpWhen(p.at)+' · '+(p.scope==='course'?'видят все, кто учит тему':'группа '+esc(p.group||''))+(o.admin&&p.author_email?' · '+esc(p.author_email):'')+'</small></span></header>';
+    +'<small>'+gpWhen(p.at)+' · '+gpScopeLabel(p)+(o.admin&&p.author_email?' · '+esc(p.author_email):'')+'</small></span></header>';
   if(p.hidden)h+='<div class="gp-hid"><i class="ti ti-eye-off" aria-hidden="true"></i>'+esc(p.hidden_reason||'Скрыто')+(o.admin&&p.reports?' · жалоб: '+p.reports:'')+'</div>';
   else if(o.admin&&p.reports)h+='<div class="gp-hid warn"><i class="ti ti-flag" aria-hidden="true"></i>Жалоб: '+p.reports+'</div>';
   if(p.caption)h+='<p class="gp-cap">'+esc(p.caption)+'</p>';
@@ -12358,7 +12527,7 @@ function gpPostHtml(p,o){
   }else if(p.mine){
     var grp=p.group||'';
     h+='<footer class="gp-f mine"><span class="gp-stat" title="Сколько человек отметили «полезно» и сохранили"><i class="ti ti-heart"></i>'+(p.likes||0)+'<i class="ti ti-bookmark"></i>'+(p.saves||0)+'</span><span class="gp-sp"></span>'
-      +(grp?'<button type="button" class="gp-b" onclick="gpScope('+p.id+')" aria-label="Кому видно: '+(p.scope==='course'?'всем, кто учит тему':'группе '+esc(grp))+'. Нажми, чтобы поменять"><i class="ti '+(p.scope==='course'?'ti-world':'ti-users')+'"></i>'+(p.scope==='course'?'Видят все':'Видит группа')+'</button>':'')
+      +'<button type="button" class="gp-b" onclick="gpScopeAsk('+p.id+')" aria-label="Кому видно: '+gpScopeLabel(p)+'. Нажми, чтобы поменять"><i class="ti '+(p.scope==='me'?'ti-lock':p.scope==='course'?'ti-world':'ti-users')+'"></i>'+(p.scope==='me'?'Только мне':p.scope==='course'?'Видят все':'Видит группа')+'</button>'
       +'<button type="button" class="gp-b gp-del" onclick="gpDel('+p.id+',this)" aria-label="Удалить материал"><i class="ti ti-trash"></i><span>Удалить</span></button></footer>';
   }else{
     h+='<footer class="gp-f"><button type="button" class="gp-b'+(p.liked?' on':'')+'" aria-pressed="'+!!p.liked+'" onclick="gpLike('+p.id+')"><i class="ti '+(p.liked?'ti-heart-filled':'ti-heart')+'"></i>Полезно'+(p.likes?'<b>'+p.likes+'</b>':'')+'</button>'
@@ -12402,8 +12571,19 @@ function gpReportAsk(id){
     +'<button type="button" class="gp-b gp-ic" onclick="gpReportAsk('+id+')" aria-label="Отмена"><i class="ti ti-x"></i></button></div>';
 }
 async function gpReport(id,reason){var r=await gpCall('gp_mark',{p_post:id,p_kind:'report',p_on:true,p_reason:reason});if(r){gpPut(r);toast2('Жалоба отправлена');}}
-async function gpScope(id){var p=gpFind(id);if(!p)return;var r=await gpCall('gp_edit',{p_post:id,p:{scope:p.scope==='course'?'group':'course'}});
-  if(r){gpPut(r);toast2(r.scope==='course'?'Теперь видят все, кто учит тему':'Теперь видит только твоя группа');}}
+function gpScopeLabel(p){return p.scope==='me'?'🔒 видишь только ты':p.scope==='course'?'видят все, кто учит тему':'группа '+esc(p.group||'');}
+async function gpScope(id,to){var p=gpFind(id);if(!p)return;var r=await gpCall('gp_edit',{p_post:id,p:{scope:to||(p.scope==='course'?'group':'course')}});
+  if(r){gpPut(r);toast2(r.scope==='me'?'Теперь видишь только ты':r.scope==='course'?'Теперь видят все, кто учит тему':'Теперь видит твоя группа');}}
+// кому видно: три понятных варианта прямо на карточке
+function gpScopeAsk(id){
+  var p=gpFind(id),el=document.getElementById('gpP'+id);if(!p||!el)return;
+  var box=el.querySelector('.gp-scope-ask');if(box){box.remove();return;}
+  var grp=p.group||gpMyGroup();
+  box=document.createElement('div');box.className='gp-scope-ask';box.setAttribute('role','radiogroup');box.setAttribute('aria-label','Кому видно');
+  box.innerHTML=[['me','ti-lock','Только мне'],grp?['group','ti-users','Группе '+esc(grp)]:null,['course','ti-world','Всем, кто учит тему']].filter(Boolean).map(function(o){
+    return '<button type="button" role="radio" aria-checked="'+(p.scope===o[0])+'" onclick="this.parentNode.remove();gpScope('+id+',\''+o[0]+'\')"><i class="ti '+o[1]+'"></i>'+o[2]+'</button>';}).join('');
+  el.appendChild(box);
+}
 async function gpHide(id,hide){var r=await gpCall('gp_edit',{p_post:id,p:{hidden:hide,reason:hide?'Скрыто админом':''}});if(r){r.author_email=r.author_email||(gpFind(id)||{}).author_email;gpPut(r);}}
 async function gpDel(id,btn){
   // удаляем со второго нажатия
@@ -12471,20 +12651,22 @@ function gpAddDraw(msg){
   var A=GP.add;if(!A)return;
   var grp=gpMyGroup(),touch=unTouch(),n=A.files.length;
   var h='<div class="gp-pick"><label class="btn bbl"><i class="ti ti-photo-plus"></i>'+(n?'Добавить ещё':'Выбрать фото или файл')
-      +'<input type="file" multiple accept="image/*,.pdf,.doc,.docx,.ppt,.pptx" onchange="gpAddFiles(this.files);this.value=\'\'" hidden></label>'
+      +'<input type="file" id="gpPickIn" multiple accept="image/*,.pdf,.doc,.docx,.ppt,.pptx" onchange="gpAddFiles(this.files);this.value=\'\'" hidden></label>'
     +(touch?'<label class="btn bgh"><i class="ti ti-camera"></i>Снять<input type="file" accept="image/*" capture="environment" onchange="gpAddFiles(this.files);this.value=\'\'" hidden></label>':'')+'</div>';
   if(n)h+='<div class="gp-pvs">'+A.files.map(function(f,i){
     return f.kind==='img'?'<div class="gp-pv"><img src="'+f.preview+'" alt=""><button type="button" onclick="gpAddRm('+i+')" aria-label="Убрать фото"><i class="ti ti-x"></i></button></div>'
       :'<div class="gp-pv file"><i class="ti ti-file" aria-hidden="true"></i><span>'+esc(f.name)+'</span><small>'+gpSize(f.size)+'</small><button type="button" onclick="gpAddRm('+i+')" aria-label="Убрать файл"><i class="ti ti-x"></i></button></div>';}).join('')+'</div>';
   h+='<label class="gp-link"><i class="ti ti-brand-youtube" aria-hidden="true"></i><input id="gpLink" type="url" inputmode="url" maxlength="300" placeholder="Или ссылка на видео YouTube" oninput="gpAddLink(this.value)" aria-label="Ссылка на видео YouTube"></label>';
   h+='<textarea id="gpCap" rows="2" maxlength="1000" placeholder="Подпись: что это — например «Лекция 12.11, слайды 5–20»" oninput="GP.add.caption=this.value"></textarea>';
-  h+='<div class="un-seg gp-scope" role="radiogroup" aria-label="Кому видно">'
+  h+='<div class="gp-scope-h" id="gpScL">Кому видно</div><div class="un-seg gp-scope gp-scope3" role="radiogroup" aria-labelledby="gpScL">'
+    +'<button type="button" role="radio" aria-checked="'+(A.scope==='me')+'" onclick="gpAddScope(\'me\')"><i class="ti ti-lock"></i>Только мне</button>'
     +(grp?'<button type="button" role="radio" aria-checked="'+(A.scope==='group')+'" onclick="gpAddScope(\'group\')"><i class="ti ti-users"></i>Группе '+esc(grp)+'</button>':'')
-    +'<button type="button" role="radio" aria-checked="'+(A.scope==='course')+'" onclick="gpAddScope(\'course\')"><i class="ti ti-world"></i>Всем, кто учит тему</button></div>';
+    +'<button type="button" role="radio" aria-checked="'+(A.scope==='course')+'" onclick="gpAddScope(\'course\')"><i class="ti ti-world"></i>Всем</button></div>'
+    +'<small class="un-hint gp-scope-why">'+(A.scope==='me'?'Увидишь только ты — одногруппники и админ не видят.':A.scope==='course'?'Увидят все студенты, которые учат эту тему.':'Увидят одногруппники из '+esc(grp)+'.')+'</small>';
   h+='<small class="un-hint">До 10 фото или файлов за раз (PDF, Word, PowerPoint — до 20 МБ). Фото сжимаются так, чтобы текст на доске читался. По ссылке на YouTube ИИ посмотрит видео и соберёт конспект — видео должно быть открытым.</small>';
   if(msg)h+='<div class="sbe-note bad" role="alert"><i class="ti ti-alert-triangle"></i>'+esc(msg)+'</div>';
   gpSheet(h,'<span class="gp-foot-n" id="gpAddSt" aria-live="polite"></span><button type="button" class="btn bgh" onclick="gpOpen()">Отмена</button>'
-    +'<button type="button" class="btn bbl" id="gpPub" onclick="gpPublish()"'+(n||gpYt(A.link)?'':' disabled')+'><i class="ti ti-upload"></i>Выложить'+(n?' ('+n+')':'')+'</button>',
+    +'<button type="button" class="btn bbl" id="gpPub" onclick="gpPublish()"'+(n||gpYt(A.link)?'':' disabled')+'><i class="ti ti-upload"></i>'+(A.scope==='me'?'Сохранить':'Выложить')+(n?' ('+n+')':'')+'</button>',
     'Новый материал',esc(((ST.topic&&ST.topic.number)?'Тема '+ST.topic.number+' · ':'')+((ST.topic&&ST.topic.title)||'')),'gpOpen()');
   var ta=document.getElementById('gpCap');if(ta)ta.value=A.caption||'';
   var li=document.getElementById('gpLink');if(li)li.value=A.link||'';
@@ -12531,7 +12713,7 @@ async function gpPublish(){
     GP.add=null;GP.list.unshift(j.post);gpRemember([j.post]);gpChip();gpEndCard();gpOpen();
     if(j.post&&j.post.cs&&j.post.cs.status==='run'){gpPoll();toast2('Выложено. ИИ смотрит видео и соберёт конспект — бот пришлёт, когда будет готов');}
     else if(j.cs_reason)toast2('Выложено. Конспект по видео сейчас не собрать: '+j.cs_reason);
-    else toast2(j.skipped?'Выложено. Не подошло файлов: '+j.skipped:'Выложено — одногруппники увидят в этой теме');
+    else toast2(j.skipped?'Сохранено. Не подошло файлов: '+j.skipped:j.post&&j.post.scope==='me'?'Сохранено — видишь только ты':'Выложено — одногруппники увидят в этой теме');
   }catch(e){A.busy=false;gpAddDraw(e.message||'Не получилось');}
 }
 // --- «Материалы группы» в учёбе: лента группы, сохранённое, мои ---
@@ -12543,8 +12725,9 @@ async function gpHomeCard(){
   if(!grp){el.innerHTML='';return;}
   var week=items.filter(function(x){return Date.now()-Date.parse(x.at)<7*864e5;}).length,th=[];
   items.forEach(function(p){(p.items||[]).forEach(function(x){if(x.t==='img'&&th.length<3)th.push(x);});});
-  el.innerHTML='<button type="button" class="gp-home" onclick="renderGroupFeed(\'group\')"><span class="gp-home-ic" aria-hidden="true"><i class="ti ti-users"></i></span>'
-    +'<span class="gp-home-t"><b>Материалы группы '+esc(grp)+'</b><small>'+(items.length?(week?'За неделю: '+week+' — ':'')+'фото доски, слайды, файлы одногруппников':'Пока пусто — выложи первым фото с занятия')+'</small></span>'
+  el.innerHTML='<h2 class="sh-sec">Группа '+esc(grp)+'</h2><button type="button" class="gp-home" onclick="renderGroupFeed(\'group\')"><span class="gp-home-ic" aria-hidden="true"><i class="ti ti-photo"></i></span>'
+    +'<span class="gp-home-t"><b>Фото и файлы с пар</b><small>'+(items.length?(week?'За неделю: '+week+'. ':'')+'Фото доски, слайды, PDF и видео, которые выложили одногруппники — по всем темам'
+      :'Пока пусто. Выложить можно в любой теме: кнопка «Добавить» внизу')+'</small></span>'
     +(th.length?'<span class="gp-home-th" aria-hidden="true">'+th.map(function(x){return '<img src="'+esc(gpUrl(x.path))+'" alt="" loading="lazy">';}).join('')+'</span>':'')
     +'<i class="ti ti-chevron-right" aria-hidden="true"></i></button>';
 }
@@ -12788,10 +12971,9 @@ async function gqInit(tid){
   gqRedraw();gqPollCheck();
 }
 function gqChip(){
-  var c=document.getElementById('gqChip');if(!c)return;
+  var c=document.getElementById('rbGq');if(!c)return;
   var ai=gqAi(),n=gqGroup().length+(ai&&ai.status==='ok'?1:0)+gqPostQs().length;
-  c.hidden=GQ.missing||!S.user||!n;
-  var b=document.getElementById('gqCnt');if(b){b.textContent=n?String(n):'';b.hidden=!n;}
+  var b=c.querySelector('.rb-n');if(b){b.textContent=n?String(n):'';b.hidden=!n;}
   c.setAttribute('aria-label','Тесты по теме'+(n?': '+n:''));
 }
 function gqEndCard(){
@@ -12827,6 +13009,10 @@ function gqOpen(){
 }
 function gqListHtml(){
   var grp=gqGroup(),pq=gqPostQs(),h=gqAiCard(gqAi(),'topic',GQ.topic);
+  // вопросы из общей базы тестов (деканат) по этой теме — тоже здесь, а не только в конце темы
+  var tf=ST.topic&&ST.topic.id===GQ.topic&&typeof vTestFor==='function'?vTestFor(ST.topic):null;
+  if(tf)h+='<button type="button" class="gq-ai bank" onclick="closeModal();vTrainTopic(\''+esc(tf.s).replace(/'/g,'')+'\',\''+esc(tf.t).replace(/'/g,'')+'\')"><span class="gq-ai-ic" aria-hidden="true"><i class="ti ti-target-arrow"></i></span>'
+    +'<span class="gq-ai-t"><b>Вопросы деканата по теме</b><small>'+gqN(tf.n)+' из общей базы тестов</small></span><i class="ti ti-chevron-right" aria-hidden="true"></i></button>';
   h+='<div class="gq-sec"><b>Вопросы с занятия</b><span>Что спрашивали на занятиях и коллоквиумах — выкладывают одногруппники.</span></div>';
   h+=grp.length?'<div class="gq-list">'+grp.map(function(z){return gqCardHtml(z,{});}).join('')+'</div>'
     :'<div class="un-empty gq-empty"><i class="ti ti-message-question" aria-hidden="true"></i><b>Пока никто не выложил</b>'
@@ -13205,8 +13391,8 @@ async function gqHomeCard(){
   GQ.home=r||[];
   var n=GQ.home.reduce(function(s,x){return s+(x.questions||[]).length;},0),k=GQ.home.length;
   if(!n){el.innerHTML='';return;}
-  el.innerHTML='<button type="button" class="gq-home" onclick="gqRunMix()"><span class="gq-home-ic" aria-hidden="true"><i class="ti ti-rotate"></i></span>'
-    +'<span class="gp-home-t"><b>Повторить ошибки</b><small>'+gqN(n)+' из '+k+' '+vplural(k,'теста','тестов','тестов')+' по темам — те, где ты ошибся</small></span>'
+  el.innerHTML='<button type="button" class="sh-row" onclick="gqRunMix()"><span class="sh-ic er" aria-hidden="true"><i class="ti ti-rotate"></i></span>'
+    +'<span class="sh-t"><b>Повторить ошибки · '+n+'</b><small>'+gqN(n)+' из '+k+' '+vplural(k,'теста','тестов','тестов')+' по темам, где ты ошибся</small></span>'
     +'<i class="ti ti-chevron-right" aria-hidden="true"></i></button>';
 }
 // --- админ: тесты студентов в конструкторе темы ---
@@ -13249,6 +13435,248 @@ async function saPublishTopic(btn){
   try{await sbPatch('topics','id=eq.'+SA.topic.id,{draft:false});SA.topic.draft=false;
     (SA.topics||[]).forEach(function(t){if(t.id===SA.topic.id)t.draft=false;});toast2('Опубликовано — студенты видят тему');saBuilderDraw();}
   catch(e){if(btn)btn.disabled=false;vAlert('Не получилось: '+(e.message||'ошибка'));}
+}
+
+// ===== ПАНЕЛЬ ТЕМЫ: Тест · Группа · Добавить · Заметки — всегда внизу экрана =====
+function rdBarHtml(){
+  return '<nav class="rd-bar" id="rdBar" aria-label="Что можно сделать с темой">'
+    +'<button type="button" class="rb" id="rbGq" onclick="rdTest()"><i class="ti ti-checklist" aria-hidden="true"></i><span>Тест</span><b class="rb-n" hidden></b></button>'
+    +'<button type="button" class="rb" id="rbGp" onclick="gpOpen()"><i class="ti ti-users" aria-hidden="true"></i><span>Группа</span><b class="rb-n" hidden></b></button>'
+    +'<button type="button" class="rb rb-add" onclick="rdAdd()"><i class="ti ti-plus" aria-hidden="true"></i><span>Добавить</span></button>'
+    +'<button type="button" class="rb" id="unBtn" onclick="unTopicSheet()"><i class="ti ti-highlight" aria-hidden="true"></i><span>Заметки</span><b class="rb-n" id="unCnt" hidden></b></button></nav>';
+}
+function rdBarPos(){
+  var bar=document.getElementById('rdBar');if(!bar)return;
+  var bn=document.getElementById('bottomNav'),h=0;
+  if(bn&&getComputedStyle(bn).display!=='none')h=bn.getBoundingClientRect().height;
+  var w=document.querySelector('#studyBody .rd-wrap'),r=w&&w.getBoundingClientRect();
+  bar.style.bottom=(h?h+8:18)+'px';
+  if(r&&r.width)bar.style.left=(r.left+r.width/2)+'px';
+  var up=document.getElementById('scrollTopBtn');if(up)up.style.bottom=((h?h+8:18)+bar.offsetHeight+12)+'px';
+}
+function rdBarInit(){
+  rdBarPos();
+  if(!GQ.rdResize){GQ.rdResize=true;window.addEventListener('resize',function(){rdBarPos();});}
+  if(!S.user)return;
+  gpChip();gqChip();try{unBadge();}catch(e){}
+  if(!S.rdTip)setTimeout(rdCoach,700);
+}
+// первая тема: объяснить панель один раз
+function rdCoach(){
+  var bar=document.getElementById('rdBar');if(!bar||S.rdTip||document.getElementById('rdCoach')||document.querySelector('#modalRoot .modal-bg'))return;
+  var d=document.createElement('div');d.id='rdCoach';d.className='rd-coach';d.setAttribute('role','dialog');d.setAttribute('aria-label','Подсказка: что можно делать с темой');
+  d.innerHTML='<b class="rc-h">Всё для темы — на этой панели</b><ul>'
+    +'<li><i class="ti ti-checklist" aria-hidden="true"></i><span><b>Тест</b> — проверь, что запомнил</span></li>'
+    +'<li><i class="ti ti-users" aria-hidden="true"></i><span><b>Группа</b> — фото доски и файлы одногруппников</span></li>'
+    +'<li><i class="ti ti-plus" aria-hidden="true"></i><span><b>Добавить</b> — своё фото, файл, видео или вопросы с пары</span></li>'
+    +'<li><i class="ti ti-highlight" aria-hidden="true"></i><span><b>Заметки</b> — выдели слова в тексте пальцем: подчеркнуть, записать мысль</span></li></ul>'
+    +'<button type="button" class="btn bbl" onclick="rdCoachOk()">Понятно</button>';
+  document.body.appendChild(d);
+  var r=bar.getBoundingClientRect();d.style.bottom=(window.innerHeight-r.top+10)+'px';d.style.left=(r.left+r.width/2)+'px';
+  try{d.querySelector('button').focus({preventScroll:true});}catch(e){}
+  // подсказка не мешает: любое нажатие мимо неё или прокрутка — убирают её
+  setTimeout(function(){document.addEventListener('pointerdown',rdCoachAway,true);var m=document.querySelector('.main');if(m)m.addEventListener('scroll',rdCoachOk,{once:true,passive:true});},300);
+}
+function rdCoachAway(e){var d=document.getElementById('rdCoach');if(!d||!d.contains(e.target))rdCoachOk();}
+function rdCoachOk(){
+  document.removeEventListener('pointerdown',rdCoachAway,true);
+  var d=document.getElementById('rdCoach');if(d)d.remove();
+  if(!S.rdTip){S.rdTip=1;S.unTipDone=1;try{sv();}catch(e){}}
+}
+function rdTest(){
+  if(!S.user){if(typeof showLoginWall==='function')showLoginWall();return;}
+  if(!GQ.missing){gqOpen();return;}
+  var tf=ST.topic&&typeof vTestFor==='function'?vTestFor(ST.topic):null;
+  if(tf){vTrainTopic(tf.s,tf.t);return;}
+  toast2('Тестов по этой теме пока нет');
+}
+// «Добавить» — одно окно со всем, что можно добавить к теме
+function rdAdd(){
+  if(!S.user){if(typeof showLoginWall==='function')showLoginWall();return;}
+  rdCoachOk();
+  var t=ST.topic||{};
+  var row=function(ic,cls,b,small,fn,off){return '<button type="button" class="ad-row'+(off?' off':'')+'" onclick="'+fn+'"'+(off?' disabled':'')+'><span class="ad-ic '+cls+'" aria-hidden="true"><i class="ti '+ic+'"></i></span><span class="ad-t"><b>'+b+'</b><small>'+small+'</small></span><i class="ti ti-chevron-right" aria-hidden="true"></i></button>';};
+  var noBot=!vBotUrl('/u/post');
+  var h='<div class="ad-list">'
+    +row('ti-camera','ph','Фото доски или слайдов','Сфоткай или выбери из галереи','rdAddGo(\'photo\')',GP.missing||noBot)
+    +row('ti-file-text','fl','Файл','PDF, Word или PowerPoint','rdAddGo(\'file\')',GP.missing||noBot)
+    +row('ti-brand-youtube','yt','Видео с YouTube','ИИ посмотрит и сделает конспект','rdAddGo(\'yt\')',GP.missing||noBot)
+    +row('ti-message-question','qq','Вопросы с занятия','Что спрашивал преподаватель — ИИ сделает тест для группы','gqEdit()',GQ.missing)
+    +row('ti-highlight','nt','Заметку в тексте','Выдели слова в конспекте — запишешь свою мысль','rdAddNote()',false)
+    +'</div><p class="un-hint ad-note"><i class="ti ti-lock" aria-hidden="true"></i>Фото, файлы и видео можно оставить только себе или показать группе — выберешь на следующем шаге.</p>';
+  gpSheet(h,'','Добавить к теме',esc((t.number?'Тема '+t.number+' · ':'')+(t.title||'')));
+}
+function rdAddGo(kind){
+  gpAdd();
+  if(kind==='yt'){setTimeout(function(){var l=document.getElementById('gpLink');if(l)l.focus();},60);return;}
+  var i=document.getElementById('gpPickIn');
+  if(i){if(kind==='photo')i.setAttribute('accept','image/*');try{i.click();}catch(e){}}
+}
+function rdAddNote(){
+  closeModal();
+  toast2('Выдели пальцем пару слов в тексте — появится кнопка «Заметка»');
+  var p=document.querySelector('#studyBody .rd-sec:not([hidden]) .sblk, #studyBody .sblk');
+  if(p){p.classList.add('rd-flash');setTimeout(function(){p.classList.remove('rd-flash');},1600);}
+}
+
+// ===== КОНСТРУКТОР: БОЛЬШОЕ ОКНО ПОИСКА КАРТИНОК =====
+// Ищешь — видишь крупно — «Вставить в конспект». Источники: Wikimedia Commons (свободные, автор подписывается сам),
+// фото групп по этой теме, своя картинка (Ctrl+V, перетащить, файл). Рядом — кнопка Google Картинок для поиска глазами.
+var IX=null;
+function saImgx(mode){
+  if(!SA.topic)return;
+  var ed=mode==='block'&&SA.ed;
+  IX={mode:ed?'block':'insert',q:ed?(val('beQq')||val('beQ')):'',src:'commons',items:[],gp:null,sel:-1,page:0,busy:false,more:false,queries:[],
+      after:null,cap:ed?val('beCap'):'',size:ed?(val('beSize')||'l'):'l'};
+  var root=document.getElementById('imgxRoot');
+  if(!root){root=document.createElement('div');root.id='imgxRoot';document.body.appendChild(root);}
+  root.innerHTML='<div class="ix-bg" onclick="if(event.target===this)saImgxClose()"><div class="ix" role="dialog" aria-modal="true" aria-labelledby="ixT">'
+    +'<header class="ix-h"><span><b id="ixT">Картинки для конспекта</b><small>'+esc(SA.topic.title)+'</small></span><button type="button" class="sbe-x" onclick="saImgxClose()" aria-label="Закрыть"><i class="ti ti-x"></i></button></header>'
+    +'<div class="ix-search"><i class="ti ti-search" aria-hidden="true"></i><input id="ixQ" value="'+esc(IX.q)+'" placeholder="Что ищем? Например: клетка Пуркинье, cerebellum histology" aria-label="Что искать" onkeydown="if(event.key===\'Enter\'){event.preventDefault();saImgxSearch();}">'
+    +'<button type="button" class="btn bbl" onclick="saImgxSearch()">Найти</button></div>'
+    +'<div class="ix-tabs" role="tablist" id="ixTabs"></div>'
+    +'<div class="ix-main"><div class="ix-grid" id="ixGrid" aria-live="polite"></div><aside class="ix-side" id="ixSide"></aside></div></div></div>';
+  document.addEventListener('paste',saImgxPaste);document.addEventListener('keydown',saImgxKey);
+  saImgxTabs();saImgxSide();
+  if(IX.q)saImgxSearch();else saImgxGrid('<div class="ix-empty"><i class="ti ti-photo-search" aria-hidden="true"></i><b>Напиши, что нужно, — или нажми «Найти»</b><p>Без запроса подберу по названию темы. По-русски тоже можно — переведу для поиска.</p></div>');
+  setTimeout(function(){var i=document.getElementById('ixQ');if(i)i.focus();},50);
+}
+function saImgxClose(){
+  document.removeEventListener('paste',saImgxPaste);document.removeEventListener('keydown',saImgxKey);
+  var r=document.getElementById('imgxRoot');if(r)r.innerHTML='';IX=null;
+}
+function saImgxKey(e){if(e.key==='Escape'&&IX){e.stopPropagation();saImgxClose();}}
+function saImgxTabs(){
+  var t=document.getElementById('ixTabs');if(!t||!IX)return;
+  var tab=function(k,ic,n){return '<button type="button" role="tab" aria-selected="'+(IX.src===k)+'" onclick="saImgxSrc(\''+k+'\')"><i class="ti '+ic+'"></i>'+n+'</button>';};
+  t.innerHTML=tab('commons','ti-world','Wikimedia Commons')+tab('group','ti-users','Фото групп'+(IX.gp?' · '+IX.gp.length:''))+tab('own','ti-upload','Своя картинка')
+    +'<span class="ix-sp"></span><button type="button" class="ix-g" onclick="saImgxGoogle()"><i class="ti ti-brand-google"></i>Открыть в Google Картинках</button>';
+}
+function saImgxSrc(k){
+  if(!IX)return;IX.src=k;IX.sel=-1;saImgxTabs();saImgxSide();
+  if(k==='commons'){IX.items=IX.cm||[];if(IX.items.length)saImgxGrid();else saImgxSearch();}
+  else if(k==='group')saImgxGroup();
+  else saImgxGrid('<div class="ix-drop" id="ixDrop" ondragover="event.preventDefault();this.classList.add(\'over\')" ondragleave="this.classList.remove(\'over\')" ondrop="event.preventDefault();this.classList.remove(\'over\');saImgxFiles(event.dataTransfer.files)">'
+    +'<i class="ti ti-clipboard-copy" aria-hidden="true"></i><b>Вставь картинку: Ctrl+V</b><p>Нашёл в Google или в учебнике — скопируй картинку (правой кнопкой → «Копировать картинку») и нажми Ctrl+V прямо здесь. Можно перетащить файл или выбрать его.</p>'
+    +'<label class="btn bgh">Выбрать файл<input type="file" accept="image/*" hidden onchange="saImgxFiles(this.files);this.value=\'\'"></label>'
+    +'<p class="ix-warn"><i class="ti ti-alert-triangle" aria-hidden="true"></i>Картинки из Google часто чужие. Для учебного конспекта внутри вуза обычно не страшно, но лучше — Commons или свои фото препаратов.</p></div>');
+}
+function saImgxGoogle(){
+  var q=(document.getElementById('ixQ')||{}).value||'';
+  var url='https://www.google.com/search?tbm=isch&q='+encodeURIComponent(q.trim()||((SA.topic&&SA.topic.title||'')+' гистология препарат'));
+  try{if(TG&&TG.openLink){TG.openLink(url);}else window.open(url,'_blank','noopener');}catch(e){window.open(url,'_blank','noopener');}
+  if(IX&&IX.src!=='own')saImgxSrc('own');
+}
+function saImgxGrid(html){
+  var g=document.getElementById('ixGrid');if(!g||!IX)return;
+  if(html){g.innerHTML=html;return;}
+  if(!IX.items.length){g.innerHTML='<div class="ix-empty"><i class="ti ti-mood-empty" aria-hidden="true"></i><b>Ничего не нашлось</b><p>Попробуй по-другому: короче или по-английски — например «Purkinje cell histology».</p></div>';return;}
+  g.innerHTML=IX.items.map(function(x,i){
+    return '<button type="button" class="ix-it'+(i===IX.sel?' on':'')+'" onclick="saImgxPick('+i+')" aria-pressed="'+(i===IX.sel)+'"><span class="ix-im"><img src="'+esc(x.thumb||x.url)+'" alt="" loading="lazy"></span>'
+      +'<span class="ix-tt">'+esc(x.title||'Без названия')+'</span><small>'+esc(x.credit||'')+'</small></button>';}).join('')
+    +(IX.src==='commons'&&IX.more?'<button type="button" class="btn bgh ix-more" onclick="saImgxMore()"'+(IX.busy?' disabled':'')+'>Показать ещё</button>':'');
+}
+async function saImgxSearch(more){
+  if(!IX)return;
+  var q=((document.getElementById('ixQ')||{}).value||'').trim();
+  var url=vBotUrl('/admin/images');if(!url){saImgxGrid('<div class="ix-empty"><b>Поиск работает через бота — он не подключён</b></div>');return;}
+  if(IX.src!=='commons'){IX.src='commons';saImgxTabs();}
+  if(!more){IX.page=0;IX.items=[];IX.sel=-1;IX.q=q;saImgxSide();saImgxGrid('<div class="ix-empty"><span class="sbe-spin" aria-hidden="true"></span><b>Ищу…</b></div>');}
+  IX.busy=true;
+  try{
+    var body={token:vAdminToken(),q:IX.q,n:24,offset:more?IX.page*48:0,context:IX.q?'':('Тема: '+SA.topic.title+'\nЧто нужно: иллюстрация к теме')};
+    var r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}),j=await r.json();
+    if(!IX)return;
+    if(j.status!=='ok')throw new Error(j.status==='forbidden'?'Войди заново как администратор':'Поиск не ответил');
+    var seen={};IX.items.forEach(function(x){seen[x.url]=1;});
+    var add=(j.items||[]).filter(function(x){return !seen[x.url];});
+    IX.items=IX.items.concat(add);IX.cm=IX.items;IX.more=add.length>=12;IX.queries=j.queries||[];
+    if(!IX.q&&IX.queries.length){var i=document.getElementById('ixQ');if(i)i.placeholder='искал: '+IX.queries.join(', ');}
+  }catch(e){if(IX&&!more)IX.items=[];toast2(e.message||'Нет связи с ботом');}
+  if(!IX)return;IX.busy=false;saImgxGrid();
+}
+function saImgxMore(){if(!IX||IX.busy)return;IX.page++;saImgxSearch(true);}
+async function saImgxGroup(){
+  if(!IX)return;
+  if(!IX.gp){
+    saImgxGrid('<div class="ix-empty"><span class="sbe-spin" aria-hidden="true"></span><b>Собираю фото групп…</b></div>');
+    var rows=[];try{rows=await vRpc('gp_list',{p_token:vAdminToken(),p_topic:SA.topic.id})||[];}catch(e){rows=[];}
+    if(!IX)return;IX.gp=[];
+    rows.forEach(function(p){(p.items||[]).forEach(function(x){if(x.t==='img')IX.gp.push({url:gpUrl(x.path),thumb:gpUrl(x.path),title:p.caption||'Фото с занятия',credit:'Фото группы '+(p.group||'')+' · '+(p.author||''),src:''});});});
+    saImgxTabs();
+  }
+  if(IX.src!=='group')return;
+  IX.items=IX.gp;saImgxGrid(IX.gp.length?'':'<div class="ix-empty"><i class="ti ti-camera" aria-hidden="true"></i><b>Студенты ещё не выкладывали фото к этой теме</b><p>Когда выложат фото доски или слайдов, они появятся здесь — удачное можно сразу поставить в конспект.</p></div>');
+}
+function saImgxPick(i){if(!IX||!IX.items[i])return;IX.sel=i;saImgxGrid();saImgxSide();
+  var s=document.getElementById('ixSide');if(s&&window.innerWidth<760)s.scrollIntoView({behavior:'smooth',block:'start'});}
+function saImgxPosOpts(){
+  var bs=SA.blocks||[],cur=IX.after,o='<option value="end"'+(cur==null?' selected':'')+'>В конец темы</option><option value="0"'+(cur===0?' selected':'')+'>В самое начало</option>';
+  bs.forEach(function(b,i){var t=SB_TYPES[b.type]||{n:b.type};var lbl=String(b.title||b.body||b.caption||'').replace(/[*=_#]/g,'').replace(/\s+/g,' ').trim().slice(0,46);
+    o+='<option value="'+b.id+'"'+(cur===b.id?' selected':'')+'>После '+(i+1)+'. '+esc(t.n)+(lbl?' — «'+esc(lbl)+'»':'')+'</option>';});
+  return o;
+}
+function saImgxSide(){
+  var el=document.getElementById('ixSide');if(!el||!IX)return;
+  var x=IX.items[IX.sel];
+  if(!x){el.innerHTML='<div class="ix-hint"><i class="ti ti-hand-click" aria-hidden="true"></i><b>Нажми на картинку — увидишь её крупно</b><p>Потом подпиши, выбери размер и место — и «Вставить в конспект».</p>'
+    +'<p>Нашёл в Google? Скопируй картинку и нажми <kbd>Ctrl</kbd>+<kbd>V</kbd> здесь — она загрузится.</p></div>';return;}
+  var szs=[['s','Небольшая'],['m','Средняя'],['l','Во всю ширину']];
+  el.innerHTML='<div class="ix-pv"><img src="'+esc(x.url)+'" alt=""></div>'
+    +'<b class="ix-pt">'+esc(x.title||'')+'</b>'+(x.credit?'<small class="ix-pc">'+esc(x.credit)+(x.src?' · <a href="'+esc(x.src)+'" target="_blank" rel="noopener">страница картинки</a>':'')+'</small>':'')
+    +'<label class="ix-l" for="ixCap">Подпись — на что смотреть</label><input id="ixCap" class="gq-in" maxlength="300" value="'+esc(IX.cap||'')+'" placeholder="Рис. Кора мозжечка: три слоя, клетки Пуркинье" oninput="IX.cap=this.value">'
+    +'<span class="ix-l">Размер</span><div class="sbe-seg" role="radiogroup">'+szs.map(function(o){return '<button type="button" role="radio" aria-checked="'+(IX.size===o[0])+'" class="'+(IX.size===o[0]?'on':'')+'" onclick="IX.size=\''+o[0]+'\';saImgxSide()">'+o[1]+'</button>';}).join('')+'</div>'
+    +(IX.mode==='insert'?'<label class="ix-l" for="ixPos">Куда вставить</label><select id="ixPos" class="gq-in" onchange="IX.after=this.value===\'end\'?null:+this.value">'+saImgxPosOpts()+'</select>':'')
+    +'<button type="button" class="btn bbl ix-go" id="ixGo" onclick="saImgxUse()"><i class="ti ti-check"></i>'+(IX.mode==='insert'?'Вставить в конспект':'Поставить в блок')+'</button>';
+}
+async function saImgxUse(){
+  if(!IX)return;var x=IX.items[IX.sel];if(!x)return;
+  if(IX.mode==='block'&&SA.ed){
+    var set=function(id,v){var e=document.getElementById(id);if(e)e.value=v||'';};
+    set('beImg',x.url);set('beImgUrl','');set('beCredit',x.credit||'');set('beSrc',x.src||'');set('beQ',IX.q||'');
+    if(IX.cap)set('beCap',IX.cap);
+    if(typeof saImgSize==='function')saImgSize(IX.size);
+    SA.ed.cands=[x].concat((SA.ed.cands||[]).filter(function(c){return c.url!==x.url;})).slice(0,12);
+    var cd=document.getElementById('beCands');if(cd)cd.innerHTML=saCandsHtml(SA.ed.cands,x.url);
+    saImgxClose();try{saEdLive();}catch(e){}toast2('Картинка в блоке — не забудь «Сохранить»');return;
+  }
+  var b=document.getElementById('ixGo');if(b)b.disabled=true;
+  try{
+    var rec={type:'image',title:'',body:'',image_url:x.url,caption:(IX.cap||'').trim(),data:{size:IX.size}};
+    if(x.credit)rec.data.credit=x.credit;if(x.src)rec.data.src=x.src;if(IX.q)rec.data.q=IX.q;
+    var id=await saInsertRec(rec,IX.after);
+    SA.flash=id||null;var keep=IX;saImgxClose();
+    await saReload(true);
+    var e2=id&&document.getElementById('sabB'+id);if(e2)e2.scrollIntoView({block:'center'});
+    toast2('Картинка вставлена в конспект');
+  }catch(e){if(b)b.disabled=false;toast2('Не получилось: '+(e.message||'ошибка'));}
+}
+function saImgxPaste(ev){
+  if(!IX)return;
+  var dt=ev.clipboardData;if(!dt)return;
+  var fs=dt.files;
+  if(fs&&fs.length&&/^image\//.test(fs[0].type)){ev.preventDefault();saImgxFiles(fs);return;}
+  var t=(dt.getData('text')||'').trim();
+  if(/^https?:\/\/\S+\.(jpe?g|png|webp|gif|svg)(\?\S*)?$/i.test(t)&&document.activeElement&&document.activeElement.id!=='ixQ'){
+    ev.preventDefault();saImgxAddOwn({url:t,thumb:t,title:'Картинка по ссылке',credit:'',src:t});
+  }
+}
+function saImgxAddOwn(x){
+  if(!IX)return;IX.own=[x].concat(IX.own||[]);IX.src='own';saImgxTabs();IX.items=IX.own;IX.sel=0;saImgxGrid();saImgxSide();
+}
+async function saImgxFiles(files){
+  var f=files&&files[0];if(!f||!IX)return;
+  if(!/^image\//.test(f.type)){toast2('Это не картинка — нужен JPG, PNG или WebP');return;}
+  toast2('Загружаю картинку…');
+  try{
+    var r=await vImgCompress(f,1600,0.85);
+    var url=vBotUrl('/admin/upload'),u=r.dataUrl;
+    if(url){try{var resp=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:vAdminToken(),data:r.b64,media_type:'image/jpeg'})});
+      var j=await resp.json();if(j.status==='ok'&&j.url)u=j.url;}catch(e){}}
+    if(u===r.dataUrl&&r.dataUrl.length>330000){try{u=(await vImgCompress(f,1100,0.72)).dataUrl;}catch(e){}}
+    saImgxAddOwn({url:u,thumb:u,title:f.name&&f.name!=='image.png'?f.name:'Своя картинка',credit:'',src:''});
+    toast2(u.indexOf('data:')===0?'Хранилище недоступно — картинка сохранится внутри урока':'Загружено — подпиши и вставь');
+  }catch(e){toast2(e.message||'Не получилось загрузить');}
 }
 function renderLevels(){
   var st=getMyStats(),lv=vitaLevel(st),r=lv.r;
