@@ -8823,15 +8823,16 @@ function vDupIndex(){
   var list=getQS().map(function(x){return {st:vStems(x.q),q:x.q,ans:(x.o||[])[x.a],o:x.o||[],s:x.s,t:x.t,id:x.id};}).filter(function(x){return x.st.length;});
   V_DUPIDX={n:getQS().length,list:list};return V_DUPIDX;
 }
-// new — нет в базе; dup — уже есть (тот же вопрос и ответ); conflict — такой же вопрос, но ответ другой
-function vDupCheck(q,ans,extra){
+// new — нет в базе; dup — уже есть (тот же вопрос и ответ); conflict — такой же вопрос и варианты, но ответ другой.
+// Тот же текст, другие варианты и другой ответ — это другой вопрос (в Moodle так бывает: «В верхний носовой ход открывается?» — дважды)
+function vDupCheck(q,ans,extra,opts){
   var st=vStems(q);if(!st.length)return {st:'new'};
   var pool=vDupIndex().list.concat(extra||[]),best=null;
   for(var i=0;i<pool.length;i++){
     var x=pool[i];
     if(vSameQ(st,x.st)){
       if(ans==null||x.ans==null||vSameAns(ans,x.ans))return {st:'dup',m:x};
-      if(!best)best=x;
+      if(!best&&!vOptsDiffer(opts,x.o))best=x;
     }
   }
   return best?{st:'conflict',m:best}:{st:'new'};
@@ -8848,8 +8849,9 @@ function vBulkClassify(qa){
   // selfs — вопросы, похожие на другой вопрос из этого же текста: по умолчанию берём первый, но админ может добавить оба
   var seen=[],res={add:[],dup:[],conf:[],self:0,selfs:[]};
   qa.forEach(function(x){
-    var a=vBulkAns(x),r=vDupCheck(x.q,a);
-    if(r.st==='new'){var st=vStems(x.q),twin=seen.filter(function(y){return vSameQ(st,y.st);})[0];
+    var a=vBulkAns(x),r=vDupCheck(x.q,a,null,x.opts);
+    // похож на соседний — только если и варианты те же: одинаковый текст с другими вариантами — разные вопросы
+    if(r.st==='new'){var st=vStems(x.q),twin=seen.filter(function(y){return vSameQ(st,y.st)&&!vOptsDiffer(x.opts,y.o);})[0];
       if(twin){
         res.selfs.push({x:x,m:{q:twin.q,ans:twin.ans,o:twin.o||[],self:true}});
         if(BK_FORCE&&BK_FORCE[vBulkKey(x)]==='add'){res.add.push(x);return;}
@@ -8965,15 +8967,17 @@ async function admBulkRun(idxs){
   if(stop)idxs.forEach(function(i){if(!pages[i].state){pages[i].state='fail';pages[i].err=pages[i].err||{status:'network'};}});
   // разбираем найденное на этих страницах
   var useSel=!!(document.getElementById('bkSel')||{}).checked;
-  var seen={},ok=[],inDb=0,nk=function(s){return String(s||'').toLowerCase().replace(/[^a-zа-яё0-9]/gi,'');};
+  // повтор — тот же вопрос с теми же вариантами; одинаковый текст с другими вариантами — разные вопросы
+  var seen={},ok=[],inDb=0,nk=function(s){return String(s||'').toLowerCase().replace(/ё/g,'е').replace(/[^a-zа-я0-9]/gi,'');};
+  var qk=function(q,o,a){var os=(o||[]).map(nk).filter(Boolean).sort();return nk(q)+'|'+(os.length?os.join('|'):'='+nk(a));};
   var ta=document.getElementById('bulkTxt');
-  parseBulkQA(ta?ta.value:'').forEach(function(x){seen[nk(x.q)]=1;});
+  parseBulkQA(ta?ta.value:'').forEach(function(x){seen[qk(x.q,x.opts,x.a)]=1;});
   idxs.forEach(function(pi){var pg=pages[pi];pg.added=0;pg.dup=0;pg.noAns=[];
     (pg.items||[]).forEach(function(it){
       if(it.correct===null&&useSel&&it.selected!==null&&it.selected!==undefined)it.correct=it.selected;
-      var key=nk(it.q);if(!key||seen[key]){pg.dup++;return;}seen[key]=1;
+      var key=qk(it.q,it.options,it.answer);if(!nk(it.q)||seen[key]){pg.dup++;return;}seen[key]=1;
       var ca=it.correct!==null&&it.correct!==undefined?it.options[it.correct]:(it.answer||null);
-      var dc=vDupCheck(it.q,ca);
+      var dc=vDupCheck(it.q,ca,null,it.options);
       if(dc.st!=='new')inDb++;   // уже есть в базе — в поле всё равно попадёт, что с ним делать, решает админ
       if(it.options.length>=2&&(it.correct===null||it.correct===undefined)){pg.noAns.push(it);return;}
       ok.push(it);pg.added++;
