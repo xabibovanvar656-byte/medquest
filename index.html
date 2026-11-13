@@ -2536,6 +2536,28 @@ body.sab-dragging .sab-ins i{opacity:.8}
   .gq-ok-tag{display:none}
 }
 @media(prefers-reduced-motion:reduce){.gq-opt{transition:none}}
+
+/* видео с YouTube в материалах группы */
+.gp-vids{display:flex;flex-direction:column;gap:8px}
+.gp-vid{display:flex;align-items:center;gap:12px;width:100%;padding:8px;border:none;border-radius:14px;background:var(--bg2);color:var(--tx);text-align:left;cursor:pointer}
+.gp-vid:hover{background:var(--bg)}
+.gp-vid-th{position:relative;flex:none;width:120px;aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:#000}
+.gp-vid-th img{width:100%;height:100%;object-fit:cover;display:block}
+.gp-vid-th i{position:absolute;inset:0;margin:auto;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center}
+.gp-vid-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.gp-vid-t b{font:700 14px/1.35 var(--f);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.gp-vid-t small{font:600 12px var(--f);color:var(--tx3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gp-link{display:flex;align-items:center;gap:10px;padding:0 12px;border-radius:12px;border:1px solid var(--bor2);background:var(--bg3)}
+.gp-link i{flex:none;font-size:20px;color:var(--eos-t)}
+.gp-link input{flex:1;min-width:0;min-height:44px;border:none;background:none;color:var(--tx);font:500 15px var(--f);outline:none}
+.gp-link:focus-within{border-color:var(--meth);outline:2px solid var(--meth-s)}
+@media(max-width:420px){.gp-vid-th{width:96px}}
+
+/* тема-черновик (собрана ботом) */
+.sa-draft{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:7px;background:var(--iod-s);color:var(--iod-t);font:700 11px/1.6 var(--f);font-style:normal;vertical-align:2px}
+.sab-draft{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 12px;padding:12px 14px;border-radius:14px;background:var(--iod-s);color:var(--tx);font:500 13.5px/1.45 var(--f)}
+.sab-draft>i{flex:none;color:var(--iod-t);font-size:19px}
+.sab-draft>span{flex:1;min-width:220px}
 </style>
 </head>
 <body>
@@ -9516,9 +9538,11 @@ function renderStudySubjects(el){
     ST.subjects.forEach(function(s){loadSubjectMeta(s);});
   }).catch(function(){el.innerHTML='<div class="study-empty"><div class="se-ic"><i class="ti ti-alert-triangle"></i></div><div class="se-t">Ошибка загрузки предметов</div></div>';});
 }
+// темы-черновики (собраны ботом для админа) студентам не показываем
+function stVisible(rows){return (rows||[]).filter(function(t){return !t.draft||S.isAdm;});}
 function loadSubjectMeta(s){
-  sbGet('topics','subject_id=eq.'+s.id+'&select=id').then(function(topics){
-    topics=topics||[];
+  sbGet('topics','subject_id=eq.'+s.id+'&select=*').then(function(topics){
+    topics=stVisible(topics);
     var total=topics.length;
     var done=0;
     topics.forEach(function(t){if(ST.progress[t.id]&&ST.progress[t.id].completed)done++;});
@@ -9545,7 +9569,7 @@ function renderStudyTopics(el){
     sbGet('topics','subject_id=eq.'+ST.subject.id+'&select=*&order=sort_order.asc,number.asc'),
     loadStudyProgress()
   ]).then(function(r){
-    ST.topics=r[0]||[];
+    ST.topics=stVisible(r[0]);
     var total=ST.topics.length,done=0;
     ST.topics.forEach(function(t){if(ST.progress[t.id]&&ST.progress[t.id].completed)done++;});
     var pct=total?Math.round(done/total*100):0;
@@ -9873,7 +9897,7 @@ function studyOpenSearchTopic(topicId,subjectId){
             if(us&&us.length)ST.uni=us[0];
             // загрузить темы предмета для навигации
             sbGet('topics','subject_id=eq.'+subjectId+'&select=*&order=sort_order.asc').then(function(tp){
-              ST.topics=tp||[];
+              ST.topics=stVisible(tp);
               studyOpenTopic(topicId);
             });
           });
@@ -10068,7 +10092,7 @@ function admStudyTopics(el){
     h+='<div class="sa-add-row"><button class="sa-add" onclick="saEditTopic(0)">+ Добавить тему</button><button class="sa-add ai" onclick="saAiOpen()"><i class="ti ti-sparkles"></i>Темы из материала (ИИ)</button></div>';
     if(!SA.topics.length)h+='<div class="sa-empty">Пока нет тем</div>';
     SA.topics.forEach(function(t){
-      h+='<div class="sa-item" data-tid="'+t.id+'"><div class="sa-i-ic">'+(t.number||'•')+'</div><div class="sa-i-t" onclick="saOpenBuilder('+t.id+')"><b>'+esc(t.title)+'</b><span>'+esc(t.kicker||'Собрать материал →')+'</span></div><div class="sa-i-act"><button onclick="saEditTopic('+t.id+')"><i class="ti ti-pencil"></i></button><button onclick="saDelTopic('+t.id+')"><i class="ti ti-trash"></i></button></div></div>';
+      h+='<div class="sa-item" data-tid="'+t.id+'"><div class="sa-i-ic">'+(t.number||'•')+'</div><div class="sa-i-t" onclick="saOpenBuilder('+t.id+')"><b>'+esc(t.title)+(t.draft?' <em class="sa-draft">черновик</em>':'')+'</b><span>'+esc(t.draft?'Студенты не видят — открой, проверь и опубликуй':(t.kicker||'Собрать материал →'))+'</span></div><div class="sa-i-act"><button onclick="saEditTopic('+t.id+')"><i class="ti ti-pencil"></i></button><button onclick="saDelTopic('+t.id+')"><i class="ti ti-trash"></i></button></div></div>';
     });
     el.innerHTML=h;
     try{saHotTopics();}catch(e){}
@@ -10952,6 +10976,8 @@ function saBuilderDraw(){
   var el=document.getElementById('admStudyAdmin');if(!el||SA.level!=='builder')return;
   var list=studyBlockList(SA.blocks,true),mins=studyReadMinutes(SA.blocks);
   var h=saCrumb();
+  if(SA.topic.draft)h+='<div class="sab-draft"><i class="ti ti-eye-off" aria-hidden="true"></i><span><b>Черновик</b> — тему собрал ИИ через бота, студенты её не видят. Проверь жёлтые отметки и опубликуй.</span>'
+    +'<button class="btn bbl bsm" onclick="saPublishTopic(this)"><i class="ti ti-send"></i>Опубликовать</button></div>';
   h+='<div class="sab-head"><div class="sab-head-t"><small>Редактор темы — слева она выглядит так же, как у студента</small><h2>'+esc(SA.topic.title)+'</h2>'
     +'<span>'+SA.blocks.length+' '+vplural(SA.blocks.length,'блок','блока','блоков')+', около '+mins+' мин чтения</span></div>'
     +'<div class="sab-head-a"><button class="btn bvio" onclick="saAiOpen()"><i class="ti ti-sparkles"></i>Конспект из материала</button>'
@@ -12319,6 +12345,10 @@ function gpPostHtml(p,o){
     return '<button type="button" class="gp-file" onclick="gpOpenFile(\''+esc(String(x.path).replace(/'/g,''))+'\',\''+esc(String(x.name||'').replace(/['\\]/g,''))+'\')">'
       +'<i class="ti '+(/pdf/i.test(ext)?'ti-file-type-pdf':/ppt/i.test(ext)?'ti-presentation':/doc/i.test(ext)?'ti-file-type-doc':'ti-file')+'" aria-hidden="true"></i>'
       +'<span>'+esc(x.name||'Файл')+'</span><small>'+gpSize(x.size)+'</small></button>';}).join('')+'</div>';
+  var vids=items.filter(function(x){return x.t==='video'&&/^[A-Za-z0-9_-]{11}$/.test(x.vid||'');});
+  if(vids.length)h+='<div class="gp-vids">'+vids.map(function(x){
+    return '<button type="button" class="gp-vid" onclick="gpOpenVideo(\''+x.vid+'\')"><span class="gp-vid-th"><img src="https://i.ytimg.com/vi/'+x.vid+'/mqdefault.jpg" alt="" loading="lazy"><i class="ti ti-player-play-filled" aria-hidden="true"></i></span>'
+      +'<span class="gp-vid-t"><b>'+esc(x.title||'Видео на YouTube')+'</b><small>'+(x.channel?esc(x.channel)+' · ':'')+'YouTube</small></span></button>';}).join('')+'</div>';
   h+=gpCsRow(p,o);
   // действия
   if(o.admin){
@@ -12381,6 +12411,12 @@ async function gpDel(id,btn){
     setTimeout(function(){if(btn.isConnected&&btn.classList.contains('sure')){btn.classList.remove('sure');if(sp)sp.textContent='Удалить';btn.setAttribute('aria-label','Удалить материал');}},4000);return;}
   var r=await gpCall('gp_delete',{p_post:id});if(r){gpDrop(id);toast2('Удалено');}
 }
+function gpOpenVideo(vid){
+  if(!/^[A-Za-z0-9_-]{11}$/.test(vid||''))return;var url='https://www.youtube.com/watch?v='+vid;
+  try{if(TG&&TG.openLink){TG.openLink(url);return;}}catch(e){}
+  window.open(url,'_blank','noopener');
+}
+function gpHasVid(p){return (p.items||[]).some(function(x){return x.t==='video';});}
 function gpOpenFile(path,name){
   var url=gpUrl(path);if(!/\.pdf$/i.test(path))url+='?download='+encodeURIComponent(name||'файл');
   try{if(TG&&TG.openLink){TG.openLink(url);return;}}catch(e){}
@@ -12428,7 +12464,7 @@ function gpZClose(){
 function gpAdd(){
   if(!S.user||!S.token){if(typeof showLoginWall==='function')showLoginWall();return;}
   if(!vBotUrl('/u/post')){vAlert('Загрузка работает через бота — он пока не подключён.');return;}
-  GP.add={files:[],caption:'',scope:gpMyGroup()?'group':'course',busy:false};
+  GP.add={files:[],caption:'',link:'',scope:gpMyGroup()?'group':'course',busy:false};
   gpAddDraw();
 }
 function gpAddDraw(msg){
@@ -12440,17 +12476,21 @@ function gpAddDraw(msg){
   if(n)h+='<div class="gp-pvs">'+A.files.map(function(f,i){
     return f.kind==='img'?'<div class="gp-pv"><img src="'+f.preview+'" alt=""><button type="button" onclick="gpAddRm('+i+')" aria-label="Убрать фото"><i class="ti ti-x"></i></button></div>'
       :'<div class="gp-pv file"><i class="ti ti-file" aria-hidden="true"></i><span>'+esc(f.name)+'</span><small>'+gpSize(f.size)+'</small><button type="button" onclick="gpAddRm('+i+')" aria-label="Убрать файл"><i class="ti ti-x"></i></button></div>';}).join('')+'</div>';
+  h+='<label class="gp-link"><i class="ti ti-brand-youtube" aria-hidden="true"></i><input id="gpLink" type="url" inputmode="url" maxlength="300" placeholder="Или ссылка на видео YouTube" oninput="gpAddLink(this.value)" aria-label="Ссылка на видео YouTube"></label>';
   h+='<textarea id="gpCap" rows="2" maxlength="1000" placeholder="Подпись: что это — например «Лекция 12.11, слайды 5–20»" oninput="GP.add.caption=this.value"></textarea>';
   h+='<div class="un-seg gp-scope" role="radiogroup" aria-label="Кому видно">'
     +(grp?'<button type="button" role="radio" aria-checked="'+(A.scope==='group')+'" onclick="gpAddScope(\'group\')"><i class="ti ti-users"></i>Группе '+esc(grp)+'</button>':'')
     +'<button type="button" role="radio" aria-checked="'+(A.scope==='course')+'" onclick="gpAddScope(\'course\')"><i class="ti ti-world"></i>Всем, кто учит тему</button></div>';
-  h+='<small class="un-hint">До 10 фото или файлов за раз (PDF, Word, PowerPoint — до 20 МБ). Фото сжимаются так, чтобы текст на доске читался.</small>';
+  h+='<small class="un-hint">До 10 фото или файлов за раз (PDF, Word, PowerPoint — до 20 МБ). Фото сжимаются так, чтобы текст на доске читался. По ссылке на YouTube ИИ посмотрит видео и соберёт конспект — видео должно быть открытым.</small>';
   if(msg)h+='<div class="sbe-note bad" role="alert"><i class="ti ti-alert-triangle"></i>'+esc(msg)+'</div>';
   gpSheet(h,'<span class="gp-foot-n" id="gpAddSt" aria-live="polite"></span><button type="button" class="btn bgh" onclick="gpOpen()">Отмена</button>'
-    +'<button type="button" class="btn bbl" id="gpPub" onclick="gpPublish()"'+(n?'':' disabled')+'><i class="ti ti-upload"></i>Выложить'+(n?' ('+n+')':'')+'</button>',
+    +'<button type="button" class="btn bbl" id="gpPub" onclick="gpPublish()"'+(n||gpYt(A.link)?'':' disabled')+'><i class="ti ti-upload"></i>Выложить'+(n?' ('+n+')':'')+'</button>',
     'Новый материал',esc(((ST.topic&&ST.topic.number)?'Тема '+ST.topic.number+' · ':'')+((ST.topic&&ST.topic.title)||'')),'gpOpen()');
   var ta=document.getElementById('gpCap');if(ta)ta.value=A.caption||'';
+  var li=document.getElementById('gpLink');if(li)li.value=A.link||'';
 }
+function gpYt(u){var m=String(u||'').match(/(?:youtube\.com\/(?:watch\?(?:[^\s#]*?&)?v=|shorts\/|live\/|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);return m?m[1]:'';}
+function gpAddLink(v){var A=GP.add;if(!A)return;A.link=v;var b=document.getElementById('gpPub');if(b)b.disabled=!(A.files.length||gpYt(v));}
 function gpAddScope(s){if(GP.add){GP.add.scope=s;gpAddDraw();}}
 function gpAddRm(i){var A=GP.add;if(!A)return;var f=A.files.splice(i,1)[0];if(f&&f.preview)try{URL.revokeObjectURL(f.preview);}catch(e){}gpAddDraw();}
 function gpAddFiles(list){
@@ -12469,7 +12509,9 @@ function gpReadB64(file){
     r.onerror=function(){fail(new Error('Файл не читается'));};r.readAsDataURL(file);});
 }
 async function gpPublish(){
-  var A=GP.add;if(!A||A.busy||!A.files.length)return;
+  var A=GP.add;if(!A||A.busy)return;
+  if(A.link&&A.link.trim()&&!gpYt(A.link)){gpAddDraw('Это не похоже на ссылку на видео YouTube');return;}
+  if(!A.files.length&&!gpYt(A.link))return;
   A.busy=true;var st=document.getElementById('gpAddSt'),btn=document.getElementById('gpPub');if(btn)btn.disabled=true;
   var say=function(t){if(st)st.textContent=t;};
   try{
@@ -12482,12 +12524,14 @@ async function gpPublish(){
     }
     say('Отправляю…');
     var resp=await fetch(vBotUrl('/u/post'),{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({token:S.token,topic_id:GP.topic,caption:(A.caption||'').trim(),scope:A.scope,files:out})});
+      body:JSON.stringify({token:S.token,topic_id:GP.topic,caption:(A.caption||'').trim(),scope:A.scope,files:out,links:gpYt(A.link)?[A.link.trim()]:[]})});
     var j=null;try{j=await resp.json();}catch(e){}
     if(!resp.ok||!j||j.status!=='ok')throw new Error((j&&j.reason)||'Не получилось — попробуй ещё раз');
     A.files.forEach(function(f){if(f.preview)try{URL.revokeObjectURL(f.preview);}catch(e){}});
     GP.add=null;GP.list.unshift(j.post);gpRemember([j.post]);gpChip();gpEndCard();gpOpen();
-    toast2(j.skipped?'Выложено. Не подошло файлов: '+j.skipped:'Выложено — одногруппники увидят в этой теме');
+    if(j.post&&j.post.cs&&j.post.cs.status==='run'){gpPoll();toast2('Выложено. ИИ смотрит видео и соберёт конспект — бот пришлёт, когда будет готов');}
+    else if(j.cs_reason)toast2('Выложено. Конспект по видео сейчас не собрать: '+j.cs_reason);
+    else toast2(j.skipped?'Выложено. Не подошло файлов: '+j.skipped:'Выложено — одногруппники увидят в этой теме');
   }catch(e){A.busy=false;gpAddDraw(e.message||'Не получилось');}
 }
 // --- «Материалы группы» в учёбе: лента группы, сохранённое, мои ---
@@ -12570,17 +12614,21 @@ async function gpToConspect(pid,i,btn){
 // ===== ИИ-КОНСПЕКТ ИЗ МАТЕРИАЛА ГРУППЫ и ЗАПИСЬ ЛЕКЦИИ =====
 function gpDur(sec){sec=+sec||0;var m=Math.round(sec/60);return m>=60?Math.floor(m/60)+' ч '+(m%60)+' мин':Math.max(1,m)+' мин';}
 function gpCanCs(p){
-  return (p.items||[]).some(function(x){return x.t==='img'||(x.t==='file'&&/\.pdf$/i.test(x.path||''));})||(+p.transcript_len||0)>=50;
+  return (p.items||[]).some(function(x){return x.t==='img'||x.t==='video'||(x.t==='file'&&/\.pdf$/i.test(x.path||''));})||(+p.transcript_len||0)>=50;
 }
 function gpWhatShort(p){
   var it=p.items||[],ph=it.filter(function(x){return x.t==='img';}).length,pdf=it.filter(function(x){return x.t==='file'&&/\.pdf$/i.test(x.path||'');}).length;
-  var w=[];if(ph)w.push(ph+' фото');if(pdf)w.push(pdf+' PDF');if((+p.transcript_len||0)>=50)w.push('запись лекции');
+  var vd=it.filter(function(x){return x.t==='video';}).length;
+  var w=[];if(ph)w.push(ph+' фото');if(pdf)w.push(pdf+' PDF');if(vd)w.push(vd>1?vd+' видео':'видео');else if((+p.transcript_len||0)>=50)w.push('запись лекции');
   return w.join(', ')||'материал';
 }
 function gpCsRow(p,o){
   o=o||{};var cs=p.cs||{},h='';
   var aud=(p.items||[]).filter(function(x){return x.t==='audio';});
-  if(aud.length||(+p.transcript_len||0)>0){
+  if(gpHasVid(p)&&(+p.transcript_len||0)>0)
+    h+='<div class="gp-audio"><i class="ti ti-brand-youtube" aria-hidden="true"></i><span><b>Что в видео</b><small>ИИ посмотрел и пересказал</small></span>'
+      +'<button type="button" class="gp-b" onclick="gpTranscript('+p.id+')">Текст</button></div>';
+  else if(aud.length||(+p.transcript_len||0)>0){
     var dur=aud.reduce(function(s,x){return s+(+x.dur||0);},0);
     h+='<div class="gp-audio"><i class="ti ti-microphone" aria-hidden="true"></i><span><b>Запись лекции</b><small>'+(dur?gpDur(dur)+' · ':'')+'есть расшифровка</small></span>'
       +'<button type="button" class="gp-b" onclick="gpTranscript('+p.id+')">Расшифровка</button></div>';
@@ -12590,7 +12638,7 @@ function gpCsRow(p,o){
     h+='<button type="button" class="gp-cs ok" onclick="gpCsOpen('+p.id+',\''+(o.admin?'admin':o.topic?'feed':'topic')+'\')"><i class="ti ti-notebook" aria-hidden="true"></i>'
       +'<span><b>Конспект по этому материалу</b><small>'+(cs.n||0)+' '+vplural(cs.n||0,'блок','блока','блоков')+' · собрал ИИ</small></span><i class="ti ti-chevron-right" aria-hidden="true"></i></button>';
   else if(cs.status==='run')
-    h+='<div class="gp-cs run" role="status"><span class="sbe-spin sm" aria-hidden="true"></span><span><b>ИИ собирает конспект…</b><small>Обычно 1–3 минуты. Можно закрыть — бот пришлёт, когда будет готов.</small></span></div>';
+    h+='<div class="gp-cs run" role="status"><span class="sbe-spin sm" aria-hidden="true"></span><span><b>'+(gpHasVid(p)&&!(+p.transcript_len)?'ИИ смотрит видео и собирает конспект…':'ИИ собирает конспект…')+'</b><small>Обычно '+(gpHasVid(p)?'2–5 минут':'1–3 минуты')+'. Можно закрыть — бот пришлёт, когда будет готов.</small></span></div>';
   else if(!o.admin)
     h+='<button type="button" class="gp-cs" onclick="gpCsStart('+p.id+',this)"><i class="ti ti-sparkles" aria-hidden="true"></i>'
       +'<span><b>'+(cs.status==='error'?'Собрать конспект ещё раз':'Собрать конспект (ИИ)')+'</b><small>'
@@ -12644,11 +12692,12 @@ async function gpCsOpen(id,from){
 }
 async function gpTranscript(id){
   var r=await gpCall('gp_full',{p_post:id});if(!r)return;
-  var t=String(r.transcript||'');
-  var h='<div class="gp-cs-ban"><i class="ti ti-microphone" aria-hidden="true"></i><span>Расшифровка сделана автоматически — в ней бывают ошибки в терминах. Сама запись не хранится.</span></div>'
+  var t=String(r.transcript||''),vid=gpHasVid(gpFind(id)||r);
+  var h=(vid?'<div class="gp-cs-ban"><i class="ti ti-brand-youtube" aria-hidden="true"></i><span>Это пересказ ИИ, который посмотрел видео: что говорят и что на экране. Бывают неточности — сверяйся с видео.</span></div>'
+      :'<div class="gp-cs-ban"><i class="ti ti-microphone" aria-hidden="true"></i><span>Расшифровка сделана автоматически — в ней бывают ошибки в терминах. Сама запись не хранится.</span></div>')
     +'<div class="gp-tr">'+esc(t)+'</div>';
   gpSheet(h,'<span class="gp-foot-n">'+t.length.toLocaleString('ru-RU')+' знаков</span>'+(GP.topic===r.topic_id?'<button type="button" class="btn bgh" onclick="gpOpen()"><i class="ti ti-photo"></i>К материалам</button>':''),
-    'Расшифровка записи',esc(r.author||''),GP.topic===r.topic_id?'gpOpen()':'closeModal()');
+    vid?'Что в видео':'Расшифровка записи',esc(r.author||''),GP.topic===r.topic_id?'gpOpen()':'closeModal()');
   var m=document.querySelector('.gp-sheet');if(m)m.classList.add('reading');
 }
 // админ: конспект студентов — в конец темы, потом поправить
@@ -13192,6 +13241,14 @@ async function saGqRebuild(id,btn){
   if(btn)btn.disabled=true;
   if(id){try{await vRpc('gq_delete',{p_token:vAdminToken(),p_quiz:id});gqDrop(id);}catch(e){if(btn)btn.disabled=false;vAlert(e.message||'Не получилось');return;}}
   await gqAiStart('topic',SA.topic.id,null);
+}
+
+// тема-черновик из бота → опубликовать
+async function saPublishTopic(btn){
+  if(!SA.topic)return;if(btn)btn.disabled=true;
+  try{await sbPatch('topics','id=eq.'+SA.topic.id,{draft:false});SA.topic.draft=false;
+    (SA.topics||[]).forEach(function(t){if(t.id===SA.topic.id)t.draft=false;});toast2('Опубликовано — студенты видят тему');saBuilderDraw();}
+  catch(e){if(btn)btn.disabled=false;vAlert('Не получилось: '+(e.message||'ошибка'));}
 }
 function renderLevels(){
   var st=getMyStats(),lv=vitaLevel(st),r=lv.r;
