@@ -10891,8 +10891,8 @@ function saAiSeg(key,opts){
 function saAiKeep(){var m=document.getElementById('aiMat');if(m&&SA_AI)SA_AI.material=m.value;}
 function saAiForm(msg){
   var A=SA_AI;
-  saAiShell('<p class="sbe-lead">'+(SA.topic?'Вставь лекцию, методичку или фото страниц. ИИ соберёт конспект блоками: главное, разделы, термины, таблицы, «запомни», вопросы. Если в материале несколько тем — сначала разложит его по темам.'
-      :'Вставь целый раздел — лекции, методичку, страницы PDF. ИИ разложит материал по темам программы, покажет список, а потом соберёт каждую тему отдельно.')
+  saAiShell('<p class="sbe-lead">'+(SA.topic?'Вставь лекцию, методичку или фото страниц к этой теме — весь материал пойдёт в один конспект: главное, разделы, термины, таблицы, «запомни», вопросы.'
+      :'Вставь материал сразу к нескольким занятиям — например, методичку за семестр. ИИ найдёт, где начинается каждое занятие, покажет список тем, а ты выберешь, какие собрать. Материал к одному занятию — это одна тема.')
     +' Пишет строго по материалу, без добавлений от себя; где в материале ошибка или пробел — оставит тебе замечание.</p>'
     +'<div class="sbe-f"><label>Материал</label><textarea id="aiMat" rows="10" placeholder="Вставь сюда текст темы…" oninput="saAiCount()">'+esc(A.material||'')+'</textarea><small id="aiCnt"></small></div>'
     +'<div class="sbe-f"><label>Или страницы: фото конспекта, сканы, PDF</label><div class="sbe-files"><label class="btn bgh bsm"><i class="ti ti-paperclip"></i>Приложить<input type="file" accept="image/*,application/pdf" multiple style="display:none" onchange="saAiFiles(this)"></label>'
@@ -10904,8 +10904,10 @@ function saAiForm(msg){
   saAiCount();
 }
 function saAiCount(){var m=document.getElementById('aiMat'),c=document.getElementById('aiCnt');if(!m||!c)return;
-  var n=m.value.length;c.textContent=n?(n>400000?'Слишком длинно: '+n+' знаков. За раз — до 400 000 (это около 200 страниц), раздели материал на две части.':n+' '+vplural(n,'знак','знака','знаков')+(n>6000?' — ИИ сначала разложит материал по темам':'')):'Чем полнее материал, тем точнее конспект.';
-  c.style.color=n>400000?'var(--eos-t)':'';}
+  var n=m.value.length;c.textContent=n?(n>400000?'Слишком длинно: '+n+' знаков. За раз — до 400 000 (это около 200 страниц), раздели материал на две части.':n+' '+vplural(n,'знак','знака','знаков')):'Чем полнее материал, тем точнее конспект.';
+  var lim=SA.topic?200000:400000;
+  if(n>lim)c.textContent='Слишком длинно: '+n+' знаков. За раз — до '+(lim/1000)+' 000.';
+  c.style.color=n>lim?'var(--eos-t)':'';}
 async function saAiFiles(inp){
   var files=Array.prototype.slice.call(inp.files||[]);inp.value='';if(!files.length||!SA_AI)return;
   saAiKeep();var info=document.getElementById('aiFilesInfo');
@@ -10952,8 +10954,9 @@ async function saAiRun(){
   saAiKeep();var A=SA_AI,mat=(A.material||'').trim();
   if(mat.length<200&&!A.images.length){saAiForm('Материала слишком мало. Вставь текст темы (хотя бы пару абзацев) или приложи страницы.');return;}
   if(!vBotUrl('/ai/lesson')){saAiForm('Бот не подключён — ИИ работает через него.');return;}
-  // большой материал почти всегда охватывает несколько тем — сначала ИИ раскладывает его по темам программы
-  if(mat.length>6000||A.images.length>4||!SA.topic){
+  // внутри темы весь материал идёт в эту тему — одна тема, одна оплата.
+  // делить на темы — только с кнопки «Темы из материала» в списке тем предмета
+  if(!SA.topic){
     A.units=saAiUnits(A);
     saAiShell('<div class="sbe-wait"><div class="sbe-spin" aria-hidden="true"></div><b>ИИ разбирает материал по темам</b><span id="aiWait">Обычно до минуты.</span></div>','');
     try{
@@ -10987,7 +10990,10 @@ function saAiSplitView(msg){
 function saAiSplitCount(){
   var n=SA_AI.topics.filter(function(t){return t.on;}).length,el=document.getElementById('aiBatchT'),c2=document.getElementById('aiSplitCnt');
   if(el)el.textContent='Создать '+n+' '+vplural(n,'тему','темы','тем')+' в «'+((SA.subject&&SA.subject.name)||'предмете')+'»';
-  if(c2){c2.style.color='var(--tx2)';c2.textContent='≈ '+Math.max(1,Math.round(n*0.45*10)/10)+' $ · '+Math.max(2,n*2)+'–'+Math.max(5,n*3)+' мин';}
+  // примерная цена — оплата со счёта Anthropic (ключ на Railway); две темы собираются одновременно
+  var per=SA_AI.detail==='brief'?0.25:0.45,rounds=Math.ceil(n/2);
+  if(c2){c2.style.color='var(--tx2)';c2.title='Оценка: около '+per+' $ за тему (пишет Opus, проверяет Sonnet, картинки). Списывается со счёта Anthropic.';
+    c2.textContent=n?'примерно '+(Math.round(n*per*10)/10)+' $ · '+(rounds*2)+'–'+(rounds*4)+' мин':'';}
 }
 function saAiPartsText(A,parts){
   var pick={};(parts||[]).forEach(function(p){for(var i=+p[0];i<=+p[1];i++)pick[i]=1;});
