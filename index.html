@@ -3007,6 +3007,117 @@ kbd{display:inline-block;padding:1px 6px;border-radius:5px;border:1px solid var(
 .vp-pn{padding-top:4px}
 .vp-plan.plus.on .vp-pp b{font-size:26px}
 @media(max-width:380px){.vp-pic{width:48px;height:48px;font-size:24px}.vp-pn b{font-size:18px}}
+
+/* ===== ДОСКА: тёмная «грифельная» сцена в любой теме. Контраст, плотные кнопки с объёмом, рукописный мел ===== */
+body.bd-open{overflow:hidden}
+#bdRoot{--bd-bg:#14182B;--bd-card:#22273F;--bd-card2:#2B3150;--bd-edge:#0D1020;--bd-line:rgba(255,255,255,.08);--bd-tx:#FFFFFF;--bd-tx2:#AEB4CF;--bd-blue:#3D82FF;--bd-blue-d:#2459C9;
+  position:fixed;inset:0;z-index:9000;background:radial-gradient(ellipse 80% 45% at 50% 30%,rgba(92,82,255,.22),transparent 70%),radial-gradient(ellipse 60% 40% at 80% 75%,rgba(255,140,60,.10),transparent 70%),var(--bd-bg);
+  color:var(--bd-tx);font-family:'Nunito',var(--sans,system-ui),sans-serif;display:flex;flex-direction:column;padding:calc(10px + env(safe-area-inset-top,0px)) 16px calc(12px + env(safe-area-inset-bottom,0px));overflow:hidden}
+#bdRoot button{font-family:inherit;color:inherit;cursor:pointer}
+#bdRoot button:focus-visible,#bdRoot textarea:focus-visible,#bdRoot input:focus-visible{outline:2.5px solid #FFFFFF;outline-offset:2px}
+.bd-top{display:flex;align-items:center;gap:10px;min-height:52px;flex:none}
+.bd-sp{flex:1}
+.bd-pill{display:inline-flex;align-items:center;gap:6px;height:46px;padding:0 18px 0 12px;border:none;border-radius:999px;background:var(--bd-card);font-size:17px;font-weight:800;box-shadow:0 4px 0 var(--bd-edge)}
+.bd-pill i{font-size:22px}
+.bd-sq{flex:none;width:52px;height:52px;border:none;border-radius:18px;background:var(--bd-card);display:grid;place-items:center;font-size:24px;box-shadow:0 4px 0 var(--bd-edge)}
+.bd-pill:active,.bd-sq:active,.bd-c:active,.bd-sugg button:active,.bd-big:active,.bd-send:active{transform:translateY(3px);box-shadow:0 1px 0 var(--bd-edge)}
+.bd-bat{display:inline-flex;align-items:center;gap:8px;height:46px;padding:0 14px;border:none;border-radius:999px;background:#1E3260;box-shadow:0 4px 0 var(--bd-edge)}
+.bd-bat b{font-size:19px;font-weight:900;color:#7FB2FF}.bd-bat small{font-size:13px;font-weight:800;color:var(--bd-tx2)}
+.bd-bar{width:42px;height:10px;border-radius:6px;background:rgba(255,255,255,.14);overflow:hidden}.bd-bar span{display:block;height:100%;border-radius:6px;background:var(--bd-blue)}
+.bd-bat.empty b{color:#FF8A9C}.bd-bat.empty .bd-bar span{background:#FF5C7A}
+/* старт */
+.bd-start{display:flex;flex-direction:column;height:100%;min-height:0}
+.bd-hero{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding:10px 0}
+.bd-hero h1{margin:14px 0 0;font-size:clamp(32px,9vw,42px);font-weight:900;letter-spacing:-.8px;line-height:1.05}
+.bd-hero p{margin:0;font-size:17px;font-weight:700;color:var(--bd-tx2)}
+.bd-orb{position:relative;width:118px;height:118px;border-radius:50%;flex:none;
+  background:radial-gradient(circle at 30% 28%,#FFFFFF 0,#C9F3FF 14%,#4FC3F7 38%,#3B4BDB 68%,#141838 100%);box-shadow:0 18px 50px -10px rgba(79,195,247,.55),inset -10px -14px 24px rgba(0,0,0,.35);animation:bdFloat 4s ease-in-out infinite}
+.bd-eye{position:absolute;top:44%;width:19px;height:21px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px rgba(0,0,0,.08)}
+.bd-eye.l{left:36%}.bd-eye.r{left:58%}
+.bd-eye::after{content:'';position:absolute;left:5px;top:6px;width:9px;height:10px;border-radius:50%;background:#14182B;animation:bdLook 6s ease-in-out infinite}
+.bd-smile{position:absolute;left:44%;top:64%;width:22px;height:10px;border:3.5px solid #fff;border-top:none;border-radius:0 0 14px 14px}
+.bd-badge{position:absolute;right:-4px;top:2px;width:34px;height:34px;border-radius:50%;background:#FF5C7A;display:grid;place-items:center;font-size:17px;color:#fff;box-shadow:0 0 0 4px var(--bd-bg)}
+.bd-orb.think{animation:bdFloat 1.6s ease-in-out infinite}
+.bd-orb.think .bd-eye::after{animation:bdThink 1.4s ease-in-out infinite}
+.bd-orb.sad .bd-smile{top:70%;border-top:3.5px solid #fff;border-bottom:none;border-radius:14px 14px 0 0}
+@keyframes bdFloat{50%{transform:translateY(-8px)}}
+@keyframes bdLook{0%,40%,100%{transform:translate(0,0)}50%,70%{transform:translate(3px,-1px)}}
+@keyframes bdThink{0%,100%{transform:translate(-2px,-3px)}50%{transform:translate(3px,-3px)}}
+@media (prefers-reduced-motion:reduce){.bd-orb,.bd-eye::after{animation:none!important}}
+.bd-sugg{display:grid;grid-template-columns:1fr 1fr;gap:12px;flex:none;margin-bottom:14px}
+.bd-sugg button{display:flex;flex-direction:column;justify-content:space-between;gap:16px;min-height:118px;padding:14px;border:2px solid var(--bd-line);border-radius:22px;background:var(--bd-card);text-align:left;box-shadow:0 5px 0 var(--bd-edge)}
+.bd-sugg b{font-size:17px;font-weight:800;line-height:1.2}
+.bd-si{display:grid;place-items:center;width:44px;height:44px;border-radius:14px;flex:none;background:color-mix(in srgb,var(--c) 20%,transparent);color:var(--c);font-size:23px}
+.bd-comp{flex:none;border-radius:26px;padding:3px;background:linear-gradient(100deg,#3D82FF,#8B5CF6 55%,#FF8A3D)}
+.bd-comp>textarea,.bd-crow{background:#1B2036}
+.bd-comp>textarea{display:block;width:100%;resize:none;border:none;border-radius:23px 23px 0 0;padding:16px 18px 6px;color:#fff;font:700 18px/1.35 'Nunito',sans-serif;max-height:110px}
+.bd-comp>textarea::placeholder{color:#7D84A6}
+.bd-crow{display:flex;align-items:center;gap:8px;padding:6px 8px 8px 10px;border-radius:0 0 23px 23px}
+.bd-ib{width:48px;height:48px;border-radius:50%;border:2px solid var(--bd-line);background:none;display:grid;place-items:center;font-size:23px}
+.bd-ib.rec{background:#FF5C7A;border-color:#FF5C7A;animation:vqPulse 1.2s infinite}.bd-ib.wait{opacity:.5}
+.bd-mode{display:inline-flex;align-items:center;gap:6px;height:46px;padding:0 14px;border:2px solid var(--bd-line);border-radius:999px;background:none;font-size:16px;font-weight:800}
+.bd-mode i:first-child{color:#FFB547;font-size:19px}.bd-mode i:last-child{color:var(--bd-tx2);font-size:16px}
+.bd-send{width:54px;height:54px;border:none;border-radius:50%;background:var(--bd-blue);color:#fff;display:grid;place-items:center;font-size:26px;box-shadow:0 4px 0 var(--bd-blue-d)}
+.bd-send.sm{width:52px;height:52px;border-radius:18px;font-size:23px}
+/* ожидание */
+.bd-wait{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:0 18px}
+.bd-wait b{font-size:21px;font-weight:900}.bd-wait small{font-size:15px;font-weight:700;color:var(--bd-tx2);max-width:320px}
+.bd-big{margin-top:8px;height:54px;padding:0 26px;border:none;border-radius:18px;background:var(--bd-blue);font-size:17px;font-weight:900;box-shadow:0 5px 0 var(--bd-blue-d)}
+/* плеер */
+.bd-v-play{background:var(--bd-bg)!important}
+.bd-tt{flex:1;min-width:0;height:52px;display:flex;flex-direction:column;justify-content:center;padding:0 16px;border-radius:18px;background:var(--bd-card);box-shadow:0 4px 0 var(--bd-edge)}
+.bd-tt b{font-size:16.5px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.bd-tt small{font-size:13px;font-weight:800;color:var(--bd-tx2)}
+.bd-board{position:relative;flex:1;min-height:0;margin:12px -16px 10px;overflow-y:auto;overscroll-behavior:contain;
+  background-image:radial-gradient(rgba(255,255,255,.09) 1.2px,transparent 1.3px);background-size:22px 22px;scroll-behavior:smooth}
+.bd-board svg{display:block;width:100%}
+.bd-board.all{display:flex;justify-content:center}
+.bd-board.all svg{width:auto}
+.bd-tx{font-family:'Caveat',cursive;dominant-baseline:auto}
+.bd-follow{position:sticky;bottom:10px;left:50%;transform:translateX(-50%);display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 16px;border:none;border-radius:999px;background:var(--bd-blue);font-size:15px;font-weight:900;box-shadow:0 4px 0 var(--bd-blue-d)}
+.bd-follow[hidden]{display:none}
+.bd-cap{flex:none;min-height:58px;padding:12px 16px;border-radius:20px;border:2px solid var(--bd-line);background:rgba(34,39,63,.92);font-size:16.5px;font-weight:800;line-height:1.38;text-align:center}
+.bd-cap.in{animation:bdCap .35s ease-out}
+@keyframes bdCap{from{opacity:0;transform:translateY(6px)}}
+.bd-panel{flex:none;margin-top:10px;padding:12px;border-radius:24px;background:var(--bd-card);box-shadow:0 5px 0 var(--bd-edge);display:flex;flex-direction:column;gap:12px}
+.bd-prog{display:flex;align-items:center;gap:10px}
+.bd-segs{flex:1;display:flex;gap:6px}
+.bd-segs i{flex:1;height:9px;border-radius:5px;background:rgba(255,255,255,.12);transition:background .3s}
+.bd-segs i.done{background:#7FB2FF}.bd-segs i.on{background:linear-gradient(90deg,#7FB2FF,#3D82FF)}
+.bd-prog b{font-size:16px;font-weight:900;color:var(--bd-tx2);min-width:34px;text-align:right}
+.bd-ctl{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.bd-c{flex:1;max-width:70px;height:56px;border:2px solid var(--bd-line);border-radius:18px;background:var(--bd-card2);display:grid;place-items:center;font-size:25px;box-shadow:0 4px 0 var(--bd-edge)}
+.bd-c.bd-play{max-width:84px;background:var(--bd-blue);border-color:var(--bd-blue);font-size:28px;box-shadow:0 4px 0 var(--bd-blue-d)}
+.bd-c.off{color:#FF8A9C}
+.bd-more{display:flex;gap:8px}
+.bd-more input{flex:1;min-width:0;height:52px;padding:0 16px;border:2px solid var(--bd-line);border-radius:18px;background:var(--bd-bg);color:#fff;font:800 16.5px 'Nunito',sans-serif}
+.bd-more input::placeholder{color:#7D84A6}
+/* шаги и история */
+.bd-sheet{position:absolute;left:0;right:0;bottom:0;max-height:75%;overflow-y:auto;padding:16px 16px calc(18px + env(safe-area-inset-bottom,0px));border-radius:26px 26px 0 0;background:#1B2036;box-shadow:0 -20px 40px rgba(0,0,0,.45);display:flex;flex-direction:column;gap:8px;z-index:2}
+.bd-sh-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}.bd-sh-h b{font-size:20px;font-weight:900}
+.bd-st{display:flex;gap:12px;align-items:flex-start;padding:12px;border:2px solid var(--bd-line);border-radius:18px;background:var(--bd-card);text-align:left}
+.bd-st span{flex:none;width:30px;height:30px;border-radius:10px;background:var(--bd-card2);display:grid;place-items:center;font-weight:900}
+.bd-st.on{border-color:var(--bd-blue)}.bd-st.on span{background:var(--bd-blue)}
+.bd-st p{margin:0;font-size:15px;font-weight:700;line-height:1.4;color:#E4E7F5}
+.bd-hist{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:14px 0}
+.bd-hr{display:flex;align-items:center;gap:12px;padding:12px;border:2px solid var(--bd-line);border-radius:20px;background:var(--bd-card);text-align:left;box-shadow:0 4px 0 var(--bd-edge)}
+.bd-hr>span:nth-child(2){flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.bd-hr b{font-size:16px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.bd-hr small{font-size:13px;font-weight:700;color:var(--bd-tx2)}
+.bd-hr>i{color:#7FB2FF;font-size:20px}
+@media (min-width:700px){#bdRoot{padding-left:calc(50% - 300px);padding-right:calc(50% - 300px)}.bd-board{margin-left:0;margin-right:0;border-radius:20px}}
+/* карточка на главной */
+.bd-home{position:relative;overflow:hidden;display:flex;align-items:center;gap:12px;width:100%;margin:12px 0 0;padding:16px;border:none;border-radius:24px;text-align:left;font:inherit;cursor:pointer;color:#fff;
+  background:radial-gradient(ellipse 70% 90% at 0% 0%,rgba(92,82,255,.55),transparent 70%),linear-gradient(135deg,#1E2350,#14182B);box-shadow:0 5px 0 #0A0D1C}
+.bd-home:active{transform:translateY(3px);box-shadow:0 2px 0 #0A0D1C}
+.bd-home:focus-visible{outline:2px solid var(--tx);outline-offset:3px}
+.bd-hglow{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.08) 1px,transparent 1.2px);background-size:16px 16px;pointer-events:none}
+.bd-hdraw{position:relative;flex:none;width:92px;height:62px;border-radius:16px;background:rgba(0,0,0,.25);display:grid;place-items:center}
+.bd-hdraw svg{width:84px;height:50px}
+.bd-ht{position:relative;flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.bd-ht small{align-self:flex-start;font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;background:#FF5C7A;color:#fff}
+.bd-ht b{font-size:19px;font-weight:800;letter-spacing:-.2px}
+.bd-ht span{font-size:13px;color:#C3C8E4}
+.bd-hgo{position:relative;flex:none;width:46px;height:46px;border-radius:50%;background:#3D82FF;display:grid;place-items:center;font-size:20px;box-shadow:0 3px 0 #2459C9}
+.vq-tr.bd-tr i{color:#3D82FF}
 </style>
 </head>
 <body>
@@ -11182,7 +11293,7 @@ function renderHome(){
     +'<button class="lb-tile meth" onclick="vGo(\'study\')"><span class="ic"><i class="ti ti-book-2"></i></span><span class="lb-tb"><b>Учёба</b><small>'+(S.studyCourseName?esc(S.studyCourseName)+(S.studyUniName?' · '+esc(S.studyUniName):''):'Конспекты тем')+'</small></span></button>'
     +'<button class="lb-tile vio" onclick="vOpen(\'duels\')"><span class="ic"><i class="ti ti-swords"></i></span>'+(duelWaiting?'<span class="cnt">!</span>':'')+'<span class="lb-tb"><b>Дуэли</b><small>'+(duelWaiting?'Тебя вызвали':'Один на один')+'</small></span></button>'
     +'</div>';
-  if(S.user||S.isAdm)h+=vqHomeRow();
+  if(S.user||S.isAdm)h+=bdHomeCard()+vqHomeRow();
   h+='<div id="vpHome">'+vpHomeHtml()+'</div>';
 
   h+='<div class="lb-tri">'
@@ -12519,6 +12630,7 @@ function unBarEl(){
   b.innerHTML='<button type="button" data-k="hl"><i class="ti ti-highlight"></i><span>Выделить</span></button>'
     +'<button type="button" data-k="note"><i class="ti ti-message-2"></i><span>Заметка</span></button>'
     +'<button type="button" data-k="q"><i class="ti ti-help-circle"></i><span>Не понял</span></button>'
+    +'<button type="button" data-k="board"><i class="ti ti-chalkboard"></i><span>На доске</span></button>'
     +'<button type="button" data-k="ask"><i class="ti ti-sparkles"></i><span>Объясни</span></button>'
     +'<span class="un-bar-long">Слишком длинный кусок — выдели фразу короче</span>';
   // нажатие на панель не должно снимать выделение
@@ -12551,6 +12663,7 @@ function unAct(kind){
   var s=UN.sel;if(!s||s.long)return;
   try{window.getSelection().removeAllRanges();}catch(e){}
   unBarHide();
+  if(kind==='board'){if(typeof bdOpen==='function')bdOpen({topicId:UN.topic,quote:s.quote,text:'Объясни это место'});return;}
   if(kind==='ask'){if(typeof vqOpen==='function')vqOpen({topicId:UN.topic,quote:s.quote,auto:'Объясни это место проще'});return;}
   if(kind==='note'){unEdit(null,{sel:s,kind:'note'});return;}
   var n=unCreate(s,kind,'');
@@ -14285,6 +14398,7 @@ function vpCompare(v,bank){
   var rows=[
     ['Деканатские тесты',v.q_limit+' в день',inf],
     ['Объяснения ИИ',v.ex_limit+' в день',inf],
+    ['Объяснение на доске',(v.board_limit||0)+' в день','<b>'+v.plus_board+' в день</b>'],
     ['Спросить ИИ',v.ask_limit+' в день','<b>'+v.plus_ask+' в день</b>'],
     ['Разбор фото, PDF и Word',no,v.plus_file>0?yes:no],
     ['Свои тесты из скриншотов',v.imp_limit?v.imp_limit+' вопросов, один раз':no,'<b>'+v.plus_imp+' в месяц</b>'],
@@ -14346,6 +14460,7 @@ function vpWall(why){
   var bank=0;try{bank=getQS().length;}catch(e){}
   var head={q:['На сегодня всё','Ты решил все бесплатные вопросы на сегодня. С Vita+ можно не останавливаться.'],
     ex:['Объяснения закончились','Бесплатно — '+v.ex_limit+' в день. С Vita+ — к каждому вопросу.'],
+    board:['Доска на сегодня всё',v.plus?'Сегодня ты посмотрел '+v.plus_board+' объяснений. Завтра — снова. Готовые объяснения из истории открываются бесплатно.':'Бесплатно — '+(v.board_limit||1)+' объяснение в день. С Vita+ — '+v.plus_board+'.'],
     ask:['Вопросы ИИ закончились','Бесплатно — '+v.ask_limit+' в день. С Vita+ — '+v.plus_ask+'.'],
     imp:['Лимит своих тестов закончился',v.plus?'В этом месяце ты уже загрузил '+v.plus_imp+' вопросов. В следующем — снова можно.':'Бесплатная проба использована. С Vita+ — '+v.plus_imp+' вопросов в месяц.'],
     file:['Разбор файлов — в Vita+','Сфотографируй страницу или пришли PDF — ИИ объяснит непонятное место.'],
@@ -14377,10 +14492,10 @@ function vpPayHtml(v){
 // карточка тарифа: выбранная раскрыта (что входит ✓ и чего нет ✕), невыбранная — свёрнута
 function vpPlanCard(id,v,bank){
   var on=VP_SEL===id,plus=id==='plus',Y=function(t){return '<li class="y"><i class="ti ti-check" aria-hidden="true"></i><span>'+t+'</span></li>';},N=function(t){return '<li class="n"><i class="ti ti-x" aria-hidden="true"></i><span>'+t+'</span></li>';};
-  var items=plus?[Y('Деканатские тесты <b>без лимита</b>'),Y('Объяснение ИИ <b>к каждому вопросу</b>'),Y('Спросить ИИ — <b>'+v.plus_ask+' в день</b>, голосом и с фото'),
+  var items=plus?[Y('Деканатские тесты <b>без лимита</b>'),Y('Объяснение ИИ <b>к каждому вопросу</b>'),Y('Объяснение на доске — <b>'+v.plus_board+' в день</b>: рисует и говорит'),Y('Спросить ИИ — <b>'+v.plus_ask+' в день</b>, голосом и с фото'),
       v.plus_file>0?Y('Разбор фото, PDF и Word из лекций'):'',Y('Свои тесты из скриншотов — <b>'+v.plus_imp+' вопросов в месяц</b>'),Y('Значок ✦ в рейтинге и золотое кольцо в профиле'),
       v.gift?Y('<b>+'+v.gift+' монет</b> в подарок за оплату'):''].join('')
-    :[Y('Деканатские тесты — '+v.q_limit+' в день'),Y('Объяснения ИИ — '+v.ex_limit+' в день'),Y('Спросить ИИ — '+v.ask_limit+' в день'),Y('Экзамен по билетам и дуэли'),
+    :[Y('Деканатские тесты — '+v.q_limit+' в день'),Y('Объяснения ИИ — '+v.ex_limit+' в день'),Y('Спросить ИИ — '+v.ask_limit+' в день'),Y('Объяснение на доске — '+(v.board_limit||0)+' в день'),Y('Экзамен по билетам и дуэли'),
       N('Разбор фото и файлов'),N('Свои тесты — только '+(v.imp_limit||0)+' вопросов на пробу'),N('Значок ✦ и подарочные монеты')].join('');
   return '<div class="vp-plan '+id+(on?' on':'')+'" role="radio" aria-checked="'+on+'" tabindex="0" onclick="vpSel(\''+id+'\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();vpSel(\''+id+'\');}">'
     +'<div class="vp-ph"><span class="vp-pic" aria-hidden="true">'+(plus?'✦':'<i class="ti ti-user"></i>')+'</span>'
@@ -14498,7 +14613,7 @@ async function vpaRender(){
       +vpaF('vpaUzs','Цена, сум',c.price_uzs)+vpaF('vpaStars','Цена, звёзд',c.price_stars,'Студент платит ≈ 200–250 сум за звезду')+vpaF('vpaDays','На сколько дней',c.days)
       +vpaF('vpaTrial','Вопросов на пробу',c.trial_q,'Один раз, с первого захода')+vpaF('vpaDq','Потом вопросов в день',c.daily_q)+vpaF('vpaDex','Объяснений ИИ в день',c.daily_ex)
       +vpaF('vpaFa','«Спросить ИИ» бесплатно, в день',c.free_ask)+vpaF('vpaPa','«Спросить ИИ» с Vita+, в день',c.plus_ask)+vpaF('vpaPf','Файлов в день с Vita+',c.plus_file,'Бесплатным файлы недоступны')
-      +vpaF('vpaFi','Свои тесты бесплатно, вопросов',c.free_imp,'Один раз, на пробу')+vpaF('vpaPi','Свои тесты с Vita+, в месяц',c.plus_imp)+(c.plus_gift!=null?vpaF('vpaGift','Монет в подарок за оплату',c.plus_gift,'За звёзды и карту; за бесплатную выдачу — нет'):'')+'</div>'
+      +vpaF('vpaFi','Свои тесты бесплатно, вопросов',c.free_imp,'Один раз, на пробу')+vpaF('vpaPi','Свои тесты с Vita+, в месяц',c.plus_imp)+(c.free_board!=null?vpaF('vpaFb','Доска бесплатно, в день',c.free_board)+vpaF('vpaPb','Доска с Vita+, в день',c.plus_board,'Одно объяснение — около 300–900 сум'):'')+(c.plus_gift!=null?vpaF('vpaGift','Монет в подарок за оплату',c.plus_gift,'За звёзды и карту; за бесплатную выдачу — нет'):'')+'</div>'
       +'<div class="vpa-grid two">'+vpaF('vpaCard','Номер карты для переводов',c.card_number.replace(/(\d{4})(?=\d)/g,'$1 '),'Пусто — оплата картой скрыта, останутся только звёзды')+vpaF('vpaHold','Имя на карте',c.card_holder,'Студент сверит его при переводе','')+'</div>'
       +'<div class="bc-foot"><span class="bc-cnt" id="vpaMsg" aria-live="polite"></span><button type="button" class="btn bbl" id="vpaSave" onclick="vpaSave()">Сохранить</button></div></div>';
   }
@@ -14520,6 +14635,7 @@ async function vpaSave(){
   var g=function(id){return (document.getElementById(id)||{}).value||'';},n=function(id){return parseInt(g(id).replace(/\D/g,''),10);};
   var cfg={price_uzs:n('vpaUzs'),price_stars:n('vpaStars'),days:n('vpaDays'),trial_q:n('vpaTrial'),daily_q:n('vpaDq'),daily_ex:n('vpaDex'),free_ask:n('vpaFa'),plus_ask:n('vpaPa'),plus_file:n('vpaPf'),free_imp:n('vpaFi'),plus_imp:n('vpaPi'),card_number:g('vpaCard'),card_holder:g('vpaHold')};
   if(document.getElementById('vpaGift'))cfg.plus_gift=n('vpaGift');
+  if(document.getElementById('vpaFb')){cfg.free_board=n('vpaFb');cfg.plus_board=n('vpaPb');}
   var m=document.getElementById('vpaMsg');
   for(var k in cfg){if(typeof cfg[k]==='number'&&isNaN(cfg[k])){m.textContent='Заполни все поля числами';return;}}
   var b=document.getElementById('vpaSave');b.disabled=true;
@@ -14695,7 +14811,7 @@ function vqHomeRow(){
 })();
 
 // расходы на ИИ: бот записывает каждый запрос к Claude (сколько токенов и сколько это стоит)
-var VPA_KINDS={explain:'Объяснения к тестам',ask:'Спросить ИИ',askf:'Спросить ИИ: файлы',mytest:'Свои тесты студентов',lesson:'Конспекты в админке',conspect:'Конспекты из материалов группы',quiz:'Тесты по темам',bot:'Бот: темы и вопросы из чата',other:'Другое'};
+var VPA_KINDS={board:'Доска: объяснения',explain:'Объяснения к тестам',ask:'Спросить ИИ',askf:'Спросить ИИ: файлы',mytest:'Свои тесты студентов',lesson:'Конспекты в админке',conspect:'Конспекты из материалов группы',quiz:'Тесты по темам',bot:'Бот: темы и вопросы из чата',other:'Другое'};
 function vpaUsd(micro){var d=micro/1e6;return '$'+(d>=10?d.toFixed(0):d>=1?d.toFixed(1):d.toFixed(2))+' · '+vpSum(Math.round(d*12000/100)*100)+' сум';}
 function vpaCost(c){
   if(!c)return '';
@@ -14800,6 +14916,415 @@ function mtDone(p,keep){
   var _drop=gqDrop;gqDrop=function(id){MT.list=MT.list.filter(function(z){return z.id!==id;});return _drop.apply(this,arguments);};
   var _find=gqFind;gqFind=function(id){var z=_find.apply(this,arguments);if(z)return z;for(var i=0;i<MT.list.length;i++)if(MT.list[i].id===id)return MT.list[i];return null;};
   var _put=gqPut;gqPut=function(z){if(z&&z.id)for(var i=0;i<MT.list.length;i++)if(MT.list[i].id===z.id)MT.list[i]=Object.assign({},MT.list[i],z);return _put.apply(this,arguments);};
+})();
+
+// ===== ДОСКА: «нарисую и объясню вслух». Сценарий пишет ИИ (бот /u/board), рисует и озвучивает — это место =====
+// Фигуры раскладываются здесь (ИИ не задаёт координаты): доска растёт сверху вниз, камера следует за рисунком.
+var BD={el:null,view:'start',mode:'short',board:null,audio:[],step:-1,playing:false,muted:false,follow:true,job:null,left:null,
+  items:[],H:0,cam:{y:0,s:1},timers:[],tok:0,au:null,ctx:{},hist:[],q:''};
+var BD_W=400,BD_COL={white:'#F4F1E8',pink:'#FF7A93',yellow:'#FFD45E',blue:'#79BEFF',green:'#7EE0A1',orange:'#FFA04D'};
+var BD_SUGG=[['virus','#FF5C7A','Что такое некроз?'],['heart','#FF7AA8','Как работает сердечный цикл?'],
+  ['flask','#FFC145','Цикл Кребса простыми словами'],['dna-2','#5FD68E','Чем апоптоз отличается от некроза?']];
+function bdFonts(){
+  if(document.getElementById('bdFonts'))return;
+  var l=document.createElement('link');l.id='bdFonts';l.rel='stylesheet';
+  l.href='https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Nunito:wght@700;800;900&display=swap';
+  document.head.appendChild(l);
+}
+function bdOpen(o){
+  if(!S.user&&!S.isAdm){showLoginWall();return;}
+  o=o||{};bdFonts();
+  if(!BD.el){BD.el=document.createElement('div');BD.el.id='bdRoot';BD.el.setAttribute('role','dialog');BD.el.setAttribute('aria-label','Доска');document.body.appendChild(BD.el);}
+  BD.ctx={qid:o.qid||'',topicId:o.topicId||'',quote:o.quote||''};
+  document.body.classList.add('bd-open');
+  try{if(TG&&TG.BackButton){TG.BackButton.show();TG.BackButton.onClick(bdBack);}}catch(e){}
+  vpLoad().then(function(){if(BD.view==='start')bdBattery();});
+  if(o.text){bdStart();bdAsk(o.text);}else bdStart();
+}
+function bdClose(){
+  bdStop();BD.view='start';
+  if(BD.el){BD.el.innerHTML='';BD.el.remove();BD.el=null;}
+  document.body.classList.remove('bd-open');
+  try{if(TG&&TG.BackButton){TG.BackButton.offClick(bdBack);TG.BackButton.hide();}}catch(e){}
+}
+function bdBack(){if(BD.view==='play'||BD.view==='wait'||BD.view==='hist'){bdStop();bdStart();}else bdClose();}
+// ---------- стартовый экран ----------
+function bdStart(){
+  BD.view='start';BD.job=null;
+  var h='<div class="bd-start"><div class="bd-top"><button type="button" class="bd-pill" onclick="bdBack()"><i class="ti ti-chevron-left" aria-hidden="true"></i>Назад</button>'
+    +'<button type="button" class="bd-sq" onclick="bdHistory()" aria-label="Мои объяснения"><i class="ti ti-history" aria-hidden="true"></i></button>'
+    +'<span class="bd-sp"></span><button type="button" class="bd-bat" id="bdBat" onclick="vpWall(\'board\')"></button></div>'
+    +'<div class="bd-hero"><div class="bd-orb" aria-hidden="true"><span class="bd-eye l"></span><span class="bd-eye r"></span><span class="bd-smile"></span><span class="bd-badge"><i class="ti ti-heart-filled"></i></span></div>'
+    +'<h1>Что объяснить?</h1><p>Нарисую на доске и объясню вслух.</p></div>'
+    +'<div class="bd-sugg">'+BD_SUGG.map(function(s){return '<button type="button" onclick="bdAsk(this.dataset.q)" data-q="'+esc(s[2])+'"><span class="bd-si" style="--c:'+s[1]+'"><i class="ti ti-'+s[0]+'" aria-hidden="true"></i></span><b>'+esc(s[2])+'</b></button>';}).join('')+'</div>'
+    +'<div class="bd-comp"><textarea id="bdIn" rows="1" maxlength="400" placeholder="Тема, вопрос или что непонятно…" aria-label="Тема или вопрос" oninput="bdGrow(this)" onkeydown="if(event.key===\'Enter\'&&!event.shiftKey){event.preventDefault();bdAsk();}"></textarea>'
+    +'<div class="bd-crow">'+(vqCanRec()?'<button type="button" class="bd-ib" id="bdMic" onclick="bdMic()" aria-label="Сказать голосом"><i class="ti ti-microphone" aria-hidden="true"></i></button>':'')
+    +'<button type="button" class="bd-mode" id="bdMode" onclick="bdMode()" aria-label="Длина объяснения">'+bdModeHtml()+'</button><span class="bd-sp"></span>'
+    +'<button type="button" class="bd-send" onclick="bdAsk()" aria-label="Объяснить"><i class="ti ti-arrow-up" aria-hidden="true"></i></button></div></div></div>';
+  BD.el.innerHTML=h;BD.el.className='bd-v-start';bdBattery();
+}
+function bdModeHtml(){return BD.mode==='short'?'<i class="ti ti-bolt" aria-hidden="true"></i>Кратко<i class="ti ti-selector" aria-hidden="true"></i>':'<i class="ti ti-book-2" aria-hidden="true"></i>Подробно<i class="ti ti-selector" aria-hidden="true"></i>';}
+function bdMode(){BD.mode=BD.mode==='short'?'long':'short';var b=document.getElementById('bdMode');if(b)b.innerHTML=bdModeHtml();}
+function bdGrow(t){t.style.height='auto';t.style.height=Math.min(t.scrollHeight,110)+'px';}
+function bdBattery(){
+  var b=document.getElementById('bdBat');if(!b)return;
+  var v=VP;if(!v||v.staff||v.board_limit==null){b.hidden=true;return;}
+  var left=Math.max(0,v.board_limit-v.board_used),pc=v.board_limit?Math.round(left/v.board_limit*100):0;
+  b.hidden=false;b.className='bd-bat'+(left?'':' empty');
+  b.innerHTML='<span class="bd-bar"><span style="width:'+pc+'%"></span></span><b>'+left+'</b><small>из '+v.board_limit+'</small>';
+  b.setAttribute('aria-label','Осталось объяснений сегодня: '+left+' из '+v.board_limit);
+}
+async function bdMic(){
+  // голос → текст (Groq), как в «Спросить ИИ»
+  var b=document.getElementById('bdMic');if(!b)return;
+  if(BD.rec){BD.rec.stop();return;}
+  try{
+    var stream=await navigator.mediaDevices.getUserMedia({audio:true}),chunks=[];
+    var mime=['audio/webm;codecs=opus','audio/webm','audio/mp4'].filter(function(m){try{return MediaRecorder.isTypeSupported(m);}catch(e){return false;}})[0]||'';
+    var rec=new MediaRecorder(stream,mime?{mimeType:mime}:undefined);BD.rec=rec;b.classList.add('rec');
+    rec.ondataavailable=function(e){if(e.data&&e.data.size)chunks.push(e.data);};
+    rec.onstop=async function(){
+      BD.rec=null;stream.getTracks().forEach(function(t){t.stop();});b.classList.remove('rec');b.classList.add('wait');
+      try{var blob=new Blob(chunks,{type:rec.mimeType||'audio/webm'});
+        var r=await fetch(vBotUrl('/u/stt'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:S.token||vAdminToken(),audio:await vqB64(blob),mime:blob.type})});
+        var j=await r.json();var t=document.getElementById('bdIn');
+        if(j.status==='ok'&&t){t.value=(t.value?t.value+' ':'')+j.text;bdGrow(t);}else toast2(j.reason||'Не расслышал');
+      }catch(e){toast2('Нет связи');}
+      b.classList.remove('wait');
+    };
+    rec.start();setTimeout(function(){if(BD.rec===rec)rec.stop();},45000);
+  }catch(e){toast2('Микрофон недоступен — напиши текстом');}
+}
+// ---------- запрос ----------
+function bdUnlock(){
+  // iPhone даёт звук только после нажатия: «разогреваем» плеер и голос телефона прямо сейчас
+  try{if(!BD.au){BD.au=new Audio();BD.au.preload='auto';}
+    BD.au.src='data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQAAAAA=';var p=BD.au.play();if(p&&p.catch)p.catch(function(){});}catch(e){}
+  try{if(window.speechSynthesis){var u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u);}}catch(e){}
+}
+async function bdAsk(text,hist){
+  var inp=document.getElementById('bdIn');
+  text=String(text||(inp&&inp.value)||'').trim();
+  if(text.length<2){if(inp)inp.focus();return;}
+  bdUnlock();bdStop();
+  var url=vBotUrl('/u/board');if(!url){toast2('Доска пока не подключена');return;}
+  BD.q=text;bdWait('Думаю, как объяснить…');
+  var body={token:S.token||vAdminToken(),text:text,mode:BD.mode,qid:BD.ctx.qid,topic_id:BD.ctx.topicId,quote:BD.ctx.quote};
+  if(hist)body.hist=hist;
+  var j;try{var r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});j=await r.json();}
+  catch(e){j={status:'error',reason:'Нет связи. Проверь интернет'};}
+  if(j.left!=null&&VP){VP.board_used=VP.board_limit-j.left;}
+  if(j.status==='limit'){bdStart();var t=document.getElementById('bdIn');if(t)t.value=text;VP_AT=0;vpLoad(true).then(function(){vpWall('board');});return;}
+  if(j.status==='ok'){bdPlay(j);return;}
+  if(j.status!=='run'){bdFail(j.reason||'Не получилось');return;}
+  BD.job=j.job;var t0=Date.now(),started=false,job=j.job;
+  (async function poll(){
+    while(BD.job===job){
+      await new Promise(function(r){setTimeout(r,1500);});
+      if(BD.job!==job)return;
+      var p;try{var r2=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:S.token||vAdminToken(),job:job})});p=await r2.json();}catch(e){continue;}
+      if(BD.job!==job)return;
+      if(p.status==='error'){BD.job=null;bdFail(p.reason||'Не получилось');return;}
+      if(p.board&&!started){
+        // голос первого шага — ждём до 8 секунд, потом начинаем с голосом телефона
+        if(p.audio&&p.audio[0]||Date.now()-t0>8000||p.status==='ok'){started=true;bdPlay(p,true);}
+        else bdWaitText('Рисую схему и записываю голос…');
+      }else if(started){BD.audio=p.audio||BD.audio;}
+      else bdWaitText(Date.now()-t0>12000?'Ещё немного — продумываю схему…':'Думаю, как объяснить…');
+      if(p.status==='ok'){BD.job=null;if(p.key)BD.key=p.key;return;}
+    }
+  })();
+}
+function bdWait(t){
+  BD.view='wait';BD.el.className='bd-v-play';
+  BD.el.innerHTML='<div class="bd-top"><button type="button" class="bd-pill" onclick="bdBack()"><i class="ti ti-chevron-left" aria-hidden="true"></i>Назад</button></div>'
+    +'<div class="bd-wait" role="status"><div class="bd-orb think" aria-hidden="true"><span class="bd-eye l"></span><span class="bd-eye r"></span><span class="bd-smile"></span></div>'
+    +'<b id="bdWaitT">'+esc(t)+'</b><small>'+esc(BD.q)+'</small></div>';
+}
+function bdWaitText(t){var e=document.getElementById('bdWaitT');if(e)e.textContent=t;}
+function bdFail(msg){
+  BD.view='wait';
+  BD.el.innerHTML='<div class="bd-top"><button type="button" class="bd-pill" onclick="bdBack()"><i class="ti ti-chevron-left" aria-hidden="true"></i>Назад</button></div>'
+    +'<div class="bd-wait"><div class="bd-orb sad" aria-hidden="true"><span class="bd-eye l"></span><span class="bd-eye r"></span><span class="bd-smile"></span></div><b>'+esc(msg)+'</b>'
+    +'<small>Попытка не списана.</small><button type="button" class="bd-big" onclick="bdAsk(BD.q)">Попробовать ещё раз</button></div>';
+}
+// ---------- плеер ----------
+function bdPlay(j,live){
+  BD.board=j.board;BD.audio=j.audio||[];BD.key=j.key||BD.key;BD.step=-1;BD.view='play';BD.follow=true;
+  var n=BD.board.steps.length;
+  BD.el.className='bd-v-play';
+  BD.el.innerHTML='<div class="bd-top"><button type="button" class="bd-pill" onclick="bdBack()"><i class="ti ti-chevron-left" aria-hidden="true"></i>Назад</button>'
+    +'<div class="bd-tt"><b>'+esc(BD.board.title)+'</b><small id="bdStepN">Шаг 1 из '+n+'</small></div>'
+    +'<button type="button" class="bd-sq" id="bdAll" onclick="bdOverview()" aria-label="Вся доска"><i class="ti ti-layout-grid" aria-hidden="true"></i></button></div>'
+    +'<div class="bd-board" id="bdBoard"><svg id="bdSvg" xmlns="http://www.w3.org/2000/svg"><g id="bdCam"></g></svg>'
+    +'<button type="button" class="bd-follow" id="bdFollow" onclick="bdFollowOn()" hidden><i class="ti ti-focus-2" aria-hidden="true"></i>Следить</button></div>'
+    +'<div class="bd-cap" id="bdCap" aria-live="polite"></div>'
+    +'<div class="bd-panel"><div class="bd-prog"><span class="bd-segs" id="bdSegs">'+BD.board.steps.map(function(_,i){return '<i data-i="'+i+'"></i>';}).join('')+'</span><b id="bdPn">1/'+n+'</b></div>'
+    +'<div class="bd-ctl"><button type="button" class="bd-c" onclick="bdSteps()" aria-label="Все шаги"><i class="ti ti-list" aria-hidden="true"></i></button>'
+    +'<button type="button" class="bd-c" onclick="bdGo(Math.max(BD.step,0))" aria-label="Повторить шаг"><i class="ti ti-rotate" aria-hidden="true"></i></button>'
+    +'<button type="button" class="bd-c bd-play" id="bdPP" onclick="bdToggle()" aria-label="Пауза"><i class="ti ti-player-pause-filled" aria-hidden="true"></i></button>'
+    +'<button type="button" class="bd-c" id="bdMute" onclick="bdMute()" aria-label="Выключить звук"><i class="ti ti-volume" aria-hidden="true"></i></button>'
+    +'<button type="button" class="bd-c" onclick="bdShare()" aria-label="Поделиться"><i class="ti ti-share-2" aria-hidden="true"></i></button></div>'
+    +'<div class="bd-more"><input id="bdMore" maxlength="300" placeholder="Спроси ещё…" aria-label="Спросить ещё" onkeydown="if(event.key===\'Enter\')bdFollowUp()">'
+    +'<button type="button" class="bd-send sm" onclick="bdFollowUp()" aria-label="Спросить"><i class="ti ti-send-2" aria-hidden="true"></i></button></div></div>';
+  bdMuteUi();
+  var bd=document.getElementById('bdBoard');
+  bd.addEventListener('wheel',bdManual,{passive:true});bd.addEventListener('touchmove',bdManual,{passive:true});
+  bdLayout();bdGo(0);
+}
+function bdManual(){if(BD.view!=='play')return;BD.follow=false;var f=document.getElementById('bdFollow');if(f)f.hidden=false;}
+function bdFollowOn(){BD.follow=true;var f=document.getElementById('bdFollow');if(f)f.hidden=true;bdCamTo(BD.focus||0);}
+// раскладка: каждая фигура получает y и высоту; рисуем потом, по шагам
+function bdLayout(){
+  var y=24,items=[];
+  BD.board.steps.forEach(function(st,si){(st.draw||[]).forEach(function(f){var h=bdMeasure(f);items.push({f:f,step:si,y:y,h:h});y+=h+22;});});
+  BD.items=items;BD.H=y+40;
+  var svg=document.getElementById('bdSvg');svg.setAttribute('viewBox','0 0 '+BD_W+' '+BD.H);
+  bdFit();
+}
+function bdFit(){
+  var bd=document.getElementById('bdBoard'),svg=document.getElementById('bdSvg');if(!bd)return;
+  var w=bd.clientWidth,s=w/BD_W;BD.cam.s=s;svg.setAttribute('width',w);svg.setAttribute('height',BD.H*s);svg.style.height=BD.H*s+'px';
+}
+function bdCamTo(y){
+  BD.focus=y;var bd=document.getElementById('bdBoard');if(!bd)return;
+  var top=Math.max(0,y*BD.cam.s-bd.clientHeight*0.38);
+  try{bd.scrollTo({top:top,behavior:'smooth'});}catch(e){bd.scrollTop=top;}
+}
+function bdOverview(){
+  var bd=document.getElementById('bdBoard'),svg=document.getElementById('bdSvg');if(!bd)return;
+  var on=!bd.classList.contains('all');bd.classList.toggle('all',on);
+  if(on){var s=Math.min(bd.clientWidth/BD_W,bd.clientHeight/BD.H);svg.style.height=BD.H*s+'px';svg.setAttribute('height',BD.H*s);svg.setAttribute('width',BD_W*s);bd.scrollTop=0;}
+  else{bdFit();bdCamTo(BD.focus||0);}
+}
+// ---------- шаги ----------
+function bdTimer(fn,ms){var t=setTimeout(fn,ms);BD.timers.push(t);return t;}
+function bdStop(){
+  BD.tok++;BD.timers.forEach(clearTimeout);BD.timers=[];BD.playing=false;
+  try{if(BD.au){BD.au.onended=null;BD.au.pause();}}catch(e){}
+  try{if(window.speechSynthesis)speechSynthesis.cancel();}catch(e){}
+}
+function bdGo(i){
+  if(!BD.board)return;
+  bdStop();var tok=BD.tok,n=BD.board.steps.length;
+  if(i>=n){bdEnd();return;}
+  BD.step=i;BD.playing=true;bdPPUi();
+  var cam=document.getElementById('bdCam');
+  // всё, что было до этого шага, — сразу, без анимации
+  cam.innerHTML='';
+  BD.items.forEach(function(it){if(it.step<i)bdDraw(cam,it,false);});
+  document.getElementById('bdStepN').textContent='Шаг '+(i+1)+' из '+n;
+  document.getElementById('bdPn').textContent=(i+1)+'/'+n;
+  document.querySelectorAll('#bdSegs i').forEach(function(s,k){s.className=k<i?'done':k===i?'on':'';});
+  var st=BD.board.steps[i],cap=document.getElementById('bdCap');cap.textContent=st.say||'';cap.classList.remove('in');void cap.offsetWidth;cap.classList.add('in');
+  var mine=BD.items.filter(function(it){return it.step===i;});
+  if(mine.length&&BD.follow)bdCamTo(mine[0].y+Math.min(mine[0].h,160)/2);
+  bdSpeak(st.say,i,function(dur){
+    if(tok!==BD.tok)return;
+    // рисуем, пока звучит фраза: фигуры шага делят время
+    var total=Math.max(1400,Math.min(dur*0.75,6500)),each=total/Math.max(mine.length,1);
+    mine.forEach(function(it,k){bdTimer(function(){if(tok!==BD.tok)return;bdDraw(cam,it,each*0.9);if(BD.follow)bdCamTo(it.y+Math.min(it.h,160)/2);},k*each);});
+  },function(){
+    if(tok!==BD.tok)return;
+    bdTimer(function(){if(tok===BD.tok&&BD.playing)bdGo(i+1);},700);
+  });
+}
+function bdEnd(){
+  BD.playing=false;bdPPUi('end');
+  document.querySelectorAll('#bdSegs i').forEach(function(s){s.className='done';});
+  var cam=document.getElementById('bdCam');if(cam){cam.innerHTML='';BD.items.forEach(function(it){bdDraw(cam,it,false);});}
+  var cap=document.getElementById('bdCap');if(cap){cap.innerHTML='Готово. Нажми ▶, чтобы посмотреть ещё раз, или спроси дальше.';}
+}
+function bdToggle(){
+  if(!BD.board)return;
+  if(BD.step>=BD.board.steps.length-1&&!BD.playing&&document.querySelector('#bdSegs i.on')===null){bdGo(0);return;}
+  if(BD.playing){
+    BD.playing=false;BD.paused=true;
+    try{if(BD.au&&!BD.au.paused)BD.au.pause();}catch(e){}
+    try{if(window.speechSynthesis)speechSynthesis.pause();}catch(e){}
+    bdPPUi();
+  }else{
+    BD.playing=true;bdPPUi();
+    var resumed=false;
+    try{if(BD.au&&BD.au.src&&BD.au.paused&&BD.au.currentTime>0&&!BD.au.ended){BD.au.play();resumed=true;}}catch(e){}
+    try{if(!resumed&&window.speechSynthesis&&speechSynthesis.paused){speechSynthesis.resume();resumed=true;}}catch(e){}
+    if(!resumed)bdGo(BD.step<0?0:BD.step+ (BD.paused?0:1));
+    BD.paused=false;
+  }
+}
+function bdPPUi(end){
+  var b=document.getElementById('bdPP');if(!b)return;
+  b.innerHTML='<i class="ti ti-'+(BD.playing?'player-pause-filled':end?'reload':'player-play-filled')+'" aria-hidden="true"></i>';
+  b.setAttribute('aria-label',BD.playing?'Пауза':end?'Сначала':'Продолжить');
+  if(end)b.onclick=function(){b.onclick=bdToggle;bdGo(0);};else b.onclick=bdToggle;
+}
+function bdMute(){BD.muted=!BD.muted;bdMuteUi();try{if(BD.au)BD.au.muted=BD.muted;}catch(e){}if(BD.muted)try{speechSynthesis.cancel();}catch(e){}}
+function bdMuteUi(){var b=document.getElementById('bdMute');if(!b)return;b.innerHTML='<i class="ti ti-'+(BD.muted?'volume-off':'volume')+'" aria-hidden="true"></i>';b.setAttribute('aria-label',BD.muted?'Включить звук':'Выключить звук');b.classList.toggle('off',BD.muted);}
+// голос шага: запись Gemini → голос телефона → без звука (по длине текста). onStart(длительность), onEnd()
+function bdSpeak(text,i,onStart,onEnd){
+  var tok=BD.tok,est=Math.max(1800,(text||'').length*62),done=false;
+  var fin=function(){if(done||tok!==BD.tok)return;done=true;onEnd();};
+  if(BD.muted||!text){onStart(est);bdTimer(fin,est);return;}
+  var url=BD.audio&&BD.audio[i];
+  if(url&&BD.au){
+    var a=BD.au,started=false;a.onended=fin;a.onerror=function(){if(!started){started=true;bdPhone(text,tok,onStart,fin,est);}};
+    a.onloadedmetadata=function(){if(started||tok!==BD.tok)return;started=true;onStart((a.duration||est/1000)*1000);};
+    a.src=url;a.muted=false;
+    var p=a.play();if(p&&p.catch)p.catch(function(){if(!started){started=true;bdPhone(text,tok,onStart,fin,est);}});
+    bdTimer(function(){if(!started){started=true;onStart(est);}},2500);
+    return;
+  }
+  bdPhone(text,tok,onStart,fin,est);
+}
+function bdPhone(text,tok,onStart,fin,est){
+  try{
+    if(!window.speechSynthesis)throw 0;
+    var u=new SpeechSynthesisUtterance(text);u.lang='ru-RU';u.rate=1.02;
+    var v=speechSynthesis.getVoices().filter(function(x){return /^ru/i.test(x.lang);});if(v.length)u.voice=v.filter(function(x){return /Milena|Google|Yuri/i.test(x.name);})[0]||v[0];
+    u.onend=fin;u.onerror=fin;speechSynthesis.cancel();speechSynthesis.speak(u);onStart(est);
+    bdTimer(fin,est+6000);              // если телефон «забыл» сказать onend
+  }catch(e){onStart(est);bdTimer(fin,est);}
+}
+function bdSteps(){
+  var h='<div class="bd-sheet" role="dialog" aria-label="Шаги"><div class="bd-sh-h"><b>Шаги объяснения</b><button type="button" class="bd-sq" onclick="this.closest(\'.bd-sheet\').remove()" aria-label="Закрыть"><i class="ti ti-x" aria-hidden="true"></i></button></div>'
+    +BD.board.steps.map(function(s,i){return '<button type="button" class="bd-st'+(i===BD.step?' on':'')+'" onclick="this.closest(\'.bd-sheet\').remove();bdGo('+i+')"><span>'+(i+1)+'</span><p>'+esc(s.say)+'</p></button>';}).join('')+'</div>';
+  BD.el.insertAdjacentHTML('beforeend',h);
+}
+function bdFollowUp(){
+  var i=document.getElementById('bdMore'),t=(i&&i.value||'').trim();if(t.length<2){if(i)i.focus();return;}
+  var prev=BD.board?BD.board.title:'';bdAsk(t,prev);
+}
+function bdShare(){
+  var bot=S.tgBot||VITA_BOT_NAME,t='Посмотри, как Vita объясняет на доске: «'+(BD.board&&BD.board.title||'')+'»';
+  vOpenTgLink('https://t.me/share/url?url='+encodeURIComponent('https://t.me/'+bot)+'&text='+encodeURIComponent(t));
+}
+async function bdHistory(){
+  BD.view='hist';
+  var h='<div class="bd-top"><button type="button" class="bd-pill" onclick="bdBack()"><i class="ti ti-chevron-left" aria-hidden="true"></i>Назад</button><div class="bd-tt"><b>Мои объяснения</b></div></div><div class="bd-hist" id="bdHist"><div class="bd-wait"><span class="sbe-spin" aria-hidden="true"></span></div></div>';
+  BD.el.className='bd-v-play';BD.el.innerHTML=h;
+  var rows=[];try{rows=await vRpc('board_mine',{p_token:S.token||vAdminToken()})||[];}catch(e){}
+  var el=document.getElementById('bdHist');if(!el)return;
+  el.innerHTML=rows.length?rows.map(function(r){return '<button type="button" class="bd-hr" onclick="bdReopen(\''+esc(r.key)+'\')"><span class="bd-si" style="--c:#79BEFF"><i class="ti ti-chalkboard" aria-hidden="true"></i></span><span><b>'+esc(r.q)+'</b><small>'+r.steps+' '+vplural(r.steps,'шаг','шага','шагов')+' · '+vpDate(r.at)+'</small></span><i class="ti ti-player-play-filled" aria-hidden="true"></i></button>';}).join('')
+    :'<div class="bd-wait"><b>Пока пусто</b><small>Здесь будут объяснения, которые ты смотрел. Повторно — бесплатно.</small></div>';
+}
+async function bdReopen(key){
+  bdUnlock();bdWait('Открываю…');
+  try{var r=await fetch(vBotUrl('/u/board'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:S.token||vAdminToken(),key:key})});var j=await r.json();
+    if(j.status==='ok'){BD.q=j.board.title;bdPlay(j);}else bdFail(j.reason||'Не открылось');}catch(e){bdFail('Нет связи');}
+}
+// ---------- рисование: фигуры «от руки» ----------
+function bdR(seed){var x=Math.sin(seed*999.13)*43758.5453;return x-Math.floor(x);}
+var BD_SEED=1;
+function bdJ(a){BD_SEED++;return (bdR(BD_SEED)-0.5)*2*a;}
+function bdLine(x1,y1,x2,y2,j){j=j==null?1.6:j;var mx=(x1+x2)/2+bdJ(j*1.5),my=(y1+y2)/2+bdJ(j*1.5);
+  return 'M'+(x1+bdJ(j)).toFixed(1)+' '+(y1+bdJ(j)).toFixed(1)+' Q'+mx.toFixed(1)+' '+my.toFixed(1)+' '+(x2+bdJ(j)).toFixed(1)+' '+(y2+bdJ(j)).toFixed(1);}
+function bdCircle(cx,cy,rx,ry,j){
+  j=j==null?2:j;var n=26,pts=[],a0=bdJ(1);
+  for(var k=0;k<=n+2;k++){var a=a0+k/n*Math.PI*2,r=1+bdJ(0.035);pts.push([cx+Math.cos(a)*rx*r,cy+Math.sin(a)*ry*r]);}
+  return bdSmooth(pts);
+}
+function bdBlob(cx,cy,rx,ry){
+  var n=9,pts=[],rr=[];for(var k=0;k<n;k++)rr.push(0.8+bdR(BD_SEED+k*7.1)*0.35);BD_SEED+=11;
+  for(var k2=0;k2<=n+1;k2++){var a=k2/n*Math.PI*2,r=rr[k2%n];pts.push([cx+Math.cos(a)*rx*r,cy+Math.sin(a)*ry*r]);}
+  return bdSmooth(pts);
+}
+function bdSmooth(p){
+  var d='M'+p[0][0].toFixed(1)+' '+p[0][1].toFixed(1);
+  for(var i=0;i<p.length-1;i++){var p0=p[i-1]||p[i],p1=p[i],p2=p[i+1],p3=p[i+2]||p2;
+    d+=' C'+(p1[0]+(p2[0]-p0[0])/6).toFixed(1)+' '+(p1[1]+(p2[1]-p0[1])/6).toFixed(1)+' '+(p2[0]-(p3[0]-p1[0])/6).toFixed(1)+' '+(p2[1]-(p3[1]-p1[1])/6).toFixed(1)+' '+p2[0].toFixed(1)+' '+p2[1].toFixed(1);}
+  return d;
+}
+function bdBox(x,y,w,h){return [bdLine(x,y,x+w,y),bdLine(x+w,y,x+w,y+h),bdLine(x+w,y+h,x,y+h),bdLine(x,y+h,x,y)];}
+function bdArrowD(x1,y1,x2,y2){var a=Math.atan2(y2-y1,x2-x1),l=10;
+  return [bdLine(x1,y1,x2,y2,1.2),bdLine(x2,y2,x2-l*Math.cos(a-0.5),y2-l*Math.sin(a-0.5),0.5),bdLine(x2,y2,x2-l*Math.cos(a+0.5),y2-l*Math.sin(a+0.5),0.5)];}
+// перенос строк по ширине (Caveat узкий: ~0.42 размера на букву)
+function bdWrap(t,size,maxW){
+  var max=Math.max(6,Math.floor(maxW/(size*0.5))),words=String(t||'').split(/\s+/),lines=[],cur='';
+  words.forEach(function(w){if((cur+' '+w).trim().length>max&&cur){lines.push(cur);cur=w;}else cur=(cur+' '+w).trim();});
+  if(cur)lines.push(cur);return lines.length?lines:[''];
+}
+function bdMeasure(f){
+  switch(f.t){
+    case 'title':return bdWrap(f.text,32,BD_W-40).length*36+6;
+    case 'node':return 150+(f.label?bdWrap(f.label,22,BD_W-80).length*24:0);
+    case 'flow':return f.nodes.length<=3?96+bdMaxLines(f.nodes,17,118)*19:f.nodes.length*78;
+    case 'arrow':return 58;
+    case 'compare':return 46+Math.max(bdLinesH(f.left),bdLinesH(f.right));
+    case 'note':return bdWrap(f.text,22,BD_W-72).length*26+28;
+    case 'list':return f.items.reduce(function(s,t){return s+bdWrap(t,21,BD_W-70).length*24+6;},0);
+    case 'formula':return 58;
+    case 'question':return bdWrap(f.text,23,BD_W-80).length*27+34;
+  }return 40;
+}
+function bdMaxLines(arr,size,w){return arr.reduce(function(m,t){return Math.max(m,bdWrap(t,size,w).length);},1);}
+function bdLinesH(s){return (s.lines||[]).reduce(function(h,t){return h+bdWrap(t,17,150).length*20+4;},0)+10;}
+// одна фигура: собираем пути и подписи, потом показываем (анимированно или сразу)
+function bdDraw(cam,it,dur){
+  var f=it.f,y=it.y,cx=BD_W/2,paths=[],texts=[],P=function(d,c,w){paths.push({d:d,c:c||'#F4F1E8',w:w||2.6});},
+    T=function(x,yy,t,size,c,anchor,weight){texts.push({x:x,y:yy,t:t,s:size,c:c||'#F4F1E8',a:anchor||'middle',w:weight||500});};
+  BD_SEED=Math.round(y*7+3);
+  var col=function(c){return BD_COL[c]||BD_COL.white;};
+  switch(f.t){
+    case 'title':bdWrap(f.text,32,BD_W-40).forEach(function(l,k){T(20,y+30+k*36,l,32,BD_COL.pink,'start',700);});break;
+    case 'node':{var c=col(f.color==='white'?'':f.color)||BD_COL.white,cy=y+70,rx=f.shape==='box'?92:f.shape==='blob'?104:72,ry=f.shape==='box'?54:f.shape==='blob'?60:66;
+      if(f.shape==='box')bdBox(cx-rx,cy-ry,rx*2,ry*2).forEach(function(d){P(d,c);});
+      else P(f.shape==='blob'?bdBlob(cx,cy,rx,ry):bdCircle(cx,cy,rx,ry),c,2.8);
+      (f.inside||[]).forEach(function(w,k,arr){var off=(k-(arr.length-1)/2)*26;T(cx+(k%2?18:-14),cy+off+7,w,20,BD_COL.white);
+        P(bdCircle(cx+(k%2?18:-14)-w.length*4.6-10,cy+off+1,2.2,2.2,0.3),BD_COL.white,2);});
+      if(f.label)bdWrap(f.label,22,BD_W-80).forEach(function(l,k){T(cx,y+158+k*24,l,22,BD_COL.white,'middle',500);});
+      break;}
+    case 'flow':{var n=f.nodes.length;
+      if(n<=3){var slot=BD_W/n;f.nodes.forEach(function(t,k){var x=slot*k+slot/2,cyy=y+40;
+          if(f.shape==='box')bdBox(x-34,cyy-30,68,60).forEach(function(d){P(d);});else P(bdCircle(x,cyy,32,32),BD_COL.white);
+          P(bdCircle(x,cyy,10+bdR(k)*4,10+bdR(k+1)*4,0.8),[BD_COL.blue,BD_COL.yellow,BD_COL.pink][k%3],2.4);
+          bdWrap(t,17,slot-12).forEach(function(l,q){T(x,y+96+q*19,l,17,BD_COL.white);});
+          if(k<n-1)bdArrowD(x+40,cyy,x+slot-42,cyy).forEach(function(d){P(d,BD_COL.white,2.2);});});}
+      else f.nodes.forEach(function(t,k){var yy=y+k*78;bdBox(cx-120,yy,240,50).forEach(function(d){P(d,BD_COL.white,2.2);});
+          T(cx,yy+33,t,21,BD_COL.white);if(k<n-1)bdArrowD(cx,yy+52,cx,yy+76).forEach(function(d){P(d,BD_COL.white,2);});});
+      break;}
+    case 'arrow':bdArrowD(cx,y+4,cx,y+52).forEach(function(d){P(d,BD_COL.white,2.4);});if(f.label)T(cx+18,y+34,f.label,19,BD_COL.yellow,'start');break;
+    case 'compare':{var hh=it.h,w=BD_W/2-26;
+      [[f.left,14,BD_COL.green],[f.right,BD_W/2+12,BD_COL.pink]].forEach(function(s){var x=s[1];
+        bdBox(x,y,w,hh).forEach(function(d){P(d,s[2],2.2);});T(x+w/2,y+28,s[0].title,22,s[2],'middle',700);
+        var yy=y+52;(s[0].lines||[]).forEach(function(l){bdWrap(l,17,150).forEach(function(q){T(x+10,yy,q,17,BD_COL.white,'start');yy+=20;});yy+=4;});});
+      break;}
+    case 'note':{var lines=bdWrap(f.text,22,BD_W-72),h=lines.length*26+18,c2=col(f.color);
+      bdBox(22,y,BD_W-44,h).forEach(function(d){P(d,BD_COL.white,1.8);});
+      lines.forEach(function(l,k){T(36,y+28+k*26,l,22,c2==='#F4F1E8'?BD_COL.yellow:c2,'start');});break;}
+    case 'list':{var yy=y+20;f.items.forEach(function(t,k){var ls=bdWrap(t,21,BD_W-70);P(bdLine(24,yy-7,40,yy-7,0.8),[BD_COL.yellow,BD_COL.blue,BD_COL.green,BD_COL.pink][k%4],3);
+        ls.forEach(function(l,q){T(50,yy+q*24,l,21,BD_COL.white,'start');});yy+=ls.length*24+6;});break;}
+    case 'formula':T(cx,y+34,f.text,26,BD_COL.yellow,'middle',700);P(bdLine(cx-120,y+48,cx+120,y+46,1.5),BD_COL.yellow,2);break;
+    case 'question':{var qs=bdWrap(f.text,23,BD_W-80),hq=qs.length*27+20;
+      bdBox(30,y,BD_W-60,hq).forEach(function(d){P(d,BD_COL.blue,2);});qs.forEach(function(l,k){T(cx,y+30+k*27,l,23,BD_COL.blue);});break;}
+  }
+  var g=document.createElementNS('http://www.w3.org/2000/svg','g');cam.appendChild(g);
+  var nT=texts.reduce(function(s,t){return s+t.t.length;},0)||1,pd=dur?dur*0.45/Math.max(paths.length,1):0,td=dur?dur*0.55:0,t0=0;
+  paths.forEach(function(p){
+    var e=document.createElementNS('http://www.w3.org/2000/svg','path');e.setAttribute('d',p.d);e.setAttribute('fill','none');e.setAttribute('stroke',p.c);
+    e.setAttribute('stroke-width',p.w);e.setAttribute('stroke-linecap','round');e.setAttribute('stroke-linejoin','round');g.appendChild(e);
+    if(dur){var L=0;try{L=e.getTotalLength();}catch(x){}if(L){e.style.strokeDasharray=L;e.style.strokeDashoffset=L;
+      (function(e,delay){bdTimer(function(){e.style.transition='stroke-dashoffset '+Math.round(pd)+'ms ease-in-out';e.style.strokeDashoffset='0';},delay);})(e,t0);t0+=pd;}}
+  });
+  texts.forEach(function(t){
+    var e=document.createElementNS('http://www.w3.org/2000/svg','text');e.setAttribute('x',t.x);e.setAttribute('y',t.y);e.setAttribute('fill',t.c);
+    e.setAttribute('font-size',t.s);e.setAttribute('font-weight',t.w);e.setAttribute('text-anchor',t.a);e.setAttribute('class','bd-tx');g.appendChild(e);
+    if(!dur){e.textContent=t.t;return;}
+    var per=td*t.t.length/nT,chars=t.t.length,step=Math.max(16,per/Math.max(chars,1));
+    (function(e,full,start){for(var k=1;k<=chars;k++)(function(k){bdTimer(function(){e.textContent=full.slice(0,k);},start+k*step);})(k);})(e,t.t,t0);
+    t0+=per;
+  });
+}
+window.addEventListener('resize',function(){if(BD.view==='play'&&BD.board){var bd=document.getElementById('bdBoard');if(bd&&!bd.classList.contains('all'))bdFit();}});
+// ---------- вход на доску: главная, тренажёр, конспект ----------
+function bdHomeCard(){
+  return '<button type="button" class="bd-home" onclick="bdOpen()"><span class="bd-hglow" aria-hidden="true"></span>'
+    +'<span class="bd-hdraw" aria-hidden="true"><svg viewBox="0 0 120 70"><path d="M8 52 C 30 10, 52 10, 60 34 S 92 60, 112 18" fill="none" stroke="#FFD45E" stroke-width="3" stroke-linecap="round"/><circle cx="22" cy="20" r="11" fill="none" stroke="#FF7A93" stroke-width="2.6"/><path d="M70 50 l14 0 M84 50 l-5 -4 M84 50 l-5 4" stroke="#79BEFF" stroke-width="2.6" stroke-linecap="round" fill="none"/></svg></span>'
+    +'<span class="bd-ht"><small>Новое</small><b>Объясни на доске</b><span>Нарисую схему и расскажу голосом</span></span>'
+    +'<span class="bd-hgo" aria-hidden="true"><i class="ti ti-player-play-filled"></i></span></button>';
+}
+(function(){
+  var w=document.getElementById('trAiWrap');
+  if(w&&!document.getElementById('bdTr'))w.insertAdjacentHTML('beforeend','<button type="button" class="vq-tr bd-tr" id="bdTr" onclick="if(TRC)bdOpen({qid:TRC.id,text:\'Объясни этот вопрос и почему верный ответ именно такой\'})"><i class="ti ti-chalkboard" aria-hidden="true"></i>Нарисуй и объясни на доске</button>');
 })();
 // ===== VITA · КОНЕЦ БЛОКА «ЛАБОРАТОРИЯ» =====
 </script>
