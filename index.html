@@ -2917,6 +2917,96 @@ kbd{display:inline-block;padding:1px 6px;border-radius:5px;border:1px solid var(
 .mt-left:empty{display:none}
 .mt-wait{padding:36px 12px}
 .mt-wait b{margin-top:12px}
+
+/* ===== VITA+ : витрина — золото, блик, сравнение ===== */
+.vp-home{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:8px;width:100%;margin:12px 0 0;padding:16px 16px 14px;border:none;border-radius:22px;text-align:left;font:inherit;cursor:pointer;
+  background:linear-gradient(135deg,#FFD65C 0%,#FFB02E 55%,#FF8A3D 100%);color:#2A1700;box-shadow:0 10px 26px -12px rgba(255,150,30,.75)}
+.vp-shine{position:absolute;inset:0;background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);transform:translateX(-120%);animation:vpShine 3.6s ease-in-out infinite;pointer-events:none}
+@keyframes vpShine{0%,55%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+@media (prefers-reduced-motion:reduce){.vp-shine{animation:none;display:none}}
+.vp-hrow{display:flex;align-items:center;gap:8px;position:relative}
+.vp-hmark{display:grid;place-items:center;width:30px;height:30px;border-radius:10px;background:#2A1700;color:#FFD65C;font-size:16px}
+.vp-hrow b{font-size:17px;font-weight:800;letter-spacing:-.2px}
+.vp-hprice{margin-left:auto;background:#2A1700;color:#FFE08A;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:800;white-space:nowrap}
+.vp-hbig{position:relative;font-family:var(--serif);font-size:23px;line-height:1.15;letter-spacing:-.3px}
+.vp-hfoot{position:relative;display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:12.5px;font-weight:600;color:#5A3A00}
+.vp-hgift{background:rgba(255,255,255,.5);border-radius:999px;padding:3px 9px;color:#2A1700}
+.vp-home.on{flex-direction:row;align-items:center;gap:12px;background:var(--bg2);color:var(--tx);border:1px solid var(--am);box-shadow:none;padding:12px 14px}
+.vp-home.on .vp-mark{width:40px;height:40px;border-radius:13px;font-size:19px;flex:none}
+.vp-ht{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.vp-ht b{font-size:15px}.vp-ht small{font-size:12.5px;color:var(--tx2)}
+.vp-home.on>i{color:var(--tx3)}
+.vp-home:focus-visible{outline:2px solid var(--tx);outline-offset:3px}
+.vp-hero{margin:-26px -22px 0;padding:30px 28px 20px;background:linear-gradient(160deg,rgba(255,190,61,.34),rgba(255,138,61,.12) 60%,transparent);border-radius:inherit}
+.vp-hero .vp-mark{box-shadow:0 8px 22px -8px rgba(255,160,30,.9)}
+.vp-cmp{border:1px solid var(--bor);border-radius:16px;overflow:hidden;font-size:13.5px}
+.vp-cr{display:grid;grid-template-columns:1.25fr .9fr 1fr;align-items:center}
+.vp-cr+.vp-cr{border-top:1px solid var(--bor)}
+.vp-cr>span{padding:10px 8px;color:var(--tx2);line-height:1.3;min-width:0}
+.vp-cr>span:first-child{padding-left:12px;color:var(--tx);font-weight:600}
+.vp-cr>span:not(:first-child){text-align:center}
+.vp-cr .vp-cp{background:var(--amd);color:var(--tx);align-self:stretch;display:grid;place-items:center}
+.vp-cr .vp-cp b{color:var(--am)}
+.vp-ch>span{font-size:11.5px;font-weight:800;color:var(--tx3);padding-top:9px;padding-bottom:9px}
+.vp-ch .vp-cp{color:var(--am)}
+.vp-cr .ti-check{color:var(--am);font-size:18px}.vp-cr .ti-minus{color:var(--tx3)}
+.vp-fact{margin:0;font-size:13px;color:var(--tx2);line-height:1.45}
+.vp-gift{display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,rgba(255,214,92,.28),rgba(255,138,61,.16));border:1px solid var(--am)}
+.vp-gift>span:first-child{font-size:26px;line-height:1}
+.vp-gift b{display:block;font-size:14.5px;color:var(--tx)}.vp-gift small{display:block;font-size:12.5px;color:var(--tx2);margin-top:2px;line-height:1.35}
+.pf-id.vp-plus .pf-ava{border-radius:50%;box-shadow:0 0 0 3px var(--cap-gold),0 0 18px -2px rgba(255,180,50,.8)}
+.pf-id.vp-plus .pf-who>b::after{content:' ✦';color:var(--cap-gold)}
+/* рассылка: картинка */
+.bc-img{display:flex;align-items:center;gap:12px}
+.bc-img img{width:64px;height:64px;object-fit:cover;border-radius:12px;flex:none}
+.bc-img>div{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;font-size:13px}
+.bc-img small{color:var(--tx3)}
+.bc-addimg{display:flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border-radius:12px;border:1px dashed var(--bor);background:none;color:var(--tx2);font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.bc-pimg{display:block;width:100%;max-height:220px;object-fit:cover;border-radius:10px;margin-bottom:8px}
+#modalRoot .modal.vp-sheet>*{flex:none}
+
+/* ===== VITA+ : выбор тарифа карточками ===== */
+#modalRoot .modal.vp-sheet:has(.vp-plans){padding:22px 16px 0}
+.vp-th{padding:0 40px 0 4px}
+.vp-th h2{margin:0 0 4px;font-size:24px;font-weight:800;letter-spacing:-.4px;color:var(--tx)}
+.vp-th p{margin:0;font-size:14px;color:var(--tx2);line-height:1.4}
+.vp-plans{display:flex;flex-direction:column;gap:12px}
+.vp-plan{border:2px solid var(--bor);border-radius:22px;background:var(--bg2);padding:14px;cursor:pointer;outline:none;transition:border-color .2s}
+.vp-plan:focus-visible{box-shadow:0 0 0 3px var(--tx)}
+.vp-plan.plus.on{border-color:var(--cap-gold);background:linear-gradient(170deg,rgba(255,200,70,.20),rgba(255,140,60,.06) 55%,var(--bg2));box-shadow:0 6px 0 -1px #C98A12}
+.vp-plan.free.on{border-color:var(--tx3)}
+.vp-ph{display:flex;align-items:center;gap:12px}
+.vp-pic{flex:none;width:58px;height:58px;border-radius:18px;display:grid;place-items:center;font-size:28px;background:var(--bg3,rgba(127,127,127,.14));color:var(--tx2)}
+.vp-plan.plus .vp-pic{background:linear-gradient(140deg,#FFD65C,#FF9A3D);color:#2A1700;box-shadow:0 6px 16px -6px rgba(255,150,30,.8)}
+.vp-pn{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.vp-pn b{font-size:20px;font-weight:800;color:var(--tx);letter-spacing:-.3px}
+.vp-plan.plus.on .vp-pn b{color:var(--cap-gold)}
+.vp-tag{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;font-size:12.5px;font-weight:800;background:var(--bg3,rgba(127,127,127,.18));color:var(--tx2)}
+.vp-plan.plus .vp-tag{background:var(--cap-gold);color:#2A1700}
+.vp-pp{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:2px;text-align:right}
+.vp-per{font-size:12px;font-weight:800;padding:3px 9px;border-radius:999px;background:var(--bg3,rgba(127,127,127,.18));color:var(--tx2);margin-bottom:4px}
+.vp-plan.plus.on .vp-per{background:var(--amd);color:var(--am)}
+.vp-pp b{font-size:24px;font-weight:800;line-height:1;color:var(--tx);font-variant-numeric:tabular-nums}
+.vp-plan.plus.on .vp-pp b{color:var(--cap-gold);font-size:28px}
+.vp-pp small{font-size:12px;color:var(--tx3)}
+.vp-pl{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:11px}
+.vp-pl li{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;line-height:1.4;color:var(--tx)}
+.vp-pl li i{flex:none;font-size:19px;margin-top:0}
+.vp-pl li.y i{color:#4FD18B}
+.vp-plan.plus .vp-pl li.y i{color:var(--cap-gold)}
+.vp-pl li.n{color:var(--re)}
+.vp-pl li.n i{color:var(--re)}
+.vp-pl b{font-weight:800}
+.vp-plan .vp-fact{margin:12px 0 0}
+.vp-stick{position:sticky;bottom:0;margin:0 -16px;padding:12px 16px calc(14px + env(safe-area-inset-bottom,0px));background:linear-gradient(transparent,var(--bg2) 18px);display:flex;flex-direction:column;gap:8px}
+.btn.vp-go{min-height:56px;font-size:17px;border-radius:18px;box-shadow:0 5px 0 #C98A12}
+.btn.bgh.vp-go{box-shadow:none;width:100%;justify-content:center}
+.vp-how{margin:0;text-align:center;font-weight:700;color:var(--tx)}
+.vp-tag{white-space:nowrap}
+.vp-ph{align-items:flex-start}
+.vp-pn{padding-top:4px}
+.vp-plan.plus.on .vp-pp b{font-size:26px}
+@media(max-width:380px){.vp-pic{width:48px;height:48px;font-size:24px}.vp-pn b{font-size:18px}}
 </style>
 </head>
 <body>
@@ -11093,6 +11183,7 @@ function renderHome(){
     +'<button class="lb-tile vio" onclick="vOpen(\'duels\')"><span class="ic"><i class="ti ti-swords"></i></span>'+(duelWaiting?'<span class="cnt">!</span>':'')+'<span class="lb-tb"><b>Дуэли</b><small>'+(duelWaiting?'Тебя вызвали':'Один на один')+'</small></span></button>'
     +'</div>';
   if(S.user||S.isAdm)h+=vqHomeRow();
+  h+='<div id="vpHome">'+vpHomeHtml()+'</div>';
 
   h+='<div class="lb-tri">'
     +'<button class="lb-mini" onclick="vOpenErrors()"><span class="lb-blob eos"><i class="ti ti-refresh-alert"></i></span><span><b>Ошибки</b><small>'+(errs?'<em>'+errs+'</em> ждут':'пока нет')+'</small></span></button>'
@@ -14101,16 +14192,29 @@ function bcRender(){
     +(BC.aud==='group'?'<div class="field"><label for="bcGroup">Номер группы</label><input id="bcGroup" placeholder="например 101" value="'+esc(BC.group||'')+'" oninput="BC.group=this.value;bcCount()"></div>':'')
     +'<div class="field"><label for="bcTitle">Заголовок</label><input id="bcTitle" maxlength="120" placeholder="Например: тесты деканата обновлены" value="'+esc(BC.title||'')+'" oninput="BC.title=this.value;bcPrev()"></div>'
     +'<div class="field"><label for="bcBody">Текст</label><textarea id="bcBody" rows="5" maxlength="3000" placeholder="Что хочешь сказать" oninput="BC.body=this.value;bcPrev()">'+esc(BC.body||'')+'</textarea></div>'
+    +'<div class="bc-img" id="bcImg"></div>'
     +(BC.aud==='all'?'<label class="bc-chk"><input type="checkbox" '+(BC.news?'checked':'')+' onchange="BC.news=this.checked;bcCount()"> Показать и в «Новостях» приложения</label>':'')
     +'<div class="bc-l">Так увидят в Telegram</div><div class="bc-prev" id="bcPrev"></div>'
     +'<div class="bc-foot"><span id="bcCnt" class="bc-cnt" aria-live="polite"></span><button type="button" class="btn bbl" id="bcSend" onclick="bcSend()"><i class="ti ti-send" aria-hidden="true"></i>Отправить</button></div></div>'
     +'<h3 class="bc-h">Отправленные</h3><div id="bcHist" class="bc-hist">Загрузка…</div>';
-  bcPrev();bcCount();bcHist();
+  bcImgDraw();bcPrev();bcCount();bcHist();
+}
+function bcImgDraw(){
+  var el=document.getElementById('bcImg');if(!el)return;
+  el.innerHTML=BC.img?'<img src="data:image/jpeg;base64,'+BC.img+'" alt="Картинка рассылки"><div><b>Картинка приложена</b><small>С картинкой текст короче: до 900 знаков</small></div><button type="button" class="btn bgh bsm" onclick="BC.img=\'\';bcImgDraw();bcPrev()">Убрать</button>'
+    :'<button type="button" class="bc-addimg" onclick="bcImgPick()"><i class="ti ti-photo-plus" aria-hidden="true"></i>Добавить картинку</button>';
+}
+function bcImgPick(){
+  var f=document.getElementById('bcFile');
+  if(!f){f=document.createElement('input');f.type='file';f.id='bcFile';f.accept='image/*';f.hidden=true;document.body.appendChild(f);
+    f.onchange=async function(){var x=f.files&&f.files[0];f.value='';if(!x)return;
+      try{var c=await vImgCompress(x,1600,.82);if(c.b64.length>1100000)c=await vImgCompress(x,1200,.75);BC.img=c.b64;bcImgDraw();bcPrev();}catch(e){toast2(e.message||'Картинка не открылась');}};}
+  f.click();
 }
 function bcAud(a){BC.aud=a;bcRender();}
 function bcPrev(){
   var p=document.getElementById('bcPrev');if(!p)return;BC.ask=false;bcBtn();
-  p.innerHTML='<b>📣 '+esc(BC.title||'Заголовок')+'</b>'+(BC.body?'<p>'+esc(BC.body).replace(/\n/g,'<br>')+'</p>':'')
+  p.innerHTML=(BC.img?'<img class="bc-pimg" src="data:image/jpeg;base64,'+BC.img+'" alt="">':'')+'<b>📣 '+esc(BC.title||'Заголовок')+'</b>'+(BC.body?'<p>'+esc(BC.body).replace(/\n/g,'<br>')+'</p>':'')
     +'<span class="bc-pbtn">'+(BC.aud==='admins'?'Открыть админку':'Открыть Vita')+'</span>';
 }
 function bcBtn(){var b=document.getElementById('bcSend');if(!b)return;b.innerHTML=BC.ask?'<i class="ti ti-send" aria-hidden="true"></i>Да, отправить'+(BC.cnt?' — '+BC.cnt.telegram+' '+vplural(BC.cnt.telegram,'человеку','людям','людям'):''):'<i class="ti ti-send" aria-hidden="true"></i>Отправить';b.classList.toggle('ask',!!BC.ask);}
@@ -14132,9 +14236,11 @@ async function bcSend(){
   if(!BC.ask){BC.ask=true;bcBtn();return;}                      // второе нажатие — уже отправка
   var b=document.getElementById('bcSend');if(b){b.disabled=true;b.textContent='Отправляю…';}
   try{
-    var r=await vRpc('admin_broadcast',{p_token:vAdminToken(),p_aud:BC.aud,p_group:BC.group||'',p_title:t,p_body:BC.body||'',p_news:BC.aud==='all'&&BC.news,p_dry:false});
+    var a={p_token:vAdminToken(),p_aud:BC.aud,p_group:BC.group||'',p_title:t,p_body:BC.body||'',p_news:BC.aud==='all'&&BC.news,p_dry:false};
+    if(BC.img)a.p_image=BC.img;
+    var r;try{r=await vRpc('admin_broadcast',a);}catch(e){if(e.missing&&BC.img)throw new Error('Чтобы слать картинки, примени security_v22.sql');throw e;}
     toast2('Отправлено — бот рассылает '+r.telegram+' '+vplural(r.telegram,'человеку','людям','людям'));try{playSound('done');}catch(e){}
-    BC.title='';BC.body='';BC.ask=false;bcRender();
+    BC.title='';BC.body='';BC.img='';BC.ask=false;bcRender();
   }catch(e){toast2(e.missing?'Сначала примени security_v20.sql':(e.message||'Не получилось'));if(b)b.disabled=false;BC.ask=false;bcBtn();}
 }
 async function bcHist(){
@@ -14142,7 +14248,7 @@ async function bcHist(){
   try{var rows=await vRpc('admin_broadcasts',{p_token:vAdminToken()})||[];
     el.innerHTML=rows.length?rows.map(function(x){
       var who=x.audience==='group'?'Группа '+esc(x.group):BC_AUD[x.audience][0],done=x.delivered+x.failed;
-      return '<div class="bc-row"><div class="bc-rt"><b>'+esc(x.title)+'</b><small>'+who+(x.news?' · и в «Новостях»':'')+' · '+new Date(x.at).toLocaleString('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+'</small></div>'
+      return '<div class="bc-row"><div class="bc-rt"><b>'+(x.img?'<i class="ti ti-photo" aria-hidden="true"></i> ':'')+esc(x.title)+'</b><small>'+who+(x.news?' · и в «Новостях»':'')+' · '+new Date(x.at).toLocaleString('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+'</small></div>'
         +'<span class="bc-st'+(done<x.planned?' wait':'')+'">'+(done<x.planned?'отправляется…':'дошло '+x.delivered+' из '+x.planned)+'</span></div>';}).join(''):'<div class="bc-empty">Рассылок ещё не было.</div>';
   }catch(e){el.innerHTML='<div class="bc-empty">'+(e.missing?'Сначала примени security_v20.sql':esc(e.message||'Не загрузилось'))+'</div>';}
 }
@@ -14155,7 +14261,39 @@ async function vpLoad(force){
   if(!force&&VP&&Date.now()-VP_AT<60000)return VP;
   try{VP=await vRpc('sub_status',{p_token:vpTok()});VP_AT=Date.now();}catch(e){if(e.missing)VP=null;}
   try{vpPaint();}catch(e){}
+  try{var hm=document.getElementById('vpHome');if(hm)hm.innerHTML=vpHomeHtml();}catch(e){}
   return VP;
+}
+// витрина на главной: бесплатным — яркая карточка, с Vita+ — строка со сроком
+function vpHomeHtml(){
+  var v=VP;if(!v||!v.enabled||v.staff||!S.user)return '';
+  if(v.plus)return '<button type="button" class="vp-home on" onclick="vpWall(\'info\')"><span class="vp-mark on" aria-hidden="true">✦</span><span class="vp-ht"><b>Vita+ активна</b><small>Без лимитов до '+vpDate(v.until,true)+'</small></span><i class="ti ti-chevron-right" aria-hidden="true"></i></button>';
+  var left=vpLeft();
+  return '<button type="button" class="vp-home" onclick="vpWall(\'info\')"><span class="vp-shine" aria-hidden="true"></span>'
+    +'<span class="vp-hrow"><span class="vp-hmark" aria-hidden="true">✦</span><b>Vita+</b><span class="vp-hprice">'+vpSum(v.price_uzs)+' сум</span></span>'
+    +'<span class="vp-hbig">Тесты, ИИ и свои тесты — без лимитов</span>'
+    +'<span class="vp-hfoot"><span>'+(v.trial_left>0?'Бесплатно осталось '+v.trial_left+' '+vplural(v.trial_left,'вопрос','вопроса','вопросов'):(left>0?'Сегодня бесплатно осталось '+left+' из '+v.q_limit:'Бесплатные вопросы на сегодня закончились'))+'</span>'
+    +(v.gift?'<span class="vp-hgift">+'+v.gift+' монет в подарок</span>':'')+'</span></button>';
+}
+function vpCompare(v,bank){
+  var yes='<i class="ti ti-check" aria-label="есть"></i>',no='<i class="ti ti-minus" aria-label="нет"></i>',inf='<b>Без лимита</b>';
+  if(v.plus&&!v.staff){
+    return '<ul class="vp-list">'
+      +[['infinity','Тесты и объяснения без лимита'],['message-question','Спросить ИИ — '+v.ask_limit+' в день, с фото и файлами'],['photo-plus','Свои тесты — '+v.plus_imp+' вопросов в месяц'],['rosette-discount-check','Значок ✦ в рейтинге']]
+        .map(function(r){return '<li><i class="ti ti-'+r[0]+'" aria-hidden="true"></i><span><b>'+r[1]+'</b></span></li>';}).join('')+'</ul>';
+  }
+  var rows=[
+    ['Деканатские тесты',v.q_limit+' в день',inf],
+    ['Объяснения ИИ',v.ex_limit+' в день',inf],
+    ['Спросить ИИ',v.ask_limit+' в день','<b>'+v.plus_ask+' в день</b>'],
+    ['Разбор фото, PDF и Word',no,v.plus_file>0?yes:no],
+    ['Свои тесты из скриншотов',v.imp_limit?v.imp_limit+' вопросов, один раз':no,'<b>'+v.plus_imp+' в месяц</b>'],
+    ['Значок ✦ в рейтинге',no,yes]];
+  var h='<div class="vp-cmp" role="table" aria-label="Сравнение: бесплатно и Vita+"><div class="vp-cr vp-ch" role="row"><span role="columnheader"></span><span role="columnheader">Бесплатно</span><span role="columnheader" class="vp-cp">✦ Vita+</span></div>'
+    +rows.map(function(r){return '<div class="vp-cr" role="row"><span role="rowheader">'+r[0]+'</span><span role="cell">'+r[1]+'</span><span role="cell" class="vp-cp">'+r[2]+'</span></div>';}).join('')+'</div>';
+  if(bank>v.q_limit*3)h+='<p class="vp-fact">В банке '+vpSum(bank)+' '+vplural(bank,'вопрос','вопроса','вопросов')+'. По '+v.q_limit+' в день это '+Math.ceil(bank/v.q_limit)+' '+vplural(Math.ceil(bank/v.q_limit),'день','дня','дней')+' — с Vita+ пройдёшь в своём темпе.</p>';
+  if(v.gift)h+='<div class="vp-gift"><span aria-hidden="true">🎁</span><span><b>+'+v.gift+' монет в подарок</b><small>Приходят сразу после оплаты — на рамки и фоны в магазине.</small></span></div>';
+  return h;
 }
 // лимит действует на этого человека? (подписка включена, Vita+ нет, не админ)
 function vpOn(){return !!(VP&&VP.enabled&&!VP.plus&&!VP.staff&&S.user);}
@@ -14212,25 +14350,60 @@ function vpWall(why){
     imp:['Лимит своих тестов закончился',v.plus?'В этом месяце ты уже загрузил '+v.plus_imp+' вопросов. В следующем — снова можно.':'Бесплатная проба использована. С Vita+ — '+v.plus_imp+' вопросов в месяц.'],
     file:['Разбор файлов — в Vita+','Сфотографируй страницу или пришли PDF — ИИ объяснит непонятное место.'],
     info:['Vita+','Готовься к деканату без остановок.']}[why]||['Vita+','Готовься к деканату без остановок.'];
-  var h='<div class="vp-top"><span class="vp-mark" aria-hidden="true">✦</span><h2>'+(v.plus&&!v.staff?'Vita+ активна':head[0])+'</h2>'
+  var h='<div class="vp-top vp-hero"><span class="vp-mark on" aria-hidden="true">✦</span><h2>'+(v.plus&&!v.staff?'Vita+ активна':head[0])+'</h2>'
     +'<p>'+(v.plus&&!v.staff&&v.until?'До '+vpDate(v.until,true)+'. Можно продлить заранее — дни прибавятся.':head[1])+'</p></div>';
-  h+='<ul class="vp-list">'
-    +'<li><i class="ti ti-infinity" aria-hidden="true"></i><span><b>Тесты без лимита</b><small>'+(bank>v.q_limit*3?'В банке '+vpSum(bank)+' '+vplural(bank,'вопрос','вопроса','вопросов')+'. По '+v.q_limit+' в день — это '+Math.ceil(bank/v.q_limit)+' '+vplural(Math.ceil(bank/v.q_limit),'день','дня','дней')+'. С Vita+ — в своём темпе.':'Решай сколько нужно, а не '+v.q_limit+' в день.')+'</small></span></li>'
-    +'<li><i class="ti ti-sparkles" aria-hidden="true"></i><span><b>Объяснение к каждому вопросу</b><small>Почему ответ такой — сразу, без счётчика «'+v.ex_limit+' в день».</small></span></li>'
-    +'<li><i class="ti ti-message-question" aria-hidden="true"></i><span><b>Спросить ИИ — '+v.plus_ask+' '+vplural(v.plus_ask,'вопрос','вопроса','вопросов')+' в день</b><small>'+(v.plus_file>0?'И разбор фото, PDF и Word: что непонятно в лекции — объяснит.':'Под тестом, по конспекту или просто так. Можно голосом.')+'</small></span></li>'
-    +'<li><i class="ti ti-photo-plus" aria-hidden="true"></i><span><b>Свои тесты — '+v.plus_imp+' вопросов в месяц</b><small>Скриншоты из Moodle, PDF или Word превращаются в тест с повтором ошибок.</small></span></li>'
-    +'<li><i class="ti ti-rosette-discount-check" aria-hidden="true"></i><span><b>Значок ✦ в рейтинге и дуэлях</b><small>Группа видит, кто готовится всерьёз.</small></span></li></ul>';
-  h+='<div class="vp-price"><b>'+vpSum(v.price_uzs)+' сум</b><span>на '+v.days+' '+vplural(v.days,'день','дня','дней')+' · '+vpSum(Math.round(v.price_uzs/v.days/100)*100)+' сум в день</span></div>';
-  if(v.pending)h+='<div class="vp-note"><i class="ti ti-clock" aria-hidden="true"></i>Твой чек у администратора. Как только он подтвердит перевод, Vita+ включится сама — бот напишет.</div>';
-  else if(!v.in_tg)h+='<div class="vp-note"><i class="ti ti-brand-telegram" aria-hidden="true"></i>'+(v.other?'У тебя есть Vita+, но она работает только в Telegram — там, где ты её купил.':'Vita+ покупается и работает только в Telegram: подписка привязана к твоему Telegram-аккаунту.')+'</div>'
-    +'<button type="button" class="btn vp-btn" onclick="vOpenTgLink(\'https://t.me/'+(S.tgBot||VITA_BOT_NAME)+'\')"><i class="ti ti-brand-telegram" aria-hidden="true"></i>Открыть Vita в Telegram</button>';
-  else{
-    if(v.other)h+='<div class="vp-note"><i class="ti ti-alert-triangle" aria-hidden="true"></i>На этом аккаунте есть Vita+, но она куплена с другого Telegram. Напиши администратору — он перенесёт.</div>';
-    h+='<div class="vp-pay"><button type="button" class="btn vp-btn" id="vpStars" onclick="vpPayStars()"><span class="vp-star">⭐</span>Оплатить звёздами · '+v.price_stars+'</button>'
-      +(v.card?'<button type="button" class="btn bgh" id="vpCard" onclick="vpPayCard()"><i class="ti ti-credit-card" aria-hidden="true"></i>Переводом на карту · '+vpSum(v.price_uzs)+' сум</button>':'')+'</div>';
+  if(v.plus&&!v.staff){
+    h+=vpCompare(v,bank);
+    h+='<div class="vp-price"><b>'+vpSum(v.price_uzs)+' сум</b><span>продлить на '+v.days+' '+vplural(v.days,'день','дня','дней')+'</span></div>';
+    h+=vpPayHtml(v);
+    h+='<button type="button" class="vp-later" onclick="closeModal()">Закрыть</button><div id="vpMsg" class="vp-msg" role="status"></div>';
+  }else{
+    VP_SEL='plus';VP_WHY=why;
+    h='<div class="vp-th"><h2>Выбери тариф</h2><p>'+esc(head[0]==='Vita+'?'Готовься к деканату без остановок':head[0]+'. '+head[1])+'</p></div>'
+      +'<div class="vp-plans" role="radiogroup" aria-label="Тарифы">'+vpPlanCard('plus',v,bank)+vpPlanCard('free',v,bank)+'</div>'
+      +'<div class="vp-stick" id="vpStick">'+vpStickHtml(v)+'</div>';
   }
-  h+='<button type="button" class="vp-later" onclick="closeModal()">'+(v.plus?'Закрыть':why==='q'?'Продолжить завтра':'Не сейчас')+'</button><div id="vpMsg" class="vp-msg" role="status"></div>';
   vpShell(h);
+}
+var VP_SEL='plus',VP_WHY='info';
+function vpPayHtml(v){
+  if(v.pending)return '<div class="vp-note"><i class="ti ti-clock" aria-hidden="true"></i>Твой чек у администратора. Как только он подтвердит перевод, Vita+ включится сама — бот напишет.</div>';
+  if(!v.in_tg)return '<div class="vp-note"><i class="ti ti-brand-telegram" aria-hidden="true"></i>'+(v.other?'У тебя есть Vita+, но она работает только в Telegram — там, где ты её купил.':'Vita+ покупается и работает только в Telegram: подписка привязана к твоему Telegram-аккаунту.')+'</div>'
+    +'<button type="button" class="btn vp-btn" onclick="vOpenTgLink(\'https://t.me/'+(S.tgBot||VITA_BOT_NAME)+'\')"><i class="ti ti-brand-telegram" aria-hidden="true"></i>Открыть Vita в Telegram</button>';
+  return (v.other?'<div class="vp-note"><i class="ti ti-alert-triangle" aria-hidden="true"></i>На этом аккаунте есть Vita+, но она куплена с другого Telegram. Напиши администратору — он перенесёт.</div>':'')
+    +'<div class="vp-pay"><button type="button" class="btn vp-btn" id="vpStars" onclick="vpPayStars()"><span class="vp-star">⭐</span>Оплатить звёздами · '+v.price_stars+'</button>'
+    +(v.card?'<button type="button" class="btn bgh" id="vpCard" onclick="vpPayCard()"><i class="ti ti-credit-card" aria-hidden="true"></i>Переводом на карту · '+vpSum(v.price_uzs)+' сум</button>':'')+'</div>';
+}
+// карточка тарифа: выбранная раскрыта (что входит ✓ и чего нет ✕), невыбранная — свёрнута
+function vpPlanCard(id,v,bank){
+  var on=VP_SEL===id,plus=id==='plus',Y=function(t){return '<li class="y"><i class="ti ti-check" aria-hidden="true"></i><span>'+t+'</span></li>';},N=function(t){return '<li class="n"><i class="ti ti-x" aria-hidden="true"></i><span>'+t+'</span></li>';};
+  var items=plus?[Y('Деканатские тесты <b>без лимита</b>'),Y('Объяснение ИИ <b>к каждому вопросу</b>'),Y('Спросить ИИ — <b>'+v.plus_ask+' в день</b>, голосом и с фото'),
+      v.plus_file>0?Y('Разбор фото, PDF и Word из лекций'):'',Y('Свои тесты из скриншотов — <b>'+v.plus_imp+' вопросов в месяц</b>'),Y('Значок ✦ в рейтинге и золотое кольцо в профиле'),
+      v.gift?Y('<b>+'+v.gift+' монет</b> в подарок за оплату'):''].join('')
+    :[Y('Деканатские тесты — '+v.q_limit+' в день'),Y('Объяснения ИИ — '+v.ex_limit+' в день'),Y('Спросить ИИ — '+v.ask_limit+' в день'),Y('Экзамен по билетам и дуэли'),
+      N('Разбор фото и файлов'),N('Свои тесты — только '+(v.imp_limit||0)+' вопросов на пробу'),N('Значок ✦ и подарочные монеты')].join('');
+  return '<div class="vp-plan '+id+(on?' on':'')+'" role="radio" aria-checked="'+on+'" tabindex="0" onclick="vpSel(\''+id+'\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();vpSel(\''+id+'\');}">'
+    +'<div class="vp-ph"><span class="vp-pic" aria-hidden="true">'+(plus?'✦':'<i class="ti ti-user"></i>')+'</span>'
+    +'<span class="vp-pn"><b>'+(plus?'Vita+':'Бесплатно')+'</b><span class="vp-tag">'+(plus?'<i class="ti ti-crown" aria-hidden="true"></i>Без лимитов':'<i class="ti ti-point-filled" aria-hidden="true"></i>Сейчас у тебя')+'</span></span>'
+    +'<span class="vp-pp">'+(on||!plus?'<span class="vp-per">'+(plus?'на '+v.days+' '+vplural(v.days,'день','дня','дней'):'всегда')+'</span>':'')+'<b>'+(plus?vpSum(v.price_uzs):'0')+'</b><small>сум</small></span></div>'
+    +(on?'<ul class="vp-pl">'+items+'</ul>'+(plus&&bank>v.q_limit*3?'<p class="vp-fact">В банке '+vpSum(bank)+' '+vplural(bank,'вопрос','вопроса','вопросов')+'. Бесплатно по '+v.q_limit+' в день — это '+Math.ceil(bank/v.q_limit)+' '+vplural(Math.ceil(bank/v.q_limit),'день','дня','дней')+'.</p>':''):'')
+    +'</div>';
+}
+function vpStickHtml(v){
+  if(VP_SEL==='free')return '<button type="button" class="btn bgh vp-go" onclick="closeModal()">'+(VP_WHY==='q'?'Продолжить завтра':'Остаться на бесплатном')+'</button>';
+  if(!v.in_tg||v.pending)return vpPayHtml(v)+'<div id="vpMsg" class="vp-msg" role="status"></div>';
+  return '<button type="button" class="btn vp-btn vp-go" onclick="vpGo()">Продолжить · '+vpSum(v.price_uzs)+' сум</button><div id="vpMsg" class="vp-msg" role="status"></div>';
+}
+function vpSel(id){
+  if(VP_SEL===id)return;VP_SEL=id;try{playSound('tap');}catch(e){}
+  var bank=0;try{bank=getQS().length;}catch(e){}
+  var box=document.querySelector('.vp-plans');if(box)box.innerHTML=vpPlanCard('plus',VP,bank)+vpPlanCard('free',VP,bank);
+  var st=document.getElementById('vpStick');if(st)st.innerHTML=vpStickHtml(VP);
+}
+// «Продолжить» → как платить
+function vpGo(){
+  var st=document.getElementById('vpStick');if(!st)return;
+  st.innerHTML='<p class="vp-how">Как оплатить '+vpSum(VP.price_uzs)+' сум?</p>'+vpPayHtml(VP)+'<button type="button" class="vp-later" onclick="document.getElementById(\'vpStick\').innerHTML=vpStickHtml(VP)">Назад</button><div id="vpMsg" class="vp-msg" role="status"></div>';
 }
 function vpSay(t,bad){var m=document.getElementById('vpMsg');if(m){m.textContent=t||'';m.className='vp-msg'+(bad?' bad':'');}}
 function vpBusy(id,on,txt){var b=document.getElementById(id);if(!b)return;if(on){b.dataset.h=b.innerHTML;b.disabled=true;b.textContent=txt;}else{b.disabled=false;if(b.dataset.h)b.innerHTML=b.dataset.h;}}
@@ -14283,7 +14456,9 @@ function vpToChat(bot){closeModal();try{if(TG&&TG.close&&typeof isTG==='function
 // карточка в профиле
 function vpProfCard(){
   var el=document.getElementById('vpProf');if(!el)return;
-  var v=VP;if(!v||!v.enabled||v.staff||!S.user){el.innerHTML='';return;}
+  var v=VP,id=document.querySelector('#pg-profile .pf-id');
+  if(id)id.classList.toggle('vp-plus',!!(v&&v.enabled&&v.plus&&!v.staff));
+  if(!v||!v.enabled||v.staff||!S.user){el.innerHTML='';return;}
   if(v.plus)el.innerHTML='<button type="button" class="vp-card on" onclick="vpWall(\'info\')"><span class="vp-mark" aria-hidden="true">✦</span><span class="vp-ct"><b>Vita+ активна</b><small>до '+vpDate(v.until,true)+' · тесты и объяснения без лимита</small></span><span class="vp-cgo">Продлить</span></button>';
   else el.innerHTML='<button type="button" class="vp-card" onclick="vpWall(\'info\')"><span class="vp-mark" aria-hidden="true">✦</span><span class="vp-ct"><b>Vita+ · без лимитов</b><small>'
     +(v.pending?'Чек на проверке у администратора':v.trial_left>0?'Бесплатно осталось '+v.trial_left+' '+vplural(v.trial_left,'вопрос','вопроса','вопросов'):'Сегодня: '+Math.min(v.q_used,v.q_limit)+' из '+v.q_limit+' вопросов · '+Math.min(v.ex_used,v.ex_limit)+' из '+v.ex_limit+' объяснений')
@@ -14323,7 +14498,7 @@ async function vpaRender(){
       +vpaF('vpaUzs','Цена, сум',c.price_uzs)+vpaF('vpaStars','Цена, звёзд',c.price_stars,'Студент платит ≈ 200–250 сум за звезду')+vpaF('vpaDays','На сколько дней',c.days)
       +vpaF('vpaTrial','Вопросов на пробу',c.trial_q,'Один раз, с первого захода')+vpaF('vpaDq','Потом вопросов в день',c.daily_q)+vpaF('vpaDex','Объяснений ИИ в день',c.daily_ex)
       +vpaF('vpaFa','«Спросить ИИ» бесплатно, в день',c.free_ask)+vpaF('vpaPa','«Спросить ИИ» с Vita+, в день',c.plus_ask)+vpaF('vpaPf','Файлов в день с Vita+',c.plus_file,'Бесплатным файлы недоступны')
-      +vpaF('vpaFi','Свои тесты бесплатно, вопросов',c.free_imp,'Один раз, на пробу')+vpaF('vpaPi','Свои тесты с Vita+, в месяц',c.plus_imp)+'</div>'
+      +vpaF('vpaFi','Свои тесты бесплатно, вопросов',c.free_imp,'Один раз, на пробу')+vpaF('vpaPi','Свои тесты с Vita+, в месяц',c.plus_imp)+(c.plus_gift!=null?vpaF('vpaGift','Монет в подарок за оплату',c.plus_gift,'За звёзды и карту; за бесплатную выдачу — нет'):'')+'</div>'
       +'<div class="vpa-grid two">'+vpaF('vpaCard','Номер карты для переводов',c.card_number.replace(/(\d{4})(?=\d)/g,'$1 '),'Пусто — оплата картой скрыта, останутся только звёзды')+vpaF('vpaHold','Имя на карте',c.card_holder,'Студент сверит его при переводе','')+'</div>'
       +'<div class="bc-foot"><span class="bc-cnt" id="vpaMsg" aria-live="polite"></span><button type="button" class="btn bbl" id="vpaSave" onclick="vpaSave()">Сохранить</button></div></div>';
   }
@@ -14344,6 +14519,7 @@ async function vpaToggle(){
 async function vpaSave(){
   var g=function(id){return (document.getElementById(id)||{}).value||'';},n=function(id){return parseInt(g(id).replace(/\D/g,''),10);};
   var cfg={price_uzs:n('vpaUzs'),price_stars:n('vpaStars'),days:n('vpaDays'),trial_q:n('vpaTrial'),daily_q:n('vpaDq'),daily_ex:n('vpaDex'),free_ask:n('vpaFa'),plus_ask:n('vpaPa'),plus_file:n('vpaPf'),free_imp:n('vpaFi'),plus_imp:n('vpaPi'),card_number:g('vpaCard'),card_holder:g('vpaHold')};
+  if(document.getElementById('vpaGift'))cfg.plus_gift=n('vpaGift');
   var m=document.getElementById('vpaMsg');
   for(var k in cfg){if(typeof cfg[k]==='number'&&isNaN(cfg[k])){m.textContent='Заполни все поля числами';return;}}
   var b=document.getElementById('vpaSave');b.disabled=true;
