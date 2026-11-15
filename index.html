@@ -2688,6 +2688,29 @@ kbd{display:inline-block;padding:1px 6px;border-radius:5px;border:1px solid var(
   .ix-side{border-left:none;border-top:1px solid var(--bor);overflow:visible}
   .ix-g{width:100%;justify-content:center}
 }
+
+/* ===== Учёба: одна шапка «где я» на всех экранах ===== */
+.st-nav{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:8px;min-height:52px;margin:0 0 14px;padding:6px 0;background:var(--bg);box-shadow:0 1px 0 var(--bor)}
+.st-nav .stn-back,.st-nav .stn-act{flex:none;width:40px;height:40px;border-radius:13px;border:1px solid var(--bor);background:var(--bg2);color:var(--tx);display:grid;place-items:center;font-size:19px;cursor:pointer}
+.st-nav .stn-act{color:var(--am);font-size:20px;line-height:1}
+.st-nav .stn-back:focus-visible,.st-nav .stn-act:focus-visible,.stn-path button:focus-visible{outline:2px solid var(--bl);outline-offset:2px}
+.stn-path{flex:1;min-width:0;display:flex;align-items:center;margin:0;padding:0;list-style:none;font-size:13.5px;line-height:1.25;white-space:nowrap}
+.stn-path li{display:flex;align-items:center;min-width:0;flex:0 1 auto}
+.stn-path li+li::before{content:'›';margin:0 6px;color:var(--tx3);flex:none}
+.stn-path li:not(:last-child){flex-shrink:2;max-width:40%}
+.stn-path li:first-child{flex-shrink:0;max-width:none}
+.stn-path button{border:0;background:none;padding:6px 0;margin:0;font:inherit;font-weight:600;color:var(--tx3);cursor:pointer;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.stn-path button:hover{color:var(--tx)}
+.stn-path span{overflow:hidden;text-overflow:ellipsis;font-weight:800;color:var(--tx);min-width:0}
+.st-nav .stn-prog{position:absolute;left:0;bottom:-1px;height:2px;width:0;background:var(--bl);border-radius:2px;transition:width .2s}
+.st-nav+.reader-top{margin-top:0}
+
+/* панель темы уезжает, пока листаешь вниз */
+.rd-bar{transition:transform .25s ease,opacity .2s ease}
+.rd-bar.off{transform:translate(-50%,calc(100% + 30px));opacity:0;pointer-events:none}
+@media (prefers-reduced-motion:reduce){.rd-bar,.st-nav .stn-prog{transition:none}}
+/* над прилипшей шапкой — отступ области прокрутки: закрываем его, чтобы текст не просвечивал */
+.st-nav::before{content:'';position:absolute;left:-2px;right:-2px;bottom:100%;height:90px;background:var(--bg);pointer-events:none}
 </style>
 </head>
 <body>
@@ -9600,7 +9623,7 @@ function renderBookmarks(){
   sbGet('bookmarks','user_email=eq.'+encodeURIComponent(S.user.email)+'&topic_id=not.is.null&select=topic_id&order=created_at.desc').then(function(rows){
     rows=rows||[];
     if(!rows.length){
-      el.innerHTML='<div class="reader-top"><div class="r-back" onclick="renderStudy()">←</div><div class="r-crumb"><b>Мои закладки</b></div><div style="width:42px"></div></div><div class="study-empty"><div class="se-ic">☆</div><div class="se-t">Пока нет закладок</div><div class="se-s">Жми ☆ на темах, чтобы сохранить их сюда</div></div>';
+      el.innerHTML=stNav([['Закладки',null]])+'<div class="study-empty"><div class="se-ic">☆</div><div class="se-t">Пока нет закладок</div><div class="se-s">Жми ☆ на темах, чтобы сохранить их сюда</div></div>';
       return;
     }
     var ids=rows.map(function(r){return r.topic_id;});
@@ -9608,7 +9631,7 @@ function renderBookmarks(){
       topics=topics||[];
       // упорядочить как в закладках
       var byId={};topics.forEach(function(t){byId[t.id]=t;});
-      var h='<div class="reader-top"><div class="r-back" onclick="renderStudy()">←</div><div class="r-crumb"><b>Мои закладки</b> · '+topics.length+'</div><div style="width:42px"></div></div>';
+      var h=stNav([['Закладки',null]]);
       h+='<div class="study-h1">Закладки</div>';
       ids.forEach(function(id){
         var t=byId[id];if(!t)return;
@@ -9740,7 +9763,7 @@ function renderStudyTopics(el){
     ST.topics=stVisible(r[0]);
     var total=ST.topics.length,pct=stSubjPct(ST.topics);
     var h='';
-    h+='<div class="study-crumb">'+esc(ST.course.title||ST.course.number+' курс')+' <span class="sep">›</span> <span class="now">'+esc(ST.subject.name)+'</span></div>';
+    h+=stNav([[ST.subject.name,null]]);
     h+='<div class="study-tprog"><div class="stp-top"><b>'+esc(ST.subject.name)+'</b><span>прочитано '+pct+'%</span></div><div class="stp-bar"><i style="width:'+pct+'%"></i></div></div>';
     if(!ST.topics.length){
       h+='<div class="study-empty"><div class="se-ic"></div><div class="se-t">Темы ещё не добавлены</div></div>';
@@ -9754,7 +9777,6 @@ function renderStudyTopics(el){
         h+='<div class="study-topic '+cls+'" onclick="studyOpenTopic('+t.id+')"><div class="st-d">'+(t.number||'•')+'</div><div class="st-t"><b>'+esc(t.title)+'</b><span>'+sub+'</span></div><div class="st-m">'+mark+'</div></div>';
       });
     }
-    h+='<div class="study-back" onclick="studyPickCourse('+ST.course.id+')">← Все предметы</div>';
     el.innerHTML=h;
   }).catch(function(){el.innerHTML='<div class="study-empty"><div class="se-ic"><i class="ti ti-alert-triangle"></i></div><div class="se-t">Ошибка загрузки тем</div></div>';});
 }
@@ -9773,7 +9795,7 @@ function renderTopicReader(el){
   var t=ST.topic;
   var h='';
   // топбар
-  h+='<div class="reader-top"><div class="r-back" onclick="renderStudyTopics(document.getElementById(\'studyBody\'))">←</div><div class="r-crumb">'+esc(ST.subject.name)+' <b>· Тема '+(t.number||'')+'</b></div><div class="r-bm" onclick="studyToggleBookmark('+t.id+')" id="bmBtn" role="button" aria-label="Закладка">☆</div></div>';
+  h+=stNav(stTopicCrumbs(t),'<button type="button" class="stn-act" onclick="studyToggleBookmark('+t.id+')" id="bmBtn" aria-label="Закладка">☆</button>',{prog:true});
   // hero
   h+='<div class="study-reader-hero"><div class="srh-k">'+esc(t.kicker||ST.subject.name)+'</div><h1>'+esc(t.title)+'</h1>';
   if(t.lede)h+='<p class="srh-lede">'+esc(t.lede)+'</p>';
@@ -10029,7 +10051,7 @@ function studyToggleBookmark(topicId){
 // ===== ПОИСК ТЕМ =====
 function studyOpenSearch(){
   var el=document.getElementById('studyBody');
-  el.innerHTML='<div class="reader-top"><div class="r-back" onclick="renderStudy()">←</div><div class="study-search-input"><i class="ti ti-search"></i><input id="studySearchInp" placeholder="Название темы…" oninput="studyDoSearch(this.value)" autofocus></div></div><div id="studySearchRes"><div class="study-search-hint">Начни вводить — найдём тему</div></div>';
+  el.innerHTML=stNav([['Поиск темы',null]])+'<div class="reader-top"><div class="study-search-input"><i class="ti ti-search"></i><input id="studySearchInp" placeholder="Название темы…" oninput="studyDoSearch(this.value)" autofocus></div></div><div id="studySearchRes"><div class="study-search-hint">Начни вводить — найдём тему</div></div>';
   setTimeout(function(){var i=document.getElementById('studySearchInp');if(i)i.focus();},100);
 }
 function studyDoSearch(q){
@@ -11152,6 +11174,7 @@ function saBuilderDraw(){
   h+='<div class="sab-head"><div class="sab-head-t"><small>Редактор темы — слева она выглядит так же, как у студента</small><h2>'+esc(SA.topic.title)+'</h2>'
     +'<span>'+SA.blocks.length+' '+vplural(SA.blocks.length,'блок','блока','блоков')+', около '+mins+' мин чтения</span></div>'
     +'<div class="sab-head-a"><button class="btn bvio" onclick="saAiOpen()"><i class="ti ti-sparkles"></i>Конспект из материала</button>'
+    +'<button class="btn bgh" onclick="saImpOpen()"><i class="ti ti-file-import"></i>Импорт конспекта</button>'
     +'<button class="btn bgh" onclick="saImgx(\'insert\')"><i class="ti ti-photo-search"></i>Найти картинку</button>'
     +'<button class="btn bgh" onclick="saPreviewTopic()"><i class="ti ti-eye"></i>Открыть как студент</button>'
     +'<button class="btn bgh" id="saGpBtn" onclick="saGpOpen()"'+(GP.missing?' hidden':'')+'><i class="ti ti-users"></i>Материалы групп<span id="saGpN">'+saGpCountText()+'</span></button>'
@@ -11514,9 +11537,10 @@ function saAiOpen(){
   if(SA.level!=='builder')SA.topic=null;   // со списка тем: материал раскладывается на новые темы
   saAiForm();
 }
-function saAiShell(inner,foot){
+function saAiShell(inner,foot,title){
+  title=title||(SA_AI&&SA_AI.imp?'Импорт конспекта':'Конспект из материала');
   document.getElementById('modalRoot').innerHTML='<div class="modal-bg"><div class="modal sbe sbe-ai">'
-    +'<div class="sbe-head"><span class="lb-blob vio"><i class="ti ti-sparkles"></i></span><b>Конспект из материала</b><button class="sbe-x" onclick="saAiClose()" aria-label="Закрыть"><i class="ti ti-x"></i></button></div>'
+    +'<div class="sbe-head"><span class="lb-blob vio"><i class="ti '+(SA_AI&&SA_AI.imp?'ti-file-import':'ti-sparkles')+'"></i></span><b>'+esc(title)+'</b><button class="sbe-x" onclick="saAiClose()" aria-label="Закрыть"><i class="ti ti-x"></i></button></div>'
     +'<div class="sbe-ai-body">'+inner+'</div>'+(foot?'<div class="sbe-foot">'+foot+'</div>':'')+'</div></div>';
 }
 function saAiClose(){if(SA_AI&&SA_AI.timer)clearInterval(SA_AI.timer);SA_AI=null;closeModal();}
@@ -11687,6 +11711,34 @@ async function saAiRunOne(mat,images,exam){
     },3000);
   }catch(e){if(SA_AI===A)saAiForm('Нет связи с ботом. Проверь интернет и попробуй ещё раз.');}
 }
+// ===== Импорт конспекта: Claude пишет его в чате по подписке («Сделай конспект для Vita»), сюда — вставить ответ =====
+function saImpOpen(){SA_AI={images:[],detail:'full',quiz:4,imp:true,text:''};saImpForm();}
+function saImpForm(msg){
+  saAiShell('<p class="sbe-lead">Конспект можно написать в обычном чате с Claude — по твоей подписке, ключ API не тратится. '
+      +'Приложи там материал и напиши: <b>«Сделай конспект для Vita»</b>. Ответ скопируй целиком и вставь сюда — или сохрани файлом и приложи.</p>'
+    +'<div class="sbe-f"><label for="impTxt">Конспект</label><textarea id="impTxt" rows="10" spellcheck="false" placeholder="{&quot;t&quot;:&quot;meta&quot;,&quot;lede&quot;:&quot;…&quot;}&#10;{&quot;t&quot;:&quot;key&quot;,&quot;items&quot;:[…]}&#10;{&quot;t&quot;:&quot;h&quot;,&quot;title&quot;:&quot;…&quot;}">'+esc(SA_AI.text||'')+'</textarea></div>'
+    +'<div class="sbe-files"><label class="btn bgh bsm"><i class="ti ti-paperclip"></i>Приложить файл<input type="file" accept=".jsonl,.json,.txt,text/plain,application/json" style="display:none" onchange="saImpFile(this)"></label><span>.jsonl или .txt</span></div>'
+    +(msg?'<div class="sbe-note bad" role="alert"><i class="ti ti-alert-triangle"></i>'+esc(msg)+'</div>':''),
+    '<span></span><button class="btn bgh" onclick="saAiClose()">Отмена</button><button class="btn bvio" onclick="saImpRun()"><i class="ti ti-eye"></i>Посмотреть</button>');
+}
+async function saImpFile(inp){
+  var f=inp.files&&inp.files[0];if(!f||!SA_AI)return;
+  if(f.size>3e6){saImpForm('Файл больше 3 МБ — это точно конспект?');return;}
+  try{SA_AI.text=await f.text();}catch(e){saImpForm('Не получилось прочитать файл.');return;}
+  saImpForm();
+}
+async function saImpRun(){
+  var A=SA_AI;if(!A)return;var t=document.getElementById('impTxt');A.text=t?t.value:A.text;
+  if(!/\{\s*"t"\s*:/.test(A.text||'')){saImpForm('Не похоже на конспект для Vita: в нём должны быть строки вида {"t":"h","title":"…"}. Попроси в чате «конспект для Vita».');return;}
+  saAiShell('<div class="sbe-wait"><div class="sbe-spin" aria-hidden="true"></div><b>Разбираю конспект</b><span>И подбираю картинки на Wikimedia Commons — до минуты.</span></div>','');
+  try{
+    var r=await fetch(vBotUrl('/ai/import'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:vAdminToken(),text:A.text})});
+    var j=r.status===404?{reason:'Бот ещё старый — обнови bot.py на Railway.'}:await r.json();
+    if(SA_AI!==A)return;
+    if(j.status!=='ok'){saImpForm(saAiErr(j));return;}
+    A.blocks=j.blocks||[];A.notes=j.notes||[];A.meta=j.meta||{};A.checked=null;A.flagged=0;saAiResult();
+  }catch(e){if(SA_AI===A)saImpForm('Нет связи с ботом. Проверь интернет и попробуй ещё раз.');}
+}
 function saAiErr(j){
   return ({ai_not_configured:'ИИ не подключён: на Railway нет ключа ANTHROPIC_API_KEY.',forbidden:'Войди заново как администратор.'}[j.status])
     ||(j.reason?(typeof vAiReason==='function'?vAiReason(j.reason):j.reason):'ИИ не ответил — попробуй ещё раз.');
@@ -11709,11 +11761,12 @@ function saAiResult(){
   var list=studyBlockList(A.blocks,true);
   saAiShell((A.notes.length?'<div class="sbe-note warn"><i class="ti ti-alert-triangle"></i><div><b>ИИ просит проверить</b><ul>'+A.notes.map(function(n){return '<li>'+esc(n)+'</li>';}).join('')+'</ul></div></div>':'')
     +'<p class="sbe-lead"><b>Готово: '+A.blocks.length+' '+vplural(A.blocks.length,'блок','блока','блоков')+'.</b> '+esc(parts)+'. Прочитай перед тем, как добавлять: это медицина, а ИИ мог понять материал не так. Каждый блок потом можно изменить.</p>'
-    +(A.checked===false?'<div class="sbe-note warn"><i class="ti ti-alert-triangle"></i><div>Проверка фактов не ответила — сверь конспект с материалом сам.</div></div>'
+    +(A.imp?'<div class="sbe-note"><i class="ti ti-message-circle"></i><div>Конспект из чата с Claude: бот разобрал его и подобрал картинки, но с материалом не сверял — прочитай перед публикацией.</div></div>'
+      :A.checked===false?'<div class="sbe-note warn"><i class="ti ti-alert-triangle"></i><div>Проверка фактов не ответила — сверь конспект с материалом сам.</div></div>'
       :A.flagged?'<div class="sbe-note warn"><i class="ti ti-zoom-check"></i><div><b>Проверка нашла расхождения с материалом: '+A.flagged+'</b> Эти блоки отмечены жёлтым — посмотри их в первую очередь. Отметка останется в редакторе, студенты её не видят.</div></div>'
       :'<div class="sbe-note"><i class="ti ti-zoom-check"></i><div>Проверка сверила каждый блок с материалом и расхождений не нашла.</div></div>')
     +'<div class="sbe-ai-prev">'+(A.meta.lede?'<p class="sbe-lede"><small>Описание темы</small>'+esc(A.meta.lede)+'</p>':'')+studyToc(list)+list.map(saChkWrap).join('')+'</div>',
-    '<span id="aiSaveSt"></span><button class="btn bgh" onclick="SA_AI.blocks=null;saAiForm()">Собрать заново</button>'
+    '<span id="aiSaveSt"></span><button class="btn bgh" onclick="SA_AI.blocks=null;'+(A.imp?'saImpForm()">Вставить другой':'saAiForm()">Собрать заново')+'</button>'
     +(SA.blocks.length?'<button class="btn bgh" onclick="saAiApply(true)">Заменить всё в теме</button>':'')
     +'<button class="btn bbl" onclick="saAiApply(false)"><i class="ti ti-check"></i>'+(SA.blocks.length?'Добавить в конец темы':'Добавить в тему')+'</button>');
 }
@@ -12327,7 +12380,7 @@ async function renderMyNotes(){
   var el=document.getElementById('studyBody');if(!el)return;
   if(!S.user){if(typeof showLoginWall==='function')showLoginWall();return;}
   UN.topic=null;unBarHide();
-  var top='<div class="reader-top"><div class="r-back" onclick="renderStudy()" role="button" aria-label="Назад">←</div><div class="r-crumb"><b>Мои заметки</b></div><div style="width:42px"></div></div>';
+  var top=stNav([['Мои заметки',null]]);
   el.innerHTML=top+'<div class="ph"><div class="pt">Загрузка…</div></div>';
   var rows=null,c=unCache(),pend=[];
   Object.keys(c).forEach(function(k){(c[k].list||[]).forEach(function(n){if(n.sync)pend.push(n);});});
@@ -12343,7 +12396,7 @@ function unMyDraw(){
   var all=UN.all,f=UN.filter,cnt={all:all.length,note:0,q:0,hl:0};
   all.forEach(function(n){cnt[n.kind]=(cnt[n.kind]||0)+1;});
   if(f!=='all'&&!cnt[f])f='all';
-  var h='<div class="reader-top"><div class="r-back" onclick="renderStudy()" role="button" aria-label="Назад">←</div><div class="r-crumb"><b>Мои заметки</b>'+(all.length?' · '+all.length:'')+'</div><div style="width:42px"></div></div>';
+  var h=stNav([['Мои заметки',null]]);
   h+='<div class="study-h1">Мои заметки</div>';
   if(!all.length){
     h+='<div class="study-empty un-empty-pg"><div class="se-ic"><i class="ti ti-highlight"></i></div><div class="se-t">Пока нет пометок</div>'
@@ -12739,7 +12792,7 @@ async function renderGroupFeed(mode){
   var el=document.getElementById('studyBody');if(!el)return;
   if(!S.user||!S.token){if(typeof showLoginWall==='function')showLoginWall();return;}
   GP.mode=mode=mode||GP.mode||'group';
-  var top='<div class="reader-top"><div class="r-back" onclick="renderStudy()" role="button" aria-label="Назад">←</div><div class="r-crumb"><b>Материалы группы</b></div><div style="width:42px"></div></div>';
+  var top=stNav([['Материалы группы',null]]);
   el.innerHTML=top+'<div class="ph"><div class="pt">Загрузка…</div></div>';
   var r=null;
   try{r=await vRpc('gp_feed',{p_token:S.token,p_mode:mode});}catch(e){if(e.missing)GP.missing=true;el.innerHTML=top+'<div class="study-empty"><div class="se-t">Пока недоступно</div></div>';return;}
@@ -13441,7 +13494,20 @@ async function saPublishTopic(btn){
   catch(e){if(btn)btn.disabled=false;vAlert('Не получилось: '+(e.message||'ошибка'));}
 }
 
-// ===== ПАНЕЛЬ ТЕМЫ: Тест · Группа · Добавить · Заметки — всегда внизу экрана =====
+// ===== ГДЕ Я: одна шапка на всех экранах «Учёбы» — «← Учёба › Патанатомия › Мозжечок», прилипает к верху =====
+// crumbs: [[название, onclick или null], …]; «←» ведёт на уровень выше; right — кнопка справа; opt.prog — полоска «сколько прочитал»
+function stNav(crumbs,right,opt){
+  opt=opt||{};crumbs=[['Учёба','renderStudy()']].concat(crumbs||[]);
+  var up=crumbs[crumbs.length-2];
+  var h='<nav class="st-nav" aria-label="Где ты в учёбе"><button type="button" class="stn-back" onclick="'+up[1]+'" aria-label="Назад: '+esc(up[0])+'"><i class="ti ti-arrow-left" aria-hidden="true"></i></button><ol class="stn-path">';
+  crumbs.forEach(function(c,i){var last=i===crumbs.length-1;
+    h+='<li'+(last?' aria-current="page"':'')+'>'+(last||!c[1]?'<span>'+esc(c[0])+'</span>':'<button type="button" onclick="'+c[1]+'">'+esc(c[0])+'</button>')+'</li>';});
+  return h+'</ol>'+(right||'')+(opt.prog?'<i class="stn-prog" id="stnProg" aria-hidden="true"></i>':'')+'</nav>';
+}
+function stGoTopics(){if(ST.subject)renderStudyTopics(document.getElementById('studyBody'));else renderStudy();}
+function stTopicCrumbs(t){return [[ST.subject?ST.subject.name:'Предмет','stGoTopics()'],[t?(t.title||('Тема '+(t.number||''))):'Тема',null]];}
+
+// ===== ПАНЕЛЬ ТЕМЫ: Тест · Группа · Добавить · Заметки — внизу экрана; пока читаешь (листаешь вниз) — прячется =====
 function rdBarHtml(){
   return '<nav class="rd-bar" id="rdBar" aria-label="Что можно сделать с темой">'
     +'<button type="button" class="rb" id="rbGq" onclick="rdTest()"><i class="ti ti-checklist" aria-hidden="true"></i><span>Тест</span><b class="rb-n" hidden></b></button>'
@@ -13458,9 +13524,23 @@ function rdBarPos(){
   if(r&&r.width)bar.style.left=(r.left+r.width/2)+'px';
   var up=document.getElementById('scrollTopBtn');if(up)up.style.bottom=((h?h+8:18)+bar.offsetHeight+12)+'px';
 }
+// листаешь вниз — читаешь: панель уезжает; чуть вверх, в начале или в конце темы — возвращается. Заодно полоска «прочитано» в шапке.
+function rdScroll(){
+  var m=document.querySelector('.main'),bar=document.getElementById('rdBar');
+  if(!bar||!m){if(m)m.removeEventListener('scroll',rdScroll);GQ.rdScrollOn=false;return;}
+  var y=m.scrollTop,d=y-(GQ.rdY||0),end=y+m.clientHeight>m.scrollHeight-320;GQ.rdY=y;
+  if(y<120||end||d<-10)bar.classList.remove('off');else if(d>6&&!document.getElementById('rdCoach'))bar.classList.add('off');
+  var pr=document.getElementById('stnProg');
+  if(pr){var secs=document.querySelectorAll('#studyBody .rd-sec'),cur=document.querySelector('#studyBody .rd-sec:not([hidden])');
+    var f=m.scrollHeight>m.clientHeight?Math.min(1,y/(m.scrollHeight-m.clientHeight)):1,k=secs.length&&cur?(+cur.getAttribute('data-s')+f)/secs.length:f;
+    pr.style.width=Math.round(Math.max(0,Math.min(1,k))*100)+'%';}
+}
 function rdBarInit(){
   rdBarPos();
   if(!GQ.rdResize){GQ.rdResize=true;window.addEventListener('resize',function(){rdBarPos();});}
+  var m=document.querySelector('.main');GQ.rdY=m?m.scrollTop:0;
+  if(m&&!GQ.rdScrollOn){GQ.rdScrollOn=true;m.addEventListener('scroll',rdScroll,{passive:true});}
+  setTimeout(rdScroll,50);
   if(!S.user)return;
   gpChip();gqChip();try{unBadge();}catch(e){}
   if(!S.rdTip)setTimeout(rdCoach,700);
