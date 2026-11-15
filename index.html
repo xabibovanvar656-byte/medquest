@@ -2759,6 +2759,164 @@ kbd{display:inline-block;padding:1px 6px;border-radius:5px;border:1px solid var(
 .study-reader-hero.sc .srh-floats>*{background:rgba(0,0,0,.12);color:var(--sc-ink);border-color:rgba(0,0,0,.1)}
 @media (min-width:900px){.sh-subjs{grid-template-columns:repeat(3,minmax(0,1fr))}.sh-subjs.one{grid-template-columns:1fr}}
 .st-subj{max-width:860px;margin:0 auto}
+
+/* ===== Админка → Рассылка ===== */
+.bc-card{background:var(--bg2);border:1px solid var(--bor);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.bc-l{font-size:12.5px;font-weight:700;color:var(--tx3)}
+.bc-seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.bc-seg button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px;border-radius:14px;border:1.5px solid var(--bor);background:var(--bg);color:var(--tx2);font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;text-align:center}
+.bc-seg button i{font-size:20px}
+.bc-seg button.on{border-color:var(--mal);background:var(--mal-s);color:var(--mal-t)}
+.bc .field{margin:0}
+.bc textarea{resize:vertical;min-height:110px}
+.bc-chk{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;cursor:pointer}
+.bc-chk input{width:18px;height:18px;accent-color:var(--mal)}
+.bc-prev{background:var(--bg);border:1px solid var(--bor);border-radius:16px 16px 16px 4px;padding:12px 14px;font-size:14px;line-height:1.45;max-width:420px}
+.bc-prev p{margin:6px 0 0;white-space:normal;overflow-wrap:anywhere}
+.bc-prev .bc-pbtn{display:block;margin-top:10px;padding:8px;border-radius:10px;background:var(--bg3);text-align:center;font-size:13px;font-weight:700;color:var(--bl)}
+.bc-foot{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:space-between}
+.bc-cnt{font-size:13px;color:var(--tx2);flex:1;min-width:180px}
+#bcSend.ask{background:#FFB547;color:#241600;box-shadow:0 4px 0 #C97F12}
+.bc-h{font-size:16px;font-weight:800;margin:20px 0 10px}
+.bc-hist{display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--tx3)}
+.bc-row{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--bg2);border:1px solid var(--bor);border-radius:14px}
+.bc-rt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.bc-rt b{color:var(--tx);font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bc-st{flex:none;font-weight:700;color:var(--mal-t)}.bc-st.wait{color:var(--tx3)}
+.bc-empty{padding:14px;text-align:center}
+
+/* ===== VITA+ : подписка. Свой цвет — золото (--cap-gold): так «плюс» отличим от обычных зелёных действий ===== */
+.vp-chip{display:flex;align-items:center;gap:8px;flex-wrap:wrap;width:100%;margin-top:12px;padding:10px 14px;border-radius:14px;border:1px solid var(--bor);background:var(--bg2);color:var(--tx2);font:inherit;font-size:13px;text-align:left;cursor:pointer}
+.vp-chip b{color:var(--tx);font-variant-numeric:tabular-nums}
+.vp-chip.low{border-color:var(--am);background:var(--amd)}
+.vp-chip-go{margin-left:auto;display:inline-flex;align-items:center;gap:2px;font-weight:700;color:var(--am);white-space:nowrap}
+.vp-stop{display:flex;flex-direction:column;gap:10px;padding:4px 0 8px}
+.vp-stop p{margin:0 0 4px;color:var(--tx2);font-size:15px;line-height:1.5}
+.vp-stop.in{padding:0}
+.vp-stop .btn{justify-content:center;min-height:48px}
+.btn.vp-btn{background:var(--cap-gold);color:#2A1B00;border:none;font-weight:800;justify-content:center;gap:8px;min-height:50px;width:100%;border-radius:15px}
+.btn.vp-btn:disabled{opacity:.6}
+.btn.vp-btn:focus-visible,.vp-chip:focus-visible,.vp-card:focus-visible,.vp-later:focus-visible,.vp-x:focus-visible,.vp-exl:focus-visible{outline:2px solid var(--tx);outline-offset:2px}
+.vp-star{font-size:17px;line-height:1}
+.vp-exl{display:block;margin-top:10px;padding:0;border:none;background:none;color:var(--tx3);font:inherit;font-size:12.5px;text-align:left;cursor:pointer}
+.vp-exl b{color:var(--tx2)}.vp-exl u{color:var(--am);text-decoration:none;font-weight:700}
+.vp-b{color:var(--am);font-size:.9em}
+.lb-row.has-bg .vp-b{color:var(--cap-gold)}
+#modalRoot .modal.vp-sheet{position:relative;max-width:420px;padding:26px 22px 18px;max-height:92vh;overflow-y:auto;display:flex;flex-direction:column;gap:14px}
+.vp-x{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;border:none;background:var(--bg3,rgba(127,127,127,.14));color:var(--tx2);font-size:17px;cursor:pointer;display:grid;place-items:center}
+.vp-top{text-align:center;padding:0 12px}
+.vp-top h2{font-family:var(--serif);font-size:27px;font-weight:400;letter-spacing:-.4px;margin:10px 0 6px;color:var(--tx)}
+.vp-top p{margin:0;color:var(--tx2);font-size:14.5px;line-height:1.45}
+.vp-mark{display:inline-grid;place-items:center;width:54px;height:54px;border-radius:18px;background:var(--amd);color:var(--am);font-size:26px;line-height:1}
+.vp-mark.on{background:var(--cap-gold);color:#2A1B00}
+.vp-mark.spin{animation:vpSpin 1.6s linear infinite}
+@keyframes vpSpin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.vp-mark.spin{animation:none}}
+.vp-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.vp-list li{display:flex;gap:12px;align-items:flex-start}
+.vp-list li>i{flex:none;width:34px;height:34px;border-radius:11px;background:var(--amd);color:var(--am);display:grid;place-items:center;font-size:18px}
+.vp-list b{display:block;font-size:14.5px;color:var(--tx)}
+.vp-list small{display:block;font-size:13px;color:var(--tx2);line-height:1.4;margin-top:2px}
+.vp-price{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;padding:12px 14px;border-radius:14px;background:var(--bg3,rgba(127,127,127,.1))}
+.vp-price b{font-size:21px;color:var(--tx);font-variant-numeric:tabular-nums}
+.vp-price span{font-size:13px;color:var(--tx2)}
+.vp-pay{display:flex;flex-direction:column;gap:8px}
+.vp-pay .btn.bgh{justify-content:center;min-height:48px;width:100%;border-radius:15px;gap:8px}
+.vp-note{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:14px;background:var(--amd);color:var(--tx);font-size:13.5px;line-height:1.45}
+.vp-note>i{flex:none;color:var(--am);font-size:18px;margin-top:1px}
+.vp-later{border:none;background:none;color:var(--tx3);font:inherit;font-size:14px;padding:8px;cursor:pointer;align-self:center}
+.vp-msg{font-size:13px;color:var(--tx2);text-align:center;min-height:0}
+.vp-msg.bad{color:var(--re)}
+.vp-msg:empty{display:none}
+.vp-steps{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:8px;color:var(--tx2);font-size:14.5px;line-height:1.45}
+.vp-steps b{color:var(--tx)}
+#vpProf:empty{display:none}
+.vp-card{display:flex;align-items:center;gap:12px;width:100%;margin:12px 0 0;padding:13px 14px;border-radius:18px;border:1px solid var(--bor);background:var(--bg2);color:var(--tx);font:inherit;text-align:left;cursor:pointer}
+.vp-card .vp-mark{width:42px;height:42px;border-radius:14px;font-size:20px;flex:none}
+.vp-card.on{border-color:var(--am)}
+.vp-card.on .vp-mark{background:var(--cap-gold);color:#2A1B00}
+.vp-ct{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.vp-ct b{font-size:15px}.vp-ct small{font-size:12.5px;color:var(--tx2);line-height:1.35}
+.vp-cgo{flex:none;font-size:13px;font-weight:800;color:var(--am);white-space:nowrap}
+/* админка */
+.vpa{display:flex;flex-direction:column;gap:12px}
+.vpa .bc-h{margin:12px 0 0}
+.vpa-state{flex-direction:row;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.vpa-state>div{flex:1;min-width:200px;display:flex;flex-direction:column;gap:4px}
+.vpa-state b{font-size:16px}.vpa-state small{color:var(--tx2);font-size:13px;line-height:1.45}
+.vpa-state.on{border-color:var(--am)}
+.vpa-nums{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.vpa-nums>div{background:var(--bg2);border:1px solid var(--bor);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.vpa-nums b{font-size:19px;font-variant-numeric:tabular-nums;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vpa-nums span{font-size:12px;color:var(--tx3);line-height:1.3}
+.vpa-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.vpa-grid.two{grid-template-columns:1fr 1fr}
+.vpa .field{margin:0;display:flex;flex-direction:column;gap:6px}
+.vpa .field label{font-size:12px;font-weight:700;color:var(--tx2)}
+.vpa .field input{width:100%;padding:12px 13px;border:1px solid var(--bor);border-radius:12px;background:var(--bg);color:var(--tx);font:inherit;font-size:15px}
+.vpa .field small{font-size:12px;color:var(--tx3);line-height:1.35}
+.vpa-res{display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--tx3)}
+.vpa-res:empty{display:none}
+.vpa-give{display:flex;gap:6px;flex:none;flex-wrap:wrap;justify-content:flex-end}
+.vpa-rm{flex:none;width:34px;height:34px;border-radius:10px;border:1px solid var(--bor);background:none;color:var(--tx3);cursor:pointer;font:inherit;font-size:13px;display:grid;place-items:center;min-width:34px;padding:0 6px}
+.vpa-rm[data-sure]{width:auto;color:var(--re);border-color:var(--re)}
+@media (max-width:640px){.vpa-grid,.vpa-grid.two{grid-template-columns:1fr 1fr}.vpa-nums b{font-size:16px}.vpa .bc-row{flex-wrap:wrap}}
+@media (max-width:380px){.vpa-grid,.vpa-grid.two{grid-template-columns:1fr}}
+
+/* ===== СПРОСИТЬ ИИ ===== */
+.lb-ask{display:flex;align-items:center;gap:12px;width:100%;margin:10px 0 0;padding:13px 14px;border-radius:20px;border:1px solid var(--bor);background:var(--bg2);color:var(--tx);font:inherit;text-align:left;cursor:pointer}
+.lb-ask-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.lb-ask-t b{font-size:15.5px}.lb-ask-t small{font-size:12.5px;color:var(--tx2)}
+.lb-ask>i{color:var(--tx3)}
+.vq-tr{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;min-height:44px;padding:0 14px;border-radius:13px;border:1px dashed var(--bor);background:none;color:var(--tx2);font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.vq-tr i{color:var(--cap-lav);font-size:17px}
+#modalRoot .modal-bg.vq-bg{align-items:flex-end;padding:0}
+#modalRoot .modal.vq{max-width:560px;width:100%;height:min(86vh,720px);padding:0;display:flex;flex-direction:column;overflow:hidden;border-radius:24px 24px 0 0;border-bottom:none}
+@media (min-width:700px){#modalRoot .modal-bg.vq-bg{align-items:center;padding:20px}#modalRoot .modal.vq{border-radius:24px;border-bottom:1px solid var(--bor)}}
+.vq-head{display:flex;align-items:center;gap:12px;padding:14px 14px 12px 16px;border-bottom:1px solid var(--bor)}
+.vq-head>div{flex:1;min-width:0;display:flex;flex-direction:column}
+.vq-head b{font-size:16px}.vq-head small{font-size:12.5px;color:var(--tx2)}
+.vq-x{width:38px;height:38px;border-radius:50%;border:none;background:var(--bg3,rgba(127,127,127,.14));color:var(--tx2);font-size:17px;cursor:pointer;display:grid;place-items:center;flex:none}
+.vq-log{flex:1;overflow-y:auto;padding:14px 14px 6px;display:flex;flex-direction:column;gap:10px;overscroll-behavior:contain}
+.vq-quote{margin:0;padding:10px 12px;border-left:3px solid var(--cap-lav);background:var(--bg3,rgba(127,127,127,.1));border-radius:0 12px 12px 0;font-size:13.5px;color:var(--tx2);line-height:1.45}
+.vq-empty{margin:auto 0;display:flex;flex-direction:column;gap:12px;padding:8px 2px}
+.vq-empty p{margin:0;color:var(--tx2);font-size:14.5px;line-height:1.5}
+.vq-hints{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.vq-hints button{border:1px solid var(--bor);background:var(--bg2);color:var(--tx);border-radius:14px;padding:10px 14px;font:inherit;font-size:14px;text-align:left;cursor:pointer}
+.vq-m{max-width:88%;padding:10px 13px;border-radius:16px;font-size:14.5px;line-height:1.5;overflow-wrap:anywhere}
+.vq-m.u{align-self:flex-end;background:var(--bl);color:var(--on-bl);border-bottom-right-radius:5px}
+.vq-m.a{align-self:flex-start;background:var(--bg3,rgba(127,127,127,.12));color:var(--tx);border-bottom-left-radius:5px}
+.vq-m.a small{display:block;margin-top:8px;font-size:11.5px;color:var(--tx3)}
+.vq-m.a.wait{color:var(--tx2)}
+.vq-m.e{align-self:stretch;max-width:none;background:var(--amd);color:var(--tx);display:flex;flex-direction:column;gap:10px}
+.vq-att{display:flex;align-items:center;gap:5px;font-size:12px;opacity:.8;margin-bottom:3px}
+.vq-foot{padding:8px 12px calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--bor);display:flex;flex-direction:column;gap:6px}
+.vq-files{display:flex;gap:6px;flex-wrap:wrap}.vq-files:empty{display:none}
+.vq-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 4px 5px 10px;border-radius:10px;background:var(--bg3,rgba(127,127,127,.14));font-size:12.5px;color:var(--tx2)}
+.vq-chip button{width:26px;height:26px;border:none;background:none;color:var(--tx3);cursor:pointer;display:grid;place-items:center;border-radius:8px}
+.vq-comp{display:flex;align-items:flex-end;gap:6px}
+.vq-comp textarea{flex:1;min-width:0;resize:none;border:1px solid var(--bor);background:var(--bg);color:var(--tx);border-radius:16px;padding:11px 13px;font:inherit;font-size:16px;line-height:1.35;max-height:120px}
+.vq-ib,.vq-send{flex:none;width:44px;height:44px;border-radius:50%;border:none;display:grid;place-items:center;font-size:20px;cursor:pointer}
+.vq-ib{background:none;color:var(--tx2)}
+.vq-ib.rec{background:var(--re);color:#fff;animation:vqPulse 1.2s ease-in-out infinite}
+.vq-ib.wait{color:var(--tx3)}
+@keyframes vqPulse{50%{box-shadow:0 0 0 8px rgba(255,111,145,.18)}}
+@media (prefers-reduced-motion:reduce){.vq-ib.rec{animation:none}}
+.vq-send{background:var(--bl);color:var(--on-bl)}
+.vq-send:disabled{opacity:.5}
+.vq-ib:focus-visible,.vq-send:focus-visible,.vq-x:focus-visible,.vq-tr:focus-visible,.lb-ask:focus-visible,.vq-hints button:focus-visible{outline:2px solid var(--tx);outline-offset:2px}
+.vq-lim{font-size:12px;color:var(--tx3);text-align:center;min-height:16px}
+.vq-lim b{color:var(--tx2)}
+.vq-lim button{border:none;background:none;padding:0;font:inherit;color:var(--am);font-weight:700;cursor:pointer}
+.vpa-nums.two{grid-template-columns:1fr 1fr}
+.vpa-hint{margin:0;font-size:12.5px;color:var(--tx3);line-height:1.45}
+@media(max-width:480px){.un-bar button{padding:0 9px;font-size:13px}.un-bar button i{display:none}}
+
+/* ===== МОИ ТЕСТЫ ===== */
+.mt-left{margin:8px 2px 14px;font-size:12.5px;color:var(--tx3)}
+.mt-left:empty{display:none}
+.mt-wait{padding:36px 12px}
+.mt-wait b{margin-top:12px}
 </style>
 </head>
 <body>
@@ -3925,7 +4083,7 @@ async function loadProg(){
   }catch(e){}
 }
 
-async function saveProg(qid,ok){
+async function saveProg(qid,ok,src){   // src: 'exam' | 'duel' — эти ответы не входят в дневной лимит тренажёра
   var p=S.prog[qid]||{c:0,a:0,streak:0,interval:0};
   p.c+=ok?1:0;p.a+=1;
   p.streak=ok?((p.streak||0)+1):0;
@@ -3950,7 +4108,9 @@ async function saveProg(qid,ok){
   if(ok&&p.c===1&&p.a<=2)addCoins(1);
   sv();
   if(!dbOK||!S.user)return;
-  try{await sbUps('progress',{user_email:S.user.email,question_id:qid,correct_count:p.c,attempt_count:p.a,streak:p.streak,due_date:p.due,interval_days:p.interval,updated_at:new Date().toISOString()},'user_email,question_id');}catch(e){}
+  var row={user_email:S.user.email,question_id:qid,correct_count:p.c,attempt_count:p.a,streak:p.streak,due_date:p.due,interval_days:p.interval,updated_at:new Date().toISOString()};
+  if(src&&VITA_UW!==false)row.src=src;
+  try{await sbUps('progress',row,'user_email,question_id');}catch(e){}
 }
 
 async function saveExam(score,total,subj,mins){
@@ -5377,7 +5537,7 @@ async function duelAnswer(chosen,correct,btn){
   if(ok)DUEL_SCORE++;
   // записать прогресс в БД + прогресс по вопросу в общую статистику
   var qid=DUEL_Q[DUEL_QI];
-  await saveProg(qid,ok);
+  await saveProg(qid,ok,'duel');
   // подсветка
   document.querySelectorAll('#duelOpts .opt').forEach(function(b,i){
     b.style.pointerEvents='none';
@@ -5830,6 +5990,7 @@ async function renderProfile(){
     +'<button onclick="profEditFrame()"><i class="ti ti-sparkles"></i>Рамка</button>'
     +'<button onclick="profEditBg()"><i class="ti ti-photo-scan"></i>Фон</button>'
     +'</div>';
+  html+='<div id="vpProf"></div>';
   html+='<div class="pf-stats">'
     +'<div><b>'+vNum(st.solved)+'</b><span>решено</span></div>'
     +'<div><b style="color:var(--mal-t)">'+st.acc+'%</b><span>точность</span></div>'
@@ -6681,7 +6842,7 @@ async function trAns(idx){
 }
 // ===== ИИ-объяснения: один раз на вопрос, дальше читаются из базы бесплатно =====
 async function vExplain(qid,regen){
-  if(!regen){
+  if(!regen&&!(typeof VP!=='undefined'&&VP)){     // с подпиской (v21) объяснения отдаёт только бот — там лимит
     try{var r=await sbGet('custom_questions','id=eq.'+encodeURIComponent(qid)+'&select=explanation,explanation_checked');
       if(r.length&&r[0].explanation)return {status:'ok',text:r[0].explanation,checked:!!r[0].explanation_checked};}catch(e){}
   }
@@ -6690,7 +6851,8 @@ async function vExplain(qid,regen){
   return await res.json().catch(function(){return {status:'error'};});
 }
 function vExplainHtml(r){
-  if(r&&r.status==='ok')return '<div class="aihdr"><i class="ti ti-sparkles"></i> '+(r.checked?'Объяснение · проверено преподавателем':'Объяснение от ИИ · может содержать неточности')+'</div><div class="ai-text">'+esc(r.text)+'</div>';
+  if(r&&r.status==='ok')return '<div class="aihdr"><i class="ti ti-sparkles"></i> '+(r.checked?'Объяснение · проверено преподавателем':'Объяснение от ИИ · может содержать неточности')+'</div><div class="ai-text">'+esc(r.text)+'</div>'+(typeof vpExLeft==='function'?vpExLeft(r):'');
+  if(r&&r.status==='limit_ex'&&typeof vpExStop==='function')return vpExStop(r);
   var m={no_session:'Войди в аккаунт, чтобы смотреть объяснения.',limit:'На сегодня лимит новых объяснений исчерпан. Готовые объяснения по-прежнему доступны.',ai_not_configured:'Объяснения пока не подключены.',ai_error:'ИИ сейчас не ответил. Попробуй ещё раз чуть позже.'}[r&&r.status];
   return '<span style="color:var(--tx2)">'+(m||'Не получилось загрузить объяснение.')+'</span>';
 }
@@ -6784,7 +6946,7 @@ async function exFinish(){
     var answered=EXA[q.id];
     var wasCorrect=(answered===q.a);
     // только если студент отвечал на вопрос
-    if(answered!==undefined)await saveProg(origId,wasCorrect);
+    if(answered!==undefined)await saveProg(origId,wasCorrect,'exam');
   }
   await saveExam(score,EXP.length,subj,spent);
   document.getElementById('exRun').style.display='none';document.getElementById('exRes').style.display='';
@@ -6996,7 +7158,7 @@ function renderLBList(data){
           +(hasBg?bg.layer:'')
           +'<div class="lb-rank">'+(i+1)+'</div>'
           +'<div class="lb-av">'+renderAvatar(e,38)+'</div>'
-          +'<div class="lb-info"><div class="lb-name">'+esc(e.name)+(e.isMe?' <span class="lb-you">вы</span>':'')+'</div>'
+          +'<div class="lb-info"><div class="lb-name">'+esc(e.name)+(typeof vpBadge==='function'?vpBadge(e.email):'')+(e.isMe?' <span class="lb-you">вы</span>':'')+'</div>'
           +'<div class="lb-sub">'+((e.priv&&!e.isMe&&!S.isSuper&&!S.isAdm)?'<i class="ti ti-lock"></i> закрыт':(e.solved+' решено · '+e.acc+'%'+(e.duelWins?' · <i class="ti ti-swords"></i>'+e.duelWins:'')))+'</div></div>'
           +'<div class="lb-score">'+e.score+'</div></div>';
   };
@@ -10930,6 +11092,7 @@ function renderHome(){
     +'<button class="lb-tile meth" onclick="vGo(\'study\')"><span class="ic"><i class="ti ti-book-2"></i></span><span class="lb-tb"><b>Учёба</b><small>'+(S.studyCourseName?esc(S.studyCourseName)+(S.studyUniName?' · '+esc(S.studyUniName):''):'Конспекты тем')+'</small></span></button>'
     +'<button class="lb-tile vio" onclick="vOpen(\'duels\')"><span class="ic"><i class="ti ti-swords"></i></span>'+(duelWaiting?'<span class="cnt">!</span>':'')+'<span class="lb-tb"><b>Дуэли</b><small>'+(duelWaiting?'Тебя вызвали':'Один на один')+'</small></span></button>'
     +'</div>';
+  if(S.user||S.isAdm)h+=vqHomeRow();
 
   h+='<div class="lb-tri">'
     +'<button class="lb-mini" onclick="vOpenErrors()"><span class="lb-blob eos"><i class="ti ti-refresh-alert"></i></span><span><b>Ошибки</b><small>'+(errs?'<em>'+errs+'</em> ждут':'пока нет')+'</small></span></button>'
@@ -10965,6 +11128,7 @@ function renderTests(){
   h+='<div class="lb-h2"><h2>Режимы</h2></div><div class="lb-modes">';
   var rows=[
     {fn:'vOpenErrors()',pg:'trainer',tone:'eos',i:'ti-refresh-alert',t:'Работа над ошибками',d:errs?errs+' '+vplural(errs,'вопрос ждёт','вопроса ждут','вопросов ждут')+' второй попытки':'Ошибок пока нет',n:errs||''},
+    {fn:'mtOpen()',pg:'trainer',tone:'vio',i:'ti-photo-plus',t:'Мои тесты',d:'Сфотографируй свой тест — получится тренажёр'},
     {fn:"vOpen('flashcards')",pg:'flashcards',tone:'meth',i:'ti-cards',t:'Карточки',d:'Вопрос — на лицевой стороне, ответ — на обороте'},
     {fn:"vOpen('exam')",pg:'exam',tone:'iod',i:'ti-clock-hour-4',t:'Экзамен',d:'Билет на время, без подсказок'+(S.hist.length?' · сдано '+S.hist.length:'')},
     {fn:"vOpen('duels')",pg:'duels',tone:'vio',i:'ti-swords',t:'Дуэль',d:'Одни и те же вопросы — кто точнее'},
@@ -12264,6 +12428,7 @@ function unBarEl(){
   b.innerHTML='<button type="button" data-k="hl"><i class="ti ti-highlight"></i><span>Выделить</span></button>'
     +'<button type="button" data-k="note"><i class="ti ti-message-2"></i><span>Заметка</span></button>'
     +'<button type="button" data-k="q"><i class="ti ti-help-circle"></i><span>Не понял</span></button>'
+    +'<button type="button" data-k="ask"><i class="ti ti-sparkles"></i><span>Объясни</span></button>'
     +'<span class="un-bar-long">Слишком длинный кусок — выдели фразу короче</span>';
   // нажатие на панель не должно снимать выделение
   b.addEventListener('pointerdown',function(e){UN.hold=Date.now();if(e.pointerType==='mouse')e.preventDefault();});
@@ -12295,6 +12460,7 @@ function unAct(kind){
   var s=UN.sel;if(!s||s.long)return;
   try{window.getSelection().removeAllRanges();}catch(e){}
   unBarHide();
+  if(kind==='ask'){if(typeof vqOpen==='function')vqOpen({topicId:UN.topic,quote:s.quote,auto:'Объясни это место проще'});return;}
   if(kind==='note'){unEdit(null,{sel:s,kind:'note'});return;}
   var n=unCreate(s,kind,'');
   if(kind==='q')unEdit(n,{fresh:true});
@@ -13153,7 +13319,7 @@ function gqAiCard(z,mode,ref){
 function gqCardHtml(z,o){
   o=o||{};var my=z.my,w=my&&my.wrong?my.wrong.length:0,h='<article class="gq-card'+(z.hidden?' hid':'')+'" id="gqC'+z.id+'">';
   if(z.kind==='group')h+='<header class="gp-h"><span class="gp-av" aria-hidden="true">'+esc(gpInitials(z.author))+'</span><span class="gp-who"><b>'+esc(z.author||'Студент')+(z.mine?' <em>· ты</em>':'')+'</b>'
-    +'<small>'+gpWhen(z.at)+' · '+(z.scope==='course'?'видят все, кто учит тему':'группа '+esc(z.group||''))+(o.admin&&z.author_email?' · '+esc(z.author_email):'')+'</small></span></header>';
+    +'<small>'+gpWhen(z.at)+' · '+(z.scope==='private'?'видишь только ты':z.scope==='course'?'видят все, кто учит тему':'группа '+esc(z.group||''))+(o.admin&&z.author_email?' · '+esc(z.author_email):'')+'</small></span></header>';
   h+='<b class="gq-title">'+esc(z.kind==='ai'&&z.source_post?'ИИ-тест по материалу'+(z.post_caption?' «'+z.post_caption+'»':''):z.title||'Тест')+'</b>';
   h+='<div class="gq-meta">'+(z.status==='ok'?gqN(z.n):z.status==='run'?'собирается…':'не собрался')+(z.solved?' · прошли '+z.solved:'')+(my?' · твой лучший: <b>'+my.best+' из '+my.total+'</b>':'')+'</div>';
   if(z.hidden)h+='<div class="gp-hid"><i class="ti ti-eye-off" aria-hidden="true"></i>'+esc(z.hidden_reason||'Скрыт')+'</div>';
@@ -13382,26 +13548,31 @@ function gqEdDraw(){
       +'<span class="gp-sp"></span><button type="button" class="btn bbl" id="gqEdGo" onclick="gqEdDraft()"><i class="ti ti-sparkles"></i>Сделать варианты</button>';
   }else{
     var uns=E.qs.filter(function(x){return x.unsure;}).length;
-    h=head+(uns?'<p class="gq-note"><i class="ti ti-alert-triangle" aria-hidden="true"></i><span>ИИ не уверен в ответе на '+gqN(uns)+' — '+(uns===1?'он отмечен':'они отмечены')+'. Проверь по конспекту или своим записям.</span></p>':'')
-      +'<p class="un-hint">Кружком отмечен верный вариант. Варианты у студентов перемешаются сами.</p>'
+    h=head+(uns?'<p class="gq-note"><i class="ti ti-alert-triangle" aria-hidden="true"></i><span>'+(E.topic?'ИИ не уверен в ответе на '+gqN(uns)+' — '+(uns===1?'он отмечен':'они отмечены')+'. Проверь по конспекту или своим записям.':'В '+uns+' '+vplural(uns,'вопросе','вопросах','вопросах')+' на фото не было правильного ответа — '+(uns===1?'он отмечен':'они отмечены')+'. Выбери верный вариант сам.')+'</span></p>':'')
+      +'<p class="un-hint">Кружком отмечен верный вариант'+(E.topic?'. Варианты у студентов перемешаются сами.':' — проверь и поправь, если ИИ ошибся. При прохождении варианты перемешаются.')+'</p>'
       +'<div class="gq-eqs">'+E.qs.map(gqEdQHtml).join('')+'</div>'
       +'<div class="gq-ed-more"><button type="button" class="gq-add" onclick="gqEdAddQ()"><i class="ti ti-plus"></i>Вопрос</button>'
-      +'<button type="button" class="gq-add" onclick="gqEdStep(\'text\')"><i class="ti ti-sparkles"></i>Ещё вопросы с ИИ</button></div>'
-      +(grp?'<div class="gq-scope"><span id="gqScL">Кому видно</span><div class="un-seg" role="radiogroup" aria-labelledby="gqScL">'
+      +(E.topic?'<button type="button" class="gq-add" onclick="gqEdStep(\'text\')"><i class="ti ti-sparkles"></i>Ещё вопросы с ИИ</button>'
+        :'<button type="button" class="gq-add" onclick="mtPick(true)"><i class="ti ti-photo-plus"></i>Ещё из фото или файла</button>')+'</div>'
+      +(!E.topic?(grp?'<div class="gq-scope"><span id="gqScL">Кому видно</span><div class="un-seg" role="radiogroup" aria-labelledby="gqScL">'
+        +[['private','<i class="ti ti-lock"></i>Только мне'],['group','<i class="ti ti-users"></i>Группе '+esc(grp)]].map(function(o){
+          return '<button type="button" role="radio" aria-checked="'+(E.scope===o[0])+'" onclick="gqEdScope(\''+o[0]+'\')">'+o[1]+'</button>';}).join('')+'</div></div>'
+        :'<p class="un-hint">Тест увидишь только ты.</p>')
+      :grp?'<div class="gq-scope"><span id="gqScL">Кому видно</span><div class="un-seg" role="radiogroup" aria-labelledby="gqScL">'
         +[['group','<i class="ti ti-users"></i>Группе '+esc(grp)],['course','<i class="ti ti-world"></i>Всем, кто учит тему']].map(function(o){
           return '<button type="button" role="radio" aria-checked="'+(E.scope===o[0])+'" onclick="gqEdScope(\''+o[0]+'\')">'+o[1]+'</button>';}).join('')+'</div></div>'
         :'<p class="un-hint">Тест увидят все, кто учит эту тему.</p>');
-    foot='<span class="gp-foot-n">'+gqN(E.qs.length)+'</span><button type="button" class="btn bbl" id="gqEdPub" onclick="gqEdPublish()"><i class="ti ti-send"></i>'+(E.id?'Сохранить':'Выложить')+'</button>';
+    foot='<span class="gp-foot-n">'+gqN(E.qs.length)+'</span><button type="button" class="btn bbl" id="gqEdPub" onclick="gqEdPublish()"><i class="ti ti-'+(E.topic?'send':'check')+'"></i>'+(E.id||!E.topic?'Сохранить':'Выложить')+'</button>';
   }
   var m=document.querySelector('.gp-sheet[data-gq="ed"]');
   if(m){m.querySelector('.gp-body').innerHTML=h;m.querySelector('.sbe-foot').innerHTML=foot;}
-  else{gpSheet(h,foot,E.id?'Изменить тест':'Вопросы с занятия',esc((ST.topic&&ST.topic.id===E.topic?ST.topic.title:'')||''),'gqEdBack()');gqMark('ed');}
+  else{gpSheet(h,foot,E.id?'Изменить тест':E.topic?'Вопросы с занятия':'Мой тест',esc((ST.topic&&ST.topic.id===E.topic?ST.topic.title:'')||''),'gqEdBack()');gqMark('ed');}
   if(E.step==='text'){var t=document.getElementById('gqText');if(t&&!E.qs.length)setTimeout(function(){try{t.focus();}catch(e){}},50);}
 }
 function gqEdQHtml(x,i){
   return '<div class="gq-eq'+(x.unsure?' unsure':'')+'" id="gqE'+i+'" data-i="'+i+'">'
     +'<div class="gq-eq-h"><b>Вопрос '+(i+1)+'</b><span class="gp-sp"></span><button type="button" class="gq-x" onclick="gqEdDelQ('+i+')" aria-label="Удалить вопрос '+(i+1)+'"><i class="ti ti-trash"></i></button></div>'
-    +(x.unsure?'<div class="gq-ur"><i class="ti ti-alert-triangle" aria-hidden="true"></i><span>ИИ не уверен в ответе — проверь</span><button type="button" class="gq-ur-ok" onclick="gqEdSure('+i+')"><i class="ti ti-check"></i>Проверил</button></div>':'')
+    +(x.unsure?'<div class="gq-ur"><i class="ti ti-alert-triangle" aria-hidden="true"></i><span>Ответ не проверен — выбери верный</span><button type="button" class="gq-ur-ok" onclick="gqEdSure('+i+')"><i class="ti ti-check"></i>Проверил</button></div>':'')
     +'<textarea class="gq-ta sm" data-f="q" rows="2" maxlength="500" placeholder="Текст вопроса" aria-label="Текст вопроса '+(i+1)+'">'+esc(x.q)+'</textarea>'
     +'<div class="gq-eo-list">'+x.options.map(function(o,k){
       return '<div class="gq-eo'+(k===x.correct?' on':'')+'"><input type="radio" name="gqR'+i+'" '+(k===x.correct?'checked ':'')+'onchange="gqEdCorrect('+i+','+k+')" aria-label="Вариант '+(k+1)+' — верный">'
@@ -13436,7 +13607,7 @@ function gqEdDelOpt(i,k){gqEdSync();var q=GQ.ed.qs[i];if(q.options.length<=2)ret
 function gqEdCorrect(i,k){gqEdSync();var q=GQ.ed.qs[i];q.correct=k;q.unsure=false;gqEdRedrawQ(i);gqEdNote();}
 function gqEdSure(i){gqEdSync();GQ.ed.qs[i].unsure=false;gqEdRedrawQ(i);gqEdNote();}
 function gqEdNote(){var n=document.querySelector('.gq-note');if(n&&!GQ.ed.qs.some(function(x){return x.unsure;}))n.remove();}
-function gqEdScope(s){gqEdSync();GQ.ed.scope=s;document.querySelectorAll('.gq-scope [role=radio]').forEach(function(b,i){b.setAttribute('aria-checked',String((i===0?'group':'course')===s));});}
+function gqEdScope(s){gqEdSync();GQ.ed.scope=s;var ord=GQ.ed.topic?['group','course']:['private','group'];document.querySelectorAll('.gq-scope [role=radio]').forEach(function(b,i){b.setAttribute('aria-checked',String(ord[i]===s));});}
 function gqEdBack(){
   var E=GQ.ed;if(E)gqEdSync();
   if(E&&E.step==='q'&&!E.id&&E.qs.length&&!E.leaveOk){E.leaveOk=true;toast2('Вопросы не выложены. Нажми «назад» ещё раз, чтобы выйти без сохранения');setTimeout(function(){if(GQ.ed===E)E.leaveOk=false;},4000);return;}
@@ -13477,14 +13648,14 @@ async function gqEdPublish(){
   var uns=E.qs.filter(function(x){return x.unsure;}).length;
   if(uns&&!E.unsureOk){E.unsureOk=true;
     var f=document.querySelector('.gq-eq.unsure');if(f)f.scrollIntoView({block:'center',behavior:'smooth'});
-    toast2('В '+uns+' '+vplural(uns,'вопросе','вопросах','вопросах')+' ИИ не уверен в ответе. Проверь — или нажми «'+(E.id?'Сохранить':'Выложить')+'» ещё раз: группа увидит пометку');return;}
+    toast2('В '+uns+' '+vplural(uns,'вопросе','вопросах','вопросах')+(E.topic?' ИИ не уверен в ответе. Проверь — или нажми «'+(E.id?'Сохранить':'Выложить')+'» ещё раз: группа увидит пометку':' ответ не проверен. Отметь верный вариант — или нажми «Сохранить» ещё раз'));return;}
   var qs=E.qs.map(function(x){var opts=[],c=-1;x.options.forEach(function(o,k){o=String(o||'').trim();if(!o)return;if(k===x.correct)c=opts.length;opts.push(o);});
     return {q:String(x.q).trim(),options:opts,correct:c,why:String(x.why||'').trim(),unsure:!!x.unsure};});
   var b=document.getElementById('gqEdPub');if(b)b.disabled=true;
   var r=await gqCall('gq_save',{p:{id:E.id,topic_id:E.topic,title:E.title,scope:E.scope,questions:qs}});
   if(!r){if(b)b.disabled=false;return;}
   GQ.ed=null;gqPut(r);
-  toast2(E.id?'Тест сохранён':'Тест выложен — '+(r.scope==='course'?'его увидят все, кто учит тему':'его увидит группа '+(r.group||'')));
+  toast2(r.scope==='private'?'Тест сохранён — он в «Моих тестах»':E.id?'Тест сохранён':'Тест выложен — '+(r.scope==='course'?'его увидят все, кто учит тему':'его увидит группа '+(r.group||'')));
   if(ST.topic&&GQ.topic===r.topic_id)gqOpen();else closeModal();
 }
 // --- тест по ИИ-конспекту материала группы (внизу конспекта) ---
@@ -13872,6 +14043,589 @@ function renderLevels(){
   document.getElementById('levelsBody').innerHTML=h;
 }
 
+// ===== ЗВУК И ОТКЛИК: каждое нажатие звучит одинаково =====
+// Раньше звук был только у ответов в тестах, а на iPhone/Telegram первый звук часто терялся: звуковой движок
+// «спит», пока его не разбудят касанием. Теперь будим его на каждом касании, у кнопок — тихий щелчок,
+// у вкладок — свой звук, у ответов — «верно/неверно», в Telegram — ещё и лёгкая вибрация.
+var SFX={ctx:null};
+function sfxCtx(){
+  try{
+    if(!SFX.ctx){var A=window.AudioContext||window.webkitAudioContext;if(!A)return null;SFX.ctx=new A();}
+    if(SFX.ctx.state==='suspended')SFX.ctx.resume();
+  }catch(e){return null;}
+  return SFX.ctx;
+}
+function sfxTone(c,t0,f,dur,type,vol,f2){
+  var o=c.createOscillator(),g=c.createGain();o.type=type||'sine';
+  o.frequency.setValueAtTime(f,t0);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t0+dur);
+  g.gain.setValueAtTime(0.0001,t0);g.gain.exponentialRampToValueAtTime(vol,t0+0.012);g.gain.exponentialRampToValueAtTime(0.0001,t0+dur);
+  o.connect(g);g.connect(c.destination);o.start(t0);o.stop(t0+dur+0.03);
+}
+function playSound(type){
+  try{var hf=window.Telegram&&Telegram.WebApp&&Telegram.WebApp.HapticFeedback;
+    if(hf&&S.haptic!==false){
+      if(type==='correct'||type==='done')hf.notificationOccurred('success');else if(type==='wrong')hf.notificationOccurred('error');
+      else if(type==='nav')hf.selectionChanged();else if(type==='tap')hf.impactOccurred('light');
+    }}catch(e){}
+  if(S.sound===false)return;
+  var c=sfxCtx();if(!c)return;var t=c.currentTime+0.01;
+  try{
+    if(type==='tap')sfxTone(c,t,880,0.045,'triangle',0.06,620);
+    else if(type==='nav'){sfxTone(c,t,620,0.06,'sine',0.06);sfxTone(c,t+0.05,930,0.08,'sine',0.05);}
+    else if(type==='correct'){sfxTone(c,t,660,0.12,'sine',0.14);sfxTone(c,t+0.09,990,0.22,'sine',0.13);}
+    else if(type==='wrong')sfxTone(c,t,260,0.24,'square',0.05,170);
+    else if(type==='done')[523,659,784,1047].forEach(function(f,i){sfxTone(c,t+i*0.09,f,0.24,'sine',0.12);});
+    else if(type==='coin'){sfxTone(c,t,1320,0.07,'square',0.035);sfxTone(c,t+0.06,1760,0.18,'sine',0.09);}
+  }catch(e){}
+}
+document.addEventListener('pointerdown',function(e){
+  sfxCtx();
+  var el=e.target&&e.target.closest&&e.target.closest('button,a[href],[role=button],[onclick],label,select,summary');
+  if(!el||el.disabled||el.getAttribute('aria-disabled')==='true'||el.closest('[data-nosfx]'))return;
+  var oc=el.getAttribute('onclick')||'';
+  if(/Ans(wer)?\s*\(|gqPick\(/.test(oc))return;                 // ответ в тесте — прозвучит «верно/неверно»
+  playSound(el.closest('.bottomnav,.sidebar,.side-dock')?'nav':'tap');
+},true);
+
+// ===== РАССЫЛКА: админ пишет — бот отправляет в Telegram всем студентам, группе или всем админам =====
+ADM_SECTIONS.broadcast={t:'Рассылка',h:'Сообщение всем сразу',d:'Бот отправит его в Telegram: всем студентам, одной группе или всем админам. Для всех студентов — ещё и в «Новости» приложения.',i:'speakerphone',k:'mal',g:'people'};
+var BC={aud:'all',news:true};
+(function(){var _t=admTab;admTab=function(t,btn){_t(t,btn);if(ADM_CUR==='broadcast')bcRender();};})();
+var BC_AUD={all:['Всем студентам','users'],group:['Группе','users-group'],admins:['Всем админам','shield-check']};
+function bcRender(){
+  var sec=document.getElementById('admSec');if(!sec)return;
+  var box=document.getElementById('admBroadcast');
+  if(!box){sec.insertAdjacentHTML('beforeend','<div id="admBroadcast" class="bc"></div>');box=document.getElementById('admBroadcast');}
+  box.innerHTML='<div class="bc-card"><div class="bc-l" id="bcAudL">Кому</div><div class="bc-seg" role="radiogroup" aria-labelledby="bcAudL">'
+    +Object.keys(BC_AUD).map(function(a){var on=BC.aud===a;return '<button type="button" role="radio" aria-checked="'+on+'" class="'+(on?'on':'')+'" onclick="bcAud(\''+a+'\')"><i class="ti ti-'+BC_AUD[a][1]+'" aria-hidden="true"></i>'+BC_AUD[a][0]+'</button>';}).join('')+'</div>'
+    +(BC.aud==='group'?'<div class="field"><label for="bcGroup">Номер группы</label><input id="bcGroup" placeholder="например 101" value="'+esc(BC.group||'')+'" oninput="BC.group=this.value;bcCount()"></div>':'')
+    +'<div class="field"><label for="bcTitle">Заголовок</label><input id="bcTitle" maxlength="120" placeholder="Например: тесты деканата обновлены" value="'+esc(BC.title||'')+'" oninput="BC.title=this.value;bcPrev()"></div>'
+    +'<div class="field"><label for="bcBody">Текст</label><textarea id="bcBody" rows="5" maxlength="3000" placeholder="Что хочешь сказать" oninput="BC.body=this.value;bcPrev()">'+esc(BC.body||'')+'</textarea></div>'
+    +(BC.aud==='all'?'<label class="bc-chk"><input type="checkbox" '+(BC.news?'checked':'')+' onchange="BC.news=this.checked;bcCount()"> Показать и в «Новостях» приложения</label>':'')
+    +'<div class="bc-l">Так увидят в Telegram</div><div class="bc-prev" id="bcPrev"></div>'
+    +'<div class="bc-foot"><span id="bcCnt" class="bc-cnt" aria-live="polite"></span><button type="button" class="btn bbl" id="bcSend" onclick="bcSend()"><i class="ti ti-send" aria-hidden="true"></i>Отправить</button></div></div>'
+    +'<h3 class="bc-h">Отправленные</h3><div id="bcHist" class="bc-hist">Загрузка…</div>';
+  bcPrev();bcCount();bcHist();
+}
+function bcAud(a){BC.aud=a;bcRender();}
+function bcPrev(){
+  var p=document.getElementById('bcPrev');if(!p)return;BC.ask=false;bcBtn();
+  p.innerHTML='<b>📣 '+esc(BC.title||'Заголовок')+'</b>'+(BC.body?'<p>'+esc(BC.body).replace(/\n/g,'<br>')+'</p>':'')
+    +'<span class="bc-pbtn">'+(BC.aud==='admins'?'Открыть админку':'Открыть Vita')+'</span>';
+}
+function bcBtn(){var b=document.getElementById('bcSend');if(!b)return;b.innerHTML=BC.ask?'<i class="ti ti-send" aria-hidden="true"></i>Да, отправить'+(BC.cnt?' — '+BC.cnt.telegram+' '+vplural(BC.cnt.telegram,'человеку','людям','людям'):''):'<i class="ti ti-send" aria-hidden="true"></i>Отправить';b.classList.toggle('ask',!!BC.ask);}
+function bcCount(){
+  clearTimeout(BC.ct);BC.ask=false;bcBtn();var el=document.getElementById('bcCnt');if(!el)return;
+  if(BC.aud==='group'&&!String(BC.group||'').trim()){el.textContent='Напиши номер группы';BC.cnt=null;return;}
+  el.textContent='Считаю, кому уйдёт…';
+  BC.ct=setTimeout(async function(){
+    try{var r=await vRpc('admin_broadcast',{p_token:vAdminToken(),p_aud:BC.aud,p_group:BC.group||'',p_title:'',p_body:'',p_news:false,p_dry:true});
+      BC.cnt=r;var no=r.people-r.telegram;
+      el.textContent=!r.people?'Здесь пока никого нет':'Получат в Telegram: '+r.telegram+' из '+r.people+(no?' · у '+no+' нет Telegram'+(BC.aud==='all'&&BC.news?' — увидят в «Новостях»':''):'');
+    }catch(e){el.textContent=e.missing?'Сначала примени security_v20.sql':(e.message||'Не получилось посчитать');}
+  },350);
+}
+async function bcSend(){
+  var t=String(BC.title||'').trim();
+  if(t.length<2){toast2('Напиши заголовок');var f=document.getElementById('bcTitle');if(f)f.focus();return;}
+  if(BC.aud==='group'&&!String(BC.group||'').trim()){toast2('Напиши номер группы');return;}
+  if(!BC.ask){BC.ask=true;bcBtn();return;}                      // второе нажатие — уже отправка
+  var b=document.getElementById('bcSend');if(b){b.disabled=true;b.textContent='Отправляю…';}
+  try{
+    var r=await vRpc('admin_broadcast',{p_token:vAdminToken(),p_aud:BC.aud,p_group:BC.group||'',p_title:t,p_body:BC.body||'',p_news:BC.aud==='all'&&BC.news,p_dry:false});
+    toast2('Отправлено — бот рассылает '+r.telegram+' '+vplural(r.telegram,'человеку','людям','людям'));try{playSound('done');}catch(e){}
+    BC.title='';BC.body='';BC.ask=false;bcRender();
+  }catch(e){toast2(e.missing?'Сначала примени security_v20.sql':(e.message||'Не получилось'));if(b)b.disabled=false;BC.ask=false;bcBtn();}
+}
+async function bcHist(){
+  var el=document.getElementById('bcHist');if(!el)return;
+  try{var rows=await vRpc('admin_broadcasts',{p_token:vAdminToken()})||[];
+    el.innerHTML=rows.length?rows.map(function(x){
+      var who=x.audience==='group'?'Группа '+esc(x.group):BC_AUD[x.audience][0],done=x.delivered+x.failed;
+      return '<div class="bc-row"><div class="bc-rt"><b>'+esc(x.title)+'</b><small>'+who+(x.news?' · и в «Новостях»':'')+' · '+new Date(x.at).toLocaleString('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+'</small></div>'
+        +'<span class="bc-st'+(done<x.planned?' wait':'')+'">'+(done<x.planned?'отправляется…':'дошло '+x.delivered+' из '+x.planned)+'</span></div>';}).join(''):'<div class="bc-empty">Рассылок ещё не было.</div>';
+  }catch(e){el.innerHTML='<div class="bc-empty">'+(e.missing?'Сначала примени security_v20.sql':esc(e.message||'Не загрузилось'))+'</div>';}
+}
+
+// ===== VITA+ : подписка. Лимиты считает сервер (security_v21.sql); здесь — счётчик, окно покупки, профиль и админка =====
+var VP=null,VP_AT=0,VP_PLUS=null,VP_PLUS_AT=0;
+function vpTok(){return S.token||vAdminToken();}
+async function vpLoad(force){
+  if(!vpTok())return VP;
+  if(!force&&VP&&Date.now()-VP_AT<60000)return VP;
+  try{VP=await vRpc('sub_status',{p_token:vpTok()});VP_AT=Date.now();}catch(e){if(e.missing)VP=null;}
+  try{vpPaint();}catch(e){}
+  return VP;
+}
+// лимит действует на этого человека? (подписка включена, Vita+ нет, не админ)
+function vpOn(){return !!(VP&&VP.enabled&&!VP.plus&&!VP.staff&&S.user);}
+function vpLeft(){return !vpOn()?Infinity:(VP.trial_left>0?VP.trial_left:Math.max(0,VP.q_limit-VP.q_used));}
+function vpDate(d,long){try{return new Date(d).toLocaleDateString('ru-RU',long?{day:'numeric',month:'long'}:{day:'numeric',month:'numeric'});}catch(e){return '';}}
+function vpSum(n){return String(n||0).replace(/\B(?=(\d{3})+(?!\d))/g,' ');}
+// счётчик в шапке тренажёра
+function vpPaint(){
+  var ph=document.querySelector('#pg-trainer .ph'),c=document.getElementById('vpChip');
+  if(!ph)return;
+  if(!vpOn()){if(c)c.remove();return;}
+  if(!c){c=document.createElement('button');c.id='vpChip';c.type='button';c.onclick=function(){vpWall('info');};ph.appendChild(c);}
+  var left=vpLeft();
+  c.className='vp-chip'+(left<=5?' low':'');
+  c.innerHTML=(VP.trial_left>0?'Бесплатно осталось <b>'+VP.trial_left+'</b> '+vplural(VP.trial_left,'вопрос','вопроса','вопросов')
+    :'Сегодня <b>'+Math.min(VP.q_used,VP.q_limit)+'</b> из '+VP.q_limit)+'<span class="vp-chip-go">✦ Без лимита<i class="ti ti-chevron-right" aria-hidden="true"></i></span>';
+}
+// бесплатные вопросы кончились: вместо вопроса — понятный экран
+function vpStop(){
+  var q=document.getElementById('trQ'),o=document.getElementById('trOpts');
+  ['trNxt','trAiWrap','trRepLink'].forEach(function(id){var e=document.getElementById(id);if(e)e.style.display='none';});
+  ['trBdg','trTbdg','trLesson'].forEach(function(id){var e=document.getElementById(id);if(e)e.innerHTML='';});
+  if(q)q.textContent='На сегодня бесплатные вопросы закончились';
+  if(o)o.innerHTML='<div class="vp-stop"><p>Ты решил сегодня '+VP.q_limit+' '+vplural(VP.q_limit,'вопрос','вопроса','вопросов')+'. Завтра будет ещё '+VP.q_limit+'.</p>'
+    +'<button type="button" class="btn vp-btn" onclick="vpWall(\'q\')"><span class="vp-star">✦</span>Решать дальше с Vita+</button>'
+    +'<button type="button" class="btn bgh" onclick="go(\'exam\')"><i class="ti ti-clipboard-check" aria-hidden="true"></i>Экзамен по билетам — без лимита</button></div>';
+  vpPaint();
+}
+function vpExLeft(r){
+  if(!r||r.left==null||!vpOn())return '';
+  VP.ex_used=VP.ex_limit-r.left;
+  return '<button type="button" class="vp-exl" onclick="vpWall(\'ex\')">'+(r.left>0?'Сегодня осталось объяснений: <b>'+r.left+'</b> из '+VP.ex_limit:'Это было последнее бесплатное объяснение на сегодня')+' · <u>Без лимита</u></button>';
+}
+function vpExStop(r){
+  return '<div class="vp-stop in"><p><b>Объяснения на сегодня закончились.</b> Бесплатно — '+(r.limit||10)+' в день. Завтра будут новые.</p>'
+    +'<button type="button" class="btn vp-btn" onclick="vpWall(\'ex\')"><span class="vp-star">✦</span>Объяснения без лимита</button></div>';
+}
+function vpBadge(email){return VP_PLUS&&VP_PLUS[email]?' <span class="vp-b" title="Vita+" aria-label="Vita+">✦</span>':'';}
+async function vpPlusLoad(){
+  if(!vpTok()||(VP_PLUS&&Date.now()-VP_PLUS_AT<300000))return;
+  try{var a=await vRpc('plus_emails',{p_token:vpTok()})||[];VP_PLUS={};a.forEach(function(e){VP_PLUS[e]=1;});VP_PLUS_AT=Date.now();}catch(e){}
+}
+// ---- окно Vita+ ----
+function vpShell(inner){
+  document.getElementById('modalRoot').innerHTML='<div class="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal vp-sheet" role="dialog" aria-label="Vita+">'
+    +'<button type="button" class="vp-x" onclick="closeModal()" aria-label="Закрыть"><i class="ti ti-x" aria-hidden="true"></i></button>'+inner+'</div></div>';
+}
+function vpWall(why){
+  var v=VP;if(!v){vpLoad(true).then(function(x){if(x)vpWall(why);});return;}
+  var bank=0;try{bank=getQS().length;}catch(e){}
+  var head={q:['На сегодня всё','Ты решил все бесплатные вопросы на сегодня. С Vita+ можно не останавливаться.'],
+    ex:['Объяснения закончились','Бесплатно — '+v.ex_limit+' в день. С Vita+ — к каждому вопросу.'],
+    ask:['Вопросы ИИ закончились','Бесплатно — '+v.ask_limit+' в день. С Vita+ — '+v.plus_ask+'.'],
+    imp:['Лимит своих тестов закончился',v.plus?'В этом месяце ты уже загрузил '+v.plus_imp+' вопросов. В следующем — снова можно.':'Бесплатная проба использована. С Vita+ — '+v.plus_imp+' вопросов в месяц.'],
+    file:['Разбор файлов — в Vita+','Сфотографируй страницу или пришли PDF — ИИ объяснит непонятное место.'],
+    info:['Vita+','Готовься к деканату без остановок.']}[why]||['Vita+','Готовься к деканату без остановок.'];
+  var h='<div class="vp-top"><span class="vp-mark" aria-hidden="true">✦</span><h2>'+(v.plus&&!v.staff?'Vita+ активна':head[0])+'</h2>'
+    +'<p>'+(v.plus&&!v.staff&&v.until?'До '+vpDate(v.until,true)+'. Можно продлить заранее — дни прибавятся.':head[1])+'</p></div>';
+  h+='<ul class="vp-list">'
+    +'<li><i class="ti ti-infinity" aria-hidden="true"></i><span><b>Тесты без лимита</b><small>'+(bank>v.q_limit*3?'В банке '+vpSum(bank)+' '+vplural(bank,'вопрос','вопроса','вопросов')+'. По '+v.q_limit+' в день — это '+Math.ceil(bank/v.q_limit)+' '+vplural(Math.ceil(bank/v.q_limit),'день','дня','дней')+'. С Vita+ — в своём темпе.':'Решай сколько нужно, а не '+v.q_limit+' в день.')+'</small></span></li>'
+    +'<li><i class="ti ti-sparkles" aria-hidden="true"></i><span><b>Объяснение к каждому вопросу</b><small>Почему ответ такой — сразу, без счётчика «'+v.ex_limit+' в день».</small></span></li>'
+    +'<li><i class="ti ti-message-question" aria-hidden="true"></i><span><b>Спросить ИИ — '+v.plus_ask+' '+vplural(v.plus_ask,'вопрос','вопроса','вопросов')+' в день</b><small>'+(v.plus_file>0?'И разбор фото, PDF и Word: что непонятно в лекции — объяснит.':'Под тестом, по конспекту или просто так. Можно голосом.')+'</small></span></li>'
+    +'<li><i class="ti ti-photo-plus" aria-hidden="true"></i><span><b>Свои тесты — '+v.plus_imp+' вопросов в месяц</b><small>Скриншоты из Moodle, PDF или Word превращаются в тест с повтором ошибок.</small></span></li>'
+    +'<li><i class="ti ti-rosette-discount-check" aria-hidden="true"></i><span><b>Значок ✦ в рейтинге и дуэлях</b><small>Группа видит, кто готовится всерьёз.</small></span></li></ul>';
+  h+='<div class="vp-price"><b>'+vpSum(v.price_uzs)+' сум</b><span>на '+v.days+' '+vplural(v.days,'день','дня','дней')+' · '+vpSum(Math.round(v.price_uzs/v.days/100)*100)+' сум в день</span></div>';
+  if(v.pending)h+='<div class="vp-note"><i class="ti ti-clock" aria-hidden="true"></i>Твой чек у администратора. Как только он подтвердит перевод, Vita+ включится сама — бот напишет.</div>';
+  else if(!v.in_tg)h+='<div class="vp-note"><i class="ti ti-brand-telegram" aria-hidden="true"></i>'+(v.other?'У тебя есть Vita+, но она работает только в Telegram — там, где ты её купил.':'Vita+ покупается и работает только в Telegram: подписка привязана к твоему Telegram-аккаунту.')+'</div>'
+    +'<button type="button" class="btn vp-btn" onclick="vOpenTgLink(\'https://t.me/'+(S.tgBot||VITA_BOT_NAME)+'\')"><i class="ti ti-brand-telegram" aria-hidden="true"></i>Открыть Vita в Telegram</button>';
+  else{
+    if(v.other)h+='<div class="vp-note"><i class="ti ti-alert-triangle" aria-hidden="true"></i>На этом аккаунте есть Vita+, но она куплена с другого Telegram. Напиши администратору — он перенесёт.</div>';
+    h+='<div class="vp-pay"><button type="button" class="btn vp-btn" id="vpStars" onclick="vpPayStars()"><span class="vp-star">⭐</span>Оплатить звёздами · '+v.price_stars+'</button>'
+      +(v.card?'<button type="button" class="btn bgh" id="vpCard" onclick="vpPayCard()"><i class="ti ti-credit-card" aria-hidden="true"></i>Переводом на карту · '+vpSum(v.price_uzs)+' сум</button>':'')+'</div>';
+  }
+  h+='<button type="button" class="vp-later" onclick="closeModal()">'+(v.plus?'Закрыть':why==='q'?'Продолжить завтра':'Не сейчас')+'</button><div id="vpMsg" class="vp-msg" role="status"></div>';
+  vpShell(h);
+}
+function vpSay(t,bad){var m=document.getElementById('vpMsg');if(m){m.textContent=t||'';m.className='vp-msg'+(bad?' bad':'');}}
+function vpBusy(id,on,txt){var b=document.getElementById(id);if(!b)return;if(on){b.dataset.h=b.innerHTML;b.disabled=true;b.textContent=txt;}else{b.disabled=false;if(b.dataset.h)b.innerHTML=b.dataset.h;}}
+async function vpBot(path){
+  var url=vBotUrl(path);if(!url)return {status:'error',msg:'Оплата пока не подключена'};
+  try{var r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:S.token||''})});return await r.json();}
+  catch(e){return {status:'error',msg:'Нет связи с сервером. Попробуй ещё раз'};}
+}
+function vpErr(j){
+  return {need_tg:'Открой Vita через Telegram-бота — Vita+ покупается только там.',no_session:'Вход устарел. Закрой и открой Vita заново.',off:'Подписка сейчас недоступна.'}[j.status]||j.msg||'Не получилось. Попробуй ещё раз';
+}
+async function vpPayStars(){
+  vpSay('');vpBusy('vpStars',true,'Выписываю счёт…');
+  var j=await vpBot('/sub/invoice');vpBusy('vpStars',false);
+  if(j.status!=='ok'){vpSay(vpErr(j),true);return;}
+  if(TG&&TG.openInvoice){
+    TG.openInvoice(j.link,function(st){if(st==='paid')vpPaid();else if(st==='failed')vpSay('Оплата не прошла. Деньги не списаны',true);});
+  }else vOpenTgLink(j.link);
+}
+// звёзды списаны — ждём, пока бот включит Vita+ (обычно секунда-две)
+async function vpPaid(){
+  vpShell('<div class="vp-top"><span class="vp-mark spin" aria-hidden="true">✦</span><h2>Включаю Vita+…</h2><p>Оплата прошла. Секунду.</p></div>');
+  for(var i=0;i<8;i++){
+    await new Promise(function(r){setTimeout(r,i?1500:700);});
+    await vpLoad(true);
+    if(VP&&VP.plus){vpDone();return;}
+  }
+  vpShell('<div class="vp-top"><span class="vp-mark" aria-hidden="true">✦</span><h2>Оплата прошла</h2><p>Vita+ включится в течение минуты — бот напишет в Telegram. Если не включилась, напиши администратору.</p></div>'
+    +'<button type="button" class="btn vp-btn" onclick="closeModal()">Понятно</button>');
+}
+function vpDone(){
+  try{playSound('done');}catch(e){}
+  VP_PLUS_AT=0;
+  vpShell('<div class="vp-top"><span class="vp-mark on" aria-hidden="true">✦</span><h2>Vita+ включена</h2><p>Тесты и объяснения — без лимита до '+vpDate(VP.until,true)+'.</p></div>'
+    +'<button type="button" class="btn vp-btn" onclick="closeModal();go(\'trainer\')">Решать дальше</button>');
+  try{vpProfCard();}catch(e){}
+}
+async function vpPayCard(){
+  vpSay('');vpBusy('vpCard',true,'Отправляю реквизиты…');
+  var j=await vpBot('/sub/card');vpBusy('vpCard',false);
+  var bot=j.bot||S.tgBot||VITA_BOT_NAME;
+  if(j.status==='cant_write'){vpSay('Бот не может тебе написать. Открой его, нажми «Запустить» и попробуй ещё раз.',true);return;}
+  if(j.status!=='ok'){vpSay(vpErr(j),true);return;}
+  vpShell('<div class="vp-top"><span class="vp-mark" aria-hidden="true"><i class="ti ti-credit-card"></i></span><h2>Реквизиты у тебя в Telegram</h2><p>Бот прислал номер карты в чат.</p></div>'
+    +'<ol class="vp-steps"><li>Переведи <b>'+vpSum(VP.price_uzs)+' сум</b> на карту из сообщения бота.</li><li>Пришли боту <b>фото или скриншот чека</b>.</li><li>Администратор проверит перевод — Vita+ включится сама.</li></ol>'
+    +'<button type="button" class="btn vp-btn" onclick="vpToChat(\''+esc(bot)+'\')"><i class="ti ti-brand-telegram" aria-hidden="true"></i>Перейти в чат с ботом</button>'
+    +'<button type="button" class="vp-later" onclick="closeModal()">Позже</button>');
+}
+function vpToChat(bot){closeModal();try{if(TG&&TG.close&&typeof isTG==='function'&&isTG()){TG.close();return;}}catch(e){}vOpenTgLink('https://t.me/'+bot);}
+// карточка в профиле
+function vpProfCard(){
+  var el=document.getElementById('vpProf');if(!el)return;
+  var v=VP;if(!v||!v.enabled||v.staff||!S.user){el.innerHTML='';return;}
+  if(v.plus)el.innerHTML='<button type="button" class="vp-card on" onclick="vpWall(\'info\')"><span class="vp-mark" aria-hidden="true">✦</span><span class="vp-ct"><b>Vita+ активна</b><small>до '+vpDate(v.until,true)+' · тесты и объяснения без лимита</small></span><span class="vp-cgo">Продлить</span></button>';
+  else el.innerHTML='<button type="button" class="vp-card" onclick="vpWall(\'info\')"><span class="vp-mark" aria-hidden="true">✦</span><span class="vp-ct"><b>Vita+ · без лимитов</b><small>'
+    +(v.pending?'Чек на проверке у администратора':v.trial_left>0?'Бесплатно осталось '+v.trial_left+' '+vplural(v.trial_left,'вопрос','вопроса','вопросов'):'Сегодня: '+Math.min(v.q_used,v.q_limit)+' из '+v.q_limit+' вопросов · '+Math.min(v.ex_used,v.ex_limit)+' из '+v.ex_limit+' объяснений')
+    +'</small></span><span class="vp-cgo">'+vpSum(v.price_uzs)+' сум</span></button>';
+}
+// встраиваемся в тренажёр, профиль и рейтинг
+(function(){
+  var _next=trNext;trNext=function(){if(vpOn()&&vpLeft()<=0){vpStop();return;}return _next.apply(this,arguments);};
+  var _save=saveProg;saveProg=async function(qid,ok,src){
+    var r=await _save.apply(this,arguments);
+    if(!src&&vpOn()){if(VP.trial_left>0)VP.trial_left--;else VP.q_used++;try{vpPaint();}catch(e){}}
+    return r;};
+  var _tt=trTopics;trTopics=function(){var r=_tt.apply(this,arguments);try{vpPaint();}catch(e){}
+    vpLoad().then(function(){var pg=document.getElementById('pg-trainer');if(pg&&pg.classList.contains('on')&&vpOn()&&vpLeft()<=0&&!document.querySelector('#trOpts .vp-stop'))vpStop();});return r;};
+  var _prof=renderProfile;renderProfile=async function(){var r=await _prof.apply(this,arguments);try{vpProfCard();}catch(e){}vpLoad().then(function(){try{vpProfCard();}catch(e){}});return r;};
+  var _lb=renderLB;renderLB=async function(){try{await vpPlusLoad();}catch(e){}return _lb.apply(this,arguments);};
+  setTimeout(function(){vpLoad();},1500);
+})();
+// ---- админка: «Подписка» ----
+ADM_SECTIONS.plus={t:'Подписка',h:'Vita+: цены, оплаты, выдача',d:'Vita+: включить, цены и лимиты, карта для переводов, кто оплатил и выдача бесплатно. Чеки приходят в Telegram — там же кнопки «Деньги пришли» и «Отклонить».',i:'rosette-discount-check',k:'iod',g:'shop'};
+var VPA={};
+(function(){var _t=admTab;admTab=function(t,btn){_t(t,btn);if(ADM_CUR==='plus')vpaRender();};})();
+function vpaF(id,label,val,hint,attr){return '<div class="field"><label for="'+id+'">'+label+'</label><input id="'+id+'" value="'+esc(val)+'" '+(attr||'inputmode="numeric"')+'>'+(hint?'<small>'+hint+'</small>':'')+'</div>';}
+async function vpaRender(){
+  var sec=document.getElementById('admSec');if(!sec)return;
+  var box=document.getElementById('admPlus');
+  if(!box){sec.insertAdjacentHTML('beforeend','<div id="admPlus" class="vpa">Загрузка…</div>');box=document.getElementById('admPlus');}
+  var d;try{d=await vRpc('admin_sub_info',{p_token:vAdminToken()});}catch(e){box.innerHTML='<div class="bc-empty">'+(e.missing?'Сначала примени security_v21.sql':esc(e.message||'Не загрузилось'))+'</div>';return;}
+  VPA.d=d;var c=d.cfg,h='';
+  h+='<div class="bc-card vpa-state'+(c.enabled?' on':'')+'"><div><b>'+(c.enabled?'Подписка включена':'Подписка выключена')+'</b><small>'+(c.enabled?'Бесплатно: на пробу — '+c.trial_q+', потом '+c.daily_q+' в день; объяснений ИИ — '+c.daily_ex+' в день. Vita+ — без лимита.':'Сейчас лимитов нет ни у кого. Включи — и они начнут действовать сразу.')+'</small></div>'
+    +(d.super?'<button type="button" class="btn '+(c.enabled?'bgh':'bbl')+'" id="vpaTog" onclick="vpaToggle()">'+(c.enabled?'Выключить':'Включить')+'</button>':'')+'</div>';
+  h+='<div class="vpa-nums"><div><b>'+d.active.length+'</b><span>с Vita+ сейчас</span></div><div><b>'+vpSum(d.month.uzs)+'</b><span>сум за 30 дней (карта)</span></div><div><b>'+vpSum(d.month.stars)+' ⭐</b><span>звёзд за 30 дней</span></div></div>';
+  if(d.pending.length)h+='<h3 class="bc-h">Чеки ждут решения</h3><div class="bc-hist">'+d.pending.map(function(p){return '<div class="bc-row"><div class="bc-rt"><b>'+esc(p.name||'')+'</b><small>'+(p.group?'группа '+esc(p.group)+' · ':'')+vpSum(p.amount)+' сум · '+new Date(p.at).toLocaleString('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+'</small></div><span class="bc-st wait">ответь в Telegram</span></div>';}).join('')+'</div>';
+  h+='<h3 class="bc-h">Выдать Vita+ бесплатно</h3><div class="bc-card"><div class="field"><label for="vpaQ">Найди студента</label><input id="vpaQ" placeholder="Имя, почта или группа" oninput="vpaSearch()" autocomplete="off"></div><div id="vpaRes" class="vpa-res"></div></div>';
+  if(d.super){
+    h+='<h3 class="bc-h">Цены и лимиты</h3><div class="bc-card"><div class="vpa-grid">'
+      +vpaF('vpaUzs','Цена, сум',c.price_uzs)+vpaF('vpaStars','Цена, звёзд',c.price_stars,'Студент платит ≈ 200–250 сум за звезду')+vpaF('vpaDays','На сколько дней',c.days)
+      +vpaF('vpaTrial','Вопросов на пробу',c.trial_q,'Один раз, с первого захода')+vpaF('vpaDq','Потом вопросов в день',c.daily_q)+vpaF('vpaDex','Объяснений ИИ в день',c.daily_ex)
+      +vpaF('vpaFa','«Спросить ИИ» бесплатно, в день',c.free_ask)+vpaF('vpaPa','«Спросить ИИ» с Vita+, в день',c.plus_ask)+vpaF('vpaPf','Файлов в день с Vita+',c.plus_file,'Бесплатным файлы недоступны')
+      +vpaF('vpaFi','Свои тесты бесплатно, вопросов',c.free_imp,'Один раз, на пробу')+vpaF('vpaPi','Свои тесты с Vita+, в месяц',c.plus_imp)+'</div>'
+      +'<div class="vpa-grid two">'+vpaF('vpaCard','Номер карты для переводов',c.card_number.replace(/(\d{4})(?=\d)/g,'$1 '),'Пусто — оплата картой скрыта, останутся только звёзды')+vpaF('vpaHold','Имя на карте',c.card_holder,'Студент сверит его при переводе','')+'</div>'
+      +'<div class="bc-foot"><span class="bc-cnt" id="vpaMsg" aria-live="polite"></span><button type="button" class="btn bbl" id="vpaSave" onclick="vpaSave()">Сохранить</button></div></div>';
+  }
+  h+=vpaCost(d.cost);
+  h+='<h3 class="bc-h">Сейчас с Vita+</h3><div class="bc-hist">'+(d.active.length?d.active.map(function(a){return '<div class="bc-row"><div class="bc-rt"><b>'+esc(a.name||a.email)+'</b><small>'+(a.group?'группа '+esc(a.group)+' · ':'')+({stars:'звёзды',card:'карта',grant:'выдал админ'}[a.how]||'')+'</small></div><span class="bc-st">до '+vpDate(a.until)+'</span>'+(d.super?'<button type="button" class="vpa-rm" onclick="vpaGrant(\''+esc(a.email)+'\',0,this)" aria-label="Снять Vita+ у '+esc(a.name||a.email)+'"><i class="ti ti-x" aria-hidden="true"></i></button>':'')+'</div>';}).join(''):'<div class="bc-empty">Пока никого.</div>')+'</div>';
+  h+='<h3 class="bc-h">Последние оплаты</h3><div class="bc-hist">'+(d.recent.length?d.recent.map(function(p){
+    var what=p.method==='stars'?p.amount+' ⭐':p.method==='card'?vpSum(p.amount)+' сум':(p.days?'бесплатно, '+p.days+' дн.':'снята');
+    return '<div class="bc-row"><div class="bc-rt"><b>'+esc(p.name||'')+'</b><small>'+what+(p.by?' · '+esc(p.by):'')+' · '+new Date(p.at).toLocaleString('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+'</small></div><span class="bc-st'+(p.status==='paid'?'':' wait')+'">'+(p.status==='paid'?'оплачено':p.method==='grant'?'снята':'отклонено')+'</span></div>';}).join(''):'<div class="bc-empty">Оплат ещё не было.</div>')+'</div>';
+  box.innerHTML=h;
+}
+async function vpaToggle(){
+  var c=VPA.d.cfg,b=document.getElementById('vpaTog');
+  if(!c.enabled&&!VPA.ask){VPA.ask=1;b.textContent='Точно включить? Лимиты начнут действовать';return;}
+  VPA.ask=0;b.disabled=true;
+  try{await vRpc('admin_sub_config',{p_token:vAdminToken(),p_cfg:{enabled:!c.enabled}});toast2(c.enabled?'Подписка выключена':'Подписка включена');VP_AT=0;vpLoad(true);}catch(e){toast2(e.message||'Не получилось');}
+  vpaRender();
+}
+async function vpaSave(){
+  var g=function(id){return (document.getElementById(id)||{}).value||'';},n=function(id){return parseInt(g(id).replace(/\D/g,''),10);};
+  var cfg={price_uzs:n('vpaUzs'),price_stars:n('vpaStars'),days:n('vpaDays'),trial_q:n('vpaTrial'),daily_q:n('vpaDq'),daily_ex:n('vpaDex'),free_ask:n('vpaFa'),plus_ask:n('vpaPa'),plus_file:n('vpaPf'),free_imp:n('vpaFi'),plus_imp:n('vpaPi'),card_number:g('vpaCard'),card_holder:g('vpaHold')};
+  var m=document.getElementById('vpaMsg');
+  for(var k in cfg){if(typeof cfg[k]==='number'&&isNaN(cfg[k])){m.textContent='Заполни все поля числами';return;}}
+  var b=document.getElementById('vpaSave');b.disabled=true;
+  try{await vRpc('admin_sub_config',{p_token:vAdminToken(),p_cfg:cfg});toast2('Сохранено');VP_AT=0;await vpaRender();}catch(e){m.textContent=e.message||'Не получилось';b.disabled=false;}
+}
+function vpaSearch(){
+  clearTimeout(VPA.t);var q=(document.getElementById('vpaQ')||{}).value||'',el=document.getElementById('vpaRes');if(!el)return;
+  if(q.trim().length<2){el.innerHTML='';return;}
+  VPA.t=setTimeout(async function(){
+    try{var rows=await vRpc('admin_sub_search',{p_token:vAdminToken(),p_q:q})||[];
+      el.innerHTML=rows.length?rows.map(function(u){return '<div class="bc-row"><div class="bc-rt"><b>'+esc(u.name||u.email)+'</b><small>'+(u.group?'группа '+esc(u.group)+' · ':'')+(u.until?'Vita+ до '+vpDate(u.until):u.tg?'без Vita+':'ещё не заходил через Telegram')+'</small></div>'
+        +(u.tg?'<span class="vpa-give">'+[7,30,90].map(function(n){return '<button type="button" class="btn bgh bsm" onclick="vpaGrant(\''+esc(u.email)+'\','+n+',this)">+'+n+' дн.</button>';}).join('')+'</span>':'')+'</div>';}).join(''):'<div class="bc-empty">Никого не нашлось.</div>';
+    }catch(e){el.innerHTML='<div class="bc-empty">'+esc(e.message||'Не получилось')+'</div>';}
+  },300);
+}
+async function vpaGrant(email,days,btn){
+  if(!days&&!btn.dataset.sure){btn.dataset.sure=1;btn.innerHTML='Снять?';return;}
+  btn.disabled=true;
+  try{await vRpc('admin_sub_grant',{p_token:vAdminToken(),p_email:email,p_days:days});toast2(days?'Vita+ выдана на '+days+' '+vplural(days,'день','дня','дней')+' — студент получит сообщение':'Vita+ снята');VP_PLUS_AT=0;
+    var q=(document.getElementById('vpaQ')||{}).value||'';await vpaRender();var f=document.getElementById('vpaQ');if(f&&days){f.value=q;vpaSearch();}}
+  catch(e){toast2(e.message||'Не получилось');btn.disabled=false;}
+}
+
+// ===== СПРОСИТЬ ИИ: под вопросом теста, по выделенному месту конспекта или просто так; текстом, голосом, с фото или файлом =====
+var VQ=null;
+function vqOpen(o){
+  if(!S.user&&!S.isAdm){showLoginWall();return;}
+  o=o||{};
+  VQ={qid:o.qid||'',topicId:o.topicId||'',quote:o.quote||'',hist:[],file:'',files:[],busy:false,log:[]};
+  var sub=VQ.qid?'По этому вопросу теста':VQ.quote?'По выделенному месту конспекта':'Вопрос по учёбе';
+  document.getElementById('modalRoot').innerHTML='<div class="modal-bg vq-bg" onclick="if(event.target===this)vqClose()"><div class="modal vq" role="dialog" aria-label="Спросить ИИ">'
+    +'<div class="vq-head"><span class="lb-blob vio" aria-hidden="true"><i class="ti ti-sparkles"></i></span><div><b>Спросить ИИ</b><small>'+sub+'</small></div>'
+    +'<button type="button" class="vq-x" onclick="vqClose()" aria-label="Закрыть"><i class="ti ti-x" aria-hidden="true"></i></button></div>'
+    +'<div class="vq-log" id="vqLog" aria-live="polite"></div>'
+    +'<div class="vq-foot"><div class="vq-files" id="vqFiles"></div>'
+    +'<div class="vq-comp"><button type="button" class="vq-ib" onclick="vqPick()" aria-label="Приложить фото или файл"><i class="ti ti-paperclip" aria-hidden="true"></i></button>'
+    +'<textarea id="vqIn" rows="1" maxlength="1500" placeholder="Напиши вопрос…" aria-label="Вопрос" oninput="vqGrow()" onkeydown="if(event.key===\'Enter\'&&!event.shiftKey&&!vqTouch()){event.preventDefault();vqSend();}"></textarea>'
+    +(vqCanRec()?'<button type="button" class="vq-ib" id="vqMic" onclick="vqMic()" aria-label="Сказать голосом"><i class="ti ti-microphone" aria-hidden="true"></i></button>':'')
+    +'<button type="button" class="vq-send" id="vqSend" onclick="vqSend()" aria-label="Отправить"><i class="ti ti-arrow-up" aria-hidden="true"></i></button></div>'
+    +'<div class="vq-lim" id="vqLim"></div><input type="file" id="vqFile" accept="image/*,.pdf,.docx,.txt" multiple hidden onchange="vqAdd(this)"></div></div></div>';
+  vqDraw();vqLimit();
+  vpLoad().then(vqLimit);
+  if(o.auto){document.getElementById('vqIn').value=o.auto;vqSend();}
+  else if(!vqTouch())try{document.getElementById('vqIn').focus();}catch(e){}
+}
+function vqTouch(){try{return matchMedia('(pointer:coarse)').matches;}catch(e){return false;}}
+function vqClose(){try{vqRecStop(true);}catch(e){}VQ=null;closeModal();}
+function vqGrow(){var t=document.getElementById('vqIn');if(!t)return;t.style.height='auto';t.style.height=Math.min(t.scrollHeight,120)+'px';}
+function vqHints(){
+  return VQ.qid?['Объясни проще','Почему другие варианты неверны?','Как это запомнить?']
+    :VQ.quote?['Объясни это место проще','Приведи пример','Зачем это нужно знать?']
+    :['Чем артерия отличается от вены?','Объясни цикл Кребса простыми словами','Как запомнить черепные нервы?'];
+}
+function vqDraw(){
+  var el=document.getElementById('vqLog');if(!el||!VQ)return;
+  var h='';
+  if(VQ.quote)h+='<blockquote class="vq-quote">'+esc(VQ.quote.length>220?VQ.quote.slice(0,220)+'…':VQ.quote)+'</blockquote>';
+  if(!VQ.log.length)h+='<div class="vq-empty"><p>'+(VQ.qid?'Спроси, что осталось непонятным в этом вопросе.':VQ.quote?'Спроси про выделенное место.':'Спроси что угодно по учёбе. Можно сказать голосом или приложить фото страницы.')+'</p>'
+    +'<div class="vq-hints">'+vqHints().map(function(t){return '<button type="button" onclick="vqHint(this)">'+esc(t)+'</button>';}).join('')+'</div></div>';
+  VQ.log.forEach(function(m){
+    if(m.r==='u')h+='<div class="vq-m u">'+(m.files?'<span class="vq-att"><i class="ti ti-paperclip" aria-hidden="true"></i>'+esc(m.files)+'</span>':'')+esc(m.t).replace(/\n/g,'<br>')+'</div>';
+    else if(m.r==='a')h+='<div class="vq-m a">'+esc(m.t).replace(/\n/g,'<br>')+'<small>Ответ ИИ — может содержать неточности</small></div>';
+    else if(m.r==='w')h+='<div class="vq-m a wait"><i class="ti ti-loader spin" aria-hidden="true"></i> '+esc(m.t)+'</div>';
+    else h+='<div class="vq-m e">'+m.t+'</div>';
+  });
+  el.innerHTML=h;el.scrollTop=el.scrollHeight;
+}
+function vqHint(b){var t=document.getElementById('vqIn');if(t){t.value=b.textContent;vqSend();}}
+function vqLimit(){
+  var el=document.getElementById('vqLim');if(!el||!VP||VP.staff)return;
+  var left=Math.max(0,VP.ask_limit-VP.ask_used);
+  el.innerHTML='Сегодня осталось <b>'+left+'</b> из '+VP.ask_limit+(VP.enabled&&!VP.plus?' · <button type="button" onclick="vpWall(\'ask\')">с Vita+ — '+VP.plus_ask+' в день</button>':'');
+}
+function vqPick(){
+  if(VP&&!VP.staff&&VP.file_limit<=0){vqStopMsg({kind:'askf',limit:0,plus:VP.plus,plus_limit:VP.plus_file,enabled:VP.enabled});return;}
+  var f=document.getElementById('vqFile');if(f)f.click();
+}
+function vqB64(file){return new Promise(function(ok,bad){var r=new FileReader();r.onload=function(){var s=String(r.result);ok(s.slice(s.indexOf(',')+1));};r.onerror=function(){bad(new Error('Файл не читается'));};r.readAsDataURL(file);});}
+async function vqAdd(inp){
+  var list=[].slice.call(inp.files||[]);inp.value='';
+  for(var i=0;i<list.length&&VQ.files.length<6;i++){
+    var f=list[i];
+    try{
+      if(/^image\//.test(f.type)){var c=await vImgCompress(f,1800,.85);VQ.files.push({name:f.name||'фото.jpg',mime:'image/jpeg',data:c.b64});}
+      else if(f.size>15*1024*1024)toast2('«'+f.name+'» больше 15 МБ — пришли фото нужной страницы');
+      else VQ.files.push({name:f.name,mime:f.type||'',data:await vqB64(f)});
+    }catch(e){toast2(e.message||'Файл не читается');}
+  }
+  vqFilesDraw();
+}
+function vqFilesDraw(){
+  var el=document.getElementById('vqFiles');if(!el||!VQ)return;
+  el.innerHTML=VQ.files.map(function(f,i){return '<span class="vq-chip"><i class="ti ti-'+(/^image/.test(f.mime)?'photo':'file-text')+'" aria-hidden="true"></i>'+esc(f.name.length>18?f.name.slice(0,16)+'…':f.name)+'<button type="button" onclick="VQ.files.splice('+i+',1);vqFilesDraw()" aria-label="Убрать '+esc(f.name)+'"><i class="ti ti-x" aria-hidden="true"></i></button></span>';}).join('');
+}
+function vqStopMsg(j){
+  var file=j.kind==='askf',h;
+  if(file&&!j.limit)h='<b>Разбор фото и файлов — в Vita+.</b> Текстом и голосом спрашивать можно и так.';
+  else h='<b>На сегодня '+(file?'файлы':'вопросы')+' закончились.</b> '+(j.plus||!j.enabled?'Завтра будут новые.':'Бесплатно — '+j.limit+' в день. Завтра будут новые.');
+  if(!j.plus&&j.enabled)h+='<button type="button" class="btn vp-btn" onclick="vpWall(\''+(file?'file':'ask')+'\')"><span class="vp-star">✦</span>'+(file?'Разбор файлов с Vita+':'С Vita+ — '+(j.plus_limit||30)+' вопросов в день')+'</button>';
+  VQ.log=VQ.log.filter(function(m){return m.r!=='w'&&m.r!=='e';});VQ.log.push({r:'e',t:h});vqDraw();
+}
+async function vqSend(){
+  if(!VQ||VQ.busy)return;
+  var inp=document.getElementById('vqIn'),text=(inp.value||'').trim(),files=VQ.files;
+  if(!text&&!files.length){inp.focus();return;}
+  var url=vBotUrl('/u/ask');if(!url){toast2('ИИ пока не подключён');return;}
+  VQ.busy=true;VQ.files=[];vqFilesDraw();inp.value='';vqGrow();
+  var shown=text||'Объясни, что здесь написано';
+  VQ.log=VQ.log.filter(function(m){return m.r!=='e';});
+  VQ.log.push({r:'u',t:shown,files:files.length?files.length+' '+vplural(files.length,'файл','файла','файлов'):''});
+  VQ.log.push({r:'w',t:files.length?'Читаю файл…':'Думаю…'});vqDraw();
+  var btn=document.getElementById('vqSend');if(btn)btn.disabled=true;
+  var j;
+  try{
+    var r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:S.token||vAdminToken(),text:text,qid:VQ.qid,topic_id:VQ.topicId,quote:VQ.quote,history:VQ.hist.slice(-3),files:files.length?files:undefined,file:files.length?'':VQ.file})});
+    j=await r.json();
+  }catch(e){j={status:'error',reason:'Нет связи. Проверь интернет и попробуй ещё раз'};}
+  if(!VQ)return;
+  VQ.busy=false;if(btn)btn.disabled=false;
+  VQ.log=VQ.log.filter(function(m){return m.r!=='w';});
+  if(j.status==='ok'){
+    VQ.log.push({r:'a',t:j.text});VQ.hist.push([shown,j.text]);if(j.file)VQ.file=j.file;
+    if(VP&&j.left!=null){if(j.kind==='askf')VP.file_used=VP.file_limit-j.left;else VP.ask_used=VP.ask_limit-j.left;}
+    vqDraw();vqLimit();
+  }else if(j.status==='limit'){VQ.log.pop();vqStopMsg(j);inp.value=text;vqGrow();}
+  else{VQ.log.pop();VQ.log.push({r:'e',t:esc(j.reason||'Не получилось. Попробуй ещё раз')});vqDraw();inp.value=text;VQ.files=files;vqFilesDraw();vqGrow();}
+}
+// --- голосовой ввод: записали → бот распознал (Groq) → текст в поле, студент проверяет и отправляет ---
+var VQR=null;
+function vqCanRec(){return !!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&window.MediaRecorder);}
+function vqMicUi(st){
+  var b=document.getElementById('vqMic');if(!b)return;
+  b.className='vq-ib'+(st==='rec'?' rec':st==='wait'?' wait':'');
+  b.innerHTML='<i class="ti ti-'+(st==='rec'?'player-stop-filled':st==='wait'?'loader spin':'microphone')+'" aria-hidden="true"></i>';
+  b.setAttribute('aria-label',st==='rec'?'Остановить запись':st==='wait'?'Распознаю речь':'Сказать голосом');
+  var t=document.getElementById('vqIn');if(t)t.placeholder=st==='rec'?'Говори… нажми ■, когда закончишь':st==='wait'?'Распознаю…':'Напиши вопрос…';
+}
+async function vqMic(){
+  if(VQR&&VQR.rec){vqRecStop(false);return;}
+  if(VQR)return;
+  try{
+    var stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    var mime=['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg'].filter(function(m){try{return MediaRecorder.isTypeSupported(m);}catch(e){return false;}})[0]||'';
+    var rec=new MediaRecorder(stream,mime?{mimeType:mime}:undefined),chunks=[];
+    VQR={rec:rec,stream:stream,drop:false};
+    rec.ondataavailable=function(e){if(e.data&&e.data.size)chunks.push(e.data);};
+    rec.onstop=async function(){
+      var drop=VQR&&VQR.drop;clearTimeout(VQR&&VQR.t);
+      stream.getTracks().forEach(function(t){t.stop();});
+      if(drop||!VQ){VQR=null;return;}
+      VQR={};vqMicUi('wait');
+      try{
+        var blob=new Blob(chunks,{type:rec.mimeType||mime||'audio/webm'});
+        var r=await fetch(vBotUrl('/u/stt'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:S.token||vAdminToken(),audio:await vqB64(blob),mime:blob.type})});
+        var j=await r.json();
+        if(j.status==='ok'&&VQ){var t=document.getElementById('vqIn');if(t){t.value=(t.value?t.value+' ':'')+j.text;vqGrow();t.focus();}}
+        else toast2(j.reason||'Не расслышал. Попробуй ещё раз');
+      }catch(e){toast2('Нет связи. Попробуй ещё раз');}
+      VQR=null;vqMicUi('');
+    };
+    rec.start();vqMicUi('rec');
+    VQR.t=setTimeout(function(){vqRecStop(false);},60000);      // не дольше минуты
+  }catch(e){VQR=null;vqMicUi('');toast2(e&&e.name==='NotAllowedError'?'Разреши доступ к микрофону в настройках Telegram':'Микрофон недоступен — напиши вопрос текстом');}
+}
+function vqRecStop(drop){if(VQR&&VQR.rec){VQR.drop=!!drop;try{VQR.rec.stop();}catch(e){}VQR.rec=null;}}
+// кнопка под вопросом тренажёра и плитка на главной
+function vqHomeRow(){
+  return '<button class="lb-ask" onclick="vqOpen()"><span class="lb-blob vio" aria-hidden="true"><i class="ti ti-sparkles"></i></span><span class="lb-ask-t"><b>Спросить ИИ</b><small>Текстом, голосом или с фото страницы</small></span><i class="ti ti-chevron-right" aria-hidden="true"></i></button>';
+}
+(function(){
+  var w=document.getElementById('trAiWrap');
+  if(w&&!document.getElementById('vqTr'))w.insertAdjacentHTML('beforeend','<button type="button" class="vq-tr" id="vqTr" onclick="if(TRC)vqOpen({qid:TRC.id})"><i class="ti ti-message-question" aria-hidden="true"></i>Остались вопросы? Спроси ИИ</button>');
+})();
+
+// расходы на ИИ: бот записывает каждый запрос к Claude (сколько токенов и сколько это стоит)
+var VPA_KINDS={explain:'Объяснения к тестам',ask:'Спросить ИИ',askf:'Спросить ИИ: файлы',mytest:'Свои тесты студентов',lesson:'Конспекты в админке',conspect:'Конспекты из материалов группы',quiz:'Тесты по темам',bot:'Бот: темы и вопросы из чата',other:'Другое'};
+function vpaUsd(micro){var d=micro/1e6;return '$'+(d>=10?d.toFixed(0):d>=1?d.toFixed(1):d.toFixed(2))+' · '+vpSum(Math.round(d*12000/100)*100)+' сум';}
+function vpaCost(c){
+  if(!c)return '';
+  var h='<h3 class="bc-h">Расходы на ИИ</h3><div class="vpa-nums two"><div><b>'+vpaUsd(c.d30)+'</b><span>за 30 дней</span></div><div><b>'+vpaUsd(c.today)+'</b><span>сегодня</span></div></div>';
+  if(!c.kinds.length)return h+'<div class="bc-hist"><div class="bc-empty">Пока пусто. Бот начнёт считать с первого запроса к ИИ после обновления.</div></div>';
+  h+='<div class="bc-hist">'+c.kinds.map(function(k){return '<div class="bc-row"><div class="bc-rt"><b>'+(VPA_KINDS[k.kind]||esc(k.kind))+'</b><small>'+vpSum(k.calls)+' '+vplural(k.calls,'запрос','запроса','запросов')+'</small></div><span class="bc-st">'+vpaUsd(k.micro)+'</span></div>';}).join('')+'</div>';
+  if(c.top.length)h+='<h3 class="bc-h">Кто тратит больше всех</h3><div class="bc-hist">'+c.top.map(function(t){return '<div class="bc-row"><div class="bc-rt"><b>'+esc(t.name||'')+(t.plus?' <span class="vp-b">✦</span>':'')+'</b><small>'+vpSum(t.calls)+' '+vplural(t.calls,'запрос','запроса','запросов')+' за 30 дней</small></div><span class="bc-st">'+vpaUsd(t.micro)+'</span></div>';}).join('')+'</div>';
+  return h+'<p class="vpa-hint">Сумы — по курсу 12 000 за доллар. Считается только Claude; Groq и Gemini бесплатные.</p>';
+}
+
+// ===== МОИ ТЕСТЫ: скриншоты, PDF или Word → ИИ достаёт вопросы → студент проверяет → тест с повтором ошибок =====
+var MT={list:[],job:null,from:false};
+function mtLeftLine(){
+  if(!VP||VP.staff)return '';
+  return VP.plus?'В этом месяце осталось '+VP.imp_left+' из '+VP.imp_limit+' вопросов':VP.imp_left>0?'Бесплатно: ещё '+VP.imp_left+' '+vplural(VP.imp_left,'вопрос','вопроса','вопросов')+' на пробу':'Бесплатная проба использована';
+}
+function mtListHtml(){
+  var mine=MT.list.filter(function(z){return z.mine;}),grp=MT.list.filter(function(z){return !z.mine;});
+  var h='<button type="button" class="gq-ai mt-add" onclick="mtPick()"><span class="gq-ai-ic" aria-hidden="true"><i class="ti ti-photo-plus"></i></span>'
+    +'<span class="gq-ai-t"><b>Добавить тест</b><small>Скриншоты из Moodle, фото листов, PDF или Word — ИИ достанет вопросы и ответы</small></span><i class="ti ti-chevron-right" aria-hidden="true"></i></button>'
+    +'<p class="mt-left" id="mtLeft">'+mtLeftLine()+'</p>';
+  h+=mine.length?'<div class="gq-list">'+mine.map(function(z){return gqCardHtml(z,{});}).join('')+'</div>'
+    :'<div class="un-empty gq-empty"><i class="ti ti-list-check" aria-hidden="true"></i><b>Своих тестов пока нет</b><p>Есть тесты с кафедры или из Moodle? Сфотографируй — и решай здесь: с ошибками, которые возвращаются.</p></div>';
+  if(grp.length)h+='<div class="gq-sec"><b>От одногруппников</b><span>Тесты, которыми поделились в твоей группе.</span></div><div class="gq-list">'+grp.map(function(z){return gqCardHtml(z,{});}).join('')+'</div>';
+  return h;
+}
+async function mtOpen(){
+  if(!S.user){showLoginWall();return;}
+  gpSheet('<div class="un-empty"><span class="sbe-spin" aria-hidden="true"></span></div>','','Мои тесты','Из своих фото и файлов');gqMark('mine');
+  try{MT.list=await vRpc('gq_mine',{p_token:gqTok()})||[];}catch(e){MT.list=[];
+    var b0=document.querySelector('.gp-sheet[data-gq="mine"] .gp-body');if(b0)b0.innerHTML='<div class="un-empty"><b>'+(e.missing?'Раздел ещё не включён':'Не загрузилось')+'</b><p>'+esc(e.missing?'Нужно обновление базы (security_v21.sql)':e.message||'')+'</p></div>';return;}
+  await vpLoad();
+  var b=document.querySelector('.gp-sheet[data-gq="mine"] .gp-body');if(b)b.innerHTML=mtListHtml();
+}
+function mtPick(more){
+  if(VP&&!VP.staff&&VP.imp_left<=0){vpWall('imp');return;}
+  MT.more=!!more;
+  var f=document.getElementById('mtFile');
+  if(!f){f=document.createElement('input');f.type='file';f.id='mtFile';f.multiple=true;f.accept='image/*,.pdf,.docx,.txt';f.hidden=true;f.onchange=function(){mtUpload(f);};document.body.appendChild(f);}
+  f.value='';f.click();
+}
+async function mtUpload(inp){
+  var list=[].slice.call(inp.files||[]).slice(0,30);if(!list.length)return;
+  var keep=MT.more&&GQ.ed?GQ.ed:null;if(keep)gqEdSync();
+  mtWait('Готовлю файлы…');
+  var files=[],size=0;
+  for(var i=0;i<list.length;i++){var f=list[i];
+    try{
+      if(/^image\//.test(f.type)){var c=await vImgCompress(f,2000,.88);files.push({name:f.name||'фото.jpg',mime:'image/jpeg',data:c.b64});size+=c.b64.length;}
+      else{if(f.size>18*1024*1024){mtFail('«'+f.name+'» больше 18 МБ. Раздели файл или пришли фото страниц',keep);return;}
+        var d=await vqB64(f);files.push({name:f.name,mime:f.type||'',data:d});size+=d.length;}
+    }catch(e){}
+  }
+  if(!files.length){mtFail('Не смог открыть файлы. Подойдут фото, PDF и Word',keep);return;}
+  if(size>33e6){mtFail('Слишком много за раз. Загрузи частями — по 10–15 фото',keep);return;}
+  mtWait('Отправляю…');
+  var j;try{var r=await fetch(vBotUrl('/u/quiz'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:gqTok(),mode:'import',files:files})});j=await r.json();}
+  catch(e){j={status:'error',reason:'Нет связи. Проверь интернет и попробуй ещё раз'};}
+  if(j.status==='limit'){closeModal();VP_AT=0;vpLoad(true).then(function(){vpWall('imp');});return;}
+  if(j.status!=='run'){mtFail(j.reason||'Не получилось. Попробуй ещё раз',keep);return;}
+  MT.job=j.job;var t0=Date.now();
+  mtWait('ИИ читает вопросы…','Обычно 1–2 минуты. Не закрывай окно.');
+  (async function poll(){
+    await new Promise(function(r){setTimeout(r,2500);});
+    if(MT.job!==j.job)return;
+    var p;try{var r2=await fetch(vBotUrl('/u/quiz'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:gqTok(),mode:'import_poll',job:j.job})});p=await r2.json();}catch(e){p={status:'run'};}
+    if(MT.job!==j.job)return;
+    if(p.status==='run'){if(Date.now()-t0>16*60000){MT.job=null;mtFail('Слишком долго. Попробуй загрузить меньше страниц',keep);return;}poll();return;}
+    MT.job=null;
+    if(p.status!=='ok'){mtFail(p.reason||'Не получилось прочитать',keep);return;}
+    if(VP&&p.left!=null)VP.imp_left=p.left;
+    mtDone(p,keep);
+  })();
+}
+function mtWait(t,sub){
+  gpSheet('<div class="un-empty mt-wait" role="status"><span class="sbe-spin" aria-hidden="true"></span><b>'+esc(t)+'</b>'+(sub?'<p>'+esc(sub)+'</p>':'')+'</div>','','Мои тесты','');gqMark('mtwait');
+}
+function mtFail(msg,keep){
+  MT.job=null;
+  if(keep){GQ.ed=keep;closeModal();gqEdDraw();toast2(msg);return;}
+  gpSheet('<div class="un-empty"><i class="ti ti-alert-triangle" aria-hidden="true"></i><b>Не получилось</b><p>'+esc(msg)+'</p></div>',
+    '<span class="gp-sp"></span><button type="button" class="btn bbl" onclick="mtPick()"><i class="ti ti-photo-plus"></i>Попробовать ещё раз</button>','Мои тесты','','mtOpen()');gqMark('mtwait');
+}
+function mtDone(p,keep){
+  var add=(p.questions||[]).map(function(x){return {q:x.q,options:x.options.slice(),correct:x.correct,why:x.why||'',unsure:!!x.unsure};});
+  var d=new Date().toLocaleDateString('ru-RU',{day:'numeric',month:'long'});
+  closeModal();
+  if(keep){GQ.ed=keep;keep.qs=keep.qs.concat(add).slice(0,100);keep.step='q';}
+  else GQ.ed={id:null,topic:null,title:'Мой тест, '+d,scope:'private',text:'',step:'q',qs:add.slice(0,100)};
+  gqEdDraw();
+  var uns=add.filter(function(x){return x.unsure;}).length;
+  toast2('Нашёл '+gqN(add.length)+(uns?'. В '+uns+' не видно верного ответа — отметь сам':'. Проверь ответы и сохрани')+((p.notes||[]).length?'. '+p.notes[0]:''));
+}
+// «мои тесты» живут в том же проигрывателе и редакторе, что и тесты по темам: после них возвращаемся в свой список
+(function(){
+  var _run=gqRun;gqRun=async function(){MT.from=!!document.querySelector('.gp-sheet[data-gq="mine"]');return _run.apply(this,arguments);};
+  var _done=gqDone;gqDone=function(){var back=MT.from&&GQ.run&&GQ.run.back==='close';MT.from=false;_done.apply(this,arguments);if(back)mtOpen();};
+  var _pub=gqEdPublish;gqEdPublish=async function(){var free=GQ.ed&&!GQ.ed.topic;var r=await _pub.apply(this,arguments);if(free&&!GQ.ed)mtOpen();return r;};
+  var _back=gqEdBack;gqEdBack=function(){var free=GQ.ed&&!GQ.ed.topic;_back.apply(this,arguments);if(free&&!GQ.ed)mtOpen();};
+  var _red=gqRedraw;gqRedraw=function(){_red.apply(this,arguments);var m=document.querySelector('.gp-sheet[data-gq="mine"] .gp-body');
+    if(m){MT.list=MT.list.map(function(z){return gqFind(z.id)||z;});m.innerHTML=mtListHtml();}};
+  var _drop=gqDrop;gqDrop=function(id){MT.list=MT.list.filter(function(z){return z.id!==id;});return _drop.apply(this,arguments);};
+  var _find=gqFind;gqFind=function(id){var z=_find.apply(this,arguments);if(z)return z;for(var i=0;i<MT.list.length;i++)if(MT.list[i].id===id)return MT.list[i];return null;};
+  var _put=gqPut;gqPut=function(z){if(z&&z.id)for(var i=0;i<MT.list.length;i++)if(MT.list[i].id===z.id)MT.list[i]=Object.assign({},MT.list[i],z);return _put.apply(this,arguments);};
+})();
+// ===== VITA · КОНЕЦ БЛОКА «ЛАБОРАТОРИЯ» =====
 </script>
 <div id="modalRoot"></div>
 </body>
