@@ -2711,6 +2711,54 @@ kbd{display:inline-block;padding:1px 6px;border-radius:5px;border:1px solid var(
 @media (prefers-reduced-motion:reduce){.rd-bar,.st-nav .stn-prog{transition:none}}
 /* над прилипшей шапкой — отступ области прокрутки: закрываем его, чтобы текст не просвечивал */
 .st-nav::before{content:'';position:absolute;left:-2px;right:-2px;bottom:100%;height:90px;background:var(--bg);pointer-events:none}
+
+/* ===== Главная: в зелёной карточке — кнопка «Решать», а не значок видео ===== */
+.lb-go{flex-shrink:0;align-self:flex-end;position:relative;display:inline-flex;align-items:center;gap:6px;height:44px;padding:0 16px 0 18px;border-radius:14px;background:var(--mal-ink);color:var(--mal);font-size:16px;font-weight:800;letter-spacing:-.01em;box-shadow:0 3px 0 rgba(0,0,0,.25)}
+.lb-go i{font-size:18px}
+.lb-cta.done .lb-go{background:var(--mal);color:var(--mal-ink)}
+
+/* ===== Лицо предмета: цвет и значок ===== */
+:root{--cap-teal:#3DD6D6;--cap-orange:#FF9A52;--cap-pink:#F07FD8}
+.sc{--sc-ink:#17132A;--sc-e:color-mix(in srgb,var(--sc) 60%,#000);--sc-soft:color-mix(in srgb,var(--sc) 16%,var(--bg2));--sc-tx:color-mix(in srgb,var(--sc) 72%,var(--tx))}
+.sc-lav{--sc:var(--cap-lav)}.sc-red{--sc:var(--cap-red)}.sc-blue{--sc:var(--cap-blue)}.sc-gold{--sc:var(--cap-gold)}.sc-green{--sc:var(--cap-green)}
+.sc-teal{--sc:var(--cap-teal)}.sc-orange{--sc:var(--cap-orange)}.sc-pink{--sc:var(--cap-pink)}.sc-grey{--sc:var(--cap-grey)}
+
+/* плитки предметов в «Учёбе» — как «Учёба»/«Дуэли» на главной: цветные, с ребром снизу */
+.sh-subjs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:6px}
+.sh-subjs.one{grid-template-columns:1fr}
+.sh-subj{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:10px;min-height:132px;padding:14px 14px 16px;border:none;border-radius:22px;background:var(--sc);color:var(--sc-ink);box-shadow:0 6px 0 var(--sc-e);text-align:left;font-family:var(--f);cursor:pointer;transition:transform .12s,box-shadow .12s}
+.sh-subj:active{transform:translateY(4px);box-shadow:0 2px 0 var(--sc-e)}
+.sh-subj:focus-visible{outline:3px solid var(--tx);outline-offset:3px}
+.sh-subj .ss2-ic{width:42px;height:42px;border-radius:13px;background:rgba(0,0,0,.13);display:grid;place-items:center;font-size:24px}
+.sh-subj .ss2-t{display:flex;flex-direction:column;gap:3px;min-width:0;width:100%;flex:1}
+.sh-subj b{font-size:17px;font-weight:800;line-height:1.15;letter-spacing:-.01em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sh-subj small{font-size:12.5px;font-weight:600;opacity:.8}
+.sh-subj .ss2-bar{display:block;width:100%;height:6px;border-radius:3px;background:rgba(0,0,0,.14);overflow:hidden}
+.sh-subj .ss2-bar i{display:block;height:100%;width:0;border-radius:3px;background:var(--sc-ink);transition:width .4s}
+.sh-subjs.one .sh-subj{flex-direction:row;align-items:center;min-height:0;flex-wrap:wrap}
+.sh-subjs.one .sh-subj .ss2-t{flex:1}
+
+/* список тем предмета: шапка в цвете предмета, номера тем — тоже */
+.st-banner{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:12px 14px;padding:18px;margin-bottom:16px;border-radius:24px;background:var(--sc);color:var(--sc-ink);box-shadow:0 6px 0 var(--sc-e)}
+.st-banner .stb-ic{width:52px;height:52px;border-radius:16px;background:rgba(0,0,0,.13);display:grid;place-items:center;font-size:30px}
+.st-banner .stb-t{display:flex;flex-direction:column;gap:3px;min-width:0}
+.st-banner b{font-size:22px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.st-banner small{font-size:13.5px;font-weight:600;opacity:.82}
+.st-banner .stb-bar{grid-column:1/-1;height:8px;border-radius:4px;background:rgba(0,0,0,.14);overflow:hidden}
+.st-banner .stb-bar i{display:block;height:100%;border-radius:4px;background:var(--sc-ink)}
+.st-subj .study-topic .st-d{background:var(--sc-soft)!important;color:var(--sc-tx)!important;border-color:transparent!important}
+.st-subj .study-topic.active .st-d{background:var(--sc-soft)!important;color:var(--sc-tx)!important;box-shadow:inset 0 0 0 2px var(--sc)}
+.st-subj .study-topic.done .st-d{background:var(--sc)!important;color:var(--sc-ink)!important}
+.st-subj .study-topic.active{box-shadow:inset 3px 0 0 var(--sc)}
+
+/* шапка темы — в цвете предмета */
+.study-reader-hero.sc{background:var(--sc);color:var(--sc-ink)}
+.study-reader-hero.sc .srh-k{color:var(--sc-ink);opacity:.68}
+.study-reader-hero.sc h1{color:var(--sc-ink)}
+.study-reader-hero.sc .srh-lede{color:var(--sc-ink);opacity:.86}
+.study-reader-hero.sc .srh-floats>*{background:rgba(0,0,0,.12);color:var(--sc-ink);border-color:rgba(0,0,0,.1)}
+@media (min-width:900px){.sh-subjs{grid-template-columns:repeat(3,minmax(0,1fr))}.sh-subjs.one{grid-template-columns:1fr}}
+.st-subj{max-width:860px;margin:0 auto}
 </style>
 </head>
 <body>
@@ -3355,7 +3403,8 @@ function vEnsureSubject(k,label){
   // тот же предмет, набранный в другом регистре или с пробелами
   var found=null;Object.keys(SM).forEach(function(x){if(!found&&(x===vSubjKey(k)||String(SM[x].label).toLowerCase()===String(label||k).trim().toLowerCase()))found=x;});
   if(found)return found;
-  SM[k]={label:label?String(label).trim():vSubjLabel(k),icon:'<i class="ti ti-book"></i>',color:V_SUBJ_PAL[(Object.keys(SM).length-3)%V_SUBJ_PAL.length],dim:'var(--bg3)',custom:true};
+  var L=vLook(label||vSubjLabel(k));
+  SM[k]={label:label?String(label).trim():vSubjLabel(k),icon:L.icon,color:L.v,dim:'var(--bg3)',custom:true};
   return k;
 }
 function vSubjOptions(first,extra){
@@ -9623,7 +9672,7 @@ function renderBookmarks(){
   sbGet('bookmarks','user_email=eq.'+encodeURIComponent(S.user.email)+'&topic_id=not.is.null&select=topic_id&order=created_at.desc').then(function(rows){
     rows=rows||[];
     if(!rows.length){
-      el.innerHTML=stNav([['Закладки',null]])+'<div class="study-empty"><div class="se-ic">☆</div><div class="se-t">Пока нет закладок</div><div class="se-s">Жми ☆ на темах, чтобы сохранить их сюда</div></div>';
+      el.innerHTML='<div class="reader-top"><div class="r-back" onclick="renderStudy()">←</div><div class="r-crumb"><b>Мои закладки</b></div><div style="width:42px"></div></div><div class="study-empty"><div class="se-ic">☆</div><div class="se-t">Пока нет закладок</div><div class="se-s">Жми ☆ на темах, чтобы сохранить их сюда</div></div>';
       return;
     }
     var ids=rows.map(function(r){return r.topic_id;});
@@ -9631,7 +9680,7 @@ function renderBookmarks(){
       topics=topics||[];
       // упорядочить как в закладках
       var byId={};topics.forEach(function(t){byId[t.id]=t;});
-      var h=stNav([['Закладки',null]]);
+      var h='<div class="reader-top"><div class="r-back" onclick="renderStudy()">←</div><div class="r-crumb"><b>Мои закладки</b> · '+topics.length+'</div><div style="width:42px"></div></div>';
       h+='<div class="study-h1">Закладки</div>';
       ids.forEach(function(id){
         var t=byId[id];if(!t)return;
@@ -9686,10 +9735,13 @@ function renderStudySubjects(el){
     if(!ST.subjects.length){
       h+='<div class="study-empty"><div class="se-ic"><i class="ti ti-book"></i></div><div class="se-t">Предметы ещё не добавлены</div></div>';
     }else{
+      h+='<div class="sh-subjs'+(ST.subjects.length===1?' one':'')+'">';
       ST.subjects.forEach(function(s){
-        var col=s.color||'violet';
-        h+='<div class="study-subj '+col+'" onclick="studyPickSubject('+s.id+')" role="button" tabindex="0"><div class="ss-acc"></div><div class="ss-ic">'+(s.emoji||'<i class="ti ti-book"></i>')+'</div><div class="ss-t"><b>'+esc(s.name)+'</b><span id="subjMeta'+s.id+'">загрузка…</span></div><div class="ss-ring" id="subjRing'+s.id+'"></div></div>';
+        var L=vLook(s.name,s.emoji);
+        h+='<button type="button" class="sh-subj '+L.cls+'" onclick="studyPickSubject('+s.id+')"><span class="ss2-ic">'+L.icon+'</span>'
+          +'<span class="ss2-t"><b>'+esc(s.name)+'</b><small id="subjMeta'+s.id+'">…</small></span><span class="ss2-bar" aria-hidden="true"><i id="subjBar'+s.id+'"></i></span></button>';
       });
+      h+='</div>';
     }
     h+='<h2 class="sh-sec">Твоё</h2><div class="sh-mine"><div id="gqHome"></div>'
       +'<button type="button" class="sh-row" onclick="renderBookmarks()"><span class="sh-ic bm" aria-hidden="true"><i class="ti ti-star"></i></span><span class="sh-t"><b>Закладки</b><small>Темы, которые ты отметил звёздочкой</small></span><i class="ti ti-chevron-right" aria-hidden="true"></i></button>'
@@ -9713,7 +9765,8 @@ function loadSubjectMeta(s){
     var total=topics.length,pct=stSubjPct(topics);
     var read=topics.filter(function(t){return stTopicPct(t)>=100;}).length,started=topics.some(function(t){return stTopicPct(t)>0;});
     var meta=document.getElementById('subjMeta'+s.id);
-    if(meta)meta.textContent=total+' '+vplural(total,'тема','темы','тем')+' · '+(read?'прочитано '+read+' из '+total:started?'начал читать':'ещё не начинал');
+    if(meta)meta.textContent=total+' '+vplural(total,'тема','темы','тем')+' · '+(read?'прочитано '+read:started?'начал читать':'ещё не начинал');
+    var bar=document.getElementById('subjBar'+s.id);if(bar)bar.style.width=pct+'%';
     var ring=document.getElementById('subjRing'+s.id);
     if(ring){
       var col=s.color==='coral'?'var(--cap-red)':s.color==='mint'?'var(--cap-green)':'var(--cap-lav)';
@@ -9763,11 +9816,12 @@ function renderStudyTopics(el){
     ST.topics=stVisible(r[0]);
     var total=ST.topics.length,pct=stSubjPct(ST.topics);
     var h='';
-    h+=stNav([[ST.subject.name,null]]);
-    h+='<div class="study-tprog"><div class="stp-top"><b>'+esc(ST.subject.name)+'</b><span>прочитано '+pct+'%</span></div><div class="stp-bar"><i style="width:'+pct+'%"></i></div></div>';
-    if(!ST.topics.length){
-      h+='<div class="study-empty"><div class="se-ic"></div><div class="se-t">Темы ещё не добавлены</div></div>';
-    }else{
+    h+='<div class="study-crumb">'+esc(ST.course.title||ST.course.number+' курс')+' <span class="sep">›</span> <span class="now">'+esc(ST.subject.name)+'</span></div>';
+    var L=vLook(ST.subject.name,ST.subject.emoji),left=ST.topics.filter(function(t){return stTopicPct(t)<100;}).length;
+    h+='<div class="st-banner"><span class="stb-ic">'+L.icon+'</span><span class="stb-t"><b>'+esc(ST.subject.name)+'</b><small>'
+      +(!total?'Темы скоро появятся':!left?'Все '+total+' '+vplural(total,'тема','темы','тем')+' прочитаны':pct?'Прочитано '+pct+'% · осталось '+left+' '+vplural(left,'тема','темы','тем'):total+' '+vplural(total,'тема','темы','тем')+' · начни с первой')
+      +'</small></span><span class="stb-bar" aria-hidden="true"><i style="width:'+pct+'%"></i></span></div>';
+    if(ST.topics.length){
       ST.topics.forEach(function(t){
         var p=ST.progress[t.id];
         var tp=stTopicPct(t);
@@ -9777,7 +9831,8 @@ function renderStudyTopics(el){
         h+='<div class="study-topic '+cls+'" onclick="studyOpenTopic('+t.id+')"><div class="st-d">'+(t.number||'•')+'</div><div class="st-t"><b>'+esc(t.title)+'</b><span>'+sub+'</span></div><div class="st-m">'+mark+'</div></div>';
       });
     }
-    el.innerHTML=h;
+    h+='<div class="study-back" onclick="studyPickCourse('+ST.course.id+')">← Все предметы</div>';
+    el.innerHTML='<div class="st-subj '+L.cls+'">'+h+'</div>';
   }).catch(function(){el.innerHTML='<div class="study-empty"><div class="se-ic"><i class="ti ti-alert-triangle"></i></div><div class="se-t">Ошибка загрузки тем</div></div>';});
 }
 
@@ -9795,9 +9850,9 @@ function renderTopicReader(el){
   var t=ST.topic;
   var h='';
   // топбар
-  h+=stNav(stTopicCrumbs(t),'<button type="button" class="stn-act" onclick="studyToggleBookmark('+t.id+')" id="bmBtn" aria-label="Закладка">☆</button>',{prog:true});
+  h+='<div class="reader-top"><div class="r-back" onclick="renderStudyTopics(document.getElementById(\'studyBody\'))">←</div><div class="r-crumb">'+esc(ST.subject.name)+' <b>· Тема '+(t.number||'')+'</b></div><div class="r-bm" onclick="studyToggleBookmark('+t.id+')" id="bmBtn" role="button" aria-label="Закладка">☆</div></div>';
   // hero
-  h+='<div class="study-reader-hero"><div class="srh-k">'+esc(t.kicker||ST.subject.name)+'</div><h1>'+esc(t.title)+'</h1>';
+  h+='<div class="study-reader-hero '+vLook(ST.subject.name,ST.subject.emoji).cls+'"><div class="srh-k">'+esc(t.kicker||ST.subject.name)+'</div><h1>'+esc(t.title)+'</h1>';
   if(t.lede)h+='<p class="srh-lede">'+esc(t.lede)+'</p>';
   h+='<div class="srh-floats"><span class="srh-chip"><i class="ti ti-clock"></i> '+(t.read_minutes||studyReadMinutes(ST.blocks))+' мин чтения</span></div></div>';
   // блоки (кроме quiz — они идут в финальный тест); из заголовков собирается содержание
@@ -10051,7 +10106,7 @@ function studyToggleBookmark(topicId){
 // ===== ПОИСК ТЕМ =====
 function studyOpenSearch(){
   var el=document.getElementById('studyBody');
-  el.innerHTML=stNav([['Поиск темы',null]])+'<div class="reader-top"><div class="study-search-input"><i class="ti ti-search"></i><input id="studySearchInp" placeholder="Название темы…" oninput="studyDoSearch(this.value)" autofocus></div></div><div id="studySearchRes"><div class="study-search-hint">Начни вводить — найдём тему</div></div>';
+  el.innerHTML='<div class="reader-top"><div class="r-back" onclick="renderStudy()">←</div><div class="study-search-input"><i class="ti ti-search"></i><input id="studySearchInp" placeholder="Название темы…" oninput="studyDoSearch(this.value)" autofocus></div></div><div id="studySearchRes"><div class="study-search-hint">Начни вводить — найдём тему</div></div>';
   setTimeout(function(){var i=document.getElementById('studySearchInp');if(i)i.focus();},100);
 }
 function studyDoSearch(q){
@@ -10582,26 +10637,26 @@ function vTrModeUi(){
 function vPlanCta(QS){
   var pl=vPlan(),solved=QS.filter(function(q){var p=S.prog[q.id];return p&&p.a>0;}).length;
   var deco='<svg class="deco" width="150" height="130" viewBox="0 0 150 130" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3"><path d="M45 10l26 15v30l-26 15-26-15V25z"/><path d="M97 40l26 15v30l-26 15-26-15V55z"/><path d="M45 70l26 15v30l-26 15-26-15V85z"/></svg>';
-  var play='<span class="lb-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5.2v13.6a1 1 0 0 0 1.5.86l11-6.8a1 1 0 0 0 0-1.72l-11-6.8A1 1 0 0 0 7 5.2z"/></svg></span>';
+  var play=function(t){return '<span class="lb-go">'+t+'<i class="ti ti-arrow-right" aria-hidden="true"></i></span>';};
   if(!pl||!pl.ids.length){
     // плана нет (гость, вопросы ещё не загрузились или всё решено и повторять нечего)
     return '<button class="lb-cta" onclick="vTrainerFree()">'+deco
-      +'<span class="lb-cta-t"><span class="lb-pill">Тренажёр</span><b>'+(solved?'Продолжить тест':'Начать тест')+'</b>'
-      +'<span>'+(solved?'Решено '+vNum(solved)+' из '+vNum(QS.length):vNum(QS.length)+' '+vplural(QS.length,'вопрос','вопроса','вопросов')+' · все предметы')+'</span></span>'+play+'</button>';
+      +'<span class="lb-cta-t"><span class="lb-pill">Тренажёр · тесты</span><b>'+(solved?'Продолжить тест':'Начать тест')+'</b>'
+      +'<span>'+(solved?'Решено '+vNum(solved)+' из '+vNum(QS.length):vNum(QS.length)+' '+vplural(QS.length,'вопрос','вопроса','вопросов')+' · все предметы')+'</span></span>'+play(solved?'Продолжить':'Решать')+'</button>';
   }
   var total=pl.ids.length,left=vPlanLeft(pl).length,done=total-left,mins=Math.max(1,Math.round(left*25/60));
   if(!left){
     return '<button class="lb-cta done" onclick="vTrainerFree()">'+deco
       +'<span class="lb-cta-t"><span class="lb-pill"><i class="ti ti-check"></i> План выполнен</span><b>На сегодня всё</b>'
-      +'<span>'+total+' '+vplural(total,'вопрос','вопроса','вопросов')+' · можно порешать ещё</span></span>'+play+'</button>';
+      +'<span>'+total+' '+vplural(total,'вопрос','вопроса','вопросов')+' · можно порешать ещё</span></span>'+play('Ещё')+'</button>';
   }
   var parts=[];
   if(pl.rev)parts.push(pl.rev+' повторить');
   if(pl.neu)parts.push(pl.neu+' '+vplural(pl.neu,'новый','новых','новых'));
   return '<button class="lb-cta" onclick="vPlanStart()" aria-label="План на сегодня: '+parts.join(', ')+', сделано '+done+' из '+total+'">'+deco
-    +'<span class="lb-cta-t"><span class="lb-pill">План на сегодня</span><b>'+(done?'Осталось '+left+' '+vplural(left,'вопрос','вопроса','вопросов'):total+' '+vplural(total,'вопрос','вопроса','вопросов'))+'</b>'
+    +'<span class="lb-cta-t"><span class="lb-pill">Тренажёр · план на сегодня</span><b>'+(done?'Осталось '+left+' '+vplural(left,'вопрос','вопроса','вопросов'):total+' '+vplural(total,'вопрос','вопроса','вопросов'))+'</b>'
     +'<span>'+(done?'Сделано '+done+' из '+total:parts.join(' и '))+', около '+mins+' '+vplural(mins,'минуты','минут','минут')+'</span>'
-    +'<span class="lb-cta-bar" role="presentation"><i style="width:'+Math.round(done/total*100)+'%"></i></span></span>'+play+'</button>';
+    +'<span class="lb-cta-bar" role="presentation"><i style="width:'+Math.round(done/total*100)+'%"></i></span></span>'+play(done?'Дальше':'Решать')+'</button>';
 }
 // ===== УРОК ↔ ТЕМА В ТЕСТАХ =====
 var V_LINKS=null,V_LINKS_AT=0,V_LINK_COLS=null; // V_LINK_COLS=false — база ещё без security_v11.sql
@@ -10872,7 +10927,7 @@ function renderHome(){
 
   var duelWaiting=document.getElementById('duelBadge')&&document.getElementById('duelBadge').style.display!=='none';
   h+='<div class="lb-duo">'
-    +'<button class="lb-tile meth" onclick="vGo(\'study\')"><span class="ic"><i class="ti ti-book-2"></i></span><span class="lb-tb"><b>Уроки</b><small>'+(S.studyCourseName?esc(S.studyCourseName)+(S.studyUniName?' · '+esc(S.studyUniName):''):'Выбери вуз и курс')+'</small></span></button>'
+    +'<button class="lb-tile meth" onclick="vGo(\'study\')"><span class="ic"><i class="ti ti-book-2"></i></span><span class="lb-tb"><b>Учёба</b><small>'+(S.studyCourseName?esc(S.studyCourseName)+(S.studyUniName?' · '+esc(S.studyUniName):''):'Конспекты тем')+'</small></span></button>'
     +'<button class="lb-tile vio" onclick="vOpen(\'duels\')"><span class="ic"><i class="ti ti-swords"></i></span>'+(duelWaiting?'<span class="cnt">!</span>':'')+'<span class="lb-tb"><b>Дуэли</b><small>'+(duelWaiting?'Тебя вызвали':'Один на один')+'</small></span></button>'
     +'</div>';
 
@@ -12380,7 +12435,7 @@ async function renderMyNotes(){
   var el=document.getElementById('studyBody');if(!el)return;
   if(!S.user){if(typeof showLoginWall==='function')showLoginWall();return;}
   UN.topic=null;unBarHide();
-  var top=stNav([['Мои заметки',null]]);
+  var top='<div class="reader-top"><div class="r-back" onclick="renderStudy()" role="button" aria-label="Назад">←</div><div class="r-crumb"><b>Мои заметки</b></div><div style="width:42px"></div></div>';
   el.innerHTML=top+'<div class="ph"><div class="pt">Загрузка…</div></div>';
   var rows=null,c=unCache(),pend=[];
   Object.keys(c).forEach(function(k){(c[k].list||[]).forEach(function(n){if(n.sync)pend.push(n);});});
@@ -12396,7 +12451,7 @@ function unMyDraw(){
   var all=UN.all,f=UN.filter,cnt={all:all.length,note:0,q:0,hl:0};
   all.forEach(function(n){cnt[n.kind]=(cnt[n.kind]||0)+1;});
   if(f!=='all'&&!cnt[f])f='all';
-  var h=stNav([['Мои заметки',null]]);
+  var h='<div class="reader-top"><div class="r-back" onclick="renderStudy()" role="button" aria-label="Назад">←</div><div class="r-crumb"><b>Мои заметки</b>'+(all.length?' · '+all.length:'')+'</div><div style="width:42px"></div></div>';
   h+='<div class="study-h1">Мои заметки</div>';
   if(!all.length){
     h+='<div class="study-empty un-empty-pg"><div class="se-ic"><i class="ti ti-highlight"></i></div><div class="se-t">Пока нет пометок</div>'
@@ -12792,7 +12847,7 @@ async function renderGroupFeed(mode){
   var el=document.getElementById('studyBody');if(!el)return;
   if(!S.user||!S.token){if(typeof showLoginWall==='function')showLoginWall();return;}
   GP.mode=mode=mode||GP.mode||'group';
-  var top=stNav([['Материалы группы',null]]);
+  var top='<div class="reader-top"><div class="r-back" onclick="renderStudy()" role="button" aria-label="Назад">←</div><div class="r-crumb"><b>Материалы группы</b></div><div style="width:42px"></div></div>';
   el.innerHTML=top+'<div class="ph"><div class="pt">Загрузка…</div></div>';
   var r=null;
   try{r=await vRpc('gp_feed',{p_token:S.token,p_mode:mode});}catch(e){if(e.missing)GP.missing=true;el.innerHTML=top+'<div class="study-empty"><div class="se-t">Пока недоступно</div></div>';return;}
@@ -13492,6 +13547,23 @@ async function saPublishTopic(btn){
   try{await sbPatch('topics','id=eq.'+SA.topic.id,{draft:false});SA.topic.draft=false;
     (SA.topics||[]).forEach(function(t){if(t.id===SA.topic.id)t.draft=false;});toast2('Опубликовано — студенты видят тему');saBuilderDraw();}
   catch(e){if(btn)btn.disabled=false;vAlert('Не получилось: '+(e.message||'ошибка'));}
+}
+
+// ===== ЛИЦО ПРЕДМЕТА: у каждого предмета свой цвет и значок — на плитке, в списке тем, в шапке темы и в тестах.
+// По цвету всегда видно, где ты: гистология — фиолетовая с микроскопом, анатомия — красная с костью…
+var V_LOOK=[[/патанатом|патологическая анатом/,'virus','pink'],[/патфиз|патологическая физиол/,'activity-heartbeat','orange'],
+  [/гистолог|цитолог|эмбриолог/,'microscope','lav'],[/анатом/,'bone','red'],[/биохим/,'test-pipe','orange'],[/биофиз|физик/,'atom-2','blue'],
+  [/физиолог/,'heartbeat','teal'],[/микробиол|вирусол/,'virus','green'],[/генетик/,'dna','green'],[/биолог/,'dna-2','green'],[/хими/,'flask','gold'],
+  [/фармакол/,'pill','pink'],[/иммунол/,'shield-check','teal'],[/невр|нейро/,'brain','lav'],[/латин/,'language','gold'],
+  [/терап|пропедевт|внутренн/,'stethoscope','blue'],[/хирург/,'first-aid-kit','red'],[/гигиен|эпидем/,'droplet','teal'],
+  [/педиатр/,'baby-carriage','orange'],[/философ|истори|эконом|прав/,'book-2','grey']];
+var V_LOOK_PAL=['lav','blue','green','gold','red','teal','orange','pink'];
+function vLook(name,emoji){
+  var n=String(name||'').toLowerCase(),hit=null,h=0,i;
+  for(i=0;i<V_LOOK.length&&!hit;i++)if(V_LOOK[i][0].test(n))hit=V_LOOK[i];
+  for(i=0;i<n.length;i++)h=(h*31+n.charCodeAt(i))>>>0;
+  var c=hit?hit[2]:V_LOOK_PAL[h%V_LOOK_PAL.length],own=emoji&&!/📘|ti-book"/.test(emoji)?emoji:'';
+  return {c:c,cls:'sc sc-'+c,v:'var(--cap-'+c+')',icon:own||'<i class="ti ti-'+(hit?hit[1]:'book-2')+'" aria-hidden="true"></i>'};
 }
 
 // ===== ГДЕ Я: одна шапка на всех экранах «Учёбы» — «← Учёба › Патанатомия › Мозжечок», прилипает к верху =====
