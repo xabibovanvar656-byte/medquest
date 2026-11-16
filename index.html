@@ -3133,6 +3133,214 @@ body.bd-tg #bdRoot .bd-back{display:none}
 .bd-segs i.more{flex:.6;background:repeating-linear-gradient(90deg,rgba(255,255,255,.22) 0 6px,transparent 6px 10px)}
 .bd-sq.on{background:var(--bd-blue);box-shadow:0 4px 0 var(--bd-blue-d)}
 .bd-follow{z-index:2}
+/* админка: сравнение ИИ */
+.cmp-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.cmp-tabs button{display:inline-flex;align-items:center;gap:6px;height:42px;padding:0 14px;border-radius:12px;border:1.5px solid var(--bd,rgba(127,127,127,.25));background:none;color:var(--tx);font:inherit;font-weight:700;cursor:pointer}
+.cmp-tabs button.on{background:#3D82FF;border-color:#3D82FF;color:#fff}
+.cmp-note{margin:12px 0;padding:12px 14px;border-radius:14px;background:rgba(255,181,71,.14);font-size:14px;line-height:1.4}
+.cmp-list{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+.cmp-v.best{outline:2.5px solid #3D82FF}
+.cmp-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.cmp-l{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:#14182B;color:#fff;font-size:19px}
+.cmp-who{font-weight:800}
+.cmp-best{margin-left:auto;display:inline-flex;align-items:center;gap:4px;color:#3D82FF;font-weight:800;font-size:14px}
+.cmp-meta{margin:6px 0 10px;font-size:13px;color:var(--tx2)}
+.cmp-tx{white-space:pre-wrap;font-size:14.5px;line-height:1.5;max-height:420px;overflow-y:auto}
+pre.cmp-tx{font-family:inherit}
+.cmp-steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:14.5px;line-height:1.45}
+.cmp-steps small{display:block;color:var(--tx2);font-size:12px}
+.cmp-err{color:#E5484D;font-weight:700;font-size:14px}
+.cmp-play,.cmp-pick{margin-top:12px}
+.cmp-open{width:100%;margin-top:12px}
+/* ===== Доска v3: большое пространство на весь экран, управление тонкими панелями поверх ===== */
+#bdRoot [hidden]{display:none!important}
+#bdRoot.bd-v-board{padding:0}
+#bdRoot.bd-v-board .bd-board{position:absolute;inset:0;margin:0;overflow:hidden;touch-action:none;border-radius:0;cursor:grab;
+  background-color:var(--bd-bg);background-image:radial-gradient(rgba(255,255,255,.07) 1.2px,transparent 1.3px);background-size:26px 26px}
+#bdRoot.bd-v-board .bd-board:active{cursor:grabbing}
+#bdRoot.bd-v-board .bd-board svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+#bdWorld{transform-origin:0 0;will-change:transform}
+#bdRoot.bd-v-board .bd-top{position:absolute;left:0;right:0;top:0;z-index:3;margin:0;
+  padding:calc(var(--tg-top,env(safe-area-inset-top,0px)) + 8px) 12px 18px;background:linear-gradient(var(--bd-bg) 55%,transparent)}
+#bdRoot.bd-v-board .bd-tt{flex:1;min-width:0;padding:0 4px}
+#bdRoot.bd-v-board .bd-tt b{font-size:16px}
+#bdRoot.bd-v-board .bd-tt small{font-size:12.5px}
+#bdRoot.bd-v-board .bd-sq{width:42px;height:42px;border-radius:14px}
+#bdRoot.bd-v-board .bd-pill{height:42px}
+.bd-dock{position:absolute;left:0;right:0;bottom:0;z-index:3;display:flex;flex-direction:column;gap:10px;
+  padding:34px 12px calc(10px + env(safe-area-inset-bottom,0px));background:linear-gradient(transparent,rgba(14,17,32,.88) 30%,var(--bd-bg) 70%)}
+.bd-dock .bd-follow{position:static;transform:none;align-self:center;margin:0}
+.bd-dock .bd-cap{min-height:0;padding:0 6px;border:none;background:none;border-radius:0;font-size:16px;line-height:1.4;font-weight:800;
+  text-shadow:0 1px 8px rgba(0,0,0,.6);display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.bd-bar2{display:flex;align-items:center;gap:10px}
+.bd-bar2 .bd-c{width:46px;height:46px;flex:none;border-radius:15px}
+.bd-bar2 .bd-c.on{background:var(--bd-blue);box-shadow:0 4px 0 var(--bd-blue-d)}
+.bd-bar2 .bd-segs{flex:1;min-width:0;display:flex;gap:4px;height:46px;align-items:center}
+.bd-bar2 .bd-segs button,.bd-bar2 .bd-segs .more{flex:1;min-width:0;height:46px;padding:0;border:none;background:none;display:flex;align-items:center;cursor:pointer}
+.bd-bar2 .bd-segs i{display:block;width:100%;height:7px;border-radius:9px;background:rgba(255,255,255,.16)}
+.bd-bar2 .bd-segs .done i{background:#7FB2FF}
+.bd-bar2 .bd-segs .on i{background:#3D82FF;box-shadow:0 0 0 2px rgba(61,130,255,.35)}
+.bd-bar2 .bd-segs .more{flex:.6;cursor:default}
+.bd-bar2 .bd-segs .more i{background:repeating-linear-gradient(90deg,rgba(255,255,255,.22) 0 5px,transparent 5px 9px)}
+.bd-dock .bd-more input{height:48px}
+.bd-big.gold{background:linear-gradient(135deg,#FFC94D,#FF9F2E);color:#2A1A00;box-shadow:0 5px 0 #B8661A}
+/* стартовый экран: всё влезает на телефон */
+.bd-start .bd-hero{flex:1 1 auto;min-height:0;overflow:hidden;gap:4px;padding:4px 0}
+.bd-mascot.hero{height:clamp(56px,13vh,124px)}
+.bd-hero h1{margin-top:8px;font-size:clamp(26px,7.4vw,36px)}
+.bd-hero p{font-size:15px}
+.bd-sugg{gap:8px;margin-bottom:10px}
+.bd-sugg button{flex-direction:row;align-items:center;justify-content:flex-start;gap:10px;min-height:0;padding:10px 12px;border-radius:18px}
+.bd-sugg button .bd-si{flex:none;width:36px;height:36px}
+.bd-sugg b{font-size:14.5px;line-height:1.25;text-align:left;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.bd-comp>textarea{font-size:16.5px;padding:13px 16px 4px}
+@media (max-height:640px){.bd-mascot.hero,.bd-hero p{display:none}.bd-sugg button .bd-si{display:none}}
+/* ===== VITA+ v2 — тёмные карточки в стиле доски ===== */
+.vx-card,.vx-act,.vx-prof,.vx-soft{--vx-nav:#11152A;--vx-tx2:#9AA2C6;color:#fff;font-family:inherit;text-align:left}
+.vx-card{position:relative;overflow:hidden;margin:12px 0 0;padding:18px 16px 16px;border-radius:26px;cursor:pointer;
+  background:radial-gradient(120% 90% at 100% 0%,rgba(255,180,60,.36),transparent 55%),radial-gradient(80% 80% at 0% 100%,rgba(139,92,246,.33),transparent 60%),var(--vx-nav);
+  box-shadow:0 6px 0 #070914,0 16px 36px rgba(255,160,50,.16)}
+.vx-card::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.12) 48%,transparent 60%);transform:translateX(-70%);animation:vxSh 4.2s ease-in-out infinite}
+@keyframes vxSh{60%,100%{transform:translateX(75%)}}
+.vx-row{display:flex;align-items:center;gap:14px}
+.vx-tt{display:flex;flex-direction:column;min-width:0;flex:1}
+.vx-tt b{font-size:17px;font-weight:900;line-height:1.2}
+.vx-tt small{font-size:13px;font-weight:700;color:var(--vx-tx2,#9AA2C6);line-height:1.35}
+.vx-h{font-size:22px!important;letter-spacing:-.3px}
+.vx-h span{background:linear-gradient(90deg,#FFE08A,#FFB43D);-webkit-background-clip:text;background-clip:text;color:transparent}
+.vx-chip{display:inline-flex;align-items:center;gap:5px;align-self:flex-start;margin-top:7px;padding:4px 10px;border-radius:999px;background:rgba(255,201,77,.15);color:#FFC94D;font-size:12px;font-weight:900}
+.vx-gem{flex:none;display:grid;place-items:center;width:58px;height:58px;border-radius:19px;font-size:30px;color:#3A2300;transform:rotate(-8deg);
+  background:linear-gradient(145deg,#FFE08A,#FFB43D 55%,#F08A1C);box-shadow:inset 0 -5px 0 rgba(150,70,0,.35),inset 0 3px 0 rgba(255,255,255,.6),0 8px 22px rgba(255,170,50,.45)}
+.vx-gem.sm{width:46px;height:46px;font-size:24px;border-radius:15px}
+.vx-gem.big{width:84px;height:84px;font-size:44px;border-radius:26px}
+.vx-gem.float{animation:vxFl 3.2s ease-in-out infinite}
+@keyframes vxFl{50%{transform:rotate(-3deg) translateY(-4px)}}
+.vx-meter{margin:16px 0 12px;padding:12px 14px;border-radius:18px;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.08)}
+.vx-mt{display:flex;justify-content:space-between;gap:8px;font-size:14px;font-weight:800}.vx-mt b{color:#FFC94D}
+.vx-bar{height:10px;border-radius:9px;background:rgba(255,255,255,.1);margin-top:8px;overflow:hidden}
+.vx-bar i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,#FF5C7A,#FFB43D)}
+.vx-perks{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.vx-perks span{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px;border-radius:16px;background:rgba(255,255,255,.06);text-align:center;font-size:12px;font-weight:800;line-height:1.2;color:#DCE1F5}
+.vx-perks i{font-size:22px}
+.vx-cta{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:54px;border:none;border-radius:18px;cursor:pointer;font:inherit;font-size:17px;font-weight:900;color:#2A1A00;
+  background:linear-gradient(180deg,#FFD25E,#FFA62E);box-shadow:0 5px 0 #B8661A;transition:transform .1s}
+.vx-cta:active{transform:translateY(3px);box-shadow:0 2px 0 #B8661A}
+.vx-cta:disabled{opacity:.7}
+.vx-act{margin:12px 0 0;padding:16px;border-radius:26px;cursor:pointer;border:2.5px solid transparent;
+  background:linear-gradient(var(--vx-nav),var(--vx-nav)) padding-box,linear-gradient(135deg,#FFE08A,#FF9F2E,#8B5CF6) border-box;box-shadow:0 6px 0 #070914}
+.vx-days{text-align:right}.vx-days b{display:block;font-size:30px;font-weight:900;line-height:1;color:#FFC94D}.vx-days small{font-size:12px;font-weight:800;color:#9AA2C6}
+.vx-today{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.vx-today div{padding:10px;border-radius:16px;background:rgba(255,255,255,.06)}
+.vx-today b{display:block;font-size:18px;font-weight:900;color:#fff}.vx-today small{font-size:11.5px;font-weight:800;color:#9AA2C6;line-height:1.25;display:block}
+.vx-today.big{grid-template-columns:1fr 1fr}
+/* окно (тёмное) */
+#modalRoot .modal.vx-sheet{--bg:#0E1120;--bg2:#12162B;--bg3:#1A1F38;--bg4:#232946;--bor:rgba(255,255,255,.08);--bor2:rgba(255,255,255,.14);--tx:#fff;--tx2:#9AA2C6;--tx3:#6B7294;--amd:rgba(255,201,77,.12);
+  background:#12162B;color:#fff;border:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column;gap:14px}
+#modalRoot .modal.vx-sheet>*{flex:none}
+.vx-sheet .vp-x{background:rgba(255,255,255,.08);color:#fff}
+.vx-hero{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding-top:6px}
+.vx-hero h2{margin:4px 0 0;font-size:24px;font-weight:900;letter-spacing:-.3px;line-height:1.15;color:#fff}
+.vx-hero p{margin:0;max-width:320px;font-size:15px;font-weight:700;line-height:1.45;color:#9AA2C6}
+.vx-ring{position:relative;display:grid;place-items:center;width:112px;height:112px;border-radius:50%;background:conic-gradient(#FF5C7A 0 100%,transparent 0);box-shadow:0 0 40px rgba(255,92,122,.32)}
+.vx-ring::before{content:"";position:absolute;inset:9px;border-radius:50%;background:#12162B}
+.vx-ring div{position:relative;text-align:center}.vx-ring b{display:block;font-size:30px;font-weight:900;line-height:1}.vx-ring small{font-size:12px;font-weight:800;color:#9AA2C6}
+.vx-ben{display:flex;flex-direction:column;gap:8px}
+.vx-ben div{display:flex;align-items:center;gap:12px;padding:11px 13px;border-radius:18px;background:#1A1F38;font-size:15px;font-weight:800;line-height:1.25}
+.vx-ben i{flex:none;display:grid;place-items:center;width:38px;height:38px;border-radius:12px;font-size:21px}
+.vx-ben small{display:block;margin-top:2px;font-size:12.5px;font-weight:700;color:#9AA2C6}
+.vx-more{border-radius:16px;background:#1A1F38}
+.vx-more summary{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer;list-style:none;font-weight:800;font-size:14.5px;color:#C9CFEA}
+.vx-more summary::-webkit-details-marker{display:none}
+.vx-more[open] summary i{transform:rotate(180deg)}
+.vx-more .vp-cmp,.vx-more .vp-fact,.vx-more .vp-gift{margin:0 10px 12px}
+.vx-pay{display:flex;gap:8px}
+.vx-pay button{flex:1;display:flex;flex-direction:column;align-items:flex-start;gap:1px;padding:10px 12px;border-radius:16px;border:2px solid #2A3152;background:none;color:#fff;font:inherit;cursor:pointer;text-align:left}
+.vx-pay button i{font-size:18px}
+.vx-pay button b{font-size:15.5px;font-weight:900}.vx-pay button small{font-size:12px;font-weight:800;color:#9AA2C6}
+.vx-pay button.on{border-color:#FFC94D;background:rgba(255,201,77,.08)}
+.vx-later{margin:0;text-align:center;font-size:14px;font-weight:800;color:#9AA2C6}.vx-later b{color:#fff}
+.vx-skip{border:none;background:none;color:#9AA2C6;font:inherit;font-size:14.5px;font-weight:800;padding:6px;cursor:pointer}
+.vx-note{display:flex;gap:10px;padding:12px 14px;border-radius:16px;background:rgba(255,201,77,.1);font-size:14px;font-weight:700;line-height:1.45;color:#E7EAF7}
+.vx-note i{color:#FFC94D;font-size:20px;flex:none}
+.vx-h3{margin:4px 0 -6px;font-size:17px;font-weight:900;color:#fff}
+.vx-p{margin:0;font-size:14px;font-weight:700;color:#9AA2C6;line-height:1.45}
+.vx-faq{display:flex;flex-direction:column;gap:2px;margin-top:4px;border-top:1px solid rgba(255,255,255,.08);padding-top:10px}
+.vx-faq div{display:flex;gap:12px;padding:8px 2px;font-size:13.5px;font-weight:700;line-height:1.45;color:#9AA2C6}
+.vx-faq i{font-size:20px;color:#7FB2FF;flex:none;margin-top:1px}
+.vx-faq b{display:block;color:#fff;font-size:14.5px}
+.vx-faq a{color:#7FB2FF;font-weight:800}
+.vx-sheet .vp-top h2,.vx-sheet .vp-top p,.vx-sheet .vp-steps{color:#fff}
+.vx-sheet .vp-mark{background:linear-gradient(145deg,#FFE08A,#FFB43D 55%,#F08A1C);color:#3A2300}
+.vx-sheet .btn.vp-btn{background:linear-gradient(180deg,#FFD25E,#FFA62E);color:#2A1A00;box-shadow:0 5px 0 #B8661A;border:none}
+.vx-sheet .vp-later{color:#9AA2C6}
+/* профиль: подписку легко найти */
+.vx-prof{display:flex;align-items:center;gap:12px;width:100%;margin:12px 0;padding:14px;border-radius:22px;cursor:pointer;font:inherit;
+  border:2px solid transparent;background:linear-gradient(var(--vx-nav),var(--vx-nav)) padding-box,linear-gradient(135deg,#FFE08A,#FF9F2E 50%,#8B5CF6) border-box;box-shadow:0 5px 0 #070914}
+.vx-lbl{text-transform:none;font-size:12px!important;font-weight:900!important;color:#FFC94D!important;margin-bottom:1px}
+.vx-pgo{flex:none;padding:9px 14px;border-radius:14px;font-weight:900;font-size:14px;color:#2A1A00;background:linear-gradient(180deg,#FFD25E,#FFA62E);box-shadow:0 3px 0 #B8661A}
+.vx-prof.on .vx-pgo{background:rgba(255,255,255,.1);color:#fff;box-shadow:none}
+/* мягкая полоска над вопросом */
+.vx-soft{display:flex;align-items:center;gap:12px;margin:0 0 12px;padding:11px 12px;border-radius:20px;cursor:pointer;background:linear-gradient(90deg,#1A1F38,#2A2246)}
+.vx-soft .vx-gem{width:38px;height:38px;font-size:19px;border-radius:12px}
+.vx-soft .vx-tt b{font-size:14.5px}
+.vx-x{flex:none;width:36px;height:36px;border:none;border-radius:12px;background:rgba(255,255,255,.08);color:#9AA2C6;font-size:18px;display:grid;place-items:center;cursor:pointer}
+/* размытое объяснение */
+.vx-lock{position:relative;overflow:hidden;margin-top:12px;border-radius:18px;padding:16px 14px;background:#11152A;color:#fff;min-height:150px}
+.vx-blur{display:flex;flex-direction:column;gap:10px;filter:blur(3px);opacity:.5}
+.vx-blur i{display:block;height:11px;border-radius:6px;background:#9AA2C6}
+.vx-ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:12px;text-align:center;background:linear-gradient(rgba(17,21,42,.15),rgba(17,21,42,.9))}
+.vx-ov b{font-size:15.5px;font-weight:900}.vx-ov small{font-size:12.5px;font-weight:700;color:#9AA2C6;margin-bottom:4px}
+.vx-pill{display:inline-flex;align-items:center;gap:6px;height:42px;padding:0 18px;border:none;border-radius:999px;cursor:pointer;font:inherit;font-weight:900;font-size:14.5px;color:#2A1A00;background:linear-gradient(180deg,#FFD25E,#FFA62E);box-shadow:0 4px 0 #B8661A}
+/* «Спросить ИИ»: лимит — как обычное сообщение ИИ */
+.vq-m.e{align-self:flex-start;max-width:88%;background:var(--bg3,rgba(127,127,127,.12));border-bottom-left-radius:5px;gap:0}
+.vx-chatbtn{margin-top:10px}
+.vp-b i{font-size:.95em;vertical-align:-1px}
+@media (prefers-reduced-motion:reduce){.vx-card::after,.vx-gem.float{animation:none}}
+#modalRoot .vx-sheet .vx-hero h2,#modalRoot .vx-sheet .vx-h3{font-family:inherit!important;font-weight:900!important;font-style:normal}
+.vx-stick{position:sticky;bottom:-18px;margin:0 -22px -18px;padding:12px 22px 18px;display:flex;flex-direction:column;gap:10px;background:linear-gradient(rgba(18,22,43,0),#12162B 18px);z-index:2}
+/* главная: компактная строка Vita+ */
+.vx-home{--vx-nav:#11152A;display:flex;align-items:center;gap:12px;width:100%;margin:12px 0 0;padding:12px 14px;border:none;border-radius:22px;cursor:pointer;font:inherit;text-align:left;color:#fff;
+  background:radial-gradient(120% 120% at 100% 0%,rgba(255,180,60,.3),transparent 60%),var(--vx-nav);box-shadow:0 5px 0 #070914}
+.vx-home>i{font-size:20px;color:#9AA2C6}
+.vx-home.on{border:2px solid transparent;background:linear-gradient(var(--vx-nav),var(--vx-nav)) padding-box,linear-gradient(135deg,#FFE08A,#FF9F2E,#8B5CF6) border-box}
+.vx-home .vx-days b{font-size:24px}
+.vx-bar.sm{height:6px;margin-top:6px;max-width:220px}
+.vx-exl{margin:8px 0 0;font-size:13px;color:var(--tx2)}
+.vp-chip .vp-chip-go{padding:0 8px}
+/* ===== светлая тема: тёплый светлый вариант, без тёмных пятен на белом ===== */
+[data-light] .vx-home,[data-light] .vx-prof{--vx-nav:#FFFFFF;color:#1a1726;
+  background:linear-gradient(120deg,#FFF6DD,#FFFFFF 62%);border:1.5px solid #F2D68E;box-shadow:0 4px 0 #EEDFB8}
+[data-light] .vx-home.on,[data-light] .vx-prof.on{border:1.5px solid #F2C35A;background:linear-gradient(120deg,#FFF1C9,#FFFFFF 70%)}
+[data-light] .vx-tt small{color:#6B6578}
+[data-light] .vx-home>i{color:#B8A980}
+[data-light] .vx-days small{color:#8A8296}
+[data-light] .vx-days b{color:#E08A00}
+[data-light] .vx-bar{background:#F3E7C6}
+[data-light] .vx-lbl{color:#C77800!important}
+[data-light] .vx-prof.on .vx-pgo{background:#FFF1C9;color:#8A5300;box-shadow:0 3px 0 #EEDFB8}
+[data-light] .vx-gem{box-shadow:inset 0 -5px 0 rgba(150,70,0,.3),inset 0 3px 0 rgba(255,255,255,.6),0 6px 14px rgba(255,170,50,.3)}
+/* окно в светлой теме — белое */
+[data-light] #modalRoot .modal.vx-sheet{--bg2:#FFFFFF;--bg3:#F7F5F1;--bg4:#F0ECE4;--bor:#ECE8E2;--tx:#1a1726;--tx2:#6B6578;--tx3:#9b97a8;--amd:#FFF6DF;background:#fff;color:#1a1726;border-color:#ECE8E2}
+[data-light] .vx-sheet .vp-x{background:#F3F1EC;color:#1a1726}
+[data-light] .vx-hero h2,[data-light] .vx-h3,[data-light] .vx-faq b,[data-light] .vx-pay button,[data-light] .vx-later b{color:#1a1726}
+[data-light] .vx-hero p,[data-light] .vx-ben small,[data-light] .vx-pay button small,[data-light] .vx-later,[data-light] .vx-skip,[data-light] .vx-p,[data-light] .vx-faq div,[data-light] .vx-ring small{color:#6B6578}
+[data-light] .vx-ring::before{background:#fff}
+[data-light] .vx-ring{box-shadow:0 0 30px rgba(255,92,122,.2)}
+[data-light] .vx-ben div,[data-light] .vx-more,[data-light] .vx-today div{background:#F7F5F1}
+[data-light] .vx-today b{color:#1a1726}[data-light] .vx-today small{color:#6B6578}
+[data-light] .vx-more summary{color:#4A4558}
+[data-light] .vx-pay button{border-color:#ECE8E2}
+[data-light] .vx-pay button.on{border-color:#F2B530;background:#FFF8E6}
+[data-light] .vx-note{background:#FFF6DF;color:#4A4558}
+[data-light] .vx-faq{border-top-color:#ECE8E2}
+[data-light] .vx-faq a{color:#3D6FE0}
+[data-light] .vx-stick{background:linear-gradient(rgba(255,255,255,0),#fff 18px)}
+[data-light] .vx-sheet .vp-top h2,[data-light] .vx-sheet .vp-top p,[data-light] .vx-sheet .vp-steps{color:#1a1726}
+/* размытое объяснение в светлой теме */
+[data-light] .vx-lock{background:#F7F5F1;color:#1a1726}
+[data-light] .vx-blur i{background:#C9C3D6}
+[data-light] .vx-ov{background:linear-gradient(rgba(247,245,241,.1),rgba(247,245,241,.92))}
+[data-light] .vx-ov small{color:#6B6578}
 </style>
 </head>
 <body>
@@ -14722,7 +14930,7 @@ function vqHint(b){var t=document.getElementById('vqIn');if(t){t.value=b.textCon
 function vqLimit(){
   var el=document.getElementById('vqLim');if(!el||!VP||VP.staff)return;
   var left=Math.max(0,VP.ask_limit-VP.ask_used);
-  el.innerHTML='Сегодня осталось <b>'+left+'</b> из '+VP.ask_limit+(VP.enabled&&!VP.plus?' · <button type="button" onclick="vpWall(\'ask\')">с Vita+ — '+VP.plus_ask+' в день</button>':'');
+  el.innerHTML='Сегодня осталось <b>'+left+'</b> из '+VP.ask_limit;
 }
 function vqPick(){
   if(VP&&!VP.staff&&VP.file_limit<=0){vqStopMsg({kind:'askf',limit:0,plus:VP.plus,plus_limit:VP.plus_file,enabled:VP.enabled});return;}
@@ -15043,7 +15251,7 @@ async function bdAsk(text,hist){
   var j;try{var r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});j=await r.json();}
   catch(e){j={status:'error',reason:'Нет связи. Проверь интернет'};}
   if(j.left!=null&&VP){VP.board_used=VP.board_limit-j.left;}
-  if(j.status==='limit'){bdStart();var t=document.getElementById('bdIn');if(t)t.value=text;VP_AT=0;vpLoad(true).then(function(){vpWall('board');});return;}
+  if(j.status==='limit'){bdLimit(j);return;}
   if(j.status==='ok'){bdPlay(j);return;}
   if(j.status!=='run'){bdFail(j.reason||'Не получилось');return;}
   // шаги приходят по одному: начинаем рисовать, как только готов первый (и его голос — или через 5 секунд без него)
@@ -15079,33 +15287,55 @@ function bdFail(msg){
     +'<div class="bd-wait">'+bdMascot('sad')+'<b>'+esc(msg)+'</b>'
     +'<small>Попытка не списана.</small><button type="button" class="bd-big" onclick="bdAsk(BD.q)">Попробовать ещё раз</button></div>';
 }
-// ---------- плеер ----------
+function bdLimit(j){
+  BD.view='wait';BD.el.className='bd-v-play';VP_AT=0;try{vpLoad(true);}catch(e){}
+  var n=j.limit||0,more=!j.plus&&j.enabled&&j.plus_limit>n;
+  BD.el.innerHTML='<div class="bd-top">'+bdBackBtn()+'</div>'
+    +'<div class="bd-wait">'+bdMascot('sad')+'<b>Доска на сегодня всё</b>'
+    +'<small>Сегодня ты посмотрел '+n+' из '+n+'. Завтра будут новые. Объяснения из истории открываются бесплатно.</small>'
+    +'<button type="button" class="bd-big" onclick="bdHistory()">Мои объяснения</button>'
+    +(more?'<button type="button" class="bd-big gold" onclick="vpWall(\'board\')">Vita+ — до '+j.plus_limit+' в день</button>':'')+'</div>';
+}
+// ---------- плеер: большая доска-пространство, камера летает от рисунка к рисунку ----------
+var BD_GAP=90;
 function bdPlay(j,live){
   BD.board={title:j.board.title,steps:(j.board.steps||[]).slice()};BD.audio=(j.audio||[]).slice();BD.key=j.key||BD.key;
-  BD.step=-1;BD.view='play';BD.follow=true;BD.live=!!live;BD.waitNext=null;BD.seen=BD.board.steps.map(function(){return Date.now();});
-  BD.el.className='bd-v-play';
-  BD.el.innerHTML='<div class="bd-top">'+bdBackBtn()
+  BD.step=-1;BD.view='play';BD.follow=true;BD.ov=false;BD.live=!!live;BD.waitNext=null;BD.seen=BD.board.steps.map(function(){return Date.now();});
+  BD.el.className='bd-v-play bd-v-board';
+  BD.el.innerHTML='<div class="bd-board" id="bdBoard"><svg id="bdSvg" xmlns="http://www.w3.org/2000/svg"><g id="bdWorld"><g id="bdCam"></g><g id="bdPen" class="bd-pen">'+bdMascotInner()+'</g></g></svg></div>'
+    +'<div class="bd-top">'+bdBackBtn()
     +'<div class="bd-tt"><b id="bdTitle">'+esc(BD.board.title)+'</b><small id="bdStepN">Шаг 1</small></div>'
-    +'<button type="button" class="bd-sq" id="bdAll" onclick="bdOverview()" aria-label="Вся доска"><i class="ti ti-layout-grid" aria-hidden="true"></i></button></div>'
-    +'<div class="bd-board" id="bdBoard"><svg id="bdSvg" xmlns="http://www.w3.org/2000/svg"><g id="bdCam"></g><g id="bdPen" class="bd-pen">'+bdMascotInner()+'</g></svg>'
-    +'<button type="button" class="bd-follow" id="bdFollow" onclick="bdFollowOn()" hidden><i class="ti ti-focus-2" aria-hidden="true"></i>Следить за доской</button></div>'
+    +'<button type="button" class="bd-sq" id="bdAll" onclick="bdOverview()" aria-label="Вся доска" aria-pressed="false"><i class="ti ti-arrows-maximize" aria-hidden="true"></i></button></div>'
+    +'<div class="bd-dock" id="bdDock"><button type="button" class="bd-follow" id="bdFollow" onclick="bdFollowOn()" style="display:none"><i class="ti ti-focus-2" aria-hidden="true"></i>Вернуться к рисунку</button>'
     +'<div class="bd-cap" id="bdCap" aria-live="polite"></div>'
-    +'<div class="bd-panel"><div class="bd-prog"><span class="bd-segs" id="bdSegs"></span><b id="bdPn"></b></div>'
-    +'<div class="bd-ctl"><button type="button" class="bd-c" onclick="bdSteps()" aria-label="Все шаги"><i class="ti ti-list" aria-hidden="true"></i></button>'
-    +'<button type="button" class="bd-c" onclick="bdGo(Math.max(BD.step,0))" aria-label="Повторить шаг"><i class="ti ti-rotate" aria-hidden="true"></i></button>'
-    +'<button type="button" class="bd-c bd-play" id="bdPP" onclick="bdToggle()" aria-label="Пауза"><i class="ti ti-player-pause-filled" aria-hidden="true"></i></button>'
+    +'<div class="bd-bar2"><button type="button" class="bd-c bd-play" id="bdPP" onclick="bdToggle()" aria-label="Пауза"><i class="ti ti-player-pause-filled" aria-hidden="true"></i></button>'
+    +'<div class="bd-segs" id="bdSegs" role="group" aria-label="Шаги"></div>'
     +'<button type="button" class="bd-c" id="bdMute" onclick="bdMute()" aria-label="Выключить звук"><i class="ti ti-volume" aria-hidden="true"></i></button>'
-    +'<button type="button" class="bd-c" onclick="bdShare()" aria-label="Поделиться"><i class="ti ti-share-2" aria-hidden="true"></i></button></div>'
-    +'<div class="bd-more"><input id="bdMore" maxlength="300" placeholder="Спроси ещё…" aria-label="Спросить ещё" onkeydown="if(event.key===\'Enter\')bdFollowUp()">'
+    +'<button type="button" class="bd-c" id="bdAskB" onclick="bdMoreToggle()" aria-label="Спросить ещё" aria-expanded="false"><i class="ti ti-message-question" aria-hidden="true"></i></button></div>'
+    +'<div class="bd-more" id="bdMoreRow" style="display:none"><input id="bdMore" maxlength="300" placeholder="Что непонятно? Спроси дальше…" aria-label="Спросить ещё" onkeydown="if(event.key===\'Enter\')bdFollowUp()">'
     +'<button type="button" class="bd-send sm" onclick="bdFollowUp()" aria-label="Спросить"><i class="ti ti-send-2" aria-hidden="true"></i></button></div></div>';
-  bdMuteUi();
-  var bd=document.getElementById('bdBoard');
-  // «Следить» выключаем только когда студент сам тянет доску, а не от случайного касания
-  bd.addEventListener('touchstart',function(e){BD.ty=e.touches[0].clientY;},{passive:true});
-  bd.addEventListener('touchmove',function(e){if(BD.ty!=null&&Math.abs(e.touches[0].clientY-BD.ty)>28){BD.ty=null;bdManual();}},{passive:true});
-  bd.addEventListener('wheel',function(e){if(Math.abs(e.deltaY)>12)bdManual();},{passive:true});
-  BD.pen={x:BD_W-70,y:70,tx:BD_W-70,ty:70,f:1};BD.strokes=[];
+  bdMuteUi();bdPointers(document.getElementById('bdBoard'));
+  BD.pen={x:60,y:60,tx:60,ty:60,f:1};BD.strokes=[];BD.cam={x:0,y:0,s:1};
   bdLayout();bdSegsUi();bdPenLoop();bdGo(0);
+}
+function bdMoreToggle(){var r=document.getElementById('bdMoreRow'),b=document.getElementById('bdAskB');if(!r)return;var on=r.style.display==='none';r.style.display=on?'flex':'none';b.setAttribute('aria-expanded',on);b.classList.toggle('on',on);if(on)document.getElementById('bdMore').focus();}
+// доску можно двигать пальцем и приближать двумя пальцами
+function bdPointers(bd){
+  var P={},drag=null,pin=null,rel=function(e){var r=bd.getBoundingClientRect();return {x:e.clientX-r.left,y:e.clientY-r.top};};
+  bd.addEventListener('pointerdown',function(e){P[e.pointerId]=rel(e);var ks=Object.keys(P);
+    if(ks.length===1)drag={x:P[ks[0]].x,y:P[ks[0]].y,cx:BD.cam.x,cy:BD.cam.y,moved:false};
+    if(ks.length===2){var a=P[ks[0]],b=P[ks[1]];pin={d:Math.hypot(a.x-b.x,a.y-b.y)||1,s:BD.cam.s,mx:(a.x+b.x)/2,my:(a.y+b.y)/2,cx:BD.cam.x,cy:BD.cam.y};drag=null;}
+    try{bd.setPointerCapture(e.pointerId);}catch(x){}});
+  bd.addEventListener('pointermove',function(e){if(!P[e.pointerId])return;P[e.pointerId]=rel(e);var ks=Object.keys(P);
+    if(pin&&ks.length>=2){var a=P[ks[0]],b=P[ks[1]],d=Math.hypot(a.x-b.x,a.y-b.y),s=Math.max(.15,Math.min(3,pin.s*d/pin.d)),
+        wx=(pin.mx-pin.cx)/pin.s,wy=(pin.my-pin.cy)/pin.s,mx=(a.x+b.x)/2,my=(a.y+b.y)/2;
+      bdManual();bdCamSet(mx-wx*s,my-wy*s,s,false);return;}
+    if(drag){var p=P[e.pointerId],dx=p.x-drag.x,dy=p.y-drag.y;if(!drag.moved&&Math.hypot(dx,dy)<10)return;drag.moved=true;bdManual();bdCamSet(drag.cx+dx,drag.cy+dy,BD.cam.s,false);}});
+  var up=function(e){delete P[e.pointerId];if(Object.keys(P).length<2)pin=null;if(!Object.keys(P).length)drag=null;};
+  bd.addEventListener('pointerup',up);bd.addEventListener('pointercancel',up);
+  bd.addEventListener('wheel',function(e){e.preventDefault();bdManual();
+    if(e.ctrlKey){var r=rel(e),s=Math.max(.15,Math.min(3,BD.cam.s*(1-e.deltaY*0.01))),wx=(r.x-BD.cam.x)/BD.cam.s,wy=(r.y-BD.cam.y)/BD.cam.s;bdCamSet(r.x-wx*s,r.y-wy*s,s,false);}
+    else bdCamSet(BD.cam.x-e.deltaX,BD.cam.y-e.deltaY,BD.cam.s,false);},{passive:false});
 }
 // новые шаги, пока ИИ ещё пишет
 function bdLiveUpdate(p){
@@ -15125,36 +15355,59 @@ function bdTryNext(){
 }
 function bdSegsUi(){
   var n=BD.board.steps.length,s=document.getElementById('bdSegs');if(!s)return;
-  var i=Math.max(BD.step,0),tot=n+(BD.live?1:0);
-  s.innerHTML=BD.board.steps.map(function(_,k){return '<i class="'+(k<i?'done':k===i?'on':'')+'"></i>';}).join('')+(BD.live?'<i class="more"></i>':'');
-  document.getElementById('bdPn').textContent=(i+1)+'/'+(BD.live?'…':n);
-  document.getElementById('bdStepN').textContent=BD.live?'Шаг '+(i+1)+' · рисую дальше':'Шаг '+(i+1)+' из '+n;
-  void tot;
+  var i=Math.max(BD.step,0);
+  s.innerHTML=BD.board.steps.map(function(_,k){return '<button type="button" class="'+(k<i?'done':k===i?'on':'')+'" onclick="bdGo('+k+')" aria-label="Шаг '+(k+1)+'"><i></i></button>';}).join('')+(BD.live?'<span class="more"><i></i></span>':'');
+  var t=document.getElementById('bdStepN');if(t)t.textContent=BD.live?'Шаг '+(i+1)+' · рисую дальше':'Шаг '+(i+1)+' из '+n;
 }
-function bdManual(){if(BD.view!=='play')return;BD.follow=false;var f=document.getElementById('bdFollow');if(f)f.hidden=false;}
-function bdFollowOn(){BD.follow=true;var f=document.getElementById('bdFollow');if(f)f.hidden=true;bdCamTo(BD.focus||0);}
+function bdManual(){if(BD.view!=='play'||!BD.follow&&!BD.ov)return;BD.follow=false;BD.ov=false;bdOvUi();var f=document.getElementById('bdFollow');if(f)f.style.display='';}
+function bdFollowOn(){BD.follow=true;BD.ov=false;bdOvUi();var f=document.getElementById('bdFollow');if(f)f.style.display='none';if(BD.fp)bdFocus(BD.fp[0],BD.fp[1],true);}
+// раскладка: шаги идут «змейкой» по двум колонкам — доска широкая, камера переезжает влево-вправо и вниз
 function bdLayout(){
-  var y=24,items=[];
-  BD.board.steps.forEach(function(st,si){(st.draw||[]).forEach(function(f){var h=bdMeasure(f);items.push({f:f,step:si,y:y,h:h});y+=h+26;});});
-  BD.items=items;BD.H=Math.max(y+60,300);
-  var svg=document.getElementById('bdSvg');svg.setAttribute('viewBox','0 0 '+BD_W+' '+BD.H);
-  var bd=document.getElementById('bdBoard');if(bd&&bd.classList.contains('all'))bdOverview(true);else bdFit();
+  var cols=[24,24],items=[],panels=[],last=-1e9;
+  BD.board.steps.forEach(function(st,si){
+    var col=si%2,x=col*(BD_W+BD_GAP),y0=Math.max(cols[col],last+60),y=y0;
+    (st.draw||[]).forEach(function(f){var h=bdMeasure(f);items.push({f:f,step:si,x:x,y:y,h:h});y+=h+26;});
+    panels.push({x:x,y0:y0,y1:Math.max(y,y0+40)});cols[col]=Math.max(y,y0+40)+50;last=y0;
+  });
+  BD.items=items;BD.panels=panels;BD.WW=2*BD_W+BD_GAP;BD.H=Math.max(cols[0],cols[1])+40;
+  if(BD.ov)bdOverview(true);
 }
-function bdFit(){
-  var bd=document.getElementById('bdBoard'),svg=document.getElementById('bdSvg');if(!bd)return;
-  var w=bd.clientWidth,s=w/BD_W;BD.cam.s=s;svg.setAttribute('width',w);svg.setAttribute('height',BD.H*s);svg.style.height=BD.H*s+'px';svg.style.width='';
+function bdView(){
+  var bd=document.getElementById('bdBoard');if(!bd)return {W:390,top:0,h:600};
+  var r=bd.getBoundingClientRect(),t=document.querySelector('#bdRoot .bd-top'),d=document.getElementById('bdDock');
+  var top=t?t.getBoundingClientRect().bottom-r.top:0,bot=d?d.getBoundingClientRect().top-r.top:r.height;
+  return {W:r.width,top:top,h:Math.max(120,bot-top)};
 }
-function bdCamTo(y){
-  BD.focus=y;var bd=document.getElementById('bdBoard');if(!bd||bd.classList.contains('all'))return;
-  var top=Math.max(0,y*BD.cam.s-bd.clientHeight*0.4);
-  try{bd.scrollTo({top:top,behavior:'smooth'});}catch(e){bd.scrollTop=top;}
+function bdCamSet(x,y,s,anim){
+  BD.cam={x:x,y:y,s:s};var w=document.getElementById('bdWorld');if(!w)return;
+  w.style.transition=anim?'transform .95s cubic-bezier(.45,0,.2,1)':'none';
+  w.style.transform='translate('+x.toFixed(1)+'px,'+y.toFixed(1)+'px) scale('+s.toFixed(3)+')';
 }
+// показать точку доски в центре экрана (если студент сам не двигает доску)
+function bdFocus(wx,wy,force){
+  BD.fp=[wx,wy];if(!force&&(!BD.follow||BD.ov))return;
+  var v=bdView(),s=Math.min(v.W/(BD_W+36),1.6);
+  bdCamSet(v.W/2-wx*s,v.top+v.h*0.46-wy*s,s,true);
+}
+function bdFocusItem(it){bdFocus(it.x+BD_W/2,it.y+Math.min(it.h,180)/2);}
+function bdCamTo(y){bdFocus(BD_W/2,y);}
+function bdFit(){if(BD.ov)bdOverview(true);else if(BD.fp)bdFocus(BD.fp[0],BD.fp[1],BD.follow);}
+function bdOvUi(){var b=document.getElementById('bdAll');if(b){b.classList.toggle('on',!!BD.ov);b.setAttribute('aria-pressed',!!BD.ov);b.innerHTML='<i class="ti ti-'+(BD.ov?'arrows-minimize':'arrows-maximize')+'" aria-hidden="true"></i>';}}
 function bdOverview(keep){
-  var bd=document.getElementById('bdBoard'),svg=document.getElementById('bdSvg');if(!bd)return;
-  var on=keep===true?true:!bd.classList.contains('all');bd.classList.toggle('all',on);
-  var b=document.getElementById('bdAll');if(b)b.classList.toggle('on',on);
-  if(on){var s=Math.min(bd.clientWidth/BD_W,bd.clientHeight/BD.H);svg.style.height=BD.H*s+'px';svg.style.width=BD_W*s+'px';svg.setAttribute('height',BD.H*s);svg.setAttribute('width',BD_W*s);bd.scrollTop=0;}
-  else{bdFit();bdCamTo(BD.focus||0);}
+  var on=keep===true?true:!BD.ov;BD.ov=on;bdOvUi();
+  var f=document.getElementById('bdFollow');if(f)f.style.display='none';
+  if(on){var v=bdView(),s=Math.min(v.W*0.94/BD.WW,v.h*0.94/BD.H,1.2);bdCamSet((v.W-BD.WW*s)/2,v.top+(v.h-BD.H*s)/2,s,true);}
+  else{BD.follow=true;if(BD.fp)bdFocus(BD.fp[0],BD.fp[1],true);}
+}
+// мелом соединяем шаги: камера и Вита «переходят» к следующему месту доски
+function bdLink(cam,i,dur){
+  var a=BD.panels[i-1],b=BD.panels[i];if(!a||!b)return;
+  var x1=a.x+BD_W/2,y1=a.y1-6,x2=b.x+BD_W/2,y2=b.y0-4,d;
+  if(Math.abs(a.x-b.x)<5)d='M'+x1+' '+y1+' L'+x2+' '+y2;
+  else{var mx=(x1+x2)/2;d='M'+x1+' '+y1+' C'+x1+' '+(y1+70)+' '+mx+' '+(Math.min(y1,y2)-30)+' '+(b.x>a.x?b.x-26:b.x+BD_W+26)+' '+(y2+30);}
+  var e=document.createElementNS('http://www.w3.org/2000/svg','path');e.setAttribute('d',d);e.setAttribute('fill','none');e.setAttribute('stroke','rgba(255,255,255,.28)');
+  e.setAttribute('stroke-width','2.4');e.setAttribute('stroke-linecap','round');cam.appendChild(e);
+  if(dur){var L=0;try{L=e.getTotalLength();}catch(x){}if(L){e.style.strokeDasharray=L;e.style.strokeDashoffset=L;BD.strokes.push({e:e,L:L,t0:performance.now(),dur:dur,ox:0});}}
 }
 // ---------- персонаж-«ручка»: идёт за мелом, плавно ----------
 function bdEase(p){return p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;}
@@ -15170,11 +15423,11 @@ function bdPenLoop(){
       if(p<1){live=s;return true;}
       s.e.style.strokeDashoffset='0';s.e.style.strokeDasharray='none';return false;
     });
-    if(live){try{var pt=live.e.getPointAtLength(live.L*bdEase(Math.min(1,(now-live.t0)/live.dur)));pen.tx=pt.x;pen.ty=pt.y;}catch(e){}}
+    if(live){try{var pt=live.e.getPointAtLength(live.L*bdEase(Math.min(1,(now-live.t0)/live.dur)));pen.tx=pt.x+(live.ox||0);pen.ty=pt.y;}catch(e){}}
     pen.x+=(pen.tx-pen.x)*0.32;pen.y+=(pen.ty-pen.y)*0.32;
-    var f=pen.x>BD_W-64?-1:pen.x<64?1:pen.f;pen.f=f;
+    var lx=((pen.x%(BD_W+BD_GAP))+(BD_W+BD_GAP))%(BD_W+BD_GAP),f=lx>BD_W-64?-1:lx<64?1:pen.f;pen.f=f;
     var g=document.getElementById('bdPen');
-    if(g)g.setAttribute('transform','translate('+pen.x.toFixed(1)+' '+pen.y.toFixed(1)+') scale('+(f*.82).toFixed(2)+' .82)');
+    if(g)g.setAttribute('transform','translate('+pen.x.toFixed(1)+' '+pen.y.toFixed(1)+') scale('+f+' 1)');
     BD.raf=requestAnimationFrame(tick);
   };
   BD.raf=requestAnimationFrame(tick);
@@ -15204,17 +15457,19 @@ function bdGo(i){
   var cam=document.getElementById('bdCam');
   cam.innerHTML='';
   BD.items.forEach(function(it){if(it.step<i)bdDraw(cam,it,false);});
+  for(var k=1;k<i;k++)bdLink(cam,k,false);
+  if(i>0)bdLink(cam,i,700);
   bdSegsUi();
   var st=BD.board.steps[i],cap=document.getElementById('bdCap');cap.textContent=st.say||'';cap.classList.remove('in');void cap.offsetWidth;cap.classList.add('in');
   var mine=BD.items.filter(function(it){return it.step===i;});
   // новый шаг — снова следим за рисунком
-  if(!BD.follow){BD.follow=true;var fb=document.getElementById('bdFollow');if(fb)fb.hidden=true;}
-  if(mine.length){bdCamTo(mine[0].y+Math.min(mine[0].h,170)/2);bdPenTo(40,mine[0].y+10);}
+  if(!BD.follow&&!BD.ov){BD.follow=true;var fb=document.getElementById('bdFollow');if(fb)fb.style.display='none';}
+  if(mine.length){bdFocusItem(mine[0]);bdPenTo(mine[0].x+40,mine[0].y+10);}
   bdSpeak(st.say,i,function(dur){
     if(tok!==BD.tok)return;
     // рисуем, пока звучит фраза: рисунок успевает раньше голоса, чтобы глаз видел то, о чём говорят
     var total=Math.max(1300,Math.min(dur*0.62,5200)),each=total/Math.max(mine.length,1);
-    mine.forEach(function(it,k){bdTimer(function(){if(tok!==BD.tok)return;bdDraw(cam,it,each*0.92);if(BD.follow)bdCamTo(it.y+Math.min(it.h,170)/2);},k*each);});
+    mine.forEach(function(it,k){bdTimer(function(){if(tok!==BD.tok)return;bdDraw(cam,it,each*0.92);bdFocusItem(it);},k*each);});
   },function(){
     if(tok!==BD.tok)return;
     bdTimer(function(){if(tok===BD.tok&&BD.playing)bdGo(i+1);},380);
@@ -15223,9 +15478,10 @@ function bdGo(i){
 function bdEnd(){
   BD.playing=false;BD.waitNext=null;bdPPUi('end');bdTalk(false);
   document.querySelectorAll('#bdSegs i').forEach(function(s){s.className='done';});
-  var cam=document.getElementById('bdCam');if(cam){cam.innerHTML='';BD.items.forEach(function(it){bdDraw(cam,it,false);});}
-  var last=BD.items[BD.items.length-1];if(last)bdPenTo(BD_W-60,last.y+last.h+10);
-  var cap=document.getElementById('bdCap');if(cap){cap.innerHTML='Готово. Нажми ▶, чтобы посмотреть ещё раз, или спроси дальше.';}
+  var cam=document.getElementById('bdCam');if(cam){cam.innerHTML='';BD.items.forEach(function(it){bdDraw(cam,it,false);});for(var k=1;k<BD.board.steps.length;k++)bdLink(cam,k,false);}
+  var last=BD.items[BD.items.length-1];if(last)bdPenTo(last.x+BD_W-60,last.y+last.h+10);
+  bdTimer(function(){if(BD.view==='play')bdOverview(true);},900);
+  var cap=document.getElementById('bdCap');if(cap){cap.innerHTML='Вот вся доска. Нажми на шаг, чтобы пересмотреть, или спроси дальше.';}
 }
 function bdToggle(){
   if(!BD.board)return;
@@ -15374,6 +15630,45 @@ function bdIcon(name,cx,cy,s){
   }
   return d;
 }
+// значки-рисунки: ИИ называет объект (icon), рисунок — здесь. Всё «мелом», с дрожанием руки
+function bdIcon(name,cx,cy,s){
+  var d=[],L=function(a,b,c,e,j){d.push(bdLine(a,b,c,e,j==null?0.8:j));},C=function(x,y,rx,ry){d.push(bdCircle(x,y,rx,ry==null?rx:ry,1));};
+  switch(name){
+    case 'cell':C(cx,cy,s,s*.9);C(cx+s*.15,cy-s*.08,s*.36,s*.32);C(cx+s*.2,cy-s*.1,s*.1);
+      d.push(bdCircle(cx-s*.55,cy+s*.35,s*.2,s*.1,0.5));d.push(bdCircle(cx+s*.45,cy+s*.5,s*.16,s*.08,0.5));d.push(bdCircle(cx-s*.4,cy-s*.5,s*.06,s*.06,0.3));break;
+    case 'virus':C(cx,cy,s*.55);for(var k=0;k<8;k++){var a=k/8*Math.PI*2;L(cx+Math.cos(a)*s*.55,cy+Math.sin(a)*s*.55,cx+Math.cos(a)*s*.85,cy+Math.sin(a)*s*.85,0.4);C(cx+Math.cos(a)*s*.94,cy+Math.sin(a)*s*.94,s*.09);}
+      C(cx-s*.15,cy-s*.1,s*.1);C(cx+s*.18,cy+s*.15,s*.08);break;
+    case 'bacteria':C(cx-s*.15,cy,s*.75,s*.36);d.push('M'+(cx+s*.6)+' '+cy+' q'+s*.12+' '+(-s*.2)+' '+s*.24+' 0 t'+s*.24+' 0 t'+s*.2+' 0');
+      d.push('M'+(cx-s*.55)+' '+cy+' q'+s*.15+' '+(-s*.15)+' '+s*.3+' 0 t'+s*.3+' 0 t'+s*.3+' 0');break;
+    case 'heart':d.push('M'+cx+' '+(cy+s*.85)+' C'+(cx-s*1.25)+' '+(cy-s*.05)+' '+(cx-s*.65)+' '+(cy-s*1)+' '+cx+' '+(cy-s*.35)+' C'+(cx+s*.65)+' '+(cy-s*1)+' '+(cx+s*1.25)+' '+(cy-s*.05)+' '+cx+' '+(cy+s*.85));
+      L(cx+s*.15,cy-s*.42,cx+s*.3,cy-s*.95);L(cx-s*.1,cy-s*.4,cx-s*.2,cy-s*.9);d.push('M'+(cx-s*.55)+' '+cy+' l'+s*.3+' 0 l'+s*.12+' '+(-s*.3)+' l'+s*.16+' '+s*.5+' l'+s*.12+' '+(-s*.2)+' l'+s*.4+' 0');break;
+    case 'drop':d.push('M'+cx+' '+(cy-s)+' C'+(cx+s*.25)+' '+(cy-s*.5)+' '+(cx+s*.7)+' '+(cy-s*.1)+' '+(cx+s*.7)+' '+(cy+s*.35)+' C'+(cx+s*.7)+' '+(cy+s*.85)+' '+(cx-s*.7)+' '+(cy+s*.85)+' '+(cx-s*.7)+' '+(cy+s*.35)+' C'+(cx-s*.7)+' '+(cy-s*.1)+' '+(cx-s*.25)+' '+(cy-s*.5)+' '+cx+' '+(cy-s));
+      d.push('M'+(cx-s*.38)+' '+(cy+s*.3)+' q0 '+s*.25+' '+s*.22+' '+s*.32);break;
+    case 'dna':{var p1='',p2='';for(var k2=0;k2<=16;k2++){var yy=cy-s+k2*s/8,x1=cx+Math.sin(k2/16*Math.PI*2)*s*.45;p1+=(k2?' L':'M')+x1.toFixed(1)+' '+yy.toFixed(1);p2+=(k2?' L':'M')+(2*cx-x1).toFixed(1)+' '+yy.toFixed(1);}
+      d.push(p1);d.push(p2);for(var k3=1;k3<8;k3+=1){if(k3===4)continue;var y3=cy-s+k3*s/4,x3=Math.sin(k3/8*Math.PI*2)*s*.45;L(cx-Math.abs(x3)+3,y3,cx+Math.abs(x3)-3,y3,0.4);}break;}
+    case 'pill':{var w=s*.95,h=s*.38;d.push('M'+(cx-w+h)+' '+(cy-h)+' L'+(cx+w-h)+' '+(cy-h)+' A'+h+' '+h+' 0 0 1 '+(cx+w-h)+' '+(cy+h)+' L'+(cx-w+h)+' '+(cy+h)+' A'+h+' '+h+' 0 0 1 '+(cx-w+h)+' '+(cy-h));L(cx,cy-h,cx,cy+h,0.5);L(cx-w*.6,cy-h*.45,cx-w*.25,cy-h*.45,0.3);break;}
+    case 'lungs':L(cx,cy-s,cx,cy-s*.2);L(cx,cy-s*.2,cx-s*.25,cy+s*.05);L(cx,cy-s*.2,cx+s*.25,cy+s*.05);
+      d.push('M'+(cx-s*.12)+' '+(cy-s*.45)+' C'+(cx-s*.9)+' '+(cy-s*.6)+' '+(cx-s*1.05)+' '+(cy+s*.9)+' '+(cx-s*.2)+' '+(cy+s*.8)+' Z');
+      d.push('M'+(cx+s*.12)+' '+(cy-s*.45)+' C'+(cx+s*.9)+' '+(cy-s*.6)+' '+(cx+s*1.05)+' '+(cy+s*.9)+' '+(cx+s*.2)+' '+(cy+s*.8)+' Z');break;
+    case 'brain':C(cx,cy,s,s*.75);L(cx,cy-s*.72,cx+s*.05,cy+s*.7,1.5);
+      d.push('M'+(cx-s*.75)+' '+(cy-s*.1)+' q'+s*.2+' '+(-s*.3)+' '+s*.4+' 0 t'+s*.3+' 0');d.push('M'+(cx+s*.2)+' '+(cy+s*.25)+' q'+s*.2+' '+(-s*.3)+' '+s*.4+' 0 t'+s*.2+' 0');
+      d.push('M'+(cx-s*.6)+' '+(cy+s*.4)+' q'+s*.15+' '+(-s*.2)+' '+s*.35+' 0');d.push('M'+(cx+s*.25)+' '+(cy-s*.35)+' q'+s*.15+' '+(-s*.2)+' '+s*.35+' 0');break;
+    case 'molecule':{var hx='';for(var k4=0;k4<=6;k4++){var a4=k4/6*Math.PI*2+Math.PI/6;hx+=(k4?' L':'M')+(cx+Math.cos(a4)*s*.5).toFixed(1)+' '+(cy+Math.sin(a4)*s*.5).toFixed(1);}d.push(hx);
+      L(cx+s*.43,cy-s*.25,cx+s*.85,cy-s*.55);C(cx+s*.92,cy-s*.6,s*.12);L(cx-s*.43,cy+s*.25,cx-s*.85,cy+s*.55);C(cx-s*.92,cy+s*.6,s*.12);C(cx,cy,s*.22);break;}
+    case 'bone':L(cx-s*.6,cy-s*.12,cx+s*.6,cy-s*.12);L(cx-s*.6,cy+s*.12,cx+s*.6,cy+s*.12);
+      C(cx-s*.72,cy-s*.22,s*.2);C(cx-s*.72,cy+s*.22,s*.2);C(cx+s*.72,cy-s*.22,s*.2);C(cx+s*.72,cy+s*.22,s*.2);break;
+    case 'eye':d.push('M'+(cx-s)+' '+cy+' Q'+cx+' '+(cy-s*.9)+' '+(cx+s)+' '+cy+' Q'+cx+' '+(cy+s*.9)+' '+(cx-s)+' '+cy);C(cx,cy,s*.36);C(cx,cy,s*.14);break;
+    case 'kidney':d.push('M'+(cx+s*.1)+' '+(cy-s*.85)+' C'+(cx-s*.9)+' '+(cy-s*.95)+' '+(cx-s*.9)+' '+(cy+s*.95)+' '+(cx+s*.1)+' '+(cy+s*.85)+' C'+(cx+s*.55)+' '+(cy+s*.8)+' '+(cx+s*.6)+' '+(cy+s*.3)+' '+(cx+s*.25)+' '+cy+' C'+(cx+s*.6)+' '+(cy-s*.3)+' '+(cx+s*.55)+' '+(cy-s*.8)+' '+(cx+s*.1)+' '+(cy-s*.85));
+      d.push('M'+(cx+s*.25)+' '+cy+' q'+s*.3+' '+s*.2+' '+s*.35+' '+s*.9);break;
+    case 'neuron':C(cx-s*.45,cy,s*.28);L(cx-s*.68,cy-s*.15,cx-s*.95,cy-s*.5);L(cx-s*.6,cy+s*.2,cx-s*.9,cy+s*.55);L(cx-s*.5,cy-s*.27,cx-s*.55,cy-s*.75);
+      d.push('M'+(cx-s*.17)+' '+cy+' C'+(cx+s*.2)+' '+(cy-s*.2)+' '+(cx+s*.5)+' '+(cy+s*.2)+' '+(cx+s*.8)+' '+cy);L(cx+s*.8,cy,cx+s,cy-s*.2,0.4);L(cx+s*.8,cy,cx+s,cy+s*.2,0.4);C(cx-s*.45,cy,s*.09);break;
+    case 'vessel':d.push('M'+(cx-s)+' '+(cy-s*.4)+' C'+(cx-s*.3)+' '+(cy-s*.55)+' '+(cx+s*.3)+' '+(cy-s*.25)+' '+(cx+s)+' '+(cy-s*.4));
+      d.push('M'+(cx-s)+' '+(cy+s*.4)+' C'+(cx-s*.3)+' '+(cy+s*.25)+' '+(cx+s*.3)+' '+(cy+s*.55)+' '+(cx+s)+' '+(cy+s*.4));
+      C(cx-s*.5,cy,s*.16,s*.1);C(cx,cy+s*.05,s*.16,s*.1);C(cx+s*.5,cy-s*.02,s*.16,s*.1);break;
+    default:C(cx,cy,s*.6);
+  }
+  return d;
+}
 function bdMeasure(f){
   switch(f.t){
     case 'title':return bdWrap(f.text,36,BD_W-40).length*40+6;
@@ -15434,12 +15729,12 @@ function bdDraw(cam,it,dur){
     case 'question':{var qs=bdWrap(f.text,25,BD_W-84),hq=qs.length*30+24;
       bdBox(26,y,BD_W-52,hq).forEach(function(d){P(d,BD_COL.blue,2.6);});T(BD_W-40,y+28,'?',34,BD_COL.blue,'middle',700);qs.forEach(function(l,k){T(cx-8,y+33+k*30,l,25,BD_COL.blue,'middle',700);});break;}
   }
-  var g=document.createElementNS('http://www.w3.org/2000/svg','g');cam.appendChild(g);
+  var g=document.createElementNS('http://www.w3.org/2000/svg','g');cam.appendChild(g);var ox=it.x||0;if(ox)g.setAttribute('transform','translate('+ox+' 0)');
   var nT=texts.reduce(function(s,t){return s+t.t.length;},0)||1,pd=dur?dur*0.5/Math.max(paths.length,1):0,td=dur?dur*0.5:0,t0=0,now=performance.now();
   paths.forEach(function(p){
     var e=document.createElementNS('http://www.w3.org/2000/svg','path');e.setAttribute('d',p.d);e.setAttribute('fill','none');e.setAttribute('stroke',p.c);
     e.setAttribute('stroke-width',p.w);e.setAttribute('stroke-linecap','round');e.setAttribute('stroke-linejoin','round');g.appendChild(e);
-    if(dur){var L=0;try{L=e.getTotalLength();}catch(x){}if(L){e.style.strokeDasharray=L;e.style.strokeDashoffset=L;BD.strokes.push({e:e,L:L,t0:now+t0,dur:Math.max(90,pd)});t0+=pd;}}
+    if(dur){var L=0;try{L=e.getTotalLength();}catch(x){}if(L){e.style.strokeDasharray=L;e.style.strokeDashoffset=L;BD.strokes.push({e:e,L:L,t0:now+t0,dur:Math.max(90,pd),ox:ox});t0+=pd;}}
   });
   texts.forEach(function(t){
     var e=document.createElementNS('http://www.w3.org/2000/svg','text');e.setAttribute('x',t.x);e.setAttribute('y',t.y);e.setAttribute('fill',t.c);
@@ -15447,11 +15742,11 @@ function bdDraw(cam,it,dur){
     if(!dur){e.textContent=t.t;return;}
     var per=td*t.t.length/nT,chars=t.t.length,step=Math.max(14,per/Math.max(chars,1));
     (function(e,full,start,tt){for(var k=1;k<=chars;k++)(function(k){bdTimer(function(){e.textContent=full.slice(0,k);
-      if(k%2===0||k===chars){var w=0;try{w=e.getComputedTextLength();}catch(x){}bdPenTo(tt.a==='middle'?tt.x+w/2:tt.a==='end'?tt.x:tt.x+w,tt.y+3);}},start+k*step);})(k);})(e,t.t,t0,t);
+      if(k%2===0||k===chars){var w=0;try{w=e.getComputedTextLength();}catch(x){}bdPenTo(ox+(tt.a==='middle'?tt.x+w/2:tt.a==='end'?tt.x:tt.x+w),tt.y+3);}},start+k*step);})(k);})(e,t.t,t0,t);
     t0+=per;
   });
 }
-window.addEventListener('resize',function(){if(BD.view==='play'&&BD.board){var bd=document.getElementById('bdBoard');if(bd&&!bd.classList.contains('all'))bdFit();}});
+window.addEventListener('resize',function(){if(BD.view==='play'&&BD.board)bdFit();});
 // ---------- вход на доску: главная, тренажёр, конспект ----------
 function bdHomeCard(){
   return '<button type="button" class="bd-home" onclick="bdOpen()"><span class="bd-hglow" aria-hidden="true"></span>'
@@ -15463,6 +15758,194 @@ function bdHomeCard(){
   var w=document.getElementById('trAiWrap');
   if(w&&!document.getElementById('bdTr'))w.insertAdjacentHTML('beforeend','<button type="button" class="vq-tr bd-tr" id="bdTr" onclick="if(TRC)bdOpen({qid:TRC.id,text:\'Объясни этот вопрос и почему верный ответ именно такой\'})"><i class="ti ti-chalkboard" aria-hidden="true"></i>Нарисуй и объясни на доске</button>');
 })();
+// ===== АДМИНКА: «Сравнение ИИ» — одна задача, несколько моделей, ответы вслепую (А / Б / В) =====
+ADM_SECTIONS.cmp={t:'Сравнение ИИ',h:'Наша модель против DeepSeek, Qwen и Kimi',d:'Одна тема уходит сразу в нашу модель и в китайские. Ответы приходят как А, Б, В — сначала выбери лучший, потом открой, где чей. Ключи DEEPSEEK_API_KEY, QWEN_API_KEY, KIMI_API_KEY — только в Railway.',i:'scale',k:'iod',g:'data'};
+var CMP={task:'board',res:null,busy:false};
+(function(){var _t=admTab;admTab=function(t,btn){_t(t,btn);if(ADM_CUR==='cmp')cmpRender();};})();
+function cmpRender(){
+  var sec=document.getElementById('admSec');if(!sec)return;
+  var box=document.getElementById('admCmp');
+  if(!box){sec.insertAdjacentHTML('beforeend','<div id="admCmp" class="cmp"></div>');box=document.getElementById('admCmp');}
+  var tasks=[['board','Доска','chalkboard'],['ask','Спросить ИИ','message-question'],['conspect','Конспект','notebook']];
+  box.innerHTML='<div class="bc-card"><div class="cmp-tabs" role="radiogroup" aria-label="Что сравниваем">'+tasks.map(function(t){return '<button type="button" role="radio" aria-checked="'+(CMP.task===t[0])+'" class="'+(CMP.task===t[0]?'on':'')+'" onclick="CMP.task=\''+t[0]+'\';cmpRender()"><i class="ti ti-'+t[2]+'" aria-hidden="true"></i>'+t[1]+'</button>';}).join('')+'</div>'
+    +'<div class="field"><label for="cmpIn">'+(CMP.task==='ask'?'Вопрос студента':'Тема')+'</label><textarea id="cmpIn" rows="2" maxlength="600" placeholder="'+(CMP.task==='ask'?'Почему при гипокалиемии бывают аритмии?':'Что такое некроз?')+'">'+esc(CMP.text||'')+'</textarea>'
+    +'<small>'+(CMP.task==='conspect'?'Конспект — самое дорогое: наша модель Opus, ответ ~1–3 минуты.':'Ответ обычно за 10–40 секунд.')+'</small></div>'
+    +'<div class="bc-foot"><span class="bc-cnt" id="cmpMsg" aria-live="polite"></span><button type="button" class="btn bbl" id="cmpGo" onclick="cmpRun()"'+(CMP.busy?' disabled':'')+'>'+(CMP.busy?'Жду ответы…':'Сравнить')+'</button></div></div>'
+    +'<div id="cmpRes"></div>';
+  if(CMP.res)cmpShow();
+}
+async function cmpRun(){
+  var t=(document.getElementById('cmpIn').value||'').trim();if(t.length<2){document.getElementById('cmpIn').focus();return;}
+  CMP.text=t;CMP.busy=true;CMP.res=null;CMP.pick=null;CMP.open=false;cmpRender();
+  var url=vBotUrl('/ai/compare');
+  try{var r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:vAdminToken(),task:CMP.task,text:t})});var j=await r.json();
+    if(j.status!=='ok')throw new Error(j.reason||j.msg||'Не получилось');CMP.res=j;}
+  catch(e){CMP.busy=false;cmpRender();var m=document.getElementById('cmpMsg');if(m)m.textContent=e.message||'Нет связи';return;}
+  CMP.busy=false;cmpRender();
+}
+function cmpShow(){
+  var j=CMP.res,el=document.getElementById('cmpRes');if(!el)return;var h='';
+  if(j.missing&&j.missing.length)h+='<div class="cmp-note">Нет ключа: '+esc(j.missing.join(', '))+'. Добавь его в Railway Variables — и эта модель появится в сравнении.</div>';
+  h+='<div class="cmp-list">'+j.variants.map(function(v,i){
+    var head='<div class="cmp-h"><b class="cmp-l">'+v.label+'</b>'+(CMP.open?'<span class="cmp-who">'+esc(v.who)+'</span>':'<span class="cmp-who">Модель скрыта</span>')
+      +(CMP.pick===i?'<span class="cmp-best"><i class="ti ti-star-filled" aria-hidden="true"></i>Твой выбор</span>':'')+'</div>';
+    var meta=CMP.open?'<div class="cmp-meta">'+v.sec+' сек · '+(v.usd!=null?'≈ '+Math.round(v.usd*12000).toLocaleString('ru-RU')+' сум':'')+(v.tout?' · '+v.tout+' токенов ответа':'')+'</div>':'';
+    var body;
+    if(v.error)body='<div class="cmp-err">Ошибка: '+esc(v.error)+'</div>';
+    else if(j.task==='board'){var b=v.board;
+      body=b?'<ol class="cmp-steps">'+b.steps.map(function(s){return '<li>'+esc(s.say)+'<small>'+s.draw.map(function(f){return f.t+(f.icon?' ('+f.icon+')':'');}).join(' · ')+'</small></li>';}).join('')+'</ol>'
+        +'<button type="button" class="btn bgh cmp-play" onclick="cmpPlay('+i+')"><i class="ti ti-player-play-filled" aria-hidden="true"></i>Показать на доске</button>'
+        :'<div class="cmp-err">Ответ пришёл, но не в формате доски — доска его не нарисует.</div><pre class="cmp-tx">'+esc(v.text.slice(0,3000))+'</pre>';}
+    else body='<div class="cmp-tx">'+esc(v.text)+'</div>';
+    return '<div class="bc-card cmp-v'+(CMP.pick===i?' best':'')+'">'+head+meta+body
+      +(CMP.pick==null&&!v.error?'<button type="button" class="btn bbl cmp-pick" onclick="cmpPick('+i+')">Этот лучше</button>':'')+'</div>';
+  }).join('')+'</div>';
+  if(!CMP.open)h+='<button type="button" class="btn bgh cmp-open" onclick="CMP.open=true;cmpShow()">Показать, где какая модель</button>';
+  if(CMP.open&&j.peak)h+='<div class="cmp-note">Сейчас в Китае час пик — DeepSeek считает по двойной цене. Ночью и в выходные он вдвое дешевле.</div>';
+  el.innerHTML=h;
+}
+function cmpPick(i){CMP.pick=i;CMP.open=true;cmpShow();}
+function cmpPlay(i){var v=CMP.res.variants[i];if(!v.board)return;bdOpen();BD.q=v.board.title;bdUnlock();bdPlay({board:v.board,audio:[]});}
+// ===== VITA+ v2: тёмные карточки в стиле доски, окно на лимите, управление подпиской в профиле =====
+var VX={pay:'stars'};
+function vxIc(n,c){return '<i class="ti ti-'+n+'"'+(c?' style="color:'+c+'"':'')+' aria-hidden="true"></i>';}
+function vxGem(cls){return '<span class="vx-gem'+(cls?' '+cls:'')+'" aria-hidden="true">'+vxIc('crown')+'</span>';}
+function vxDaysLeft(v){return v&&v.until?Math.max(1,Math.ceil((new Date(v.until)-Date.now())/864e5)):0;}
+function vxDay(){var t=new Date(Date.now()+5*3600e3);return t.toISOString().slice(0,10);}
+function vxReset(){ // до полуночи по Ташкенту
+  var now=Date.now(),t=new Date(now+5*3600e3),ms=864e5-((t.getUTCHours()*3600+t.getUTCMinutes()*60+t.getUTCSeconds())*1e3),h=Math.floor(ms/3600e3),m=Math.floor(ms%3600e3/60e3);
+  return (h?h+' ч ':'')+m+' мин';
+}
+function vxLs(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v);}catch(e){return null;}}
+// ---- карточка на главной ----
+vpHomeHtml=function(){
+  var v=VP;if(!v||!v.enabled||v.staff||!S.user)return '';
+  if(v.plus){
+    var dl=vxDaysLeft(v);
+    return '<button type="button" class="vx-home on" onclick="vpWall(\'info\')">'+vxGem('sm')
+      +'<span class="vx-tt"><b>Vita+ активна</b><small>до '+vpDate(v.until,true)+'</small></span>'
+      +'<span class="vx-days"><b>'+dl+'</b><small>'+vplural(dl,'день','дня','дней')+'</small></span></button>';
+  }
+  var trial=v.trial_left>0,left=trial?v.trial_left:Math.max(0,v.q_limit-v.q_used),tot=trial?v.trial:v.q_limit,pc=Math.max(3,Math.round(left/Math.max(tot,1)*100));
+  return '<button type="button" class="vx-home" onclick="vpWall(\'info\')">'+vxGem('sm float')
+    +'<span class="vx-tt"><b>Vita+ · без лимитов</b><small>'+(trial?'Пробных вопросов':'Бесплатно сегодня')+': '+left+' из '+tot+'</small>'
+    +'<span class="vx-bar sm"><i style="width:'+pc+'%"></i></span></span>'+vxIc('chevron-right')+'</button>';
+};
+// ---- окно ----
+var _vpShell0=vpShell;
+vpShell=function(inner){
+  inner=String(inner).replace(/<span class="vp-star">[^<]*<\/span>/g,vxIc('crown')).replace(/✦/g,'<i class="ti ti-crown"></i>').replace(/🎁/g,'<i class="ti ti-gift"></i>').replace(/⭐/g,'<i class="ti ti-star-filled"></i>');
+  _vpShell0(inner);var m=document.querySelector('#modalRoot .modal');if(m)m.classList.add('vx-sheet');
+};
+var VX_TXT={
+  q:['Ты сегодня в ударе','Бесплатные вопросы на сегодня закончились. С Vita+ решаешь дальше — прямо сейчас.'],
+  ex:['Объяснения на сегодня закончились','С Vita+ ИИ объяснит каждый вопрос — почему этот ответ верный, а остальные нет.'],
+  board:['Доска на сегодня всё','С Vita+ — больше объяснений на доске каждый день.'],
+  ask:['Вопросы ИИ на сегодня закончились','С Vita+ спрашивай больше — текстом, голосом и с фото лекций.'],
+  file:['Разбор фото и файлов — в Vita+','Сфотографируй страницу или пришли PDF — ИИ объяснит непонятное место.'],
+  imp:['Лимит своих тестов закончился','С Vita+ делай тесты из скриншотов и файлов каждый месяц.'],
+  info:['Vita+','Готовься к деканату без остановок.']};
+function vxRing(used,lim){return '<div class="vx-ring"><div><b>'+used+'</b><small>из '+lim+'</small></div></div>';}
+function vxBen(why,v){
+  var B={tests:['infinity','#7FB2FF','rgba(61,130,255,.18)','Тесты без лимита','весь банк деканата, экзамен, дуэли'],
+    ex:['sparkles','#B794FF','rgba(139,92,246,.2)','Объяснение к каждому вопросу','почему ответ верный, а остальные — нет'],
+    board:['chalkboard','#FF8A9C','rgba(255,92,122,.18)','Доска — до '+v.plus_board+' в день','нарисую схему и расскажу голосом'],
+    ask:['message-question','#5EE0B0','rgba(61,220,151,.16)','Спросить ИИ — до '+v.plus_ask+' в день',v.plus_file>0?'голосом, с фото и PDF лекций':'текстом и голосом'],
+    imp:['photo-plus','#7FB2FF','rgba(61,130,255,.18)','Свои тесты — '+v.plus_imp+' вопросов в месяц','из скриншотов и файлов'],
+    gift:['gift','#FFC94D','rgba(255,201,77,.18)','+'+v.gift+' монет в подарок','сразу после оплаты'],
+    badge:['crown','#FFC94D','rgba(255,201,77,.18)','Корона в рейтинге','и золотое кольцо в профиле']};
+  var order={q:['tests','board','ex'],ex:['ex','tests','board'],board:['board','ask','tests'],ask:['ask','ex','board'],file:['ask','ex','board'],imp:['imp','tests','ex'],info:['tests','ex','board','ask']}[why]||['tests','ex','board'];
+  order=order.concat([v.gift?'gift':'badge']);
+  return '<div class="vx-ben">'+order.map(function(k){var b=B[k];return '<div><i class="ti ti-'+b[0]+'" style="color:'+b[1]+';background:'+b[2]+'" aria-hidden="true"></i><span>'+b[3]+'<small>'+b[4]+'</small></span></div>';}).join('')+'</div>';
+}
+function vxPayBlock(v,label){
+  if(v.pending)return '<div class="vx-note">'+vxIc('clock')+'<span>Твой чек у администратора. Как только он подтвердит перевод, Vita+ включится сама — бот напишет.</span></div>';
+  if(!v.in_tg)return '<div class="vx-note">'+vxIc('brand-telegram')+'<span>'+(v.other?'У тебя есть Vita+, но она работает только в Telegram — там, где ты её купил.':'Vita+ покупается и работает только в Telegram: подписка привязана к твоему Telegram-аккаунту.')+'</span></div>'
+    +'<button type="button" class="vx-cta" onclick="vOpenTgLink(\'https://t.me/'+(S.tgBot||VITA_BOT_NAME)+'\')">Открыть Vita в Telegram</button>';
+  if(!v.card)VX.pay='stars';
+  return (v.other?'<div class="vx-note">'+vxIc('alert-triangle')+'<span>На этом аккаунте есть Vita+, но она куплена с другого Telegram. Напиши администратору — он перенесёт.</span></div>':'')
+    +'<div class="vx-pay" role="radiogroup" aria-label="Как оплатить">'
+    +'<button type="button" role="radio" aria-checked="'+(VX.pay==='stars')+'" class="'+(VX.pay==='stars'?'on':'')+'" onclick="vxPick(\'stars\')">'+vxIc('star-filled','#FFC94D')+'<b>'+v.price_stars+' звёзд</b><small>сразу, в Telegram</small></button>'
+    +(v.card?'<button type="button" role="radio" aria-checked="'+(VX.pay==='card')+'" class="'+(VX.pay==='card'?'on':'')+'" onclick="vxPick(\'card\')">'+vxIc('credit-card','#7FB2FF')+'<b>'+vpSum(v.price_uzs)+' сум</b><small>перевод на карту</small></button>':'')+'</div>'
+    +'<button type="button" class="vx-cta" id="vxGo" onclick="vxPay()">'+label+'</button><div id="vpMsg" class="vp-msg" role="status"></div>';
+}
+function vxPick(k){VX.pay=k;document.querySelectorAll('.vx-pay button').forEach(function(b){var on=b.getAttribute('onclick').indexOf("'"+k+"'")>0;b.classList.toggle('on',on);b.setAttribute('aria-checked',on);});}
+async function vxPay(){
+  var b=document.getElementById('vxGo');if(b){b.disabled=true;b.dataset.h=b.innerHTML;b.textContent=VX.pay==='stars'?'Выписываю счёт…':'Отправляю реквизиты…';}
+  try{if(VX.pay==='card')await vpPayCard();else await vpPayStars();}finally{var b2=document.getElementById('vxGo');if(b2&&b2.dataset.h){b2.disabled=false;b2.innerHTML=b2.dataset.h;}}
+}
+vpWall=function(why){
+  var v=VP;if(!v){vpLoad(true).then(function(x){if(x)vpWall(why);});return;}
+  why=why||'info';
+  if(v.plus&&!v.staff){vxManage();return;}
+  var t=VX_TXT[why]||VX_TXT.info,bank=0;try{bank=getQS().length;}catch(e){}
+  var ring={q:[v.q_limit,v.q_limit],ex:[v.ex_limit,v.ex_limit],board:[v.board_limit,v.board_limit],ask:[v.ask_limit,v.ask_limit]}[why];
+  var daily=why==='q'||why==='ex'||why==='board'||why==='ask';
+  var h='<div class="vx-hero">'+(ring?vxRing(ring[0],ring[1]):vxGem('big float'))+'<h2>'+t[0]+'</h2><p>'+t[1]+'</p></div>'
+    +vxBen(why,v)
+    +'<details class="vx-more"><summary>Сравнить с бесплатным'+vxIc('chevron-down')+'</summary>'+vpCompare(v,bank)+'</details>'
+    +'<div class="vx-stick">'+vxPayBlock(v,'Продолжить с Vita+')
+    +(daily?'<p class="vx-later">или подожди — бесплатно снова через <b>'+vxReset()+'</b></p>':'<button type="button" class="vx-skip" onclick="closeModal()">Остаться на бесплатном</button>')+'</div>';
+  vpShell(h);try{playSound('tap');}catch(e){}
+};
+// подписка уже есть: срок, что использовано сегодня, продление, ответы на частые вопросы
+function vxManage(){
+  var v=VP,dl=vxDaysLeft(v);
+  var h='<div class="vx-hero">'+vxGem('big')+'<h2>Vita+ активна</h2><p>До '+vpDate(v.until,true)+' · осталось '+dl+' '+vplural(dl,'день','дня','дней')+'</p></div>'
+    +'<div class="vx-today big"><div><b>∞</b><small>тестов и объяснений</small></div><div><b>'+v.board_used+' / '+v.board_limit+'</b><small>доска сегодня</small></div>'
+    +'<div><b>'+v.ask_used+' / '+v.ask_limit+'</b><small>вопросов ИИ сегодня</small></div><div><b>'+(v.imp_left!=null?v.imp_left:v.plus_imp)+'</b><small>вопросов в свои тесты в этом месяце</small></div></div>'
+    +'<h3 class="vx-h3">Продлить заранее</h3><p class="vx-p">Новые '+v.days+' '+vplural(v.days,'день','дня','дней')+' прибавятся к текущему сроку — ничего не теряешь.</p>'
+    +vxPayBlock(v,'Продлить на '+v.days+' '+vplural(v.days,'день','дня','дней'))
+    +'<div class="vx-faq"><div>'+vxIc('refresh-off')+'<span><b>Автопродления нет</b>Деньги сами не списываются. Закончится срок — просто вернутся бесплатные лимиты.</span></div>'
+    +'<div>'+vxIc('brand-telegram')+'<span><b>Работает в твоём Telegram</b>Vita+ привязана к аккаунту, с которого куплена.</span></div>'
+    +'<div>'+vxIc('help-circle')+'<span><b>Вопрос по оплате?</b><a href="#" onclick="event.preventDefault();vpToChat(\''+esc(S.tgBot||VITA_BOT_NAME)+'\')">Напиши в чат с ботом</a> — ответит администратор.</span></div></div>';
+  vpShell(h);
+}
+// ---- профиль: заметная карточка «Подписка» ----
+vpProfCard=function(){
+  var el=document.getElementById('vpProf');if(!el)return;
+  var v=VP,id=document.querySelector('#pg-profile .pf-id');
+  if(id)id.classList.toggle('vp-plus',!!(v&&v.enabled&&v.plus&&!v.staff));
+  if(!v||!v.enabled||v.staff||!S.user){el.innerHTML='';return;}
+  var dl=vxDaysLeft(v);
+  el.innerHTML='<button type="button" class="vx-prof'+(v.plus?' on':'')+'" onclick="vpWall(\'info\')">'+vxGem('sm')
+    +'<span class="vx-tt"><small class="vx-lbl">Подписка</small><b>'+(v.plus?'Vita+ · ещё '+dl+' '+vplural(dl,'день','дня','дней'):'Vita+')+'</b>'
+    +'<small>'+(v.plus?'до '+vpDate(v.until,true):v.pending?'Чек на проверке':'без лимитов · '+vpSum(v.price_uzs)+' сум')+'</small></span>'
+    +'<span class="vx-pgo">'+(v.plus?'Управлять':'Подключить')+'</span></button>';
+};
+// ---- мягко, на месте ----
+var _vpPaint0=vpPaint;
+vpPaint=function(){
+  _vpPaint0();
+  var c=document.getElementById('vpChip');if(c){var g=c.querySelector('.vp-chip-go');if(g)g.innerHTML=vxIc('crown');}
+};
+var _vpStop0=vpStop;
+vpStop=function(){
+  _vpStop0();
+  var o=document.querySelector('#trOpts .vp-stop .vp-btn');if(o)o.innerHTML=vxIc('crown')+'Решать дальше с Vita+';
+};
+// под объяснением счётчик — только когда осталось совсем мало
+vpExLeft=function(r){
+  if(!r||r.left==null||!vpOn())return '';
+  VP.ex_used=VP.ex_limit-r.left;
+  if(r.left>2)return '';
+  return '<p class="vx-exl">'+(r.left>0?'Объяснений на сегодня осталось: '+r.left:'Это было последнее объяснение на сегодня')+'</p>';
+};
+// объяснение закрыто: видно, что оно есть, — размыто, с кнопкой
+vpExStop=function(r){
+  return '<div class="vx-lock"><div class="vx-blur" aria-hidden="true"><i style="width:92%"></i><i style="width:86%"></i><i style="width:95%"></i><i style="width:60%"></i></div>'
+    +'<div class="vx-ov"><b>Объяснения на сегодня закончились</b><small>Бесплатно — '+(r.limit||10)+' в день. Новые — через '+vxReset()+'</small>'
+    +'<button type="button" class="vx-pill" onclick="vpWall(\'ex\')">'+vxIc('lock-open')+'Открыть с Vita+</button></div></div>';
+};
+// «Спросить ИИ»: о лимите говорит сам ИИ, сообщением в чате
+vqStopMsg=function(j){
+  var file=j.kind==='askf',h;
+  if(file&&!j.limit)h='Фото и файлы я разбираю с Vita+. Текстом и голосом спрашивать можно и так.';
+  else h='На сегодня твои '+(j.limit||'')+' '+(file?'файлов':'вопросов')+' мне закончились — завтра отвечу снова.'+(j.plus||!j.enabled?'':' С Vita+ — до '+(j.plus_limit||30)+' в день'+(file?'.':', и можно присылать фото лекций.'));
+  if(!j.plus&&j.enabled)h+='<div class="vx-chatbtn"><button type="button" class="vx-pill" onclick="vpWall(\''+(file?'file':'ask')+'\')">'+vxIc('crown')+'Vita+</button></div>';
+  VQ.log=VQ.log.filter(function(m){return m.r!=='w'&&m.r!=='e';});VQ.log.push({r:'e',t:h});vqDraw();
+};
+vpBadge=function(email){return VP_PLUS&&VP_PLUS[email]?' <span class="vp-b" title="Vita+" aria-label="Vita+"><i class="ti ti-crown" aria-hidden="true"></i></span>':'';};
 // ===== VITA · КОНЕЦ БЛОКА «ЛАБОРАТОРИЯ» =====
 </script>
 <div id="modalRoot"></div>
