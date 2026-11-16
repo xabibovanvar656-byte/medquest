@@ -3341,6 +3341,10 @@ pre.cmp-tx{font-family:inherit}
 [data-light] .vx-blur i{background:#C9C3D6}
 [data-light] .vx-ov{background:linear-gradient(rgba(247,245,241,.1),rgba(247,245,241,.92))}
 [data-light] .vx-ov small{color:#6B6578}
+.bc-addimg{position:relative;overflow:hidden;cursor:pointer}
+.bc-addimg .bc-fin{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0}
+/* скрытые поля выбора файла: не display:none — иначе встроенный браузер Telegram может не открыть галерею */
+.vx-fhide{position:fixed;left:0;top:0;width:1px;height:1px;opacity:0;pointer-events:none}
 </style>
 </head>
 <body>
@@ -14538,7 +14542,13 @@ function bcRender(){
 function bcImgDraw(){
   var el=document.getElementById('bcImg');if(!el)return;
   el.innerHTML=BC.img?'<img src="data:image/jpeg;base64,'+BC.img+'" alt="Картинка рассылки"><div><b>Картинка приложена</b><small>С картинкой текст короче: до 900 знаков</small></div><button type="button" class="btn bgh bsm" onclick="BC.img=\'\';bcImgDraw();bcPrev()">Убрать</button>'
-    :'<button type="button" class="bc-addimg" onclick="bcImgPick()"><i class="ti ti-photo-plus" aria-hidden="true"></i>Добавить картинку</button>';
+    :'<label class="bc-addimg"><input type="file" accept="image/*" class="bc-fin" onchange="bcImgFile(this)" aria-label="Добавить картинку"><i class="ti ti-photo-plus" aria-hidden="true"></i>Добавить картинку</label>';
+}
+// поле выбора файла лежит прямо под пальцем: в Telegram на телефоне программное «нажатие» на скрытое поле галерею не открывает
+async function bcImgFile(inp){
+  var x=inp.files&&inp.files[0];if(!x)return;
+  try{var c=await vImgCompress(x,1600,.82);if(c.b64.length>1100000)c=await vImgCompress(x,1200,.75);BC.img=c.b64;inp.value='';bcImgDraw();bcPrev();}
+  catch(e){toast2(e.message||'Картинка не открылась');}
 }
 function bcImgPick(){
   var f=document.getElementById('bcFile');
@@ -14898,7 +14908,7 @@ function vqOpen(o){
     +'<textarea id="vqIn" rows="1" maxlength="1500" placeholder="Напиши вопрос…" aria-label="Вопрос" oninput="vqGrow()" onkeydown="if(event.key===\'Enter\'&&!event.shiftKey&&!vqTouch()){event.preventDefault();vqSend();}"></textarea>'
     +(vqCanRec()?'<button type="button" class="vq-ib" id="vqMic" onclick="vqMic()" aria-label="Сказать голосом"><i class="ti ti-microphone" aria-hidden="true"></i></button>':'')
     +'<button type="button" class="vq-send" id="vqSend" onclick="vqSend()" aria-label="Отправить"><i class="ti ti-arrow-up" aria-hidden="true"></i></button></div>'
-    +'<div class="vq-lim" id="vqLim"></div><input type="file" id="vqFile" accept="image/*,.pdf,.docx,.txt" multiple hidden onchange="vqAdd(this)"></div></div></div>';
+    +'<div class="vq-lim" id="vqLim"></div><input type="file" id="vqFile" class="vx-fhide" accept="image/*,.pdf,.docx,.txt" multiple onchange="vqAdd(this)"></div></div></div>';
   vqDraw();vqLimit();
   vpLoad().then(vqLimit);
   if(o.auto){document.getElementById('vqIn').value=o.auto;vqSend();}
@@ -15075,7 +15085,7 @@ function mtPick(more){
   if(VP&&!VP.staff&&VP.imp_left<=0){vpWall('imp');return;}
   MT.more=!!more;
   var f=document.getElementById('mtFile');
-  if(!f){f=document.createElement('input');f.type='file';f.id='mtFile';f.multiple=true;f.accept='image/*,.pdf,.docx,.txt';f.hidden=true;f.onchange=function(){mtUpload(f);};document.body.appendChild(f);}
+  if(!f){f=document.createElement('input');f.type='file';f.id='mtFile';f.multiple=true;f.accept='image/*,.pdf,.docx,.txt';f.className='vx-fhide';f.onchange=function(){mtUpload(f);};document.body.appendChild(f);}
   f.value='';f.click();
 }
 async function mtUpload(inp){
