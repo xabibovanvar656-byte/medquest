@@ -14984,6 +14984,8 @@ async function vqSend(){
     if(VP&&j.left!=null){if(j.kind==='askf')VP.file_used=VP.file_limit-j.left;else VP.ask_used=VP.ask_limit-j.left;}
     vqDraw();vqLimit();
   }else if(j.status==='limit'){VQ.log.pop();vqStopMsg(j);inp.value=text;vqGrow();}
+  else if(j.status==='forbidden'&&!VQ.relog){VQ.log.pop();vqDraw();inp.value=text;VQ.files=files;VQ.relog=1;var okr=await vxRelog();if(!VQ)return;VQ.relog=0;
+    if(okr)vqSend();else{VQ.log.push({r:'e',t:'Вход устарел. Закрой Vita и открой заново из бота.'});vqDraw();}}
   else{VQ.log.pop();VQ.log.push({r:'e',t:esc(j.reason||'Не получилось. Попробуй ещё раз')});vqDraw();inp.value=text;VQ.files=files;vqFilesDraw();vqGrow();}
 }
 // --- голосовой ввод: записали → бот распознал (Groq) → текст в поле, студент проверяет и отправляет ---
@@ -15253,6 +15255,9 @@ async function bdAsk(text,hist){
   if(j.left!=null&&VP){VP.board_used=VP.board_limit-j.left;}
   if(j.status==='limit'){bdLimit(j);return;}
   if(j.status==='ok'){bdPlay(j);return;}
+  if(j.status==='forbidden'){ // вход истёк — тихо входим заново через Telegram и повторяем
+    if(!BD.relog){BD.relog=1;var okr=await vxRelog();BD.relog=0;if(okr){bdAsk(text,hist);return;}}
+    bdFail('Вход устарел. Закрой Vita и открой заново из бота');return;}
   if(j.status!=='run'){bdFail(j.reason||'Не получилось');return;}
   // шаги приходят по одному: начинаем рисовать, как только готов первый (и его голос — или через 5 секунд без него)
   BD.job=j.job;var t0=Date.now(),started=false,first=0,job=j.job;
@@ -15946,6 +15951,14 @@ vqStopMsg=function(j){
   VQ.log=VQ.log.filter(function(m){return m.r!=='w'&&m.r!=='e';});VQ.log.push({r:'e',t:h});vqDraw();
 };
 vpBadge=function(email){return VP_PLUS&&VP_PLUS[email]?' <span class="vp-b" title="Vita+" aria-label="Vita+"><i class="ti ti-crown" aria-hidden="true"></i></span>':'';};
+
+// вход истёк — входим заново через Telegram (подпись проверяет бот) и ждём новый токен
+async function vxRelog(){
+  var old=S.token;
+  try{if(!(typeof isTG==='function'&&isTG()&&TG&&TG.initData)){vSessionLost();return false;}V_SESS_LOST=Date.now();await tgAutoLogin();}catch(e){return false;}
+  for(var i=0;i<24&&S.token===old;i++)await new Promise(function(r){setTimeout(r,250);});
+  return !!S.token&&S.token!==old;
+}
 // ===== VITA · КОНЕЦ БЛОКА «ЛАБОРАТОРИЯ» =====
 </script>
 <div id="modalRoot"></div>
