@@ -15952,13 +15952,27 @@ vqStopMsg=function(j){
 };
 vpBadge=function(email){return VP_PLUS&&VP_PLUS[email]?' <span class="vp-b" title="Vita+" aria-label="Vita+"><i class="ti ti-crown" aria-hidden="true"></i></span>':'';};
 
-// вход истёк — входим заново через Telegram (подпись проверяет бот) и ждём новый токен
+// вход истёк — входим заново через Telegram (подпись проверяет бот) и ждём новый токен.
+// Важно: tgAutoLogin ничего не делает, пока в телефоне лежит старый вход, поэтому сначала его сбрасываем.
 async function vxRelog(){
   var old=S.token;
-  try{if(!(typeof isTG==='function'&&isTG()&&TG&&TG.initData)){vSessionLost();return false;}V_SESS_LOST=Date.now();await tgAutoLogin();}catch(e){return false;}
-  for(var i=0;i<24&&S.token===old;i++)await new Promise(function(r){setTimeout(r,250);});
-  return !!S.token&&S.token!==old;
+  if(!(typeof isTG==='function'&&isTG()&&TG&&TG.initData)){vSessionLost();return false;}
+  V_SESS_LOST=Date.now();
+  var keepUser=S.user;S.token='';
+  try{await tgAutoLogin();}catch(e){}
+  if(S.token&&S.token!==old&&S.user&&S.user.email&&(!keepUser||S.user.email===keepUser.email))return true;
+  if(!S.token)S.token=old;
+  return false;
 }
+// то же для всего приложения: «Нужен вход» → тихо входим заново через Telegram
+(function(){
+  var _lost=vSessionLost;
+  vSessionLost=function(){
+    if(!S.user||Date.now()-V_SESS_LOST<60000)return;
+    try{if(typeof isTG==='function'&&isTG()&&TG&&TG.initData){V_SESS_LOST=Date.now();S.token='';tgAutoLogin();return;}}catch(e){}
+    V_SESS_LOST=0;_lost();
+  };
+})();
 // ===== VITA · КОНЕЦ БЛОКА «ЛАБОРАТОРИЯ» =====
 </script>
 <div id="modalRoot"></div>
