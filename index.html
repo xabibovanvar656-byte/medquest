@@ -3419,6 +3419,18 @@ pre.cmp-tx{font-family:inherit}
 .ams-send{width:48px;height:48px;border:0;border-radius:14px;background:var(--bl);color:#fff;font-size:21px;display:grid;place-items:center;cursor:pointer;flex:none}
 .ams-send:disabled{opacity:.6}
 .ams-err{min-height:0;padding:0 12px 10px;font-size:13px;font-weight:800;color:var(--re)}.ams-err:empty{padding:0}
+/* ===== Админка: «Нагрузка» ===== */
+.lt{margin-top:12px}
+.lt .cmp-tabs button{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;height:auto;min-height:54px;padding:8px 14px;flex:1 1 140px;text-align:left}
+.lt .cmp-tabs small{font-size:11.5px;font-weight:700;opacity:.75}
+.lt-tab{margin-top:12px;border:1px solid var(--bor);border-radius:16px;overflow:hidden;background:var(--bg2)}
+.lt-r{display:grid;grid-template-columns:1.1fr 1fr 1fr .8fr;gap:6px;align-items:center;padding:10px 12px;border-top:1px solid var(--bor);font-size:14px;font-weight:700;color:var(--tx)}
+.lt-r:first-child{border-top:0}
+.lt-hd{font-size:11.5px;font-weight:800;color:var(--tx2);background:var(--bg3);line-height:1.25}
+.lt-r b{font-size:16px;font-weight:900}
+.lt-r.ok{box-shadow:inset 4px 0 0 var(--gr)}.lt-r.mid{box-shadow:inset 4px 0 0 var(--am)}.lt-r.bad{box-shadow:inset 4px 0 0 var(--re)}
+.lt-sum{display:flex;gap:10px;margin-top:12px;padding:12px 14px;border-radius:16px;background:var(--bg3);font-size:14px;font-weight:700;line-height:1.45;color:var(--tx)}
+.lt-sum i{font-size:22px;flex:none;color:var(--am)}
 </style>
 </head>
 <body>
@@ -16347,6 +16359,78 @@ async function amsSend(){
   try{await vRpc('admin_message_student',{p_token:vAdminToken(),p_email:m.email,p_text:t});inp.value='';m.dir='out';m.last=t;await amsLoad();}
   catch(e){if(er)er.textContent=e.missing?'Сначала запусти security_v25.sql в Supabase.':(e.message||'Не получилось отправить');}
   b.disabled=false;
+}
+
+// ===================== АДМИНКА: «Нагрузка» — сколько студентов сразу выдержит Vita =====================
+// Браузер админа изображает N студентов, которые одновременно открывают Vita: те же запросы к базе, что при
+// настоящем входе. Ступени 1 → 100; останавливаемся, как только становится медленно. Только главный админ.
+ADM_SECTIONS.load={t:'Нагрузка',h:'Сколько студентов выдержит',d:'Твой браузер изображает студентов, которые одновременно открывают Vita, и меряет, сколько они ждут. Запускай, когда в Vita мало людей: тест сам создаёт нагрузку.',i:'gauge',k:'eos',g:'data',sup:1};
+var LT={mode:'open',run:false,rows:[],stop:false};
+(function(){var _t=admTab;admTab=function(t,btn){_t(t,btn);if(ADM_CUR==='load')ltRender();else LT.stop=true;};})();
+function ltRender(){
+  var sec=document.getElementById('admSec');if(!sec)return;
+  var box=document.getElementById('admLoad');
+  if(!box){sec.insertAdjacentHTML('beforeend','<div id="admLoad" class="lt"></div>');box=document.getElementById('admLoad');}
+  var modes=[['open','Обычный вход','вопросы уже в памяти телефона'],['first','Первый вход','скачивает все вопросы — тяжелее']];
+  box.innerHTML='<div class="bc-card"><div class="cmp-tabs" role="radiogroup" aria-label="Какой вход">'+modes.map(function(m){
+      return '<button type="button" role="radio" aria-checked="'+(LT.mode===m[0])+'" class="'+(LT.mode===m[0]?'on':'')+'" onclick="LT.mode=\''+m[0]+'\';ltRender()"'+(LT.run?' disabled':'')+'><b>'+m[1]+'</b><small>'+m[2]+'</small></button>';}).join('')+'</div>'
+    +'<div class="bc-foot"><span class="bc-cnt" id="ltMsg" aria-live="polite">'+(LT.run?'Идёт тест…':'Ступени: 1, 5, 10, 20, 30, 50, 75, 100 студентов')+'</span>'
+    +(LT.run?'<button type="button" class="btn bgh" onclick="LT.stop=true">Остановить</button>':'<button type="button" class="btn bbl" onclick="ltRun()"><i class="ti ti-player-play"></i>Запустить тест</button>')+'</div></div>'
+    +'<div id="ltRes">'+ltTable()+'</div>';
+}
+function ltTable(){
+  if(!LT.rows.length)return '';
+  var h='<div class="lt-tab" role="table" aria-label="Результаты"><div class="lt-r lt-hd" role="row"><span>Студентов сразу</span><span>Ждут в среднем</span><span>Худшие 5%</span><span>Ошибки</span></div>';
+  LT.rows.forEach(function(r){
+    h+='<div class="lt-r '+r.k+'" role="row"><span><b>'+r.n+'</b></span><span>'+ltS(r.avg)+'</span><span>'+ltS(r.p95)+'</span><span>'+(r.err?r.err+' из '+r.n:'нет')+'</span></div>';
+  });
+  h+='</div>';
+  var last=LT.rows[LT.rows.length-1],firstBad=LT.rows.filter(function(r){return r.k!=='ok';})[0];
+  if(!LT.run){
+    var bi=firstBad?LT.rows.indexOf(firstBad):-1,good=bi>0?LT.rows[bi-1]:null;
+    h+='<div class="lt-sum"><i class="ti ti-'+(firstBad?'alert-triangle':'circle-check')+'" aria-hidden="true"></i><span>'
+      +(firstBad?'Быстро — до <b>'+(good?good.n:0)+'</b> студентов сразу. С <b>'+firstBad.n+'</b> вход заметно медленнее'+(firstBad.k==='bad'?', студенты ждут дольше 3 секунд':'')+'.'
+               :'Даже <b>'+last.n+'</b> студентов сразу открывают Vita быстро.')
+      +' Это одновременные входы в одну секунду — в жизни столько бывает разве что сразу после рассылки.</span></div>';
+  }
+  return h;
+}
+function ltS(ms){return ms<1000?Math.round(ms)+' мс':(Math.round(ms/100)/10).toString().replace('.',',')+' с';}
+async function ltRpc(fn,body){
+  var r=await fetch(SB_URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:SBH,body:JSON.stringify(body),cache:'no-store'});
+  if(!r.ok)throw new Error(fn+' '+r.status);await r.text();
+}
+async function ltGet(table,filter){
+  var r=await fetch(SB_URL+'/rest/v1/'+table+'?'+filter,{headers:SBH,cache:'no-store'});if(!r.ok)throw new Error(table+' '+r.status);await r.text();
+}
+async function ltStudent(tok,em){
+  var t0=performance.now(),q=function(tb,f){return ltRpc('user_read',{p_token:tok,p_table:tb,p_q:vParseQuery(f)||{}});};
+  var w=[ltRpc('qbank_meta',{p_token:tok}),ltGet('news','order=created_at.desc&limit=20'),ltGet('schedule','order=exam_date.asc&limit=20'),
+         ltRpc('vita_require_invite',{}),q('users','email=eq.'+encodeURIComponent(em)),q('progress','user_email=eq.'+encodeURIComponent(em)),
+         q('bookmarks','user_email=eq.'+encodeURIComponent(em)),q('daily_progress','user_email=eq.'+encodeURIComponent(em)),q('exam_history','user_email=eq.'+encodeURIComponent(em))];
+  if(LT.mode==='first')w.push((async function(){var after='';for(var i=0;i<40;i++){
+      var r=await fetch(SB_URL+'/rest/v1/rpc/qbank_page',{method:'POST',headers:SBH,body:JSON.stringify({p_token:tok,p_after:after,p_limit:5000}),cache:'no-store'});
+      if(!r.ok)throw new Error('qbank_page '+r.status);var rows=await r.json();if(!rows.length)break;after=String(rows[rows.length-1].id);if(rows.length<5000)break;}})());
+  await Promise.all(w);return performance.now()-t0;
+}
+async function ltRun(){
+  if(LT.run)return;var tok=vAdminToken()||S.token;if(!tok){vAlert('Нужен вход администратора');return;}
+  var em=(S.user&&S.user.email)||'load-test@vita.app';
+  LT.run=true;LT.stop=false;LT.rows=[];ltRender();
+  try{await ltRpc('qbank_meta',{p_token:tok});}catch(e){LT.run=false;ltRender();vAlert(/404/.test(e.message)?'Сначала запусти security_v24.sql в Supabase.':'Нет связи с базой: '+e.message);return;}
+  var steps=LT.mode==='first'?[1,3,5,10,20,30]:[1,5,10,20,30,50,75,100];
+  for(var si=0;si<steps.length&&!LT.stop;si++){
+    var n=steps[si],m=document.getElementById('ltMsg');if(m)m.textContent='Сейчас: '+n+' '+vplural(n,'студент','студента','студентов')+' сразу…';
+    var res=await Promise.all(Array.from({length:n},function(){return ltStudent(tok,em).then(function(t){return {t:t};},function(e){return {t:0,e:e.message};});}));
+    var ok=res.filter(function(x){return !x.e;}).map(function(x){return x.t;}).sort(function(a,b){return a-b;});
+    var avg=ok.length?ok.reduce(function(s,x){return s+x;},0)/ok.length:0,p95=ok.length?ok[Math.min(ok.length-1,Math.floor(ok.length*.95))]:0;
+    var err=res.length-ok.length,k=err>n*.05||p95>3000?'bad':p95>1500?'mid':'ok';
+    LT.rows.push({n:n,avg:avg,p95:p95,err:err,k:k});
+    var rb=document.getElementById('ltRes');if(rb)rb.innerHTML=ltTable();
+    if(k==='bad')break;
+    await new Promise(function(r){setTimeout(r,2500);});
+  }
+  LT.run=false;if(ADM_CUR==='load')ltRender();
 }
 // ===== VITA · КОНЕЦ БЛОКА «ЛАБОРАТОРИЯ» =====
 </script>
