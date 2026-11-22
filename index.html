@@ -1,14 +1,25 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Vita</title>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<!-- Скорость первого кадра (v25): ничего внешнее не держит отрисовку.
+     Скрипт Telegram грузим только внутри Telegram; анимации, шрифты и иконки — без ожидания. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.10.0/dist/tabler-icons.min.css">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<script>
+(function(){
+  var inTg=/tgWebApp/.test(location.hash)||!!window.TelegramWebviewProxy||(window.external&&'notify' in window.external)||window.parent!==window;
+  try{inTg=inTg||!!sessionStorage.getItem('__telegram__initParams');}catch(e){}
+  if(inTg)document.write('<script src="https://telegram.org/js/telegram-web-app.js"><\/script>');
+})();
+</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.10.0/dist/tabler-icons.min.css" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.10.0/dist/tabler-icons.min.css"></noscript>
 <style>
 :root{--bg:#0e0d12;--bg2:#17151d;--bg3:#1f1c28;--bg4:#2a2636;--bor:rgba(255,255,255,.08);--bor2:rgba(255,255,255,.14);--tx:#f4f2f8;--tx2:#a6a2b5;--tx3:#6b6878;--bl:#8b5cf6;--bl2:#7c3aed;--bld:rgba(139,92,246,.16);--gr:#34d399;--grd:rgba(52,211,153,.12);--am:#fbbf24;--amd:rgba(251,191,36,.13);--re:#ff6b4a;--red:rgba(255,107,74,.14);--pu:#a78bfa;--pud:rgba(167,139,250,.16);--te:#22d3ee;--r:22px;--rs:16px;--f:'Inter',system-ui,sans-serif;--fm:'JetBrains Mono',monospace;--serif:'Instrument Serif',Georgia,serif}
 [data-light]{--bg:#f6f4f0;--bg2:#ffffff;--bg3:#faf8f4;--bg4:#f0ece4;--bor:#ece8e2;--bor2:#ddd6cc;--tx:#1a1726;--tx2:#5e5a6e;--tx3:#9b97a8;--bl:#7c3aed;--bl2:#6d28d9;--gr:#0fa873;--am:#e8920a;--re:#f4663a;--pu:#8b5cf6;--bld:#f3effe;--grd:#e9f9f2;--amd:#fef6e7;--red:#fef0eb;--pud:#f3effe}
