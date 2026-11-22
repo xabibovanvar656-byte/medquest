@@ -13,7 +13,12 @@
 (function(){
   var inTg=/tgWebApp/.test(location.hash)||!!window.TelegramWebviewProxy||(window.external&&'notify' in window.external)||window.parent!==window;
   try{inTg=inTg||!!sessionStorage.getItem('__telegram__initParams');}catch(e){}
-  if(inTg)document.write('<script src="https://telegram.org/js/telegram-web-app.js"><\/script>');
+  if(!inTg)return;
+  // без document.write: Chrome на плохой связи может его заблокировать. init() дождётся скрипта (до 4 секунд)
+  window.__tgReady=new Promise(function(res){
+    var sc=document.createElement('script');sc.src='https://telegram.org/js/telegram-web-app.js';sc.async=false;
+    sc.onload=sc.onerror=function(){res();};document.head.appendChild(sc);setTimeout(res,4000);
+  });
 })();
 </script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -4539,6 +4544,7 @@ async function vVerifyAdmin(){
   catch(e){S.isAdm=false;S.isSuper=false;sv();}
 }
 async function init(){
+  if(window.__tgReady&&!window.Telegram){try{await window.__tgReady;}catch(e){}}
   tgInit();
   newsCache=[
     {id:1,title:'Vita запущен! ',body:'545 вопросов по физике, химии и биологии.',pinned:true,news_date:'01.06.2026'},
