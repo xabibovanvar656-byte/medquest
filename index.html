@@ -4540,6 +4540,14 @@ async function init(){
     {id:4,subject:'Нормальная физиология',exam_date:'2026-07-05',exam_time:'11:00',room:'112'},
     {id:5,subject:'Анатомия',exam_date:'2026-07-12',exam_time:'08:30',room:'208'}
   ];
+  // вернувшийся студент сразу видит главную: вопросы — из памяти телефона, свежее подтянется следом (v25)
+  var early=false;
+  if(S.user&&S.token&&typeof vQbGet==='function'){
+    try{var qc=await Promise.race([vQbGet(),new Promise(function(res){setTimeout(function(){res(null);},700);})]);
+      if(qc&&qc.rows&&qc.rows.length){CQS=qc.rows.map(vMapQ);CQS.forEach(function(q){vEnsureSubject(q.s);});try{refreshSubjectDropdowns();}catch(e){}}}catch(e){}
+    if(CQS.length){dbOK=true;early=true;hideLdg();try{renderHome();renderAuthHdr();}catch(e){}}
+  }
+  var uwP=null;try{uwP=vUwProbe();}catch(e){}    // проверка сервера — параллельно с данными, а не после
   try{
     var r=await Promise.race([
       Promise.all([sbGet('news','order=created_at.desc&limit=20'),sbGet('schedule','order=exam_date.asc&limit=20'),sbGetAll('custom_questions','order=created_at.asc')]),
@@ -4553,7 +4561,7 @@ async function init(){
     refreshSubjectDropdowns();
     dbOK=true;
     document.getElementById('dbst').innerHTML='';
-    try{await Promise.race([vUwProbe(),new Promise(function(res){setTimeout(res,4000);})]);}catch(e){}
+    try{await Promise.race([uwP||vUwProbe(),new Promise(function(res){setTimeout(res,4000);})]);}catch(e){}
     try{vInviteFromUrl();}catch(e){}
     vVerifyAdmin();
     if(S.user&&S.mustChange)setTimeout(function(){openChangePassword(true);},600);
