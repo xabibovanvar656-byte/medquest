@@ -3345,6 +3345,64 @@ pre.cmp-tx{font-family:inherit}
 .bc-addimg .bc-fin{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0}
 /* скрытые поля выбора файла: не display:none — иначе встроенный браузер Telegram может не открыть галерею */
 .vx-fhide{position:fixed;left:0;top:0;width:1px;height:1px;opacity:0;pointer-events:none}
+.bc-imgrow{display:flex;gap:8px;flex-wrap:wrap}
+.bc-code{margin-top:10px;padding:12px 14px;border-radius:14px;background:var(--bld);display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.bc-code b{font-size:14.5px}.bc-code b span{font-size:20px;letter-spacing:2px;color:var(--bl)}
+.bc-code small{color:var(--tx2);font-size:13px}
+.bc-imgwrap{width:100%;display:flex;flex-direction:column;gap:0}
+.bc-imgrow .bc-addimg{flex:1;justify-content:center}
+/* ===== Вход через Telegram (v25) ===== */
+.wl{display:flex;flex-direction:column;gap:0;padding:2px 0 4px}
+.wl-h{font-size:24px;font-weight:900;letter-spacing:-.4px;line-height:1.15;color:var(--tx)}
+.wl-p{font-size:14.5px;font-weight:700;color:var(--tx2);margin:6px 0 0;line-height:1.45}
+.wl-tg{display:flex;align-items:center;justify-content:center;gap:10px;min-height:56px;margin-top:18px;border:0;border-radius:18px;background:#2AABEE;color:#fff;font:inherit;font-size:17px;font-weight:900;text-decoration:none;cursor:pointer;box-shadow:0 5px 0 #1A86BF}
+.wl-tg i{font-size:24px}.wl-tg:active{transform:translateY(3px);box-shadow:0 2px 0 #1A86BF}.wl-tg:disabled{opacity:.6}
+.wl-tg:focus-visible,.wl-old:focus-visible,.wl-in:focus-visible,.wl-again:focus-visible{outline:3px solid #2AABEE;outline-offset:3px}
+.wl-or{display:flex;align-items:center;gap:10px;margin:18px 0 12px;font-size:13px;font-weight:900;color:var(--tx2)}
+.wl-or::before,.wl-or::after{content:"";flex:1;height:2px;background:var(--bor)}
+.wl-code{padding:14px;border-radius:18px;background:var(--bg3);border:1px solid var(--bor)}
+.wl-code b{display:block;font-size:15.5px;font-weight:900;color:var(--tx)}.wl-code b a{color:#1A86BF}
+.wl-code small{display:block;font-size:13px;font-weight:700;color:var(--tx2);margin-top:3px;line-height:1.35}
+.wl-in{display:block;width:100%;height:58px;margin-top:12px;border-radius:15px;border:2px solid var(--bor2);background:var(--bg2);color:var(--tx);font:inherit;font-size:28px;font-weight:900;letter-spacing:.18em;text-align:center}
+.wl-in:focus{border-color:#2AABEE;outline:none}
+.wl-err{min-height:18px;margin-top:8px;font-size:13px;font-weight:800;color:var(--re)}
+.wl-why{display:flex;gap:10px;margin-top:12px;padding:11px 13px;border-radius:15px;background:var(--bg3);font-size:13px;font-weight:700;color:var(--tx2);line-height:1.4}
+.wl-why i{font-size:19px;color:var(--gr);flex:none}
+.wl-old{display:flex;align-items:center;justify-content:center;gap:6px;min-height:46px;margin-top:12px;border:0;border-radius:14px;background:transparent;color:var(--tx2);font:inherit;font-size:14px;font-weight:800;cursor:pointer;text-align:center}
+.wl-old:hover{color:var(--tx)}
+.wl-wait{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;margin-top:18px;padding:22px 14px;border-radius:20px;background:var(--bg3);border:1px solid var(--bor)}
+.wl-wait b{font-size:18px;font-weight:900;color:var(--tx)}.wl-wait small{font-size:14px;font-weight:700;color:var(--tx2);line-height:1.4}
+.wl-spin{width:48px;height:48px;border-radius:50%;border:5px solid rgba(42,171,238,.22);border-top-color:#2AABEE;animation:wlspin 1s linear infinite}
+@keyframes wlspin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.wl-spin{animation-duration:3s}}
+.wl-again{display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px;margin-top:10px;font-size:14px;font-weight:800;color:#1A86BF;text-decoration:none}
+/* ===== Админка: «Сообщения» (v25) ===== */
+.ams{margin-top:12px}
+.ams-list{display:flex;flex-direction:column;gap:8px}
+.ams-th{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border:1px solid var(--bor);border-radius:18px;background:var(--bg2);color:var(--tx);font:inherit;text-align:left;cursor:pointer}
+.ams-th:hover{border-color:var(--bor2)}.ams-th:focus-visible,.ams-back:focus-visible,.ams-send:focus-visible{outline:3px solid var(--bl);outline-offset:2px}
+.ams-av{width:44px;height:44px;border-radius:50%;flex:none;display:grid;place-items:center;color:#fff;font-weight:900;font-size:16px}
+.ams-av.sm{width:38px;height:38px;font-size:14px}
+.ams-tt{flex:1;min-width:0}.ams-tt b{display:block;font-size:15.5px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ams-tt small{display:block;font-size:13px;font-weight:700;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ams-meta{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex:none}.ams-meta small{font-size:11.5px;font-weight:700;color:var(--tx3);white-space:nowrap}
+.ams-new{min-width:22px;height:22px;padding:0 7px;border-radius:999px;background:#2AABEE;color:#fff;font-size:12px;font-weight:900;font-style:normal;display:grid;place-items:center}
+.ams-empty{display:flex;flex-direction:column;align-items:center;gap:6px;padding:26px 14px;text-align:center;color:var(--tx2);font-size:14px;font-weight:700;line-height:1.45}
+.ams-empty i{font-size:32px;color:var(--bl)}.ams-empty b{font-size:16px;font-weight:900;color:var(--tx)}
+.ams-conv{border:1px solid var(--bor);border-radius:20px;background:var(--bg2);overflow:hidden}
+.ams-hd{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--bor)}
+.ams-hd b{display:block;font-size:15.5px;font-weight:900}.ams-hd small{font-size:12.5px;font-weight:700;color:var(--tx2)}
+.ams-back{width:40px;height:40px;border:0;border-radius:12px;background:var(--bg3);color:var(--tx);font-size:20px;display:grid;place-items:center;cursor:pointer;flex:none}
+.ams-msgs{display:flex;flex-direction:column;gap:8px;padding:14px 12px;max-height:52vh;min-height:160px;overflow-y:auto}
+.ams-m{max-width:84%;padding:9px 12px 6px;border-radius:16px;font-size:14.5px;font-weight:600;line-height:1.4;overflow-wrap:anywhere;user-select:text;-webkit-user-select:text}
+.ams-m small{display:block;margin-top:3px;font-size:11px;font-weight:700;opacity:.6;text-align:right}
+.ams-m.st{align-self:flex-start;background:var(--bg3);color:var(--tx);border-bottom-left-radius:5px}
+.ams-m.ad{align-self:flex-end;background:var(--bl);color:#fff;border-bottom-right-radius:5px}
+.ams-rep{display:flex;align-items:flex-end;gap:8px;padding:10px 12px;border-top:1px solid var(--bor)}
+.ams-rep textarea{flex:1;min-height:46px;max-height:140px;resize:vertical;padding:11px 12px;border-radius:14px;border:1px solid var(--bor2);background:var(--bg3);color:var(--tx);font:inherit;font-size:14.5px}
+.ams-send{width:48px;height:48px;border:0;border-radius:14px;background:var(--bl);color:#fff;font-size:21px;display:grid;place-items:center;cursor:pointer;flex:none}
+.ams-send:disabled{opacity:.6}
+.ams-err{min-height:0;padding:0 12px 10px;font-size:13px;font-weight:800;color:var(--re)}.ams-err:empty{padding:0}
 </style>
 </head>
 <body>
@@ -3942,6 +4000,10 @@ async function vSyncMe(){
 function sbGet(t,f){return sbFetch('GET',t,f,null);}
 // Загрузка ВСЕХ строк постранично (обходит лимит Supabase 1000 строк за запрос)
 async function sbGetAll(t,f){
+  // база вопросов: из памяти телефона, качаем заново только если она изменилась (v24)
+  if(t==='custom_questions'&&f==='order=created_at.asc'&&typeof vQBank==='function'){
+    try{var qb=await vQBank();if(qb)return qb;}catch(e){}
+  }
   var all=[],offset=0,page=1000;
   while(true){
     var sep=f?'&':'';
@@ -3953,6 +4015,70 @@ async function sbGetAll(t,f){
     if(offset>200000)break; // предохранитель
   }
   return all;
+}
+// ===================== БАЗА ВОПРОСОВ В ПАМЯТИ ТЕЛЕФОНА (v24) =====================
+// Раньше каждый запуск качал всю базу страницами по 1000 — при 10 людях Supabase зависал.
+// Теперь: спрашиваем «изменилась ли база?» (1 лёгкий запрос). Не изменилась — берём из памяти телефона.
+// Изменилась — качаем быстрыми страницами по 5000. Админ всегда получает свежее (ему нужны объяснения).
+var VQB={mem:null,p:null,at:0};
+function vQbIdb(){
+  return new Promise(function(res){
+    try{
+      var rq=indexedDB.open('vita_qbank',1);
+      rq.onupgradeneeded=function(){try{rq.result.createObjectStore('kv');}catch(e){}};
+      rq.onsuccess=function(){res(rq.result);};
+      rq.onerror=function(){res(null);};
+      setTimeout(function(){res(null);},3000);
+    }catch(e){res(null);}
+  });
+}
+function vQbGet(){
+  return vQbIdb().then(function(db){
+    if(!db)return null;
+    return new Promise(function(res){
+      try{var r=db.transaction('kv','readonly').objectStore('kv').get('qbank');r.onsuccess=function(){res(r.result||null);};r.onerror=function(){res(null);};}
+      catch(e){res(null);}
+    });
+  });
+}
+function vQbPut(v){
+  return vQbIdb().then(function(db){
+    if(!db)return;
+    try{db.transaction('kv','readwrite').objectStore('kv').put(v,'qbank');}catch(e){}
+  });
+}
+async function vQbRpc(fn,body){
+  var r=await fetch(SB_URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:SBH,body:JSON.stringify(body)});
+  var j=null;try{j=await r.json();}catch(e){}
+  if(!r.ok){var er=new Error((j&&j.message)||('Ошибка '+r.status));er.status=r.status;throw er;}
+  return j;
+}
+function vQBank(){
+  var tok=vReadToken();
+  if(!tok)return Promise.resolve(null);                       // гость: по-старому (только счётчики)
+  if(VQB.p)return VQB.p;                                       // уже качаем — ждём ту же загрузку
+  if(VQB.mem&&VQB.tok===tok&&Date.now()-VQB.at<20000)return Promise.resolve(VQB.mem);
+  VQB.p=(async function(){
+    var meta=await vQbRpc('qbank_meta',{p_token:tok});
+    var key=meta.n+'|'+meta.v;
+    if(!meta.adm){
+      var c=VQB.mem&&VQB.key===key?{key:key,rows:VQB.mem}:await vQbGet();
+      if(c&&c.key===key&&c.rows&&c.rows.length===meta.n){VQB.mem=c.rows;VQB.key=key;VQB.tok=tok;VQB.at=Date.now();return c.rows;}
+    }
+    var all=[],after='';
+    for(var i=0;i<100;i++){
+      var rows=await vQbRpc('qbank_page',{p_token:tok,p_after:after,p_limit:5000});
+      if(!rows||!rows.length)break;
+      all=all.concat(rows);after=String(rows[rows.length-1].id);
+      if(rows.length<5000)break;
+    }
+    all.sort(function(a,b){return String(a.created_at||'')<String(b.created_at||'')?-1:String(a.created_at||'')>String(b.created_at||'')?1:0;});
+    VQB.mem=all;VQB.key=key;VQB.tok=tok;VQB.at=Date.now();
+    if(!meta.adm)vQbPut({key:key,rows:all});
+    return all;
+  })();
+  VQB.p.then(function(){VQB.p=null;},function(){VQB.p=null;});
+  return VQB.p.catch(function(e){if(e&&e.status===404)VQB.off=true;return null;});
 }
 function sbPost(t,b){return sbFetch('POST',t,null,b);}
 function sbPatch(t,f,b){return sbFetch('PATCH',t,f,b);}
@@ -4102,14 +4228,7 @@ async function tgAutoLogin(){
     var r=await fetch(VITA_AUTH_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({init_data:TG.initData})});
     var j=await r.json();
     if(j.bot){S.tgBot=j.bot;}
-    if(j.status==='ok'&&j.user){
-      var f=j.user;S.token=j.token;S.viaTg=true;try{setTimeout(function(){vApplyRole(f.role,f.email);vOpenAdminLink();},0);}catch(e){}
-      S.user={name:f.name,email:f.email,group:f.group_name||'',avatar:f.avatar||'',frames:f.frames||'',frame:f.frame||'',coins:f.coins||0,owned_items:f.owned_items||'',profile_bg:f.profile_bg||'',private_profile:f.private_profile||false};
-      var wasApply=!!(S.apply&&S.apply.status!=='active');vApplyClear();
-      sv();renderAuthHdr();await loadProg();renderHome();
-      if(wasApply){closeModal();showAlert('hAlert','alok','ti-circle-check',' Заявка одобрена — добро пожаловать в Vita!',7000);}
-      return;
-    }
+    if(j.status==='ok'&&j.user){await vAuthOk(j);return;}
     if(j.status==='new'){
       S.token=j.token;S.viaTg=true;sv();
       // заявка подана по почте с этого устройства — показываем её статус, а не «создать аккаунт»
@@ -4122,13 +4241,22 @@ async function tgAutoLogin(){
       }
       return;
     }
-    if(j.status==='pending'||j.status==='blocked'||j.status==='rejected'){
-      vApplySet({via:'tg',status:j.status,name:j.name||(TG_USER&&TG_USER.name)||'',
-        at:j.applied_at?Date.parse(j.applied_at):((S.apply&&S.apply.at)||Date.now()),
-        reason:j.reason||'',contact:j.contact||'',bot:j.bot||S.tgBot||'',canWrite:!!j.can_write});
-      vShowApply();
-    }
+    if(j.status==='pending'||j.status==='blocked'||j.status==='rejected')vAuthApplyState(j);
   }catch(e){}
+}
+// вход по Telegram (Mini App или сайт через бота): аккаунт найден и активен
+async function vAuthOk(j){
+  var f=j.user;S.token=j.token;S.viaTg=true;try{setTimeout(function(){vApplyRole(f.role,f.email);vOpenAdminLink();},0);}catch(e){}
+  S.user={name:f.name,email:f.email,group:f.group_name||'',avatar:f.avatar||'',frames:f.frames||'',frame:f.frame||'',coins:f.coins||0,owned_items:f.owned_items||'',profile_bg:f.profile_bg||'',private_profile:f.private_profile||false};
+  var wasApply=!!(S.apply&&S.apply.status!=='active');vApplyClear();
+  sv();renderAuthHdr();try{await vEnsureQs();}catch(e){}await loadProg();renderHome();
+  if(wasApply){closeModal();showAlert('hAlert','alok','ti-circle-check',' Заявка одобрена — добро пожаловать в Vita!',7000);}
+}
+function vAuthApplyState(j){
+  vApplySet({via:'tg',status:j.status,name:j.name||(TG_USER&&TG_USER.name)||'',
+    at:j.applied_at?Date.parse(j.applied_at):((S.apply&&S.apply.at)||Date.now()),
+    reason:j.reason||'',contact:j.contact||'',bot:j.bot||S.tgBot||'',canWrite:!!j.can_write});
+  vShowApply();
 }
 // ===== ЗАЯВКА: студент всегда видит, что с ней =====
 // S.apply = {via:'email'|'tg', email, key, name, at, status, reason, contact, bot, canWrite, checked}
@@ -4570,13 +4698,11 @@ function renderAuthHdr(){
     pills.innerHTML='<span class="lb-stat fire" title="Дней подряд"><i class="ti ti-flame"></i>'+days+'</span><span class="lb-stat coin" title="Монеты"><i class="ti ti-coin"></i><span class="coinDisp">'+myCoins()+'</span></span>';
     el.innerHTML='';el.appendChild(pills);el.appendChild(av);el.style.display='flex';el.style.alignItems='center';el.style.gap='8px';
   }else{
+    // вход и регистрация — одна кнопка: через Telegram (один Telegram — один аккаунт)
     var b1=document.createElement('button');
-    b1.className='bh';b1.textContent='Войти';
+    b1.className='bh bhp';b1.innerHTML='<i class="ti ti-brand-telegram" aria-hidden="true"></i> Войти';
     b1.addEventListener('click',function(){openModal('login');});
-    var b2=document.createElement('button');
-    b2.className='bh bhp';b2.style.marginLeft='6px';b2.textContent='Регистрация';
-    b2.addEventListener('click',function(){openModal('register');});
-    el.innerHTML='';el.appendChild(b1);el.appendChild(b2);
+    el.innerHTML='';el.appendChild(b1);
   }
   document.getElementById('admNav').style.display=S.isAdm?'':'none';
   updPendBadge();
@@ -4655,6 +4781,9 @@ function go(pg,btn){
 }
 
 function openModal(m){
+  // вход и регистрация — только через Telegram (один Telegram — один аккаунт). Старые аккаунты с паролем — «loginpw».
+  if((m==='login'||m==='register')&&typeof vWebLogin==='function'&&!(typeof isTG==='function'&&isTG())){vWebLogin();return;}
+  if(m==='loginpw')m='login';
   document.getElementById('modal').style.display='flex';
   var t=document.getElementById('mdT'),b=document.getElementById('mdBody');
   if(m==='login'){
@@ -8566,7 +8695,7 @@ async function admTgLink(email,btn){
 function admMsgStudent(email,name){
   var qe=esc(email).replace(/'/g,'');
   showModal('Написать студенту','<div class="adm-rej">'
-    +'<p><b>'+esc(name||email)+'</b> получит сообщение от бота Vita в Telegram. Под ним будет кнопка «Ответить» — она ведёт в твой Telegram'+(ADM_CONTACT?' (или к контакту для студентов @'+esc(ADM_CONTACT)+')':'')+'.</p>'
+    +'<p><b>'+esc(name||email)+'</b> получит сообщение от бота Vita. Ответ придёт в раздел «Сообщения». Твой Telegram студент не увидит, а ты — его.</p>'
     +'<textarea id="msT" rows="5" maxlength="1000" placeholder="Например: привет! Уточни, пожалуйста, свою группу." oninput="admMsgCnt()" aria-label="Сообщение студенту"></textarea>'
     +'<div class="adm-msg-cnt"><span id="msCnt">0</span> / 1000</div>'
     +'<div id="msErr" class="adm-msg-err" role="alert"></div>'
@@ -8581,7 +8710,7 @@ async function admMsgSend(email,btn){
   if(t.length<2){if(er)er.textContent='Напиши сообщение';return;}
   btn.disabled=true;if(er)er.textContent='';
   try{await vRpc('admin_message_student',{p_token:vAdminToken(),p_email:email,p_text:t});
-    closeModal();vAlert('Отправлено. Бот доставит сообщение в течение 15 секунд.');}
+    closeModal();vAlert('Отправлено. Бот доставит сообщение в течение 15 секунд, ответ придёт в «Сообщения».');}
   catch(e){btn.disabled=false;if(er)er.textContent=e.missing?'Сначала запусти security_v8.sql в Supabase.':e.message;}
 }
 async function admSaveContact(btn){
@@ -14542,7 +14671,10 @@ function bcRender(){
 function bcImgDraw(){
   var el=document.getElementById('bcImg');if(!el)return;
   el.innerHTML=BC.img?'<img src="data:image/jpeg;base64,'+BC.img+'" alt="Картинка рассылки"><div><b>Картинка приложена</b><small>С картинкой текст короче: до 900 знаков</small></div><button type="button" class="btn bgh bsm" onclick="BC.img=\'\';bcImgDraw();bcPrev()">Убрать</button>'
-    :'<label class="bc-addimg"><input type="file" accept="image/*" class="bc-fin" onchange="bcImgFile(this)" aria-label="Добавить картинку"><i class="ti ti-photo-plus" aria-hidden="true"></i>Добавить картинку</label>';
+    :'<div class="bc-imgwrap"><div class="bc-imgrow"><label class="bc-addimg"><input type="file" accept="image/*" class="bc-fin" onchange="bcImgFile(this)" aria-label="Добавить картинку из галереи"><i class="ti ti-photo-plus" aria-hidden="true"></i>Из галереи</label>'
+      +'<button type="button" class="bc-addimg" onclick="bcImgBot()"><i class="ti ti-brand-telegram" aria-hidden="true"></i>Отправить через бота</button></div>'
+      +(BC.code?'<div class="bc-code"><b>Отправь боту фото с подписью <span>'+BC.code+'</span></b><small>Как только фото придёт, картинка появится здесь сама.</small>'
+        +'<button type="button" class="btn bbl bsm" onclick="vOpenTgLink(\'https://t.me/'+esc(BC.bot||S.tgBot||VITA_BOT_NAME)+'\')"><i class="ti ti-brand-telegram" aria-hidden="true"></i>Открыть чат с ботом</button></div>':'')+'</div>';
 }
 // поле выбора файла лежит прямо под пальцем: в Telegram на телефоне программное «нажатие» на скрытое поле галерею не открывает
 async function bcImgFile(inp){
@@ -15543,20 +15675,36 @@ function bdSpeak(text,i,onStart,onEnd){
   var fin=function(){if(done||tok!==BD.tok)return;done=true;bdTalk(false);onEnd();};
   if(BD.muted||!text){onStart(est);bdTimer(fin,est);return;}
   var url=BD.audio&&BD.audio[i];
+  // голос Gemini уже звучал или ещё придёт — голос телефона не подставляем: он другой, это и было «голос меняется»
+  var keep=function(){return BD.gem||bdAnyAudio()||BD.live;};
+  var silent=function(){onStart(est);bdTimer(fin,est);};
   if(url&&BD.au){
-    var a=BD.au,started=false;a.onended=fin;a.onerror=function(){if(!started){started=true;bdPhone(text,tok,onStart,fin,est);}};
-    a.onloadedmetadata=function(){try{a.playbackRate=BD_RATE;}catch(e){}if(started||tok!==BD.tok)return;started=true;BD.gem=true;bdTalk(true);onStart((a.duration||est/1000)*1000/BD_RATE);};
-    a.src=url;a.muted=false;try{a.playbackRate=BD_RATE;a.preservesPitch=true;}catch(e){}
-    var p=a.play();if(p&&p.catch)p.catch(function(){if(!started){started=true;bdPhone(text,tok,onStart,fin,est);}});
-    bdTimer(function(){if(!started){started=true;bdTalk(true);onStart(est);}},2500);
+    var a=BD.au,started=false,retried=false;
+    var giveUp=function(){if(started)return;started=true;try{a.pause();a.removeAttribute('src');a.load();}catch(e){}
+      if(keep())silent();else bdPhone(text,tok,onStart,fin,est);};
+    var tryPlay=function(src){
+      a.onended=fin;
+      a.onerror=function(){if(started||tok!==BD.tok)return;
+        if(!retried){retried=true;bdTimer(function(){if(!started&&tok===BD.tok)tryPlay(url+(url.indexOf('?')<0?'?':'&')+'r='+Date.now());},600);return;}
+        giveUp();};
+      a.onloadedmetadata=function(){try{a.playbackRate=BD_RATE;}catch(e){}if(started||tok!==BD.tok)return;started=true;BD.gem=true;bdTalk(true);onStart((a.duration||est/1000)*1000/BD_RATE);};
+      a.src=src;a.muted=false;try{a.playbackRate=BD_RATE;a.preservesPitch=true;}catch(e){}
+      var p=a.play();if(p&&p.catch)p.catch(function(e){if(started||tok!==BD.tok)return;
+        if(e&&e.name==='NotAllowedError'){giveUp();return;}   // браузер не дал играть звук — шаг идёт с субтитрами
+        if(!retried){retried=true;bdTimer(function(){if(!started&&tok===BD.tok)tryPlay(url+(url.indexOf('?')<0?'?':'&')+'r='+Date.now());},600);return;}
+        giveUp();});
+    };
+    tryPlay(url);
+    // медленный интернет: ждём звук до 8 секунд, потом идём без него и ОСТАНАВЛИВАЕМ файл,
+    // чтобы голос не догнал и не звучал поверх следующего шага
+    bdTimer(function(){if(!started&&tok===BD.tok)giveUp();},8000);
     return;
   }
-  // Gemini уже звучал в этом объяснении — не меняем голос на телефонный посреди рассказа: этот шаг идёт с субтитрами
-  if(BD.gem||bdAnyAudio()){onStart(est);bdTimer(fin,est);return;}
+  if(keep()){silent();return;}
   bdPhone(text,tok,onStart,fin,est);
 }
 function bdAnyAudio(){return (BD.audio||[]).some(Boolean);}
-function bdVoiceWait(){return BD.gem||bdAnyAudio()?25000:9000;}
+function bdVoiceWait(){return BD.gem||bdAnyAudio()?40000:12000;}
 function bdPhone(text,tok,onStart,fin,est){
   try{
     if(!window.speechSynthesis)throw 0;
@@ -16001,6 +16149,180 @@ async function vxRelog(){
     V_SESS_LOST=0;_lost();
   };
 })();
+
+// ---- рассылка: картинка через чат с ботом + черновик не теряется, если Telegram перезапустил Vita ----
+async function bcImgCall(body){var url=vBotUrl('/admin/bcimg');if(!url)throw new Error('Бот не подключён');
+  var r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({token:vAdminToken()},body))});return await r.json();}
+async function bcImgBot(){
+  try{var j=await bcImgCall({op:'new'});if(j.status!=='ok')throw new Error(j.reason||'Не получилось');BC.code=j.code;BC.bot=j.bot;bcSave();bcImgDraw();bcImgPoll();}
+  catch(e){toast2(e.message||'Не получилось');}
+}
+function bcImgPoll(){
+  clearTimeout(BC.pt);if(!BC.code||BC.img)return;
+  BC.pt=setTimeout(async function(){
+    if(!BC.code||!document.getElementById('bcImg'))return;
+    try{var j=await bcImgCall({op:'get',code:BC.code});
+      if(j.status==='ok'&&j.img){BC.img=j.img;BC.code=null;bcSave();bcImgDraw();bcPrev();toast2('Картинка получена');return;}
+      if(j.status==='error'){BC.code=null;bcSave();bcImgDraw();toast2(j.reason||'Код устарел');return;}}catch(e){}
+    bcImgPoll();
+  },2500);
+}
+function bcSave(){try{localStorage.setItem('vx_bc',JSON.stringify({aud:BC.aud,group:BC.group,title:BC.title,body:BC.body,news:BC.news,img:BC.img||null,code:BC.code||null,bot:BC.bot||null,at:Date.now()}));}catch(e){}}
+(function(){
+  try{var d=JSON.parse(localStorage.getItem('vx_bc')||'null');if(d&&Date.now()-d.at<864e5)['aud','group','title','body','news','img','code','bot'].forEach(function(k){if(d[k]!=null)BC[k]=d[k];});}catch(e){}
+  var _p=bcPrev;bcPrev=function(){_p.apply(this,arguments);bcSave();};
+  var _d=bcImgDraw;bcImgDraw=function(){_d.apply(this,arguments);bcSave();if(BC.code&&!BC.img)bcImgPoll();};
+})();
+
+// ===================== ВХОД С САЙТА ЧЕРЕЗ TELEGRAM (v25) =====================
+// Один Telegram — один аккаунт. В браузере: кнопка (бот подтверждает вход) или 6 цифр из /code.
+var WL={nonce:null,link:'',bot:'',poll:0,busy:false};
+function wlBot(){return (WL.bot||(S.tgBot&&String(S.tgBot).replace(/^@/,''))||'vitastubot');}
+async function wlPrep(){
+  WL.nonce=null;WL.link='';
+  try{var r=await fetch(vBotUrl('/auth/web_start'),{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});
+    var j=await r.json();if(j&&j.nonce){WL.nonce=j.nonce;WL.link=j.link;WL.bot=j.bot||WL.bot;}}catch(e){}
+}
+function vWebLogin(msg){
+  WL.poll++;
+  if(!vBotUrl('/auth/web_start')){vAlert('Вход через Telegram пока не подключён.');return;}
+  showModal('Вход','<div class="wl">'
+    +'<div class="wl-h">Вход через Telegram</div><p class="wl-p">Один аккаунт — один Telegram. Пароль не нужен.</p>'
+    +'<button type="button" class="wl-tg" id="wlTg" onclick="wlGo()"><i class="ti ti-brand-telegram" aria-hidden="true"></i>Войти через Telegram</button>'
+    +'<div class="wl-or" aria-hidden="true">или код из бота</div>'
+    +'<div class="wl-code"><b>Напиши боту <a href="https://t.me/'+esc(wlBot())+'" target="_blank" rel="noopener">/code</a></b><small>Он пришлёт 6 цифр — введи их здесь</small>'
+    +'<input id="wlCode" class="wl-in" inputmode="numeric" autocomplete="one-time-code" maxlength="7" placeholder="000 000" aria-label="Код из бота" oninput="wlCodeIn(this)">'
+    +'<div id="wlErr" class="wl-err" role="alert">'+(msg?esc(msg):'')+'</div></div>'
+    +'<div class="wl-why"><i class="ti ti-shield-check" aria-hidden="true"></i><span>Код работает 5 минут и только один раз. Никому его не пересылай.</span></div>'
+    +'<button type="button" class="wl-old" onclick="openModal(\'loginpw\')">У меня старый аккаунт с почтой и паролем</button></div>');
+  vModalX(true);
+  wlPrep();
+}
+function wlGo(){
+  if(!WL.link){                       // метка ещё не пришла — откроем бота, когда придёт
+    var b=document.getElementById('wlTg');if(b)b.disabled=true;
+    wlPrep().then(function(){if(b)b.disabled=false;if(WL.link){wlWait();try{window.open(WL.link,'_blank');}catch(e){}}else wlErr('Нет связи с ботом. Попробуй ещё раз или войди по коду');});
+    return;
+  }
+  try{window.open(WL.link,'_blank');}catch(e){}
+  wlWait();
+}
+function wlWait(){
+  var id=++WL.poll;
+  showModal('Вход','<div class="wl">'
+    +'<div class="wl-h">Подтверди в Telegram</div>'
+    +'<div class="wl-wait" role="status"><span class="wl-spin" aria-hidden="true"></span><b>Открыли бота Vita</b><small>Нажми там «Войти на сайт» — эта страница войдёт сама</small></div>'
+    +'<a class="wl-again" href="'+esc(WL.link)+'" target="_blank" rel="noopener"><i class="ti ti-external-link" aria-hidden="true"></i>Бот не открылся? Открыть ещё раз</a>'
+    +'<button type="button" class="wl-old" onclick="vWebLogin()"><i class="ti ti-arrow-left" aria-hidden="true"></i>Войти по коду</button></div>');
+  vModalX(true);
+  var t0=Date.now(),nonce=WL.nonce;
+  (async function loop(){
+    while(id===WL.poll&&Date.now()-t0<300000){
+      await new Promise(function(r){setTimeout(r,2000);});
+      if(id!==WL.poll||document.getElementById('modal').style.display==='none')return;
+      var j=null;try{var r=await fetch(vBotUrl('/auth/web_poll'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nonce:nonce})});j=await r.json();}catch(e){continue;}
+      if(!j||j.status==='wait')continue;
+      if(j.status==='expired'){vWebLogin('Время вышло — нажми «Войти через Telegram» ещё раз');return;}
+      WL.poll++;wlDone(j);return;
+    }
+    if(id===WL.poll)vWebLogin('Время вышло — нажми «Войти через Telegram» ещё раз');
+  })();
+}
+function wlErr(t){var e=document.getElementById('wlErr');if(e)e.textContent=t||'';}
+function wlCodeIn(inp){
+  var d=String(inp.value||'').replace(/\D/g,'').slice(0,6);
+  inp.value=d.length>3?d.slice(0,3)+' '+d.slice(3):d;wlErr('');
+  if(d.length===6&&!WL.busy)wlCode(d);
+}
+async function wlCode(d){
+  WL.busy=true;var inp=document.getElementById('wlCode');if(inp)inp.disabled=true;
+  var j=null;try{var r=await fetch(vBotUrl('/auth/web_code'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code:d})});j=await r.json();}catch(e){}
+  WL.busy=false;
+  if(!j){if(inp){inp.disabled=false;}wlErr('Нет связи. Проверь интернет и попробуй ещё раз');return;}
+  if(j.status==='bad_code'||j.status==='busy'){if(inp){inp.disabled=false;inp.value='';inp.focus();}wlErr(j.reason||'Код не подошёл');return;}
+  wlDone(j);
+}
+async function wlDone(j){
+  if(j.bot)WL.bot=j.bot;
+  if(j.status==='ok'&&j.user){closeModal();await vAuthOk(j);toast2('Вошёл через Telegram');return;}
+  if(j.status==='pending'||j.status==='blocked'||j.status==='rejected'){closeModal();vAuthApplyState(j);return;}
+  if(j.status==='new'){
+    showModal('Вход','<div class="wl">'
+      +'<div class="wl-h">Аккаунта ещё нет</div><p class="wl-p">Аккаунт создаётся в Telegram: открой бота Vita, нажми «Открыть Vita» и подай заявку. Потом сможешь входить и отсюда.</p>'
+      +'<a class="wl-tg" href="https://t.me/'+esc(wlBot())+'" target="_blank" rel="noopener"><i class="ti ti-brand-telegram" aria-hidden="true"></i>Открыть бота Vita</a>'
+      +'<button type="button" class="wl-old" onclick="vWebLogin()">Назад</button></div>');
+    vModalX(true);return;
+  }
+  vWebLogin(j.reason||'Не получилось войти — попробуй ещё раз');
+}
+
+// ===================== АДМИНКА: «Сообщения» — переписка со студентами через бота (v25) =====================
+// Студент отвечает прямо в чате с ботом. Telegram админа и студента друг другу не виден.
+ADM_SECTIONS.msgs={t:'Сообщения',h:'Ответы студентов из бота',d:'Студенты пишут боту, ты отвечаешь отсюда. Telegram друг друга вы не видите.',i:'message-circle',k:'vio',g:'people'};
+var AMS={list:null,cur:null,th:null,t:0};
+(function(){var _t=admTab;admTab=function(t,btn){_t(t,btn);AMS.cur=null;if(ADM_CUR==='msgs')amsList();};})();
+(function(){var _h=admHome;admHome=function(){_h();amsBadge();};})();
+async function amsBadge(){
+  if(!S.isAdm||!dbOK)return;
+  var n=0;try{n=await vRpc('admin_msgs_unseen',{p_token:vAdminToken()});}catch(e){return;}
+  var b=document.querySelector('#admHome .adm-card[onclick*="\'msgs\'"]');if(!b)return;
+  var c=b.querySelector('.adm-cnt');if(c)c.remove();
+  if(+n>0)b.insertAdjacentHTML('afterbegin','<span class="adm-cnt" aria-label="новых: '+(+n)+'">'+(+n)+'</span>');
+}
+function amsBox(){
+  var sec=document.getElementById('admSec');if(!sec)return null;
+  var box=document.getElementById('admMsgs');
+  if(!box){sec.insertAdjacentHTML('beforeend','<div id="admMsgs" class="ams"></div>');box=document.getElementById('admMsgs');}
+  return box;
+}
+function amsInit(n){return String(n||'?').trim().split(/\s+/).slice(0,2).map(function(w){return w.charAt(0).toUpperCase();}).join('');}
+var AMS_COL=['#E2459B','#3D82FF','#16B98A','#F2A20C','#8B5CF6','#E5484D'];
+function amsCol(e){var h=0;for(var i=0;i<e.length;i++)h=(h*31+e.charCodeAt(i))>>>0;return AMS_COL[h%AMS_COL.length];}
+async function amsList(){
+  var box=amsBox();if(!box)return;
+  if(!AMS.list)box.innerHTML='<div class="ams-empty" role="status">Загружаю…</div>';
+  try{AMS.list=await vRpc('admin_msgs',{p_token:vAdminToken()})||[];}
+  catch(e){box.innerHTML='<div class="ams-empty">'+(e.missing?'Сначала запусти security_v25.sql в Supabase.':esc(e.message||'Не получилось загрузить'))+'</div>';return;}
+  if(AMS.cur)return;
+  if(!AMS.list.length){box.innerHTML='<div class="ams-empty"><i class="ti ti-message-circle" aria-hidden="true"></i><b>Пока пусто</b><span>Напиши студенту из его карточки в «Студентах» — ответ придёт сюда. Студент может и сам написать боту кнопкой «Написать администратору».</span></div>';return;}
+  box.innerHTML='<div class="ams-list">'+AMS.list.map(function(m,i){
+    return '<button type="button" class="ams-th" onclick="amsOpen('+i+')"><span class="ams-av" style="background:'+amsCol(m.email)+'" aria-hidden="true">'+esc(amsInit(m.name))+'</span>'
+      +'<span class="ams-tt"><b>'+esc(m.name)+'</b><small>'+(m.dir==='out'?'Вы: ':'')+esc(m.last)+'</small></span>'
+      +'<span class="ams-meta"><small>'+esc(vWhen(Date.parse(m.at)))+'</small>'+(m.unseen?'<i class="ams-new" aria-label="новых: '+m.unseen+'">'+m.unseen+'</i>':'')+'</span></button>';
+  }).join('')+'</div>';
+}
+async function amsOpen(i){
+  var m=AMS.list&&AMS.list[i];if(!m)return;
+  AMS.cur=m;var box=amsBox();if(!box)return;
+  box.innerHTML='<div class="ams-conv"><div class="ams-hd"><button type="button" class="ams-back" onclick="amsBack()" aria-label="Все переписки"><i class="ti ti-arrow-left"></i></button>'
+    +'<span class="ams-av sm" style="background:'+amsCol(m.email)+'" aria-hidden="true">'+esc(amsInit(m.name))+'</span><div><b>'+esc(m.name)+'</b>'+(m.group?'<small>'+esc(m.group)+'</small>':'')+'</div></div>'
+    +'<div class="ams-msgs" id="amsMsgs" aria-live="polite"><div class="ams-empty">Загружаю…</div></div>'
+    +'<div class="ams-rep"><textarea id="amsIn" rows="2" maxlength="1000" placeholder="Ответить…" aria-label="Ответ студенту" onkeydown="if(event.key===\'Enter\'&&(event.ctrlKey||event.metaKey))amsSend()"></textarea>'
+    +'<button type="button" class="ams-send" id="amsSend" onclick="amsSend()" aria-label="Отправить"><i class="ti ti-send"></i></button></div>'
+    +'<div class="ams-err" id="amsErr" role="alert"></div></div>';
+  await amsLoad();
+  var id=++AMS.t;(function tick(){setTimeout(function(){if(id!==AMS.t||AMS.cur!==m||ADM_CUR!=='msgs')return;amsLoad().then(tick);},15000);})();
+}
+async function amsLoad(){
+  var m=AMS.cur;if(!m)return;
+  var th;try{th=await vRpc('admin_msg_thread',{p_token:vAdminToken(),p_email:m.email})||[];}catch(e){return;}
+  if(AMS.cur!==m)return;
+  var el=document.getElementById('amsMsgs');if(!el)return;
+  var near=el.scrollHeight-el.scrollTop-el.clientHeight<80;
+  el.innerHTML=th.length?th.map(function(x){return '<div class="ams-m '+(x.dir==='out'?'ad':'st')+'">'+esc(x.body).replace(/\n/g,'<br>')+'<small>'+esc(vWhen(Date.parse(x.at)))+'</small></div>';}).join('')
+    :'<div class="ams-empty">Сообщений пока нет</div>';
+  if(near||!AMS.th)el.scrollTop=el.scrollHeight;AMS.th=th;
+  m.unseen=0;
+}
+function amsBack(){AMS.cur=null;AMS.th=null;AMS.t++;amsList();}
+async function amsSend(){
+  var m=AMS.cur,inp=document.getElementById('amsIn'),b=document.getElementById('amsSend'),er=document.getElementById('amsErr');
+  if(!m||!inp)return;var t=inp.value.trim();if(!t){inp.focus();return;}
+  b.disabled=true;if(er)er.textContent='';
+  try{await vRpc('admin_message_student',{p_token:vAdminToken(),p_email:m.email,p_text:t});inp.value='';m.dir='out';m.last=t;await amsLoad();}
+  catch(e){if(er)er.textContent=e.missing?'Сначала запусти security_v25.sql в Supabase.':(e.message||'Не получилось отправить');}
+  b.disabled=false;
+}
 // ===== VITA · КОНЕЦ БЛОКА «ЛАБОРАТОРИЯ» =====
 </script>
 <div id="modalRoot"></div>
