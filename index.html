@@ -3562,15 +3562,45 @@ html.dark .stm-b{color:#B9A2FF}html.dark .stm-b.grp{color:#8DB7FF}html.dark .stm
 /* поверх доски: окно Vita+ и подсказки (раньше прятались под доской) */
 body.bd-open #modalRoot .modal-bg{z-index:9600}
 body.bd-open .study-toast{z-index:9700;top:calc(env(safe-area-inset-top,0px) + 72px);bottom:auto}
-/* доска: переключатель «Кратко | Подробно» — половинки равные, ничего не прыгает; без Vita+ на «Подробно» значок-замок */
+/* доска v2: меню длины, фоны, расшифровка (макет board2) */
 #bdRoot .bd-crow{gap:8px;align-items:center}
-#bdRoot .bd-crow .bd-sp{display:none}
+#bdRoot .bd-crow .bd-sp{flex:1;display:block}
 #bdRoot .bd-crow .bd-ib,#bdRoot .bd-crow .bd-send{flex:none}
-#bdRoot .bd-seg{flex:1 1 0;min-width:0;display:grid;grid-template-columns:1fr 1fr;height:46px;padding:3px;gap:3px;border:2px solid var(--bd-line);border-radius:999px}
-#bdRoot .bd-seg button{position:relative;overflow:visible;display:inline-flex;align-items:center;justify-content:center;width:100%;min-width:0;height:36px;padding:0 6px;border:0;border-radius:999px;background:none;color:var(--bd-tx2);font:800 15px/1 var(--f);white-space:nowrap}
-#bdRoot .bd-seg button.on{background:var(--bd-tx);color:var(--bd-bg,#14182B)}
-#bdRoot .bd-seg button.lock i{position:absolute;top:-9px;right:-3px;width:20px;height:20px;border-radius:50%;background:#FFB547;color:#3A2300;font-size:12px;display:grid;place-items:center;box-shadow:0 0 0 2px var(--bd-bg)}
-@media(max-width:360px){#bdRoot .bd-seg button{font-size:13.5px;padding:0 4px}#bdRoot .bd-crow{gap:6px}}
+#bdRoot .bd-len{display:inline-flex;align-items:center;gap:6px;height:46px;padding:0 14px;border:2px solid var(--bd-line);border-radius:999px;background:none;color:var(--bd-tx);font:800 15px/1 var(--f);white-space:nowrap;flex:none}
+#bdRoot .bd-len i:first-child{font-size:18px}#bdRoot .bd-len .bd-len-ch{font-size:15px;color:var(--bd-tx2);transition:transform .2s}
+#bdRoot .bd-len.open{border-color:rgba(61,130,255,.6);background:rgba(61,130,255,.12)}#bdRoot .bd-len.open .bd-len-ch{transform:rotate(180deg)}
+#bdRoot .bd-pop{position:absolute;z-index:20;background:var(--bd-card);border-radius:20px;box-shadow:0 18px 40px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.06);padding:8px;color:var(--bd-tx);animation:bdPopIn .18s ease-out}
+@keyframes bdPopIn{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
+#bdRoot .bd-lenpop{left:max(12px,calc(50% - 290px));right:max(12px,calc(50% - 290px));bottom:calc(118px + env(safe-area-inset-bottom,0px))}
+#bdRoot .bd-lenpop h4{margin:4px 8px 8px;font:800 13px var(--f);color:var(--bd-tx2)}
+#bdRoot .bd-lenpop button{display:flex;width:100%;align-items:center;gap:12px;border:0;background:none;color:var(--bd-tx);padding:10px;border-radius:14px;text-align:left;font-family:var(--f)}
+#bdRoot .bd-lenpop button.on{background:rgba(61,130,255,.18)}
+#bdRoot .bd-lenpop .ic{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;font-size:21px;flex:none}
+#bdRoot .bd-lenpop .tx{flex:1;min-width:0}#bdRoot .bd-lenpop b{display:block;font-size:16px;font-weight:800}#bdRoot .bd-lenpop small{display:block;font-size:13px;font-weight:600;color:var(--bd-tx2);margin-top:2px}
+#bdRoot .bd-lenpop .tag{flex:none;display:inline-flex;align-items:center;gap:4px;height:26px;padding:0 9px;border-radius:999px;background:#FFB547;color:#3A2300;font:800 12px var(--f)}
+#bdRoot .bd-lenpop .ok{flex:none;color:#3D82FF;font-size:22px}
+#bdRoot .bd-bgpop{top:calc(66px + env(safe-area-inset-top,0px));right:12px;display:flex;gap:6px}
+#bdRoot .bd-bgpop button{width:84px;border:0;background:none;color:var(--bd-tx2);font:700 13px var(--f);display:flex;flex-direction:column;align-items:center;gap:6px;padding:6px 4px;border-radius:14px}
+#bdRoot .bd-bgpop button.on{color:var(--bd-tx);background:rgba(255,255,255,.06)}
+#bdRoot .bd-bgpop .sw{width:70px;height:50px;border-radius:12px;display:block;box-shadow:0 0 0 2px rgba(255,255,255,.08)}
+#bdRoot .bd-bgpop button.on .sw{box-shadow:0 0 0 3px #3D82FF}
+.sw-grid{background-color:#14336E;background-image:linear-gradient(rgba(255,255,255,.2) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.2) 1px,transparent 1px);background-size:12px 12px}
+.sw-clean{background:#14182B}.sw-chalk{background:#1E3A30;box-shadow:inset 0 0 0 4px #5B3A22!important}
+#bdRoot.bd-v-board .bd-board.bg-grid{background-color:#14336E;background-image:linear-gradient(rgba(255,255,255,.13) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.13) 1px,transparent 1px),linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:130px 130px,130px 130px,26px 26px,26px 26px}
+#bdRoot.bd-v-board .bd-board.bg-clean{background-image:none;background-color:#14182B}
+#bdRoot.bd-v-board .bd-board.bg-chalk{background-color:#1E3A30;background-image:radial-gradient(ellipse at 30% 20%,rgba(255,255,255,.06),transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(0,0,0,.25),transparent 60%);background-size:auto;box-shadow:inset 0 0 0 10px #5B3A22,inset 0 0 0 13px #3E2716}
+#bdRoot .bd-tr{position:absolute;z-index:20;left:0;right:0;bottom:0;top:38%;background:#1B2036;border-radius:26px 26px 0 0;box-shadow:0 -14px 40px rgba(0,0,0,.45);padding:14px 16px calc(16px + env(safe-area-inset-bottom,0px));color:var(--bd-tx);display:flex;flex-direction:column;animation:bdTrIn .22s ease-out}
+@media (min-width:700px){#bdRoot .bd-tr{left:auto;top:0;width:380px;border-radius:0}}
+@keyframes bdTrIn{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+#bdRoot .bd-tr-hd{display:flex;align-items:center;gap:8px;margin-bottom:10px}#bdRoot .bd-tr-hd b{flex:1;font:800 18px var(--f)}
+#bdRoot .bd-tr-cp{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 14px;border-radius:13px;background:var(--bd-card2);color:var(--bd-tx);font:800 14px var(--f);border:0}
+#bdRoot .bd-sq.sm{width:38px;height:38px}
+#bdRoot .bd-tr ol{list-style:none;margin:0;padding:0;overflow:auto;display:flex;flex-direction:column;gap:4px;-webkit-user-select:text;user-select:text}
+#bdRoot .bd-tr li button{display:flex;width:100%;gap:10px;padding:10px;border:0;border-radius:14px;background:none;font:600 14.5px/1.35 var(--f);color:#C9CEE4;text-align:left}
+#bdRoot .bd-tr li em{flex:none;width:26px;height:26px;border-radius:9px;background:var(--bd-card2);display:grid;place-items:center;font:800 13px var(--f);font-style:normal;color:var(--bd-tx2)}
+#bdRoot .bd-tr li button.on{background:rgba(61,130,255,.16);color:#fff}#bdRoot .bd-tr li button.on em{background:#3D82FF;color:#fff}
+#bdRoot .bd-tr li button.done{color:#8F96B5}
+#bdRoot .bd-c.on{background:rgba(61,130,255,.2);color:#fff}
 /* главная: строка «Отстаёт: предмет» в карточке плана */
 .hm-weak{display:flex;width:100%;align-items:center;gap:10px;margin-top:12px;padding:8px 10px 8px 8px;border:0;border-radius:15px;background:rgba(6,38,26,.12);color:#06261A;min-height:46px}
 .hm-weak-ic{width:30px;height:30px;flex:none;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,.55);font-size:18px}
@@ -3580,6 +3610,7 @@ body.bd-open .study-toast{z-index:9700;top:calc(env(safe-area-inset-top,0px) + 7
 @media(min-width:641px){[data-tg] .bottomnav{display:none!important}}
 @media(max-width:360px){.hm-weak-t{white-space:normal;line-height:1.2}.hm-ask-in{font-size:14px;gap:7px;padding:0 6px}.hm-ask-in i{font-size:21px}.hm-ask-b{width:40px;height:40px;font-size:20px}.hm-ask{gap:6px}}
 .hm-ask-s{display:none}@media(max-width:360px){.hm-ask-l{display:none}.hm-ask-s{display:inline}}
+@media(max-width:400px){#bdRoot.bd-v-board .bd-back span{display:none}#bdRoot.bd-v-board .bd-back{width:46px;padding:0;justify-content:center}}
 </style>
 </head>
 <body>
@@ -15560,7 +15591,7 @@ function bdMascotInner(){
     +'<path class="bd-mouth" d="M26.5 -25.5 Q30 -21.5 33.5 -25.5" fill="none" stroke="#14182B" stroke-width="2.2" stroke-linecap="round"/></g></g>';
 }
 function bdMascot(cls){return '<svg class="bd-mascot '+(cls||'')+'" viewBox="-10 -78 66 86" aria-hidden="true">'+bdMascotInner()+'</svg>';}
-function bdBackBtn(){return '<button type="button" class="bd-pill bd-back" onclick="bdBack()"><i class="ti ti-chevron-left" aria-hidden="true"></i>Назад</button>';}
+function bdBackBtn(){return '<button type="button" class="bd-pill bd-back" onclick="bdBack()" aria-label="Назад"><i class="ti ti-chevron-left" aria-hidden="true"></i><span>Назад</span></button>';}
 function bdOpen(o){
   if(!S.user&&!S.isAdm){showLoginWall();return;}
   o=o||{};bdFonts();
@@ -15590,21 +15621,70 @@ function bdStart(){
     +'<div class="bd-sugg">'+BD_SUGG.map(function(s){return '<button type="button" onclick="bdAsk(this.dataset.q)" data-q="'+esc(s[2])+'"><span class="bd-si" style="--c:'+s[1]+'"><i class="ti ti-'+s[0]+'" aria-hidden="true"></i></span><b>'+esc(s[2])+'</b></button>';}).join('')+'</div>'
     +'<div class="bd-comp"><textarea id="bdIn" rows="1" maxlength="400" placeholder="Тема, вопрос или что непонятно…" aria-label="Тема или вопрос" oninput="bdGrow(this)" onkeydown="if(event.key===\'Enter\'&&!event.shiftKey){event.preventDefault();bdAsk();}"></textarea>'
     +'<div class="bd-crow">'+(vqCanRec()?'<button type="button" class="bd-ib" id="bdMic" onclick="bdMic()" aria-label="Сказать голосом"><i class="ti ti-microphone" aria-hidden="true"></i></button>':'')
-    +'<div class="bd-seg" id="bdMode" role="radiogroup" aria-label="Длина объяснения">'+bdModeHtml()+'</div><span class="bd-sp"></span>'
+    +'<button type="button" class="bd-len" id="bdMode" onclick="bdLenMenu()" aria-haspopup="true" aria-expanded="false" aria-label="Как подробно объяснить">'+bdModeHtml()+'</button><span class="bd-sp"></span>'
     +'<button type="button" class="bd-send" onclick="bdAsk()" aria-label="Объяснить"><i class="ti ti-arrow-up" aria-hidden="true"></i></button></div></div></div>';
   BD.el.innerHTML=h;BD.el.className='bd-v-start';bdBattery();
 }
-// «Подробно» — только с Vita+ (когда подписка включена)
+// длина объяснения: Кратко — всем, Средне и Подробно — с Vita+ (когда подписка включена)
+var BD_LEN={short:['Кратко','ti-bolt','#FFB547','rgba(255,181,71,.16)','7 шагов · ~1,5 мин'],
+  mid:['Средне','ti-list-details','#79BEFF','rgba(61,130,255,.18)','9 шагов · ~2 мин'],
+  long:['Подробно','ti-book-2','#B794FF','rgba(139,92,246,.2)','12 шагов · ~3 мин']};
 function bdLongLocked(){var v=VP;return !!(v&&v.enabled&&!v.plus&&!v.staff);}
 function bdModeHtml(){
-  var lock=bdLongLocked();if(lock)BD.mode='short';
-  var seg=function(m,t){var on=BD.mode===m,l=m==='long'&&lock;
-    return '<button type="button" role="radio" aria-checked="'+on+'" class="'+(on?'on':'')+(l?' lock':'')+'" onclick="bdMode(\''+m+'\')"'+(l?' aria-label="Подробно — с Vita+"':'')+'>'+t+(l?'<i class="ti ti-lock" aria-hidden="true"></i>':'')+'</button>';};
-  return seg('short','Кратко')+seg('long','Подробно');
+  if(BD.mode!=='short'&&bdLongLocked())BD.mode='short';
+  var L=BD_LEN[BD.mode]||BD_LEN.short;
+  return '<i class="ti '+L[1]+'" style="color:'+L[2]+'" aria-hidden="true"></i>'+L[0]+'<i class="ti ti-chevron-up bd-len-ch" aria-hidden="true"></i>';
 }
+function bdLenMenu(){
+  var old=document.getElementById('bdLenPop');if(old){bdLenClose();return;}
+  var lock=bdLongLocked(),b=document.getElementById('bdMode');
+  var m=document.createElement('div');m.id='bdLenPop';m.className='bd-pop bd-lenpop';m.setAttribute('role','menu');
+  m.innerHTML='<h4>Как подробно объяснить</h4>'+Object.keys(BD_LEN).map(function(k){var L=BD_LEN[k],on=BD.mode===k,l=k!=='short'&&lock;
+    return '<button type="button" role="menuitemradio" aria-checked="'+on+'" class="'+(on?'on':'')+'" onclick="bdMode(\''+k+'\')">'
+      +'<i class="ic ti '+L[1]+'" style="background:'+L[3]+';color:'+L[2]+'" aria-hidden="true"></i><span class="tx"><b>'+L[0]+'</b><small>'+L[4]+'</small></span>'
+      +(l?'<span class="tag"><i class="ti ti-lock" aria-hidden="true"></i>Vita+</span>':on?'<i class="ok ti ti-check" aria-hidden="true"></i>':'')+'</button>';}).join('');
+  BD.el.appendChild(m);if(b){b.setAttribute('aria-expanded','true');b.classList.add('open');}
+  setTimeout(function(){document.addEventListener('pointerdown',bdLenOut,true);},0);
+}
+function bdLenOut(e){var m=document.getElementById('bdLenPop'),b=document.getElementById('bdMode');if(m&&!m.contains(e.target)&&!(b&&b.contains(e.target)))bdLenClose();}
+function bdLenClose(){var m=document.getElementById('bdLenPop');if(m)m.remove();document.removeEventListener('pointerdown',bdLenOut,true);
+  var b=document.getElementById('bdMode');if(b){b.setAttribute('aria-expanded','false');b.classList.remove('open');}}
 function bdMode(m){
-  if(m==='long'&&bdLongLocked()){toast2('Подробно — с Vita+. Кратко — бесплатно');try{haptic&&haptic('warn');}catch(e){}return;}
-  BD.mode=m;var b=document.getElementById('bdMode');if(b)b.innerHTML=bdModeHtml();}
+  if(m!=='short'&&bdLongLocked()){bdLenClose();toast2((BD_LEN[m]||BD_LEN.long)[0]+' — с Vita+. Кратко — бесплатно');return;}
+  BD.mode=m;bdLenClose();var b=document.getElementById('bdMode');if(b)b.innerHTML=bdModeHtml();}
+// фон доски: сетка, чистый, школьная доска — выбор запоминается
+var BD_BG=[['grid','Сетка'],['clean','Чистый'],['chalk','Доска']];
+function bdBgGet(){var v='grid';try{v=localStorage.getItem('vitaBdBg')||'grid';}catch(e){}return BD_BG.some(function(b){return b[0]===v;})?v:'grid';}
+function bdBgApply(){var el=document.getElementById('bdBoard');if(!el)return;BD_BG.forEach(function(b){el.classList.remove('bg-'+b[0]);});el.classList.add('bg-'+bdBgGet());}
+function bdBgMenu(){
+  var old=document.getElementById('bdBgPop');if(old){bdBgClose();return;}
+  var cur=bdBgGet(),m=document.createElement('div');m.id='bdBgPop';m.className='bd-pop bd-bgpop';m.setAttribute('role','menu');
+  m.innerHTML=BD_BG.map(function(b){return '<button type="button" role="menuitemradio" aria-checked="'+(cur===b[0])+'" class="'+(cur===b[0]?'on':'')+'" onclick="bdBgSet(\''+b[0]+'\')"><span class="sw sw-'+b[0]+'" aria-hidden="true"></span>'+b[1]+'</button>';}).join('');
+  BD.el.appendChild(m);setTimeout(function(){document.addEventListener('pointerdown',bdBgOut,true);},0);
+}
+function bdBgOut(e){var m=document.getElementById('bdBgPop'),b=document.getElementById('bdBgB');if(m&&!m.contains(e.target)&&!(b&&b.contains(e.target)))bdBgClose();}
+function bdBgClose(){var m=document.getElementById('bdBgPop');if(m)m.remove();document.removeEventListener('pointerdown',bdBgOut,true);}
+function bdBgSet(k){try{localStorage.setItem('vitaBdBg',k);}catch(e){}bdBgApply();bdBgClose();}
+// расшифровка: весь текст по шагам, можно скопировать и перейти к шагу
+function bdTr(){
+  var m=document.getElementById('bdTrPop'),b=document.getElementById('bdTrB');
+  if(m){m.remove();if(b){b.classList.remove('on');b.setAttribute('aria-expanded','false');}return;}
+  m=document.createElement('div');m.id='bdTrPop';m.className='bd-tr';m.setAttribute('role','dialog');m.setAttribute('aria-label','Расшифровка');
+  BD.el.appendChild(m);if(b){b.classList.add('on');b.setAttribute('aria-expanded','true');}bdTrUi(true);
+}
+function bdTrUi(scroll){
+  var m=document.getElementById('bdTrPop');if(!m||!BD.board)return;
+  var cur=Math.max(0,BD.step);
+  m.innerHTML='<div class="bd-tr-hd"><b>Расшифровка</b><button type="button" class="bd-tr-cp" onclick="bdTrCopy()"><i class="ti ti-copy" aria-hidden="true"></i>Копировать</button>'
+    +'<button type="button" class="bd-sq sm" onclick="bdTr()" aria-label="Закрыть расшифровку"><i class="ti ti-x" aria-hidden="true"></i></button></div>'
+    +'<ol>'+BD.board.steps.map(function(st,i){return '<li><button type="button" class="'+(i===cur?'on':i<cur?'done':'')+'" onclick="bdGo('+i+')"><em>'+(i+1)+'</em><span>'+esc(st.say||'')+'</span></button></li>';}).join('')+'</ol>';
+  if(scroll){var on=m.querySelector('button.on');if(on)try{on.scrollIntoView({block:'center'});}catch(e){}}
+}
+function bdTrCopy(){
+  var t=(BD.board.title?BD.board.title+'\n\n':'')+BD.board.steps.map(function(st,i){return (i+1)+'. '+(st.say||'');}).join('\n');
+  var ok=function(){toast2('Текст скопирован');},fb=function(){try{var a=document.createElement('textarea');a.value=t;a.style.cssText='position:fixed;opacity:0';document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();ok();}catch(e){toast2('Не получилось скопировать');}};
+  try{if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(ok,fb);else fb();}catch(e){fb();}
+}
 function bdGrow(t){t.style.height='auto';t.style.height=Math.min(t.scrollHeight,110)+'px';}
 function bdBattery(){
   var b=document.getElementById('bdBat');if(!b)return;
@@ -15713,16 +15793,18 @@ function bdPlay(j,live){
   BD.el.innerHTML='<div class="bd-board" id="bdBoard"><svg id="bdSvg" xmlns="http://www.w3.org/2000/svg"><g id="bdWorld"><g id="bdCam"></g><g id="bdPen" class="bd-pen">'+bdMascotInner()+'</g></g></svg></div>'
     +'<div class="bd-top">'+bdBackBtn()
     +'<div class="bd-tt"><b id="bdTitle">'+esc(BD.board.title)+'</b><small id="bdStepN">Шаг 1</small></div>'
+    +'<button type="button" class="bd-sq" id="bdBgB" onclick="bdBgMenu()" aria-label="Фон доски"><i class="ti ti-layout-grid" aria-hidden="true"></i></button>'
     +'<button type="button" class="bd-sq" id="bdAll" onclick="bdOverview()" aria-label="Вся доска" aria-pressed="false"><i class="ti ti-arrows-maximize" aria-hidden="true"></i></button></div>'
     +'<div class="bd-dock" id="bdDock"><button type="button" class="bd-follow" id="bdFollow" onclick="bdFollowOn()" style="display:none"><i class="ti ti-focus-2" aria-hidden="true"></i>Вернуться к рисунку</button>'
     +'<div class="bd-cap" id="bdCap" aria-live="polite"></div>'
     +'<div class="bd-bar2"><button type="button" class="bd-c bd-play" id="bdPP" onclick="bdToggle()" aria-label="Пауза"><i class="ti ti-player-pause-filled" aria-hidden="true"></i></button>'
     +'<div class="bd-segs" id="bdSegs" role="group" aria-label="Шаги"></div>'
     +'<button type="button" class="bd-c" id="bdMute" onclick="bdMute()" aria-label="Выключить звук"><i class="ti ti-volume" aria-hidden="true"></i></button>'
+    +'<button type="button" class="bd-c" id="bdTrB" onclick="bdTr()" aria-label="Расшифровка" aria-expanded="false"><i class="ti ti-align-left" aria-hidden="true"></i></button>'
     +'<button type="button" class="bd-c" id="bdAskB" onclick="bdMoreToggle()" aria-label="Спросить ещё" aria-expanded="false"><i class="ti ti-message-question" aria-hidden="true"></i></button></div>'
     +'<div class="bd-more" id="bdMoreRow" style="display:none"><input id="bdMore" maxlength="300" placeholder="Что непонятно? Спроси дальше…" aria-label="Спросить ещё" onkeydown="if(event.key===\'Enter\')bdFollowUp()">'
     +'<button type="button" class="bd-send sm" onclick="bdFollowUp()" aria-label="Спросить"><i class="ti ti-send-2" aria-hidden="true"></i></button></div></div>';
-  bdMuteUi();bdPointers(document.getElementById('bdBoard'));
+  bdMuteUi();bdBgApply();bdPointers(document.getElementById('bdBoard'));
   BD.pen={x:60,y:60,tx:60,ty:60,f:1};BD.strokes=[];BD.cam={x:0,y:0,s:1};BD.camT=null;BD.gem=false;BD.vw=null;
   bdLayout();bdSegsUi();bdPenLoop();bdGo(0);
 }
@@ -15766,6 +15848,7 @@ function bdSegsUi(){
   var i=Math.max(BD.step,0);
   s.innerHTML=BD.board.steps.map(function(_,k){return '<button type="button" class="'+(k<i?'done':k===i?'on':'')+'" onclick="bdGo('+k+')" aria-label="Шаг '+(k+1)+'"><i></i></button>';}).join('')+(BD.live?'<span class="more"><i></i></span>':'');
   var t=document.getElementById('bdStepN');if(t)t.textContent=BD.live?'Шаг '+(i+1)+' · рисую дальше':'Шаг '+(i+1)+' из '+n;
+  bdTrUi(true);
 }
 function bdManual(){if(BD.view!=='play'||!BD.follow&&!BD.ov)return;BD.follow=false;BD.camF=null;BD.ov=false;bdOvUi();var f=document.getElementById('bdFollow');if(f)f.style.display='';}
 function bdFollowOn(){BD.follow=true;BD.ov=false;bdOvUi();var f=document.getElementById('bdFollow');if(f)f.style.display='none';if(BD.fp)bdFocus(BD.fp[0],BD.fp[1],true);}
