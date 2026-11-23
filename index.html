@@ -3611,6 +3611,16 @@ body.bd-open .study-toast{z-index:9700;top:calc(env(safe-area-inset-top,0px) + 7
 @media(max-width:360px){.hm-weak-t{white-space:normal;line-height:1.2}.hm-ask-in{font-size:14px;gap:7px;padding:0 6px}.hm-ask-in i{font-size:21px}.hm-ask-b{width:40px;height:40px;font-size:20px}.hm-ask{gap:6px}}
 .hm-ask-s{display:none}@media(max-width:360px){.hm-ask-l{display:none}.hm-ask-s{display:inline}}
 @media(max-width:400px){#bdRoot.bd-v-board .bd-back span{display:none}#bdRoot.bd-v-board .bd-back{width:46px;padding:0;justify-content:center}}
+/* доска: шапка и низ не закрывают доску — компактные плашки (макет doska_obzor) */
+#bdRoot.bd-v-board .bd-top{background:none;pointer-events:none;padding-bottom:0}
+#bdRoot.bd-v-board .bd-top>*{pointer-events:auto}
+#bdRoot.bd-v-board .bd-tt{flex:0 1 auto;max-width:440px;margin-right:auto}
+.bd-dock{left:50%;right:auto;transform:translateX(-50%);width:min(660px,calc(100% - 16px));background:none;padding:0 0 calc(8px + env(safe-area-inset-bottom,0px));gap:8px;pointer-events:none}
+.bd-dock>*{pointer-events:auto}
+.bd-dock .bd-cap{align-self:center;max-width:100%;padding:0;border:9px solid transparent;border-left-width:14px;border-right-width:14px;border-radius:16px;background:rgba(16,19,36,.84);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font-size:15px;line-height:1.38;text-shadow:none;-webkit-line-clamp:4;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.bd-dock .bd-cap:empty{display:none}
+.bd-bar2{padding:6px;border-radius:20px;background:rgba(16,19,36,.84);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 6px 20px rgba(0,0,0,.25);gap:8px}
+.bd-bar2 .bd-c{width:42px;height:42px;border-radius:13px}
 </style>
 </head>
 <body>
