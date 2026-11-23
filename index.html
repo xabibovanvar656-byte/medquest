@@ -3473,8 +3473,10 @@ html.dark .stm-b{color:#B9A2FF}html.dark .stm-b.grp{color:#8DB7FF}html.dark .stm
 .hm-me{display:flex;align-items:center;gap:10px;flex:1;min-width:0;background:none;border:0;padding:0;color:var(--tx)}
 .hm-av{position:relative;width:52px;height:52px;flex:none;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--mal) 0 var(--p),var(--hm-soft) 0)}
 .hm-av-in{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;overflow:hidden;box-shadow:0 0 0 3px var(--bg);background:var(--bg)}
+.hm-av-in img{display:block}
+.hm-av.fr{background:none}.hm-av.fr .hm-av-in{overflow:visible;box-shadow:none;background:none;width:52px;height:52px}
 .hm-av-in>*{flex:none}
-.hm-av em{position:absolute;right:-4px;bottom:-4px;min-width:22px;height:22px;padding:0 5px;border-radius:999px;background:#8B5CF6;color:#fff;font:800 12px/22px var(--f);font-style:normal;text-align:center;box-shadow:0 0 0 3px var(--bg)}
+.hm-av em{position:absolute;right:-6px;bottom:-5px;z-index:4;min-width:22px;height:20px;padding:0 5px;border-radius:999px;background:#8B5CF6;color:#fff;font:800 11px/20px var(--f);font-style:normal;text-align:center;box-shadow:0 0 0 3px var(--bg)}
 .hm-who{min-width:0;flex:1;display:block}
 .hm-who b{display:block;font-size:18px;font-weight:800;letter-spacing:-.3px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--tx)}
 .hm-who small{display:block;font-size:13px;font-weight:600;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
@@ -11833,9 +11835,10 @@ function hmTop(lv){
     +'<span class="hm-who g"><b>Vita</b><small>войди, чтобы сохранить прогресс</small></span>'
     +'<button type="button" class="hm-login" onclick="openModal(\'login\')"><i class="ti ti-brand-telegram" aria-hidden="true"></i>Войти</button></div>';
   var name=String(S.user.name||'').split(' ')[0]||'Студент';
-  return '<div class="hm-top"><button type="button" class="hm-me" onclick="vGo(\'levels\')" aria-label="Звание и уровень: '+lv.r.n+', уровень '+lv.level+'">'
-    +'<span class="hm-av" style="--p:'+lv.pct+'%"><span class="hm-av-in">'+renderAvatar(S.user,44)+'</span><em>'+lv.level+'</em></span>'
-    +'<span class="hm-who"><b>'+esc(name)+'</b><small>Уровень '+lv.level+' · '+vNum(lv.inLevel)+' XP</small></span></button>'
+  var fr=S.user.frame&&typeof userFrames==='function'&&userFrames(S.user).indexOf(S.user.frame)>=0;
+  return '<div class="hm-top"><button type="button" class="hm-me" onclick="vGo(\'profile\')" aria-label="Мой профиль">'
+    +'<span class="hm-av'+(fr?' fr':'')+'" style="--p:'+lv.pct+'%"><span class="hm-av-in">'+renderAvatar(S.user,fr?40:44)+'</span><em>'+lv.level+'</em></span>'
+    +'<span class="hm-who"><b>'+esc(name)+'</b><small>Уровень '+lv.level+'</small></span></button>'
     +'<span class="hm-chip" title="Дней подряд" aria-label="Дней подряд: '+vStreakNow()+'"><i class="ti ti-flame" style="color:#FF7A3D" aria-hidden="true"></i>'+vStreakNow()+'</span>'
     +'<button type="button" class="hm-chip" onclick="vGo(\'shop\')" aria-label="Монеты, магазин"><i class="ti ti-coin" style="color:#F2B530" aria-hidden="true"></i><span class="coinDisp">'+vNum(myCoins())+'</span></button></div>';
 }
