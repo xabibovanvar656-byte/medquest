@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Vita</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%232ED39A%27/%3E%3Cpath d=%27M18 18l14 30 14-30%27 fill=%27none%27 stroke=%27%2308291C%27 stroke-width=%278%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E">
 <!-- Скорость первого кадра (v25): ничего внешнее не держит отрисовку.
      Скрипт Telegram грузим только внутри Telegram; анимации, шрифты и иконки — без ожидания. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,7 +13,7 @@
 <script>
 (function(){
   var inTg=/tgWebApp/.test(location.hash)||!!window.TelegramWebviewProxy||(window.external&&'notify' in window.external)||window.parent!==window;
-  try{inTg=inTg||!!sessionStorage.getItem('__telegram__initParams');}catch(e){}
+  try{inTg=inTg||/tgWebAppData/.test(sessionStorage.getItem('__telegram__initParams')||'');}catch(e){}
   if(!inTg)return;
   // без document.write: Chrome на плохой связи может его заблокировать. init() дождётся скрипта (до 4 секунд)
   window.__tgReady=new Promise(function(res){
@@ -3431,6 +3432,131 @@ pre.cmp-tx{font-family:inherit}
 .lt-r.ok{box-shadow:inset 4px 0 0 var(--gr)}.lt-r.mid{box-shadow:inset 4px 0 0 var(--am)}.lt-r.bad{box-shadow:inset 4px 0 0 var(--re)}
 .lt-sum{display:flex;gap:10px;margin-top:12px;padding:12px 14px;border-radius:16px;background:var(--bg3);font-size:14px;font-weight:700;line-height:1.45;color:var(--tx)}
 .lt-sum i{font-size:22px;flex:none;color:var(--am)}
+/* ===== Своя тема (v26) ===== */
+.stm-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:20px 2px 8px}
+.stm-h b{font-size:18px;font-weight:800;color:var(--tx)}.stm-h small{font-size:12.5px;font-weight:600;color:var(--tx2);text-align:right}
+.stm-card{display:flex;align-items:center;gap:12px;width:100%;margin-bottom:8px;padding:12px 14px;border:2px dashed #8B5CF6;border-radius:18px;background:var(--bg2);color:var(--tx);font:inherit;text-align:left;cursor:pointer}
+.stm-card:focus-visible,.stm-add:focus-visible,.stm-act:focus-visible,.stm-seg button:focus-visible{outline:3px solid #8B5CF6;outline-offset:3px}
+.stm-ic{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;flex:none;background:rgba(139,92,246,.14);color:#8B5CF6;font-size:22px}
+.stm-tt{flex:1;min-width:0}.stm-tt b{display:block;font-size:15.5px;font-weight:800;overflow-wrap:anywhere}
+.stm-tt small{display:block;margin-top:3px;font-size:12.5px;font-weight:600;color:var(--tx2)}
+.stm-b{display:inline-flex;align-items:center;gap:4px;margin-top:4px;padding:2px 8px;border-radius:8px;background:rgba(139,92,246,.14);color:#7C4DEB;font-size:11.5px;font-weight:800}
+.stm-b.grp{background:rgba(61,130,255,.14);color:#2B6FE8}.stm-b.rev{background:rgba(242,162,12,.16);color:#B97800}
+html.dark .stm-b{color:#B9A2FF}html.dark .stm-b.grp{color:#8DB7FF}html.dark .stm-b.rev{color:#F5C15B}
+.stm-go{color:var(--tx3);font-size:18px;flex:none}
+.stm-add{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:54px;margin-top:4px;border:0;border-radius:18px;background:#8B5CF6;color:#fff;font:inherit;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 5px 0 #6236C9}
+.stm-add i{font-size:21px}.stm-add:active{transform:translateY(3px);box-shadow:0 2px 0 #6236C9}
+.stm-form .stm-sub{margin:0 0 12px;font-size:14px;font-weight:600;color:var(--tx2);line-height:1.45}
+.stm-subj{display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:0 14px;border-radius:13px;background:var(--bg3);font-weight:700;font-size:14.5px;color:var(--tx)}
+.stm-seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:5px;border-radius:16px;background:var(--bg3)}
+.stm-seg button{display:flex;align-items:center;justify-content:center;gap:6px;min-height:46px;padding:4px 8px;border:0;border-radius:12px;background:transparent;color:var(--tx2);font:inherit;font-size:14px;font-weight:800;cursor:pointer;text-align:center;line-height:1.15}
+.stm-seg button.on{background:var(--bg2);color:var(--tx);box-shadow:0 2px 0 var(--bor2)}.stm-seg button:disabled{opacity:.45;cursor:not-allowed}
+.stm-hint{display:flex;gap:8px;margin-top:12px;padding:10px 12px;border-radius:14px;background:var(--bg3);font-size:13px;font-weight:600;color:var(--tx2);line-height:1.4}
+.stm-hint i{font-size:18px;color:#8B5CF6;flex:none}
+.stm-err{min-height:18px;margin-top:8px;font-size:13px;font-weight:700;color:var(--re)}
+.stm-go2{width:100%;min-height:52px;margin-top:4px;justify-content:center}
+.stm-chip{background:rgba(139,92,246,.18)!important}
+.stm-acts{display:flex;flex-direction:column;gap:8px;margin:14px 0}
+.stm-empty,.stm-act{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border-radius:18px;background:var(--bg2);border:1px solid var(--bor);color:var(--tx);font:inherit;text-align:left}
+.stm-act{cursor:pointer}.stm-act:hover{border-color:var(--bor2)}
+.stm-empty>i,.stm-act>i{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;flex:none;font-size:20px;background:rgba(139,92,246,.14);color:#8B5CF6}
+.stm-empty span,.stm-act span{flex:1;min-width:0}.stm-empty b,.stm-act b{display:block;font-size:15px;font-weight:800}
+.stm-empty small,.stm-act small{display:block;margin-top:2px;font-size:12.5px;font-weight:600;color:var(--tx2);line-height:1.35}
+.stm-empty{border-style:dashed}
+.stm-act.del>i{background:rgba(229,72,77,.12);color:var(--re)}.stm-act.del b{color:var(--re)}
+.stm-act.pub>i{background:rgba(46,211,154,.16);color:var(--gr)}
+/* ===== ГЛАВНАЯ v2 (макет home_ref2) ===== */
+@media(max-width:640px){[data-onhome] .hdr{display:none!important}[data-onhome] #tgThemeBtn{display:none!important}[data-onhome]:not([data-tg-fs]) .hm2{padding-top:10px}}
+.hm2{--hm-card:var(--bg2);--hm-soft:var(--bg3)}
+.hm2 button{font-family:var(--f);text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.hm-top{display:flex;align-items:center;gap:8px;padding:2px 2px 16px;min-height:68px}
+.hm-me{display:flex;align-items:center;gap:10px;flex:1;min-width:0;background:none;border:0;padding:0;color:var(--tx)}
+.hm-av{position:relative;width:52px;height:52px;flex:none;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--mal) 0 var(--p),var(--hm-soft) 0)}
+.hm-av-in{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;overflow:hidden;box-shadow:0 0 0 3px var(--bg);background:var(--bg)}
+.hm-av-in>*{flex:none}
+.hm-av em{position:absolute;right:-4px;bottom:-4px;min-width:22px;height:22px;padding:0 5px;border-radius:999px;background:#8B5CF6;color:#fff;font:800 12px/22px var(--f);font-style:normal;text-align:center;box-shadow:0 0 0 3px var(--bg)}
+.hm-who{min-width:0;flex:1;display:block}
+.hm-who b{display:block;font-size:18px;font-weight:800;letter-spacing:-.3px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--tx)}
+.hm-who small{display:block;font-size:13px;font-weight:600;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.hm-chip{display:inline-flex;align-items:center;gap:4px;height:36px;padding:0 9px;border-radius:13px;background:var(--hm-card);border:0;color:var(--tx);font-weight:800;font-size:15px;box-shadow:0 3px 0 var(--edge);flex:none;white-space:nowrap}
+.hm-chip i{font-size:18px}
+.hm-logo{width:44px;height:44px;border-radius:14px;background:var(--mal);display:grid;place-items:center;box-shadow:0 3px 0 var(--mal-e);flex:none}.hm-logo svg{width:26px;height:26px}
+.hm-login{display:inline-flex;align-items:center;gap:6px;height:42px;padding:0 16px;border-radius:14px;border:0;background:var(--mal);color:var(--mal-ink);font-weight:800;font-size:15px;box-shadow:0 4px 0 var(--mal-e);flex:none}
+/* план */
+.hm-plan{position:relative;border-radius:28px;padding:18px;background:linear-gradient(150deg,#2ED39A,#14B87F);color:#06261A;box-shadow:0 7px 0 #0E8E62;margin-bottom:6px}
+.hm-plan-row{display:flex;align-items:center;gap:14px;min-height:84px}
+.hm-ring{width:80px;height:80px;border-radius:50%;flex:none;display:grid;place-items:center;background:conic-gradient(#06261A 0 var(--p),rgba(6,38,26,.18) 0)}
+.hm-ring>span{width:63px;height:63px;border-radius:50%;background:#22C98D;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
+.hm-ring b{font-size:24px;font-weight:800}.hm-ring small{font-size:11px;font-weight:700;opacity:.75;margin-top:2px}.hm-ring i{font-size:28px}
+.hm-plan-t{flex:1;min-width:0;display:block}
+.hm-k{display:block;padding-right:58px;font-size:13px;font-weight:700;opacity:.75}
+.hm-plan-t b{display:block;font-size:26px;font-weight:800;letter-spacing:-.5px;line-height:1.08;margin-top:2px}
+.hm-plan-t small{display:block;font-size:14px;font-weight:600;opacity:.82;margin-top:4px;line-height:1.25}
+.hm-goal{position:absolute;top:12px;right:12px;display:inline-flex;align-items:center;gap:3px;height:30px;padding:0 9px;border-radius:11px;border:0;background:rgba(6,38,26,.12);color:#06261A;font-weight:800;font-size:13px}
+.hm-goal i{font-size:16px}
+.hm-week{display:flex;gap:6px;margin-top:14px}
+.hm-week span{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;font-weight:700;color:rgba(6,38,26,.65)}
+.hm-week i{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:rgba(6,38,26,.12);font-size:16px;color:#06261A}
+.hm-week .ok i{background:#06261A;color:#2ED39A}.hm-week .now i{background:#fff;color:#14B87F;box-shadow:0 3px 0 rgba(6,38,26,.35)}
+.hm-go{display:flex;width:100%;align-items:center;justify-content:center;gap:8px;height:56px;margin-top:16px;border-radius:18px;border:0;background:#06261A;color:#fff;font-size:18px;font-weight:800;box-shadow:0 5px 0 #021009;text-align:center!important}
+.hm-go:active{transform:translateY(3px);box-shadow:0 2px 0 #021009}
+/* доска */
+.hm-board{position:relative;overflow:hidden;display:block;width:100%;margin-top:14px;border:0;border-radius:28px;padding:18px;min-height:196px;color:#fff;
+ background:radial-gradient(90% 120% at 100% 0%,rgba(255,92,122,.45),transparent 60%),linear-gradient(150deg,#3D6BFF,#6A4DFF);box-shadow:0 7px 0 #3326B8}
+:root:not([data-light]) .hm-board{background:radial-gradient(90% 120% at 100% 0%,rgba(255,92,122,.35),transparent 60%),linear-gradient(150deg,#232A55,#1A1F38);box-shadow:0 7px 0 #070914}
+.hm-board::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.14) 1.3px,transparent 1.4px);background-size:22px 22px;pointer-events:none}
+.hm-doodle{position:absolute;right:22px;top:14px;opacity:.55}
+.hm-new{position:relative;display:inline-block;padding:4px 10px;border-radius:999px;background:#FF5C7A;font-size:12px;font-weight:800}
+.hm-board b{position:relative;display:block;font-size:25px;font-weight:800;line-height:1.08;margin-top:10px;max-width:190px}
+.hm-board small{position:relative;display:block;font-size:14px;font-weight:600;opacity:.88;margin-top:6px;max-width:170px;line-height:1.3}
+.hm-play{position:relative;display:inline-flex;align-items:center;gap:6px;margin-top:14px;height:44px;padding:0 16px;border-radius:15px;background:#fff;color:#3326B8;font-weight:800;font-size:15px;box-shadow:0 4px 0 rgba(0,0,0,.2)}
+:root:not([data-light]) .hm-play{color:#1A1F38}
+.hm-masc{position:absolute;right:6px;bottom:-14px;width:136px;height:176px}
+/* спросить ИИ */
+.hm-ask{display:flex;align-items:center;gap:8px;margin-top:14px;height:62px;padding:0 8px 0 4px;border-radius:20px;box-shadow:0 4px 0 var(--edge);border:2px solid transparent;
+ background-image:linear-gradient(var(--hm-card),var(--hm-card)),linear-gradient(90deg,#16B98A,#3D82FF,#8B5CF6);background-origin:border-box;background-clip:padding-box,border-box}
+.hm-ask-in{flex:1;min-width:0;display:flex;align-items:center;gap:10px;height:100%;padding:0 10px;background:none;border:0;color:var(--tx2);font-size:15px;font-weight:600}
+.hm-ask-in span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hm-ask-in i{color:#16B98A;font-size:24px;flex:none}
+.hm-ask-b{width:44px;height:44px;flex:none;border-radius:14px;border:0;display:grid;place-items:center;font-size:22px;background:var(--hm-soft);color:var(--tx)}
+.hm-ask-b.g{background:#16B98A;color:#fff;box-shadow:0 3px 0 #0D8A66}
+/* ошибки */
+.hm-err{display:flex;width:100%;align-items:center;gap:12px;margin-top:14px;padding:12px 12px 12px 14px;border-radius:20px;border:0;border-left:6px solid #FF5C7A;background:var(--hm-card);box-shadow:0 4px 0 var(--edge);color:var(--tx)}
+.hm-err-ic{width:42px;height:42px;flex:none;border-radius:14px;display:grid;place-items:center;font-size:22px;background:rgba(255,92,122,.14);color:#FF5C7A}
+.hm-err-t{flex:1;min-width:0}.hm-err-t b{display:block;font-size:15.5px;font-weight:800}.hm-err-t small{display:block;font-size:13px;font-weight:600;color:var(--tx2)}
+.hm-err-go{flex:none;height:40px;padding:0 14px;border-radius:13px;background:#FF5C7A;color:#fff;font-weight:800;font-size:14px;display:grid;place-items:center;box-shadow:0 3px 0 #C93A55}
+/* плитки */
+.hm-h{display:flex;align-items:baseline;justify-content:space-between;margin:24px 2px 10px}
+.hm-h h2{font-size:20px;font-weight:800;letter-spacing:-.3px;margin:0}.hm-h span{font-size:14px;font-weight:600;color:var(--tx2)}
+.hm-g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.hm-t{position:relative;overflow:hidden;border:0;border-radius:24px;padding:14px;color:#fff;height:118px;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start}
+.hm-t::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 2px 0 rgba(255,255,255,.25);pointer-events:none}
+.hm-t-bg{position:absolute;right:-14px;bottom:-18px;font-size:96px;opacity:.18;transform:rotate(-12deg)}
+.hm-t-ic{position:relative;width:44px;height:44px;border-radius:15px;display:grid;place-items:center;font-size:25px;background:rgba(255,255,255,.22)}
+.hm-t-tx{position:relative;display:block;min-width:0;max-width:100%}
+.hm-t-tx b{display:block;font-size:19px;font-weight:800;line-height:1.1}
+.hm-t-tx small{display:block;font-size:13px;font-weight:600;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hm-t-cnt{position:absolute;top:12px;right:12px;min-width:24px;height:24px;border-radius:999px;background:#fff;color:#6236C9;font-weight:800;font-size:14px;display:grid;place-items:center}
+.hm-t.duel{background:#8B5CF6;box-shadow:0 6px 0 #6236C9}.hm-t.exam{background:#FF5C7A;box-shadow:0 6px 0 #C93A55}
+.hm-t.study{background:#3D82FF;box-shadow:0 6px 0 #2B5FC4}.hm-t.cards{background:#FF9F2E;box-shadow:0 6px 0 #C46C0C}
+.hm-t:active,.hm-s:active,.hm-err:active,.hm-vp:active{transform:translateY(3px)}
+/* Vita+ */
+#vpHome.hm-vp-wait{min-height:82px}
+.hm-vp{display:flex;width:100%;align-items:center;gap:12px;margin-top:14px;padding:12px 14px;border-radius:20px;background:linear-gradient(120deg,#FFF6DD,#FFFFFF 62%);border:1.5px solid #F2D68E;box-shadow:0 4px 0 #EEDFB8;color:var(--tx)}
+:root:not([data-light]) .hm-vp{background:radial-gradient(120% 120% at 100% 0%,rgba(255,180,60,.3),transparent 60%),var(--bg2);border:0;box-shadow:0 5px 0 var(--edge)}
+.hm-gem{width:42px;height:42px;flex:none;border-radius:14px;display:grid;place-items:center;font-size:22px;color:#3A2300;background:linear-gradient(145deg,#FFE08A,#FFB43D 55%,#F08A1C);box-shadow:inset 0 -4px 0 rgba(150,70,0,.3);transform:rotate(-8deg)}
+.hm-vp-t{flex:1;min-width:0;display:block}.hm-vp-t b{display:block;font-size:15.5px;font-weight:800}
+.hm-vp-t small{display:block;font-size:13px;font-weight:600;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hm-vp-bar{display:block;height:6px;border-radius:9px;background:var(--hm-soft);margin-top:6px;overflow:hidden}.hm-vp-bar i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,#FF5C7A,#FFB43D)}
+.hm-chev{color:var(--tx2);font-size:20px;flex:none}
+/* предметы */
+.hm-subj{display:flex;flex-direction:column;gap:10px}
+.hm-s{display:flex;width:100%;align-items:center;gap:12px;padding:10px 12px;border:0;border-radius:20px;background:var(--hm-card);box-shadow:0 4px 0 var(--edge);color:var(--tx);min-height:66px}
+.hm-s-ic{width:42px;height:42px;flex:none;border-radius:14px;display:grid;place-items:center;font-size:23px;background:var(--cs);color:var(--ct)}
+.hm-s-tx{flex:1;min-width:0;display:block}.hm-s-tx b{display:block;font-size:16px;font-weight:700;line-height:1.2}
+.hm-s-bar{display:block;height:9px;border-radius:9px;background:var(--hm-soft);margin-top:7px;overflow:hidden}.hm-s-bar i{display:block;height:100%;border-radius:9px;background:var(--c)}
+.hm-s-pc{font-size:15px;font-weight:800;min-width:44px;text-align:right;color:var(--ct)}
+.hm-who.g small{white-space:normal;line-height:1.2}
 </style>
 </head>
 <body>
@@ -10511,7 +10637,13 @@ function renderStudySubjects(el){
   }).catch(function(){el.innerHTML='<div class="study-empty"><div class="se-ic"><i class="ti ti-alert-triangle"></i></div><div class="se-t">Ошибка загрузки предметов</div></div>';});
 }
 // темы-черновики (собраны ботом для админа) студентам не показываем
-function stVisible(rows){return (rows||[]).filter(function(t){return !t.draft||S.isAdm;});}
+function stVisible(rows){return (rows||[]).filter(function(t){
+  if(t.draft&&!S.isAdm)return false;
+  if(!t.owner_email||S.isAdm)return true;                                  // своя тема студента (v26)
+  var me=S.user&&S.user.email,g=S.user&&S.user.group;
+  return t.owner_email===me||(t.visibility==='group'&&g&&t.owner_group===g);
+});}
+function stIsMine(t){return !!(t&&t.owner_email&&S.user&&t.owner_email===S.user.email);}
 // сколько прочитано: пройденная тема — 100%, иначе — сколько дочитал
 function stTopicPct(t){var p=ST.progress[t.id];return p?(p.completed?100:Math.max(0,Math.min(100,+p.read_pct||0))):0;}
 function stSubjPct(topics){if(!topics.length)return 0;var s=0;topics.forEach(function(t){s+=stTopicPct(t);});return Math.round(s/topics.length);}
@@ -10577,8 +10709,9 @@ function renderStudyTopics(el){
     h+='<div class="st-banner"><span class="stb-ic">'+L.icon+'</span><span class="stb-t"><b>'+esc(ST.subject.name)+'</b><small>'
       +(!total?'Темы скоро появятся':!left?'Все '+total+' '+vplural(total,'тема','темы','тем')+' прочитаны':pct?'Прочитано '+pct+'% · осталось '+left+' '+vplural(left,'тема','темы','тем'):total+' '+vplural(total,'тема','темы','тем')+' · начни с первой')
       +'</small></span><span class="stb-bar" aria-hidden="true"><i style="width:'+pct+'%"></i></span></div>';
+    var mine=ST.topics.filter(function(t){return !!t.owner_email;});
     if(ST.topics.length){
-      ST.topics.forEach(function(t){
+      ST.topics.filter(function(t){return !t.owner_email;}).forEach(function(t){
         var p=ST.progress[t.id];
         var tp=stTopicPct(t);
         var cls=tp>=100?'done':(tp>0?'active':'');
@@ -10587,6 +10720,7 @@ function renderStudyTopics(el){
         h+='<div class="study-topic '+cls+'" onclick="studyOpenTopic('+t.id+')"><div class="st-d">'+(t.number||'•')+'</div><div class="st-t"><b>'+esc(t.title)+'</b><span>'+sub+'</span></div><div class="st-m">'+mark+'</div></div>';
       });
     }
+    if(typeof stMyHtml==='function')h+=stMyHtml(mine);
     h+='<div class="study-back" onclick="studyPickCourse('+ST.course.id+')">← Все предметы</div>';
     el.innerHTML='<div class="st-subj '+L.cls+'">'+h+'</div>';
   }).catch(function(){el.innerHTML='<div class="study-empty"><div class="se-ic"><i class="ti ti-alert-triangle"></i></div><div class="se-t">Ошибка загрузки тем</div></div>';});
@@ -10606,11 +10740,14 @@ function renderTopicReader(el){
   var t=ST.topic;
   var h='';
   // топбар
-  h+='<div class="reader-top"><div class="r-back" onclick="renderStudyTopics(document.getElementById(\'studyBody\'))">←</div><div class="r-crumb">'+esc(ST.subject.name)+' <b>· Тема '+(t.number||'')+'</b></div><div class="r-bm" onclick="studyToggleBookmark('+t.id+')" id="bmBtn" role="button" aria-label="Закладка">☆</div></div>';
+  h+='<div class="reader-top"><div class="r-back" onclick="renderStudyTopics(document.getElementById(\'studyBody\'))">←</div><div class="r-crumb">'+esc(ST.subject.name)+' <b>· '+(t.owner_email?'Моя тема':'Тема '+(t.number||''))+'</b></div><div class="r-bm" onclick="studyToggleBookmark('+t.id+')" id="bmBtn" role="button" aria-label="Закладка">☆</div></div>';
   // hero
   h+='<div class="study-reader-hero '+vLook(ST.subject.name,ST.subject.emoji).cls+'"><div class="srh-k">'+esc(t.kicker||ST.subject.name)+'</div><h1>'+esc(t.title)+'</h1>';
   if(t.lede)h+='<p class="srh-lede">'+esc(t.lede)+'</p>';
-  h+='<div class="srh-floats"><span class="srh-chip"><i class="ti ti-clock"></i> '+(t.read_minutes||studyReadMinutes(ST.blocks))+' мин чтения</span></div></div>';
+  if(t.owner_email&&typeof stMyHero==='function')h+=stMyHero(t);
+  else h+='<div class="srh-floats"><span class="srh-chip"><i class="ti ti-clock"></i> '+(t.read_minutes||studyReadMinutes(ST.blocks))+' мин чтения</span></div>';
+  h+='</div>';
+  if(t.owner_email&&typeof stMyActions==='function')h+=stMyActions(t);
   // блоки (кроме quiz — они идут в финальный тест); из заголовков собирается содержание
   var blist=studyBlockList(ST.blocks.filter(function(b){return b.type!=='quiz';}),false);
   var quizzes=ST.blocks.filter(function(b){return b.type==='quiz';});
@@ -11659,56 +11796,104 @@ function renderHome(){
   renderAuthHdr();
   var QS=getQS();
   var st=getMyStats(),lv=vitaLevel(st);
-  var firstName=S.user?String(S.user.name||'').split(' ')[0]:'';
-  var hour=new Date().getHours();
-  var greet=hour<6?'Доброй ночи':hour<12?'Доброе утро':hour<18?'Добрый день':'Добрый вечер';
   var errs=vErrCount();
-  var h='<div class="v-home">';
-  h+='<p class="lb-hi">'+greet+(firstName?', <b>'+esc(firstName)+'</b>':'')+'</p>';
-
-  if(S.user){
-    h+='<button class="lb-hero" onclick="vGo(\'levels\')" aria-label="Звание и уровень">'
-      +'<span class="lb-hero-top">'+vRankBadge(lv.r)
-      +'<span class="lb-hero-t"><b>'+lv.r.n+'</b><span>Уровень '+lv.level+' · '+vNum(lv.inLevel)+' / '+vNum(lv.need)+' XP</span></span>'
-      +'<i class="ti ti-chevron-right lb-chev"></i></span>'
-      +vEcg(lv.pct)+'</button>';
-  }else if(typeof vApplyBanner==='function'&&vApplyBanner()){
-    h+=vApplyBanner();
-  }else{
-    h+='<div class="lb-guest"><p>Войди через Telegram или почту — прогресс сохранится, появится звание, рейтинг и дуэли.</p><button class="btn bbl" onclick="openModal(\'login\')">Войти</button></div>';
-  }
-
-  h+=vPlanCta(QS);
-  if(S.user)h+=vGoalRow();
-
+  var h='<div class="v-home hm2">';
+  h+=hmTop(lv);
+  if(!S.user&&typeof vApplyBanner==='function'&&vApplyBanner())h+=vApplyBanner();
+  h+=hmPlan(QS);
+  if(S.user||S.isAdm)h+=hmBoard()+hmAsk();
+  if(errs)h+='<button type="button" class="hm-err" onclick="vOpenErrors()"><span class="hm-err-ic" aria-hidden="true"><i class="ti ti-refresh-alert"></i></span>'
+    +'<span class="hm-err-t"><b>'+errs+' '+vplural(errs,'ошибка ждёт','ошибки ждут','ошибок ждут')+'</b><small>повтори, пока помнишь</small></span><span class="hm-err-go">Повторить</span></button>';
   var duelWaiting=document.getElementById('duelBadge')&&document.getElementById('duelBadge').style.display!=='none';
-  h+='<div class="lb-duo">'
-    +'<button class="lb-tile meth" onclick="vGo(\'study\')"><span class="ic"><i class="ti ti-book-2"></i></span><span class="lb-tb"><b>Учёба</b><small>'+(S.studyCourseName?esc(S.studyCourseName)+(S.studyUniName?' · '+esc(S.studyUniName):''):'Конспекты тем')+'</small></span></button>'
-    +'<button class="lb-tile vio" onclick="vOpen(\'duels\')"><span class="ic"><i class="ti ti-swords"></i></span>'+(duelWaiting?'<span class="cnt">!</span>':'')+'<span class="lb-tb"><b>Дуэли</b><small>'+(duelWaiting?'Тебя вызвали':'Один на один')+'</small></span></button>'
+  var tile=function(cls,fn,ic,t,d,badge){return '<button type="button" class="hm-t '+cls+'" onclick="'+fn+'"><i class="ti '+ic+' hm-t-bg" aria-hidden="true"></i><span class="hm-t-ic" aria-hidden="true"><i class="ti '+ic+'"></i></span>'+(badge?'<span class="hm-t-cnt">'+badge+'</span>':'')+'<span class="hm-t-tx"><b>'+t+'</b><small>'+d+'</small></span></button>';};
+  h+='<div class="hm-h"><h2>Учиться</h2></div><div class="hm-g2">'
+    +tile('duel',"vOpen('duels')",'ti-swords','Дуэли',duelWaiting?'тебя вызвали':'один на один',duelWaiting?'!':'')
+    +tile('exam',"vOpen('exam')",'ti-clock-hour-4','Экзамен','билет на время')
+    +tile('study',"vGo('study')",'ti-file-text','Учёба',S.studyCourseName?esc(S.studyCourseName):'конспекты тем')
+    +tile('cards',"vOpen('flashcards')",'ti-cards','Карточки',vNum(QS.length)+' '+vplural(QS.length,'карточка','карточки','карточек'))
     +'</div>';
-  if(S.user||S.isAdm)h+=bdHomeCard()+vqHomeRow();
-  h+='<div id="vpHome">'+vpHomeHtml()+'</div>';
-
-  h+='<div class="lb-tri">'
-    +'<button class="lb-mini" onclick="vOpenErrors()"><span class="lb-blob eos"><i class="ti ti-refresh-alert"></i></span><span><b>Ошибки</b><small>'+(errs?'<em>'+errs+'</em> ждут':'пока нет')+'</small></span></button>'
-    +'<button class="lb-mini" onclick="vOpen(\'exam\')"><span class="lb-blob iod"><i class="ti ti-clock-hour-4"></i></span><span><b>Экзамен</b><small>билет на время</small></span></button>'
-    +'<button class="lb-mini" onclick="vOpen(\'flashcards\')"><span class="lb-blob meth"><i class="ti ti-cards"></i></span><span><b>Карточки</b><small>'+vNum(QS.length)+' '+vplural(QS.length,'карточка','карточки','карточек')+'</small></span></button>'
-    +'</div>';
-
+  // место под Vita+ держим заранее, чтобы список предметов не прыгал, когда придёт ответ сервера
+  h+='<div id="vpHome" class="'+(S.user&&!VP&&!VP_AT?'hm-vp-wait':'')+'">'+vpHomeHtml()+'</div>';
   var keys=Object.keys(SM);
-  h+='<div class="lb-h2"><h2>Предметы</h2><span>решено</span></div>';
-  h+='<div class="lb-subj">';
+  h+='<div class="hm-h"><h2>Предметы</h2><span>решено</span></div><div class="hm-subj">';
   keys.forEach(function(k){
     var m=SM[k],s2=vSubjStats(k,QS),tone=vSubjTone(k);
-    h+='<button class="lb-sub" onclick="vOpenSubject(\''+esc(k)+'\')" aria-label="'+esc(m.label)+': решено '+s2.solved+' из '+s2.total+', освоено '+s2.mast+'">'
-      +'<span class="lb-sub-ic lb-blob '+tone+'">'+m.icon+'</span>'
-      +'<span class="lb-sub-tx"><b>'+esc(m.label)+'</b>'
-      +'<small><em style="color:var(--'+tone+'-t)">'+s2.pct+'%</em> · '+vNum(s2.solved)+' из '+vNum(s2.total)+'</small>'
-      +vBar2(s2,tone)+'</span></button>';
+    h+='<button type="button" class="hm-s" style="--c:var(--'+tone+');--ct:var(--'+tone+'-t);--cs:var(--'+tone+'-s)" onclick="vOpenSubject(\''+esc(k)+'\')" aria-label="'+esc(m.label)+': решено '+s2.solved+' из '+s2.total+'">'
+      +'<span class="hm-s-ic" aria-hidden="true">'+m.icon+'</span>'
+      +'<span class="hm-s-tx"><b>'+esc(m.label)+'</b><span class="hm-s-bar"><i style="width:'+Math.max(s2.pct,2)+'%"></i></span></span>'
+      +'<span class="hm-s-pc">'+s2.pct+'%</span></button>';
   });
   h+='</div><div style="height:8px"></div></div>';
   document.getElementById('homeBody').innerHTML=h;
+  setTimeout(function(){var w=document.getElementById('vpHome');if(w)w.className='';},4000);
 }
+// верхняя строка: аватар с кольцом опыта, имя, серия, монеты
+function hmTop(lv){
+  if(!S.user)return '<div class="hm-top"><span class="hm-logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#08261A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 13h4l2-5 4 10 3-7 2 2h5"/></svg></span>'
+    +'<span class="hm-who g"><b>Vita</b><small>войди, чтобы сохранить прогресс</small></span>'
+    +'<button type="button" class="hm-login" onclick="openModal(\'login\')"><i class="ti ti-brand-telegram" aria-hidden="true"></i>Войти</button></div>';
+  var name=String(S.user.name||'').split(' ')[0]||'Студент';
+  return '<div class="hm-top"><button type="button" class="hm-me" onclick="vGo(\'levels\')" aria-label="Звание и уровень: '+lv.r.n+', уровень '+lv.level+'">'
+    +'<span class="hm-av" style="--p:'+lv.pct+'%"><span class="hm-av-in">'+renderAvatar(S.user,44)+'</span><em>'+lv.level+'</em></span>'
+    +'<span class="hm-who"><b>'+esc(name)+'</b><small>Уровень '+lv.level+' · '+vNum(lv.inLevel)+' XP</small></span></button>'
+    +'<span class="hm-chip" title="Дней подряд" aria-label="Дней подряд: '+vStreakNow()+'"><i class="ti ti-flame" style="color:#FF7A3D" aria-hidden="true"></i>'+vStreakNow()+'</span>'
+    +'<button type="button" class="hm-chip" onclick="vGo(\'shop\')" aria-label="Монеты, магазин"><i class="ti ti-coin" style="color:#F2B530" aria-hidden="true"></i><span class="coinDisp">'+vNum(myCoins())+'</span></button></div>';
+}
+// неделя: день засчитан, если цель выполнена
+function hmWeek(){
+  var g=vGoal(),now=new Date(),dow=(now.getDay()+6)%7,names=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'],days=S.days||{},out='';
+  for(var i=0;i<7;i++){
+    var d=new Date(now);d.setDate(now.getDate()-dow+i);
+    var n=days[vDayKey(d)]||0,cls='',ic='ti-point';
+    if(n>=g){cls='ok';ic='ti-check';}
+    else if(i===dow){cls='now';ic='ti-flame';}
+    out+='<span class="'+cls+'"><i class="ti '+ic+'" aria-hidden="true"></i>'+names[i]+'</span>';
+  }
+  return '<div class="hm-week" aria-label="Неделя: дни, когда цель выполнена">'+out+'</div>';
+}
+function hmPlan(QS){
+  var pl=vPlan(),solved=QS.filter(function(q){var p=S.prog[q.id];return p&&p.a>0;}).length;
+  var goal='<button type="button" class="hm-goal" onclick="vGoalOpen()" aria-label="Изменить цель на день"><i class="ti ti-target-arrow" aria-hidden="true"></i>'+vGoal()+'</button>';
+  var ring=function(done,total,inner){var pc=total?Math.round(done/total*100):0;return '<span class="hm-ring" style="--p:'+pc+'%" aria-hidden="true"><span>'+inner+'</span></span>';};
+  var k,t,sub,btn,fn,r;
+  if(!pl||!pl.ids.length){
+    k='Тренажёр';t=solved?'Продолжить тест':'Начать тест';
+    sub=solved?'Решено '+vNum(solved)+' из '+vNum(QS.length):vNum(QS.length)+' '+vplural(QS.length,'вопрос','вопроса','вопросов');
+    r=ring(solved,QS.length,'<i class="ti ti-player-play-filled"></i>');btn=solved?'Продолжить':'Решать';fn='vTrainerFree()';
+  }else{
+    var total=pl.ids.length,left=vPlanLeft(pl).length,done=total-left,mins=Math.max(1,Math.round(left*25/60));
+    k='План на сегодня';
+    if(!left){t='На сегодня всё';sub='Можно порешать ещё';r=ring(1,1,'<i class="ti ti-check"></i>');btn='Порешать ещё';fn='vTrainerFree()';}
+    else{
+      t=(done?left:total)+' '+vplural(done?left:total,'вопрос','вопроса','вопросов');
+      var parts=[];if(pl.rev)parts.push(pl.rev+' повторить');if(pl.neu)parts.push(pl.neu+' '+vplural(pl.neu,'новый','новых','новых'));parts.push('~'+mins+' мин');
+      sub=done?'осталось · ~'+mins+' мин':parts.join(' · ');
+      r=ring(done,total,'<b>'+done+'</b><small>из '+total+'</small>');btn=done?'Дальше':'Решать';fn='vPlanStart()';
+    }
+  }
+  return '<div class="hm-plan"><div class="hm-plan-row">'+r+'<span class="hm-plan-t"><span class="hm-k">'+k+'</span><b>'+t+'</b><small>'+sub+'</small></span>'+(S.user?goal:'')+'</div>'
+    +(S.user?hmWeek():'')
+    +'<button type="button" class="hm-go" onclick="'+fn+'">'+btn+'<i class="ti ti-arrow-right" aria-hidden="true"></i></button></div>';
+}
+function hmBoard(){
+  return '<button type="button" class="hm-board" onclick="bdOpen()">'
+    +'<svg class="hm-doodle" width="70" height="44" viewBox="0 0 70 44" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M4 30 h12 l6 -16 l9 26 l7 -18 h28"/></svg>'
+    +'<span class="hm-new">Новое</span><b>Объясни на доске</b><small>Нарисую схему и расскажу голосом</small>'
+    +'<span class="hm-play"><i class="ti ti-player-play-filled" aria-hidden="true"></i>Выбрать тему</span>'
+    +'<svg class="hm-masc" viewBox="-10 -78 66 86" aria-hidden="true"><path d="M7 -11 L0 0" stroke="#F4F1E8" stroke-width="5.5" stroke-linecap="round"/><path d="M9 -14 Q15 -21 21 -25" fill="none" stroke="#0D1020" stroke-width="7" stroke-linecap="round"/><path d="M9 -14 Q15 -21 21 -25" fill="none" stroke="#FFD0D9" stroke-width="3.6" stroke-linecap="round"/><g transform="rotate(-20 30 -41)"><rect x="13" y="-66" width="34" height="50" rx="17" fill="#F4F1E8"/><path d="M13 -41 L13 -49 A17 17 0 0 1 47 -49 L47 -41 Z" fill="#FF5C7A"/><ellipse cx="22" cy="-56" rx="3.2" ry="5" fill="#FFB3C1" transform="rotate(20 22 -56)"/><path d="M13 -41 H47" stroke="#0D1020" stroke-width="2"/><rect x="13" y="-66" width="34" height="50" rx="17" fill="none" stroke="#0D1020" stroke-width="3"/><circle cx="24" cy="-32" r="3.3" fill="#14182B"/><circle cx="36" cy="-32" r="3.3" fill="#14182B"/><circle cx="25" cy="-33.2" r="1.1" fill="#fff"/><circle cx="37" cy="-33.2" r="1.1" fill="#fff"/><circle cx="20" cy="-26" r="2.6" fill="#FF9FB0" opacity=".7"/><circle cx="40" cy="-26" r="2.6" fill="#FF9FB0" opacity=".7"/><path d="M26.5 -25.5 Q30 -21.5 33.5 -25.5" fill="none" stroke="#14182B" stroke-width="2.2" stroke-linecap="round"/></g></svg>'
+    +'</button>';
+}
+function hmAsk(){
+  return '<div class="hm-ask"><button type="button" class="hm-ask-in" onclick="vqOpen()"><i class="ti ti-sparkles" aria-hidden="true"></i><span>Спроси ИИ что угодно</span></button>'
+    +'<button type="button" class="hm-ask-b" onclick="vqOpen();setTimeout(function(){try{vqPick();}catch(e){}},60)" aria-label="Спросить по фото"><i class="ti ti-camera" aria-hidden="true"></i></button>'
+    +((typeof vqCanRec!=='function'||vqCanRec())?'<button type="button" class="hm-ask-b g" onclick="vqOpen();setTimeout(function(){try{vqMic();}catch(e){}},60)" aria-label="Спросить голосом"><i class="ti ti-microphone" aria-hidden="true"></i></button>':'')+'</div>';
+}
+// на телефоне у главной своя верхняя строка — общую шапку прячем
+(function(){
+  var mark=function(pg){document.documentElement.toggleAttribute('data-onhome',pg==='home');};
+  var _g=go;go=function(pg,btn){var r=_g.apply(this,arguments);var on=document.querySelector('.page.on');mark(on?on.id.replace('pg-',''):pg);return r;};
+  var on=document.querySelector('.page.on');mark(on?on.id.replace('pg-',''):'home');
+})();
 
 function renderTests(){
   var QS=getQS();
@@ -14647,7 +14832,8 @@ function renderLevels(){
 var SFX={ctx:null};
 function sfxCtx(){
   try{
-    if(!SFX.ctx){var A=window.AudioContext||window.webkitAudioContext;if(!A)return null;SFX.ctx=new A();}
+    if(!SFX.ctx){var ua=navigator.userActivation;if(ua&&!ua.hasBeenActive)return null;   // до первого касания браузер звук не даст
+      var A=window.AudioContext||window.webkitAudioContext;if(!A)return null;SFX.ctx=new A();}
     if(SFX.ctx.state==='suspended')SFX.ctx.resume();
   }catch(e){return null;}
   return SFX.ctx;
@@ -14659,7 +14845,7 @@ function sfxTone(c,t0,f,dur,type,vol,f2){
   o.connect(g);g.connect(c.destination);o.start(t0);o.stop(t0+dur+0.03);
 }
 function playSound(type){
-  try{var hf=window.Telegram&&Telegram.WebApp&&Telegram.WebApp.HapticFeedback;
+  try{var wa0=window.Telegram&&Telegram.WebApp,hf=wa0&&wa0.initData&&wa0.isVersionAtLeast&&wa0.isVersionAtLeast('6.1')&&wa0.HapticFeedback;
     if(hf&&S.haptic!==false){
       if(type==='correct'||type==='done')hf.notificationOccurred('success');else if(type==='wrong')hf.notificationOccurred('error');
       else if(type==='nav')hf.selectionChanged();else if(type==='tap')hf.impactOccurred('light');
@@ -14776,19 +14962,19 @@ async function vpLoad(force){
   if(!force&&VP&&Date.now()-VP_AT<60000)return VP;
   try{VP=await vRpc('sub_status',{p_token:vpTok()});VP_AT=Date.now();}catch(e){if(e.missing)VP=null;}
   try{vpPaint();}catch(e){}
-  try{var hm=document.getElementById('vpHome');if(hm)hm.innerHTML=vpHomeHtml();}catch(e){}
+  try{var hm=document.getElementById('vpHome');if(hm){hm.innerHTML=vpHomeHtml();hm.className='';}}catch(e){}
   return VP;
 }
 // витрина на главной: бесплатным — яркая карточка, с Vita+ — строка со сроком
 function vpHomeHtml(){
   var v=VP;if(!v||!v.enabled||v.staff||!S.user)return '';
-  if(v.plus)return '<button type="button" class="vp-home on" onclick="vpWall(\'info\')"><span class="vp-mark on" aria-hidden="true">✦</span><span class="vp-ht"><b>Vita+ активна</b><small>Без лимитов до '+vpDate(v.until,true)+'</small></span><i class="ti ti-chevron-right" aria-hidden="true"></i></button>';
-  var left=vpLeft();
-  return '<button type="button" class="vp-home" onclick="vpWall(\'info\')"><span class="vp-shine" aria-hidden="true"></span>'
-    +'<span class="vp-hrow"><span class="vp-hmark" aria-hidden="true">✦</span><b>Vita+</b><span class="vp-hprice">'+vpSum(v.price_uzs)+' сум</span></span>'
-    +'<span class="vp-hbig">Тесты, ИИ и свои тесты — без лимитов</span>'
-    +'<span class="vp-hfoot"><span>'+(v.trial_left>0?'Бесплатно осталось '+v.trial_left+' '+vplural(v.trial_left,'вопрос','вопроса','вопросов'):(left>0?'Сегодня бесплатно осталось '+left+' из '+v.q_limit:'Бесплатные вопросы на сегодня закончились'))+'</span>'
-    +(v.gift?'<span class="vp-hgift">+'+v.gift+' монет в подарок</span>':'')+'</span></button>';
+  var gem='<span class="hm-gem" aria-hidden="true"><i class="ti ti-crown"></i></span>';
+  if(v.plus)return '<button type="button" class="hm-vp on" onclick="vpWall(\'info\')">'+gem+'<span class="hm-vp-t"><b>Vita+ активна</b><small>Без лимитов до '+vpDate(v.until,true)+'</small></span><i class="ti ti-chevron-right hm-chev" aria-hidden="true"></i></button>';
+  var left=vpLeft(),lim=v.trial_left>0?Math.max(v.trial_left,1):v.q_limit,val=v.trial_left>0?v.trial_left:left;
+  var line=v.trial_left>0?'Бесплатно осталось: '+v.trial_left:(left>0?'Бесплатно сегодня: '+left+' из '+v.q_limit:'Бесплатные на сегодня закончились');
+  return '<button type="button" class="hm-vp" onclick="vpWall(\'info\')">'+gem
+    +'<span class="hm-vp-t"><b>Vita+ · без лимитов</b><small>'+line+(v.gift?' · +'+v.gift+' монет в подарок':'')+'</small>'
+    +'<span class="hm-vp-bar"><i style="width:'+Math.round(Math.min(1,val/lim)*100)+'%"></i></span></span><i class="ti ti-chevron-right hm-chev" aria-hidden="true"></i></button>';
 }
 function vpCompare(v,bank){
   var yes='<i class="ti ti-check" aria-label="есть"></i>',no='<i class="ti ti-minus" aria-label="нет"></i>',inf='<b>Без лимита</b>';
@@ -16431,6 +16617,92 @@ async function ltRun(){
     await new Promise(function(r){setTimeout(r,2500);});
   }
   LT.run=false;if(ADM_CUR==='load')ltRender();
+}
+
+// ===================== СВОЯ ТЕМА (v26) =====================
+// Темы нет в списке — студент создаёт её сам. Видно «только мне» или «моей группе».
+// Внутри всё как у обычной темы: материалы, конспект от ИИ, тест, доска. «Предложить всем» — админ проверит.
+function stMyHtml(mine){
+  if(!S.user)return '';
+  var h='<div class="stm-h"><b>Мои темы</b><small>'+(mine.length?'видишь ты'+(mine.some(function(t){return t.visibility==='group';})?' и твоя группа':''):'темы нет в списке? создай свою')+'</small></div>';
+  mine.forEach(function(t){
+    var own=stIsMine(t),badge=!own?'<span class="stm-b grp"><i class="ti ti-users" aria-hidden="true"></i>Тема одногруппника</span>'
+      :t.proposed?'<span class="stm-b rev"><i class="ti ti-hourglass" aria-hidden="true"></i>На проверке</span>'
+      :t.visibility==='group'?'<span class="stm-b grp"><i class="ti ti-users" aria-hidden="true"></i>Видит группа</span>'
+      :'<span class="stm-b"><i class="ti ti-lock" aria-hidden="true"></i>Только ты</span>';
+    var tp=stTopicPct(t);
+    h+='<button type="button" class="stm-card" onclick="studyOpenTopic('+t.id+')"><span class="stm-ic" aria-hidden="true"><i class="ti ti-file-text"></i></span>'
+      +'<span class="stm-tt"><b>'+esc(t.title)+'</b>'+badge+(tp>0?'<small>'+(tp>=100?'Прочитана':'Читаешь · '+tp+'%')+'</small>':'')+'</span><i class="ti ti-chevron-right stm-go" aria-hidden="true"></i></button>';
+  });
+  h+='<button type="button" class="stm-add" onclick="stMyNew()"><i class="ti ti-plus" aria-hidden="true"></i>Своя тема</button>';
+  return h;
+}
+function stMyNew(){
+  if(!S.user){openModal('login');return;}
+  var g=S.user.group||'';
+  showModal('Своя тема','<div class="stm-form"><p class="stm-sub">Темы нет в списке? Создай и собирай материалы сам — фото, PDF, YouTube. ИИ соберёт конспект.</p>'
+    +'<div class="field"><label for="stmTitle">Название</label><input id="stmTitle" maxlength="120" placeholder="Например: Амилоидоз почек" autocomplete="off" onkeydown="if(event.key===\'Enter\')stMyCreate()"></div>'
+    +'<div class="field"><label>Предмет</label><div class="stm-subj"><i class="ti ti-book" aria-hidden="true"></i>'+esc(ST.subject?ST.subject.name:'')+'</div></div>'
+    +'<div class="field"><label id="stmVisL">Кому видно</label><div class="stm-seg" role="radiogroup" aria-labelledby="stmVisL">'
+    +'<button type="button" role="radio" aria-checked="true" class="on" data-v="me" onclick="stMyVis(this)"><i class="ti ti-lock" aria-hidden="true"></i>Только мне</button>'
+    +'<button type="button" role="radio" aria-checked="false" data-v="group" onclick="stMyVis(this)"'+(g?'':' disabled title="Укажи группу в профиле"')+'><i class="ti ti-users" aria-hidden="true"></i>'+(g?'Группе '+esc(g):'Группе')+'</button></div></div>'
+    +'<div class="stm-hint"><i class="ti ti-info-circle" aria-hidden="true"></i><span>Захочешь, чтобы тему видели все, — нажмёшь «Предложить всем» внутри темы. Админ проверит и добавит в предмет.</span></div>'
+    +'<div class="stm-err" id="stmErr" role="alert"></div>'
+    +'<button type="button" class="btn bbl stm-go2" id="stmGo" onclick="stMyCreate()"><i class="ti ti-check" aria-hidden="true"></i>Создать тему</button></div>');
+  vModalX(true);setTimeout(function(){var i=document.getElementById('stmTitle');if(i)i.focus();},80);
+}
+function stMyVis(b){if(b.disabled)return;b.parentNode.querySelectorAll('button').forEach(function(x){var on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-checked',on);});}
+async function stMyCreate(){
+  var i=document.getElementById('stmTitle'),e=document.getElementById('stmErr'),go=document.getElementById('stmGo');
+  var t=(i&&i.value||'').trim();if(t.length<3){if(e)e.textContent='Название — хотя бы 3 буквы';if(i)i.focus();return;}
+  var on=document.querySelector('.stm-seg .on'),vis=on?on.getAttribute('data-v'):'me';
+  go.disabled=true;if(e)e.textContent='';
+  try{
+    var r=await vRpc('topic_create_own',{p_token:vReadToken(),p_subject:ST.subject.id,p_title:t,p_vis:vis});
+    var row=Array.isArray(r)?r[0]:r;closeModal();
+    ST.topics=(ST.topics||[]).concat([row]);studyOpenTopic(row.id);toast2('Тема создана — добавь первый материал');
+  }catch(x){go.disabled=false;if(e)e.textContent=x.missing?'Сначала нужно запустить security_v26.sql в Supabase.':(x.message||'Не получилось создать');}
+}
+function stMyHero(t){
+  var own=stIsMine(t);
+  var k=!own?'<i class="ti ti-users" aria-hidden="true"></i>Тема одногруппника':t.proposed?'<i class="ti ti-hourglass" aria-hidden="true"></i>Моя тема · на проверке у админа'
+    :t.visibility==='group'?'<i class="ti ti-users" aria-hidden="true"></i>Моя тема · видит группа':'<i class="ti ti-lock" aria-hidden="true"></i>Моя тема · видишь только ты';
+  return '<div class="srh-floats"><span class="srh-chip stm-chip">'+k+'</span></div>';
+}
+function stMyActions(t){
+  if(S.isAdm&&!stIsMine(t))
+    return '<div class="stm-acts"><button type="button" class="stm-act pub" onclick="stMyPublish('+t.id+')"><i class="ti ti-world-upload" aria-hidden="true"></i><span><b>'+(t.proposed?'Опубликовать для всех':'Сделать общей темой')+'</b><small>Тема студента станет обычной темой предмета</small></span></button></div>';
+  if(!stIsMine(t))return '';
+  var h='<div class="stm-acts">';
+  h+='<div class="stm-empty"><i class="ti ti-photo-plus" aria-hidden="true"></i><span><b>Добавь материалы</b><small>Фото доски, PDF лекции или ссылку на YouTube — кнопка «Добавить» внизу. ИИ соберёт из них конспект.</small></span></div>';
+  h+=t.proposed?'<button type="button" class="stm-act" onclick="stMyPropose('+t.id+',false)"><i class="ti ti-hourglass" aria-hidden="true"></i><span><b>На проверке у админа</b><small>Нажми, чтобы отозвать</small></span></button>'
+    :'<button type="button" class="stm-act" onclick="stMyPropose('+t.id+',true)"><i class="ti ti-send" aria-hidden="true"></i><span><b>Предложить всем</b><small>Админ проверит и добавит в предмет</small></span></button>';
+  h+='<button type="button" class="stm-act" onclick="stMyVisToggle('+t.id+')"><i class="ti ti-'+(t.visibility==='group'?'lock':'users')+'" aria-hidden="true"></i><span><b>'+(t.visibility==='group'?'Сделать только для себя':'Показать группе')+'</b><small>'+(t.visibility==='group'?'Одногруппники перестанут её видеть':'Одногруппники увидят тему и материалы')+'</small></span></button>';
+  h+='<button type="button" class="stm-act del" onclick="stMyDelete('+t.id+')"><i class="ti ti-trash" aria-hidden="true"></i><span><b>Удалить тему</b></span></button>';
+  return h+'</div>';
+}
+function stMyRefresh(row){
+  if(!row)return;var i=(ST.topics||[]).findIndex(function(x){return x.id===row.id;});if(i>=0)ST.topics[i]=row;ST.topic=row;
+  renderTopicReader(document.getElementById('studyBody'));
+}
+async function stMyPropose(id,on){
+  try{var r=await vRpc('topic_own_update',{p_token:vReadToken(),p_id:id,p_propose:on});stMyRefresh(Array.isArray(r)?r[0]:r);
+    toast2(on?'Отправлено админу на проверку':'Предложение отозвано');}catch(e){vAlert(e.message||'Не получилось');}
+}
+async function stMyVisToggle(id){
+  var t=ST.topic;if(!t)return;
+  if(t.visibility!=='group'&&!(S.user&&S.user.group)){vAlert('Сначала укажи свою группу в профиле');return;}
+  try{var r=await vRpc('topic_own_update',{p_token:vReadToken(),p_id:id,p_vis:t.visibility==='group'?'me':'group'});stMyRefresh(Array.isArray(r)?r[0]:r);}
+  catch(e){vAlert(e.message||'Не получилось');}
+}
+async function stMyDelete(id){
+  var ok=await vConfirm('Удалить тему «'+(ST.topic&&ST.topic.title||'')+'»? Материалы в ней тоже пропадут.','Удалить',true);if(!ok)return;
+  try{await vRpc('topic_own_delete',{p_token:vReadToken(),p_id:id});ST.topics=(ST.topics||[]).filter(function(x){return x.id!==id;});
+    renderStudyTopics(document.getElementById('studyBody'));toast2('Тема удалена');}catch(e){vAlert(e.message||'Не получилось удалить');}
+}
+async function stMyPublish(id){
+  try{var r=await vRpc('admin_topic_publish',{p_token:vAdminToken(),p_id:id});stMyRefresh(Array.isArray(r)?r[0]:r);toast2('Тема теперь общая');}
+  catch(e){vAlert(e.missing?'Сначала нужно запустить security_v26.sql в Supabase.':(e.message||'Не получилось'));}
 }
 // ===== VITA · КОНЕЦ БЛОКА «ЛАБОРАТОРИЯ» =====
 </script>
