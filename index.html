@@ -16681,7 +16681,7 @@ async function amsSend(){
 
 // ===================== АДМИНКА: «Нагрузка» — сколько студентов сразу выдержит Vita =====================
 // Браузер админа изображает N студентов, которые одновременно открывают Vita: те же запросы к базе, что при
-// настоящем входе. Ступени 1 → 100; останавливаемся, как только становится медленно. Только главный админ.
+// настоящем входе. Ступени 1 → 100; останавливаемся, только когда появились ошибки или ждать стали втрое дольше.
 ADM_SECTIONS.load={t:'Нагрузка',h:'Сколько студентов выдержит',d:'Твой браузер изображает студентов, которые одновременно открывают Vita, и меряет, сколько они ждут. Запускай, когда в Vita мало людей: тест сам создаёт нагрузку.',i:'gauge',k:'eos',g:'data',sup:1};
 var LT={mode:'open',run:false,rows:[],stop:false};
 (function(){var _t=admTab;admTab=function(t,btn){_t(t,btn);if(ADM_CUR==='load')ltRender();else LT.stop=true;};})();
@@ -16703,12 +16703,15 @@ function ltTable(){
     h+='<div class="lt-r '+r.k+'" role="row"><span><b>'+r.n+'</b></span><span>'+ltS(r.avg)+'</span><span>'+ltS(r.p95)+'</span><span>'+(r.err?r.err+' из '+r.n:'нет')+'</span></div>';
   });
   h+='</div>';
-  var last=LT.rows[LT.rows.length-1],firstBad=LT.rows.filter(function(r){return r.k!=='ok';})[0];
-  if(!LT.run){
-    var bi=firstBad?LT.rows.indexOf(firstBad):-1,good=bi>0?LT.rows[bi-1]:null;
-    h+='<div class="lt-sum"><i class="ti ti-'+(firstBad?'alert-triangle':'circle-check')+'" aria-hidden="true"></i><span>'
-      +(firstBad?'Быстро — до <b>'+(good?good.n:0)+'</b> студентов сразу. С <b>'+firstBad.n+'</b> вход заметно медленнее'+(firstBad.k==='bad'?', студенты ждут дольше 3 секунд':'')+'.'
-               :'Даже <b>'+last.n+'</b> студентов сразу открывают Vita быстро.')
+  var last=LT.rows[LT.rows.length-1],first=LT.rows[0],bad=LT.rows.filter(function(r){return r.k==='bad';})[0],
+      slow=LT.rows.filter(function(r){return r.k!=='ok';})[0],okRows=LT.rows.filter(function(r){return r.k!=='bad';}),top=okRows[okRows.length-1];
+  if(!LT.run&&top){
+    var txt='Без сбоев выдержал <b>'+top.n+'</b> '+vplural(top.n,'студента','студентов','студентов')+' сразу. '
+      +'Один студент ждёт '+ltS(first.avg)+' — это в основном дорога от телефона до базы'+(top.n>1?', при '+top.n+' — '+ltS(top.avg)+'.':'.');
+    if(bad)txt+=' С <b>'+bad.n+'</b> '+(bad.err?'начались ошибки':'ожидание выросло втрое')+' — это и есть предел.';
+    else if(slow)txt+=' С <b>'+slow.n+'</b> немного медленнее, но без ошибок — для студентов это незаметно.';
+    else txt+=' Ожидание почти не растёт — запас большой.';
+    h+='<div class="lt-sum"><i class="ti ti-'+(bad?'alert-triangle':'circle-check')+'" aria-hidden="true"></i><span>'+txt
       +' Это одновременные входы в одну секунду — в жизни столько бывает разве что сразу после рассылки.</span></div>';
   }
   return h;
@@ -16742,7 +16745,10 @@ async function ltRun(){
     var res=await Promise.all(Array.from({length:n},function(){return ltStudent(tok,em).then(function(t){return {t:t};},function(e){return {t:0,e:e.message};});}));
     var ok=res.filter(function(x){return !x.e;}).map(function(x){return x.t;}).sort(function(a,b){return a-b;});
     var avg=ok.length?ok.reduce(function(s,x){return s+x;},0)/ok.length:0,p95=ok.length?ok[Math.min(ok.length-1,Math.floor(ok.length*.95))]:0;
-    var err=res.length-ok.length,k=err>n*.05||p95>3000?'bad':p95>1500?'mid':'ok';
+    // судим не по абсолютным секундам (в них сидит дорога телефон → база в Корее), а по тому, во сколько раз
+    // стало медленнее, чем у одного студента. Плохо — ошибки или ожидание выросло втрое.
+    var err=res.length-ok.length,base=LT.rows.length?LT.rows[0].p95:p95;
+    var k=err>n*.05||(si>0&&p95>base*3+1500)||p95>15000?'bad':(si>0&&p95>base*1.8+500)?'mid':'ok';
     LT.rows.push({n:n,avg:avg,p95:p95,err:err,k:k});
     var rb=document.getElementById('ltRes');if(rb)rb.innerHTML=ltTable();
     if(k==='bad')break;
