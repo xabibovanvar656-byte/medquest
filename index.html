@@ -3621,6 +3621,8 @@ body.bd-open .study-toast{z-index:9700;top:calc(env(safe-area-inset-top,0px) + 7
 .bd-dock .bd-cap:empty{display:none}
 .bd-bar2{padding:6px;border-radius:20px;background:rgba(16,19,36,.84);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 6px 20px rgba(0,0,0,.25);gap:8px}
 .bd-bar2 .bd-c{width:42px;height:42px;border-radius:13px}
+.lt-why{margin-top:10px;padding:12px 14px;border-radius:16px;background:var(--bg2);font-size:14px;font-weight:600;line-height:1.4;color:var(--tx2)}.lt-why b{color:var(--tx)}
+.hm-spin{animation:hmSpin 1s linear infinite}@keyframes hmSpin{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){.hm-spin{animation:none}}
 </style>
 </head>
 <body>
@@ -3775,6 +3777,7 @@ body.bd-open .study-toast{z-index:9700;top:calc(env(safe-area-inset-top,0px) + 7
   </div>
   <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
     <button class="btn bgh bsm" id="trModeAll" onclick="trSetMode('all')">Все вопросы</button>
+    <button class="btn bgh bsm" id="trModeSeq" onclick="trSetMode('seq')">По порядку</button>
     <button class="btn bgh bsm" id="trModeErr" onclick="trSetMode('errors')">Мои ошибки</button>
     <button class="btn bgh bsm" id="trModeFav" onclick="trSetMode('fav')">Закладки</button>
   </div>
@@ -4278,11 +4281,11 @@ function vQBank(){
   if(VQB.mem&&VQB.tok===tok&&Date.now()-VQB.at<20000)return Promise.resolve(VQB.mem);
   VQB.p=(async function(){
     var meta=await vQbRpc('qbank_meta',{p_token:tok});
-    var key=meta.n+'|'+meta.v;
-    if(!meta.adm){
-      var c=VQB.mem&&VQB.key===key?{key:key,rows:VQB.mem}:await vQbGet();
-      if(c&&c.key===key&&c.rows&&c.rows.length===meta.n){VQB.mem=c.rows;VQB.key=key;VQB.tok=tok;VQB.at=Date.now();return c.rows;}
-    }
+    // админу — тоже из памяти телефона, если база не менялась (раньше качал всё заново при каждом входе,
+    // и на медленном Android не успевал → «0 вопросов», «Локально»). Ключ отдельный: у админа есть объяснения.
+    var key=meta.n+'|'+meta.v+(meta.adm?'|adm':'');
+    var c=VQB.mem&&VQB.key===key?{key:key,rows:VQB.mem}:await vQbGet();
+    if(c&&c.key===key&&c.rows&&c.rows.length===meta.n){VQB.mem=c.rows;VQB.key=key;VQB.tok=tok;VQB.at=Date.now();return c.rows;}
     var all=[],after='';
     for(var i=0;i<100;i++){
       var rows=await vQbRpc('qbank_page',{p_token:tok,p_after:after,p_limit:5000});
@@ -4292,7 +4295,7 @@ function vQBank(){
     }
     all.sort(function(a,b){return String(a.created_at||'')<String(b.created_at||'')?-1:String(a.created_at||'')>String(b.created_at||'')?1:0;});
     VQB.mem=all;VQB.key=key;VQB.tok=tok;VQB.at=Date.now();
-    if(!meta.adm)vQbPut({key:key,rows:all});
+    vQbPut({key:key,rows:all});
     return all;
   })();
   VQB.p.then(function(){VQB.p=null;},function(){VQB.p=null;});
@@ -4745,6 +4748,28 @@ async function vVerifyAdmin(){
   try{var si=await sbRpc('session_info',{p_token:vAdminToken()});if(si&&si.length&&si[0].is_admin){S.isSuper=!!si[0].is_super;sv();}if(!(si&&si.length&&si[0].is_admin)){S.isAdm=false;S.isSuper=false;S.adminToken='';sv();try{renderAuthHdr();}catch(e){}}}
   catch(e){S.isAdm=false;S.isSuper=false;sv();}
 }
+// вопросы: грузим, при сбое — ещё две попытки; true — загрузились
+async function vLoadQuestions(){
+  for(var a=0;a<3;a++){
+    try{
+      var rows=await sbGetAll('custom_questions','order=created_at.asc');
+      if(rows&&(rows.length||!CQS.length)){CQS=rows.map(vMapQ);CQS.forEach(function(q){vEnsureSubject(q.s);});try{refreshSubjectDropdowns();}catch(e){}}
+      try{localStorage.removeItem('vitaQErr');}catch(e){}
+      return true;
+    }catch(e){try{localStorage.setItem('vitaQErr',new Date().toISOString()+' '+(e&&e.message||e));}catch(x){}
+      await new Promise(function(r){setTimeout(r,2000*(a+1));});}
+  }
+  vQLoadingUi(false,true);return false;
+}
+function vQLoadingUi(on,failed){
+  window.V_QLOAD=!!on;window.V_QFAIL=!!failed;
+  try{if(!getQS().length&&document.querySelector('#pg-home.on'))renderHome();}catch(e){}
+  var el=document.getElementById('dbst');if(!el)return;
+  el.innerHTML=on?'<span style="color:var(--tx2)">Загружаю вопросы…</span>'
+    :failed?'<span style="color:var(--am)">Вопросы не загрузились</span> <button type="button" class="btn bgh" style="padding:4px 10px;font-size:13px" onclick="vQRetry()">Повторить</button>':'';
+}
+function vQRetry(){vQLoadingUi(true);VQB.p=null;vLoadQuestions().then(function(ok){vQLoadingUi(false,!ok);if(ok)vQAfterLoad();});}
+function vQAfterLoad(){try{renderHome();}catch(e){}try{if(typeof renderTests==='function'&&document.querySelector('#pg-tests.on'))renderTests();}catch(e){}try{updNotifBadges();}catch(e){}}
 async function init(){
   if(window.__tgReady&&!window.Telegram){try{await window.__tgReady;}catch(e){}}
   tgInit();
@@ -4768,16 +4793,18 @@ async function init(){
   }
   var uwP=null;try{uwP=vUwProbe();}catch(e){}    // проверка сервера — параллельно с данными, а не после
   try{
-    var r=await Promise.race([
-      Promise.all([sbGet('news','order=created_at.desc&limit=20'),sbGet('schedule','order=exam_date.asc&limit=20'),sbGetAll('custom_questions','order=created_at.asc')]),
-      new Promise(function(_,rej){setTimeout(function(){rej(new Error('timeout'));},15000);})
+    // вопросы качаются отдельно и не обрываются по таймеру: на медленном Android банк может идти дольше 15 с,
+    // раньше это считалось «нет связи» → 0 вопросов и «Локально». Новости и расписание — лёгкие, их ждём недолго.
+    var qP=vLoadQuestions();
+    var light=await Promise.race([
+      Promise.all([sbGet('news','order=created_at.desc&limit=20').catch(function(){return null;}),sbGet('schedule','order=exam_date.asc&limit=20').catch(function(){return null;})]),
+      new Promise(function(res){setTimeout(function(){res([null,null]);},10000);})
     ]);
-    if(r[0]&&r[0].length)newsCache=r[0];
-    if(r[1]&&r[1].length)schedCache=r[1];
-    CQS=(r[2]||[]).map(vMapQ);
-    // Register any custom subjects not in SM
-    CQS.forEach(function(q){vEnsureSubject(q.s);});
-    refreshSubjectDropdowns();
+    if(light[0]&&light[0].length)newsCache=light[0];
+    if(light[1]&&light[1].length)schedCache=light[1];
+    var qOk=await Promise.race([qP,new Promise(function(res){setTimeout(function(){res('slow');},early?1500:12000);})]);
+    if(qOk==='slow'){vQLoadingUi(true);qP.then(function(ok){vQLoadingUi(false,!ok);if(ok)vQAfterLoad();});}
+    else if(!qOk&&!light[0]&&!light[1])throw new Error('offline');
     dbOK=true;
     document.getElementById('dbst').innerHTML='';
     try{await Promise.race([uwP||vUwProbe(),new Promise(function(res){setTimeout(res,4000);})]);}catch(e){}
@@ -7508,22 +7535,23 @@ function shuffleOpts(q){
   var correctIdx=idx.indexOf(q.a);
   return {opts:opts,correctIdx:correctIdx};
 }
-var TRshuf=null;
+var TRshuf=null,TR_SEQ_FRESH=true;
 function trSetMode(m){
-  TR_MODE=m;
-  ['All','Err','Fav'].forEach(function(suf){
+  TR_MODE=m;TR_SEQ_FRESH=true;
+  ['All','Seq','Err','Fav'].forEach(function(suf){
     var btn=document.getElementById('trMode'+suf);
     if(btn)btn.className='btn bgh bsm';
   });
-  var active={all:'trModeAll',errors:'trModeErr',fav:'trModeFav'}[m];
+  var active={all:'trModeAll',seq:'trModeSeq',errors:'trModeErr',fav:'trModeFav'}[m];
   var ab=document.getElementById(active);if(ab)ab.className='btn bbl bsm';
   trNext();
 }
 function trInit(){
   TRss={c:0,w:0};
   // не в плане — подсветить выбранный режим
-  if(TR_MODE!=='plan'){['All','Err','Fav'].forEach(function(suf){var b=document.getElementById('trMode'+suf);if(b)b.className='btn bgh bsm';});
-    var ab=document.getElementById({all:'trModeAll',errors:'trModeErr',fav:'trModeFav'}[TR_MODE]);if(ab)ab.className='btn bbl bsm';}
+  if(TR_MODE!=='plan'){['All','Seq','Err','Fav'].forEach(function(suf){var b=document.getElementById('trMode'+suf);if(b)b.className='btn bgh bsm';});
+    var ab=document.getElementById({all:'trModeAll',seq:'trModeSeq',errors:'trModeErr',fav:'trModeFav'}[TR_MODE]);if(ab)ab.className='btn bbl bsm';}
+  TR_SEQ_FRESH=true;
   try{vLoadLessonLinks();}catch(e){}
   trNext();
 }
@@ -7572,23 +7600,38 @@ function trNext(){
   var notMastered=pool.filter(function(q){var p=S.prog[q.id];return !p||(p.streak||0)<3;});
   // Вопросы которые "пора повторить" по интервалу (due <= сегодня)
   var dueForReview=pool.filter(function(q){var p=S.prog[q.id];return p&&(p.streak||0)>=3&&p.due&&p.due<=today;});
-  var arr;
+  var arr,seqTxt='';
+  if(TR_MODE==='seq'){
+    // «По порядку»: все вопросы темы подряд, как в модуле; место запоминается — вернёшься туда же
+    if(!S.trSeq)S.trSeq={};
+    var sk=s+'|'+selT.slice().sort().join(',');
+    var pos=S.trSeq[sk]||0;
+    if(!TR_SEQ_FRESH&&TRrev&&TRC&&pool[pos]&&pool[pos].id===TRC.id)pos++;
+    if(pos>=pool.length){pos=0;if(!TR_SEQ_FRESH)try{toast2('Все вопросы пройдены — начинаем сначала');}catch(e){}}
+    TR_SEQ_FRESH=false;S.trSeq[sk]=pos;sv();
+    TRC=pool[pos];TRrev=false;seqTxt=' · '+(pos+1)+' из '+pool.length;
+  }else{
   if(TR_MODE==='errors'||TR_MODE==='fav'){
     arr=pool;
   }else if(dueForReview.length){
     arr=dueForReview; // сначала то что пора повторить (интервальное повторение)
   }else if(notMastered.length){
-    arr=notMastered; // потом неосвоенные
+    // раньше брали только неосвоенные: когда новые кончались, по кругу крутились те же 10 трудных.
+    // Теперь новые (ещё не решал) идут чаще — 7 из 10, трудные вперемешку с ними.
+    var unseen=notMastered.filter(function(q){var p=S.prog[q.id];return !p||!p.a;}),weak=notMastered.filter(function(q){var p=S.prog[q.id];return p&&p.a;});
+    arr=unseen.length&&(!weak.length||Math.random()<0.7)?unseen:weak.length?weak:notMastered;
   }else{
     arr=pool;
   }
   // не показывать тот же вопрос два раза подряд
   if(arr.length>1&&TRC){arr=arr.filter(function(q){return q.id!==TRC.id;});}
   TRC=arr[Math.floor(Math.random()*arr.length)];TRrev=false;
+  }
+  TR_SEQ_FRESH=false;
   TRshuf=shuffleOpts(TRC);
   var m=SM[TRC.s];
   var b=document.getElementById('trBdg');b.innerHTML=m.icon+' '+esc(m.label);b.style.background=m.dim;b.style.color=m.color;
-  document.getElementById('trTbdg').textContent=TRC.t;
+  document.getElementById('trTbdg').textContent=TRC.t+seqTxt;
   var favBtn=document.getElementById('trFav');if(favBtn)favBtn.textContent=(S.favs&&S.favs[TRC.id])?'★':'☆';
   document.getElementById('trQ').textContent=TRC.q;
   document.getElementById('trOpts').innerHTML=TRshuf.opts.map(function(o,i){return '<button class="opt" onclick="trAns('+i+')"><span class="ol">'+'АБВГДЕЖЗ'.charAt(i)+'</span>'+o+'</button>';}).join('');
@@ -11908,6 +11951,9 @@ function hmWeek(){
   return '<div class="hm-week" aria-label="Неделя: дни, когда цель выполнена">'+out+'</div>';
 }
 function hmPlan(QS){
+  if(!QS.length&&(window.V_QLOAD||window.V_QFAIL))return '<div class="hm-plan"><div class="hm-plan-row"><span class="hm-ring" style="--p:0%" aria-hidden="true"><span><i class="ti '+(window.V_QFAIL?'ti-wifi-off':'ti-loader-2 hm-spin')+'"></i></span></span>'
+    +'<span class="hm-plan-t"><span class="hm-k">Тренажёр</span><b>'+(window.V_QFAIL?'Вопросы не загрузились':'Загружаю вопросы')+'</b><small>'+(window.V_QFAIL?'Проверь интернет и попробуй ещё раз':'Первый раз дольше — потом откроется сразу')+'</small></span></div>'
+    +(window.V_QFAIL?'<button type="button" class="hm-go" onclick="vQRetry()">Повторить<i class="ti ti-refresh" aria-hidden="true"></i></button>':'')+'</div>';
   var pl=vPlan(),solved=QS.filter(function(q){var p=S.prog[q.id];return p&&p.a>0;}).length;
   var goal='<button type="button" class="hm-goal" onclick="vGoalOpen()" aria-label="Изменить цель на день"><i class="ti ti-target-arrow" aria-hidden="true"></i>'+vGoal()+'</button>';
   var ring=function(done,total,inner){var pc=total?Math.round(done/total*100):0;return '<span class="hm-ring" style="--p:'+pc+'%" aria-hidden="true"><span>'+inner+'</span></span>';};
@@ -16705,6 +16751,13 @@ function ltTable(){
   h+='</div>';
   var last=LT.rows[LT.rows.length-1],first=LT.rows[0],bad=LT.rows.filter(function(r){return r.k==='bad';})[0],
       slow=LT.rows.filter(function(r){return r.k!=='ok';})[0],okRows=LT.rows.filter(function(r){return r.k!=='bad';}),top=okRows[okRows.length-1];
+  var withErr=LT.rows.filter(function(r){return r.err;});
+  if(withErr.length){var w=withErr[0].why||{};
+    h+='<div class="lt-why"><b>Почему ошибки при '+withErr[0].n+':</b> '+Object.keys(w).map(function(k){return esc(k)+' — '+w[k];}).join('; ')+'</div>';}
+  var heavy=LT.rows.filter(function(r){return r.mb>0.05;});
+  if(heavy.length){var hr=heavy[heavy.length-1];
+    h+='<div class="lt-why">Скачано при '+hr.n+': <b>'+(Math.round(hr.mb*10)/10).toString().replace('.',',')+' МБ</b> со скоростью '+(Math.round(hr.mbs*10)/10).toString().replace('.',',')+' МБ/с. '
+      +'Все «студенты» качают через интернет одного твоего телефона — если скорость упёрлась в его интернет, тормозит телефон, а не сервер.</div>';}
   if(!LT.run&&top){
     var txt='Без сбоев выдержал <b>'+top.n+'</b> '+vplural(top.n,'студента','студентов','студентов')+' сразу. '
       +'Один студент ждёт '+ltS(first.avg)+' — это в основном дорога от телефона до базы'+(top.n>1?', при '+top.n+' — '+ltS(top.avg)+'.':'.');
@@ -16716,6 +16769,12 @@ function ltTable(){
   }
   return h;
 }
+// почему не получилось: сервер ответил ошибкой — или до него не достучался сам телефон (сеть, лимиты браузера)
+function ltErr(e){var m=String(e&&e.message||e||'');
+  if(/ (5\d\d)$/.test(m))return 'сервер ответил ошибкой '+m.slice(-3)+' ('+m.split(' ')[0]+')';
+  if(/ (4\d\d)$/.test(m))return 'сервер отказал '+m.slice(-3)+' ('+m.split(' ')[0]+')';
+  if(/fetch|network|load failed|сеть/i.test(m))return 'телефон не достучался (сеть или лимит браузера)';
+  return m.slice(0,60)||'неизвестно';}
 function ltS(ms){return ms<1000?Math.round(ms)+' мс':(Math.round(ms/100)/10).toString().replace('.',',')+' с';}
 async function ltRpc(fn,body){
   var r=await fetch(SB_URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:SBH,body:JSON.stringify(body),cache:'no-store'});
@@ -16731,7 +16790,7 @@ async function ltStudent(tok,em){
          q('bookmarks','user_email=eq.'+encodeURIComponent(em)),q('daily_progress','user_email=eq.'+encodeURIComponent(em)),q('exam_history','user_email=eq.'+encodeURIComponent(em))];
   if(LT.mode==='first')w.push((async function(){var after='';for(var i=0;i<40;i++){
       var r=await fetch(SB_URL+'/rest/v1/rpc/qbank_page',{method:'POST',headers:SBH,body:JSON.stringify({p_token:tok,p_after:after,p_limit:5000}),cache:'no-store'});
-      if(!r.ok)throw new Error('qbank_page '+r.status);var rows=await r.json();if(!rows.length)break;after=String(rows[rows.length-1].id);if(rows.length<5000)break;}})());
+      if(!r.ok)throw new Error('qbank_page '+r.status);var tx=await r.text();LT.bytes=(LT.bytes||0)+tx.length;var rows=JSON.parse(tx);if(!rows.length)break;after=String(rows[rows.length-1].id);if(rows.length<5000)break;}})());
   await Promise.all(w);return performance.now()-t0;
 }
 async function ltRun(){
@@ -16742,14 +16801,17 @@ async function ltRun(){
   var steps=LT.mode==='first'?[1,3,5,10,20,30]:[1,5,10,20,30,50,75,100];
   for(var si=0;si<steps.length&&!LT.stop;si++){
     var n=steps[si],m=document.getElementById('ltMsg');if(m)m.textContent='Сейчас: '+n+' '+vplural(n,'студент','студента','студентов')+' сразу…';
-    var res=await Promise.all(Array.from({length:n},function(){return ltStudent(tok,em).then(function(t){return {t:t};},function(e){return {t:0,e:e.message};});}));
+    LT.bytes=0;var t0=performance.now();
+    var res=await Promise.all(Array.from({length:n},function(){return ltStudent(tok,em).then(function(t){return {t:t};},function(e){return {t:0,e:ltErr(e)};});}));
+    var secs=(performance.now()-t0)/1000;
     var ok=res.filter(function(x){return !x.e;}).map(function(x){return x.t;}).sort(function(a,b){return a-b;});
     var avg=ok.length?ok.reduce(function(s,x){return s+x;},0)/ok.length:0,p95=ok.length?ok[Math.min(ok.length-1,Math.floor(ok.length*.95))]:0;
     // судим не по абсолютным секундам (в них сидит дорога телефон → база в Корее), а по тому, во сколько раз
     // стало медленнее, чем у одного студента. Плохо — ошибки или ожидание выросло втрое.
     var err=res.length-ok.length,base=LT.rows.length?LT.rows[0].p95:p95;
     var k=err>n*.05||(si>0&&p95>base*3+1500)||p95>15000?'bad':(si>0&&p95>base*1.8+500)?'mid':'ok';
-    LT.rows.push({n:n,avg:avg,p95:p95,err:err,k:k});
+    var why={};res.forEach(function(x){if(x.e)why[x.e]=(why[x.e]||0)+1;});
+    LT.rows.push({n:n,avg:avg,p95:p95,err:err,k:k,why:why,mb:LT.bytes/1048576,mbs:LT.bytes/1048576/Math.max(secs,.1)});
     var rb=document.getElementById('ltRes');if(rb)rb.innerHTML=ltTable();
     if(k==='bad')break;
     await new Promise(function(r){setTimeout(r,2500);});
