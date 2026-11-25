@@ -3623,6 +3623,70 @@ body.bd-open .study-toast{z-index:9700;top:calc(env(safe-area-inset-top,0px) + 7
 .bd-bar2 .bd-c{width:42px;height:42px;border-radius:13px}
 .lt-why{margin-top:10px;padding:12px 14px;border-radius:16px;background:var(--bg2);font-size:14px;font-weight:600;line-height:1.4;color:var(--tx2)}.lt-why b{color:var(--tx)}
 .hm-spin{animation:hmSpin 1s linear infinite}@keyframes hmSpin{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){.hm-spin{animation:none}}
+/* ===== КАРТОЧКИ v2 (макет maket_kartochki): экран без прокрутки ===== */
+#pg-flashcards.fc2.on{display:flex;flex-direction:column;min-height:0;overflow:hidden;position:relative}
+#pg-flashcards.fc2 .fc2-top{display:flex;align-items:center;gap:10px;flex:none}
+#pg-flashcards.fc2 .fc2-topic{flex:1;min-width:0;display:flex;align-items:center;gap:10px;height:52px;padding:0 12px 0 7px;border:0;border-radius:17px;background:var(--bg2);color:var(--tx);text-align:left;font-family:var(--f);box-shadow:0 3px 0 var(--edge)}
+#pg-flashcards.fc2 .fc2-ic{width:38px;height:38px;flex:none;border-radius:12px;display:grid;place-items:center;background:var(--meth-s);color:var(--meth-t);font-size:21px}
+#pg-flashcards.fc2 .fc2-tt{flex:1;min-width:0;display:block}
+#pg-flashcards.fc2 .fc2-tt b{display:block;font-size:15px;font-weight:800;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#pg-flashcards.fc2 .fc2-tt small{display:block;font-size:12.5px;font-weight:600;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#pg-flashcards.fc2 .fc2-ch{color:var(--tx2);font-size:18px;flex:none}
+#pg-flashcards.fc2 .fc2-pos{flex:none;min-width:58px;text-align:right;font-size:17px;font-weight:800;color:var(--tx)}
+#pg-flashcards.fc2 .fc2-pos span{color:var(--tx2);font-weight:700}
+#pg-flashcards.fc2 .fc2-bar{flex:none;display:flex;gap:2px;height:6px;border-radius:9px;background:var(--bg3);overflow:hidden;margin:12px 0 0}
+#pg-flashcards.fc2 .fc2-bar i{display:block;height:100%;border-radius:9px;transition:width .3s}
+#pg-flashcards.fc2 .fc2-bar .k{background:#2ED39A}#pg-flashcards.fc2 .fc2-bar .r{background:#FF7A93}#pg-flashcards.fc2 .fc2-bar .c{background:#7FB0FF}
+#pg-flashcards.fc2 .fc2-mid{flex:1;min-height:0;display:flex;padding:14px 0 0}
+#pg-flashcards.fc2 .fc2-card{position:relative;flex:1;min-height:0;margin:0;border:0;border-radius:28px;background:var(--bg2);box-shadow:0 6px 0 var(--edge);padding:20px 20px 14px;display:flex;flex-direction:column;cursor:pointer;-webkit-user-select:none;user-select:none;touch-action:pan-y}
+#pg-flashcards.fc2 .fc2-k em{display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 10px;border-radius:999px;font:800 13px var(--f);font-style:normal;background:rgba(61,130,255,.16);color:#5B9BFF}
+#pg-flashcards.fc2 .fc2-k em.a{background:rgba(46,211,154,.16);color:#14B87F}
+:root:not([data-light]) #pg-flashcards.fc2 .fc2-k em{color:#7FB0FF}:root:not([data-light]) #pg-flashcards.fc2 .fc2-k em.a{color:#2ED39A}
+#pg-flashcards.fc2 .fc2-q{flex:1;min-height:0;overflow:hidden;display:flex;align-items:center;font-family:var(--f);font-size:22px;font-weight:700;line-height:1.35;color:var(--tx);padding:10px 0}
+#pg-flashcards.fc2 .fc2-back{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;justify-content:center;gap:12px;padding:10px 0}
+#pg-flashcards.fc2 .fc2-qs{font-size:14.5px;font-weight:600;line-height:1.35;color:var(--tx2);display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+#pg-flashcards.fc2 .fc2-ans{font-family:var(--f);font-size:32px;font-weight:800;line-height:1.15;color:#14B87F}
+:root:not([data-light]) #pg-flashcards.fc2 .fc2-ans{color:#2ED39A}
+#pg-flashcards.fc2 .fc2-foot{flex:none;display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid var(--bor);padding-top:10px;font-size:12.5px;font-weight:700;color:var(--tx2);min-height:38px}
+#pg-flashcards.fc2 .fc2-foot>span{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+#pg-flashcards.fc2 .fc2-tap{display:inline-flex;align-items:center;gap:6px;color:var(--tx);font-weight:800}
+#pg-flashcards.fc2 .fc2-ai{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 10px;margin-left:-4px;border:0;border-radius:10px;background:var(--bg3);color:var(--tx);font:800 13px var(--f)}
+#pg-flashcards.fc2 .fc2-foot .ti-check{color:#14B87F}
+#pg-flashcards.fc2 .fc2-bot{flex:none;padding-top:16px}
+#pg-flashcards.fc2 .fc-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0}
+#pg-flashcards.fc2 .fc-btn{display:flex;align-items:center;justify-content:center;gap:8px}
+#pg-flashcards.fc2 .fc-nav{margin-top:8px}
+#pg-flashcards.fc2 .fc-nav-btn{gap:5px}
+#pg-flashcards.fc2 .swipemark{position:absolute;top:18px;z-index:2;padding:6px 12px;border-radius:12px;font:900 15px var(--f);color:#fff;opacity:0;pointer-events:none}
+#pg-flashcards.fc2 .swipemark.know{right:18px;background:#14B87F}#pg-flashcards.fc2 .swipemark.dunno{left:18px;background:#FF5C7A}
+/* подсказка первого раза */
+#pg-flashcards.fc2 .fc2-coach{position:absolute;inset:0;z-index:5;border-radius:26px;background:#0B0E1A;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:0 26px;text-align:center}
+#pg-flashcards.fc2 .fc2-hand{width:88px;height:88px;border-radius:50%;background:rgba(255,255,255,.08);display:grid;place-items:center;font-size:44px}
+#pg-flashcards.fc2 .fc2-coach>b{font-size:21px;font-weight:800}
+#pg-flashcards.fc2 .fc2-g{display:grid;grid-template-columns:auto 1fr;gap:10px 12px;text-align:left}
+#pg-flashcards.fc2 .fc2-g i{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-size:19px;background:rgba(255,255,255,.1)}
+#pg-flashcards.fc2 .fc2-g i.g{background:rgba(46,211,154,.2);color:#2ED39A}#pg-flashcards.fc2 .fc2-g i.r{background:rgba(255,92,122,.2);color:#FF7A93}
+#pg-flashcards.fc2 .fc2-g span{align-self:center;font-size:15px;font-weight:600;line-height:1.3;color:#E6E9F4}
+#pg-flashcards.fc2 .fc2-coach>button{margin-top:6px;height:50px;padding:0 32px;border:0;border-radius:16px;background:#fff;color:#14182B;font:800 16px var(--f)}
+/* меню «Что учим» */
+.fc2-chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:12px;scrollbar-width:none}.fc2-chips::-webkit-scrollbar{display:none}
+.fc2-chips button{flex:none;height:38px;padding:0 14px;border:0;border-radius:999px;background:var(--bg3);color:var(--tx2);font:700 14px var(--f)}
+.fc2-chips button.on{background:var(--tx);color:var(--bg)}
+.fc2-tl{display:flex;flex-direction:column;gap:4px;max-height:52vh;overflow:auto}
+.fc2-tr{display:flex;align-items:center;gap:12px;width:100%;padding:12px;border:0;border-radius:14px;background:none;color:var(--tx);text-align:left;font-family:var(--f)}
+.fc2-tr.on{background:rgba(61,130,255,.16)}
+.fc2-tr b{flex:1;min-width:0;font-size:15px;font-weight:700;line-height:1.25}
+.fc2-tr small{flex:none;min-width:30px;text-align:right;font-size:13px;font-weight:700;color:var(--tx2)}
+.fc2-pb{flex:none;width:54px;height:6px;border-radius:9px;background:var(--bg3);overflow:hidden}.fc2-pb i{display:block;height:100%;background:#2ED39A}
+@media(max-width:360px){#pg-flashcards.fc2 .fc2-q{font-size:20px}#pg-flashcards.fc2 .fc-btn{height:52px}}
+/* карточки: страница не прокручивается — всё на одном экране */
+[data-onfc] #mscroll{overflow:hidden;padding-bottom:0}
+#pg-flashcards.fc2>*{min-width:0}
+#pg-flashcards.fc2 .fc2-foot>span{min-width:0}#pg-flashcards.fc2 #fcStat{flex:0 1 auto;overflow:hidden}
+#pg-flashcards.fc2 #fcStat span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#pg-flashcards.fc2 #fcHint{flex:none}
+@media(max-width:360px){#pg-flashcards.fc2 .fc-nav-btn{font-size:13px;padding:0 6px}#pg-flashcards.fc2 .fc2-ai{font-size:12.5px;padding:0 8px}}
+#pg-flashcards.fc2 .fc2-q.ovf{align-items:flex-start;overflow-y:auto}#pg-flashcards.fc2 .fc2-back.ovf{justify-content:flex-start;overflow-y:auto}
 </style>
 </head>
 <body>
@@ -3723,39 +3787,45 @@ body.bd-open .study-toast{z-index:9700;top:calc(env(safe-area-inset-top,0px) + 7
 <div id="pg-study" class="page">
   <div id="studyBody"></div>
 </div>
-<div id="pg-flashcards" class="page">
-  <div class="ph"><div class="pt">Карточки</div><div class="ps">Нажми на карточку — увидишь ответ. Смахни вправо, если знаешь.</div></div>
-  <div class="fc-filters">
-    <select id="fcS" onchange="fcInit()" class="fc-sel">
-      <option value="all">Все предметы</option><option value="physics">Биофизика</option>
-      <option value="chemistry">Химия</option><option value="biology">Биология</option>
-    </select>
-    <button id="fcTbtn" class="fc-topics" onclick="fcPickTopics()"><i class="ti ti-list-check"></i> <span id="fcTbtnLbl">Все темы</span></button>
-    <span id="fcCnt" class="fc-cnt"></span>
+<div id="pg-flashcards" class="page fc2">
+  <select id="fcS" onchange="fcInit()" class="fc-sel" hidden aria-hidden="true">
+    <option value="all">Все предметы</option><option value="physics">Биофизика</option>
+    <option value="chemistry">Химия</option><option value="biology">Биология</option>
+  </select>
+  <div class="fc2-top">
+    <button type="button" class="fc2-topic" id="fcTbtn" onclick="fcMenu()" aria-haspopup="dialog" aria-label="Выбрать предмет и тему">
+      <span class="fc2-ic" id="fcIc" aria-hidden="true"><i class="ti ti-cards"></i></span>
+      <span class="fc2-tt"><b id="fcTbtnLbl">Все темы</b><small><span id="fcSubj">Все предметы</span> · <span id="fcCnt"></span></small></span>
+      <i class="ti ti-chevron-down fc2-ch" aria-hidden="true"></i>
+    </button>
+    <div class="fc2-pos" id="fcPos" aria-live="polite"></div>
   </div>
-  <div class="pdots fc-dots" id="fcDots"></div>
-  <div class="fcard fc-premium" id="fcCard">
-    <div class="fc-glow"></div>
-    <div class="swipemark know" id="fcMarkKnow">Знаю</div>
-    <div class="swipemark dunno" id="fcMarkDunno">↻ ПОВТОР</div>
-    <div class="fc-head"><div class="fctp fc-tag" id="fcTp"></div><div class="fcmeta fc-pos" id="fcPos"></div></div>
-    <div class="fcq fc-question" id="fcQ">Загрузка...</div>
-    <div id="fcBack" style="display:none">
-      <div class="fc-answer-label" id="fcAnsLbl">Правильный ответ</div>
-      <div class="fcans fc-answer" id="fcAns"></div><div class="fcopts fc-opts" id="fcOpts"></div>
+  <div class="fc2-bar" id="fcDots" aria-hidden="true"></div>
+  <div class="fc2-mid">
+    <div class="fcard fc2-card" id="fcCard" role="button" tabindex="0" aria-label="Карточка: нажми, чтобы перевернуть">
+      <div class="swipemark know" id="fcMarkKnow">Знаю</div>
+      <div class="swipemark dunno" id="fcMarkDunno">Повторить</div>
+      <div class="fc2-k" id="fcTp"></div>
+      <div class="fc2-q" id="fcQ">Загрузка…</div>
+      <div class="fc2-back" id="fcBack" style="display:none">
+        <div class="fc2-qs" id="fcQs"></div>
+        <div class="fc2-ans" id="fcAns"></div>
+        <div id="fcAnsLbl" hidden></div><div id="fcOpts" hidden></div>
+      </div>
+      <div class="fc2-foot"><span id="fcHint"></span><span id="fcStat"></span></div>
     </div>
-    <div class="fchint fc-hint" id="fcHint"><span class="fc-hint-tap">Нажми, чтобы увидеть ответ</span></div>
   </div>
-  <div class="fc-actions">
-    <button class="fc-btn fc-dunno" onclick="fcSwipe('dunno')"><i class="ti ti-rotate"></i> Повторить</button>
-    <button class="fc-btn fc-know" onclick="fcSwipe('know')"><i class="ti ti-check"></i> Знаю</button>
+  <div class="fc2-bot">
+    <div class="fc-actions">
+      <button type="button" class="fc-btn fc-dunno" onclick="fcSwipe('dunno')"><i class="ti ti-rotate" aria-hidden="true"></i>Повторить</button>
+      <button type="button" class="fc-btn fc-know" onclick="fcSwipe('know')"><i class="ti ti-check" aria-hidden="true"></i>Знаю</button>
+    </div>
+    <div class="fc-nav">
+      <button type="button" class="fc-nav-btn" id="fcPrev" onclick="fcPrev()" aria-label="Предыдущая карточка"><i class="ti ti-chevron-left" aria-hidden="true"></i>Назад</button>
+      <button type="button" class="fc-nav-btn" onclick="fcShuffle()"><i class="ti ti-arrows-shuffle" aria-hidden="true"></i>Перемешать</button>
+      <button type="button" class="fc-nav-btn" id="fcNext" onclick="fcNext()" aria-label="Следующая карточка">Дальше<i class="ti ti-chevron-right" aria-hidden="true"></i></button>
+    </div>
   </div>
-  <div class="fc-nav">
-    <button class="fc-nav-btn" id="fcPrev" onclick="fcPrev()" aria-label="Предыдущая карточка"><i class="ti ti-chevron-left"></i> Назад</button>
-    <button class="fc-nav-btn" onclick="fcFlip()"><i class="ti ti-refresh"></i> Перевернуть</button>
-    <button class="fc-nav-btn" id="fcNext" onclick="fcNext()" aria-label="Следующая карточка">Дальше <i class="ti ti-chevron-right"></i></button>
-  </div>
-  <div class="fc-stat" id="fcStat"></div>
 </div>
 <div id="pg-trainer" class="page">
   <div class="ph">
@@ -7324,31 +7394,91 @@ function fcFilter(){
   var s=document.getElementById('fcS').value;
   var selT=SELECTED_TOPICS.flashcards||[];
   FCP=getQS().filter(function(q){return(s==='all'||q.s===s)&&(selT.length===0||selT.indexOf(q.t)>=0);});
-  FCI=0;FCf=false;
+  FCI=0;FCf=false;FC_SES={know:0,again:0};
   document.getElementById('fcCnt').textContent=FCP.length+' '+vplural(FCP.length,'карточка','карточки','карточек');
-  fcRender();
+  var m=SM[s],sj=document.getElementById('fcSubj'),ic=document.getElementById('fcIc');
+  if(sj)sj.textContent=m?m.label:'Все предметы';
+  if(ic){ic.innerHTML=m?m.icon:'<i class="ti ti-cards"></i>';var tone=m?vSubjTone(s):'';ic.style.cssText=tone?'background:var(--'+tone+'-s);color:var(--'+tone+'-t)':'';}
+  var lbl=document.getElementById('fcTbtnLbl');if(lbl)lbl.textContent=topicBtnLabel('flashcards');
+  fcRender();fcCoach();
 }
 function fcRender(){
-  if(!FCP.length){document.getElementById('fcQ').textContent='Нет карточек';return;}
+  fcLayout();
+  var qEl=document.getElementById('fcQ');
+  if(!FCP.length){qEl.textContent='В этой теме нет карточек';document.getElementById('fcPos').textContent='';document.getElementById('fcBack').style.display='none';qEl.style.display='';return;}
   var q=FCP[FCI];var p=S.prog[q.id]||{c:0,a:0};
-  var n=Math.min(FCP.length,50);
-  document.getElementById('fcDots').innerHTML='<i style="width:'+(FCP.length?Math.max(2,Math.round((FCI+1)/FCP.length*100)):0)+'%"></i>';
-  document.getElementById('fcPos').textContent=(FCI+1)+'/'+FCP.length;
-  document.getElementById('fcTp').textContent=q.t;
-  document.getElementById('fcQ').textContent=q.q;
-  document.getElementById('fcAns').textContent=q.o[q.a];
-  document.getElementById('fcOpts').innerHTML=q.o.map(function(o,i){return '<span class="fcopt'+(i===q.a?' win':'')+'">'+'АБВГДЕЖЗ'.charAt(i)+'. '+o+'</span>';}).join('');
+  var ses=FC_SES||{know:0,again:0},L=FCP.length,pc=function(n){return Math.max(0,Math.min(100,n/L*100));};
+  document.getElementById('fcDots').innerHTML='<i class="k" style="width:'+pc(ses.know)+'%"></i><i class="r" style="width:'+pc(ses.again)+'%"></i><i class="c" style="width:'+Math.max(1.5,pc(1))+'%"></i>';
+  document.getElementById('fcPos').innerHTML=(FCI+1)+'<span> / '+L+'</span>';
+  var tp=document.getElementById('fcTp');
+  tp.innerHTML=FCf?'<em class="a"><i class="ti ti-bulb" aria-hidden="true"></i>Ответ</em>':'<em><i class="ti ti-help-circle" aria-hidden="true"></i>Вопрос</em>';
+  qEl.textContent=q.q;qEl.style.display=FCf?'none':'';
+  document.getElementById('fcQs').textContent=q.q;
+  document.getElementById('fcAns').textContent=q.o&&q.o[q.a]!=null?q.o[q.a]:'';
   document.getElementById('fcBack').style.display=FCf?'':'none';
-  document.getElementById('fcHint').style.display=FCf?'none':'';
+  document.getElementById('fcHint').innerHTML=FCf
+    ?'<button type="button" class="fc2-ai" onclick="event.stopPropagation();vqOpen({qid:\''+esc(String(q.id))+'\'})"><i class="ti ti-sparkles" aria-hidden="true"></i>Объяснить подробнее</button>'
+    :'<span class="fc2-tap"><i class="ti ti-hand-finger" aria-hidden="true"></i>Нажми — покажу ответ</span>';
+  document.getElementById('fcStat').innerHTML=p.a>0
+    ?'<span title="В тестах: верно '+p.c+' из '+p.a+'"><i class="ti ti-check" aria-hidden="true"></i>'+p.c+' из '+p.a+'</span>':'<span>не решал</span>';
   document.getElementById('fcPrev').disabled=FCI===0;
-  document.getElementById('fcNext').disabled=FCI===FCP.length-1;
-  var ses=FC_SES||{know:0,again:0};
-  document.getElementById('fcStat').textContent=(ses.know||ses.again?'Сейчас: знаю '+ses.know+', повторить '+ses.again+'. ':'')
-    +(p.a>0?'В тестах на этот вопрос: '+p.c+' из '+p.a+' верно.':'В тестах этот вопрос ещё не решал.');
+  document.getElementById('fcNext').disabled=FCI===L-1;
+  fcFit();
 }
+// экран карточек — на всю высоту между шапкой и нижним меню, без прокрутки
+function fcLayout(){
+  var pg=document.getElementById('pg-flashcards');if(!pg||!pg.classList.contains('on'))return;
+  var top=pg.getBoundingClientRect().top,nav=document.getElementById('bottomNav'),nb=0;
+  if(nav&&getComputedStyle(nav).display!=='none')nb=nav.getBoundingClientRect().height;
+  var h=Math.max(420,window.innerHeight-Math.max(0,top)-nb-8);
+  pg.style.height=h+'px';
+}
+// длинный вопрос — шрифт меньше, чтобы влез без прокрутки
+function fcFit(){
+  var c=document.getElementById('fcCard');if(!c)return;
+  var el=FCf?document.getElementById('fcAns'):document.getElementById('fcQ');if(!el)return;
+  var max=FCf?32:22,min=FCf?17:14,fs=max;el.style.fontSize=fs+'px';
+  var box=c.querySelector(FCf?'.fc2-back':'.fc2-q');
+  if(box)box.classList.remove("ovf");
+  for(var i=0;i<12&&box&&box.scrollHeight>box.clientHeight+1&&fs>min;i++){fs=Math.max(min,fs-1.5);el.style.fontSize=fs+"px";}
+  if(box&&box.scrollHeight>box.clientHeight+1)box.classList.add("ovf");   // совсем маленький экран — пусть прокручивается внутри карточки
+}
+window.addEventListener('resize',function(){try{if(document.querySelector('#pg-flashcards.on')){fcLayout();fcFit();}}catch(e){}});
 function fcFlip(){FCf=!FCf;fcRender();}
 function fcPrev(){if(FCI>0){FCI--;FCf=false;fcRender();}}
-function fcNext(){if(FCI<FCP.length-1){FCI++;FCf=false;fcRender();}else{document.getElementById('fcQ').textContent='Это была последняя карточка! ';}}
+function fcNext(){if(FCI<FCP.length-1){FCI++;FCf=false;fcRender();}else{toast2('Это последняя карточка. «Перемешать» — пройти ещё раз');}}
+function fcShuffle(){
+  if(FCP.length<2)return;
+  for(var i=FCP.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=FCP[i];FCP[i]=FCP[j];FCP[j]=t;}
+  FCI=0;FCf=false;FC_SES={know:0,again:0};fcRender();toast2('Карточки перемешаны');
+}
+// подсказка — только при первом открытии
+function fcCoach(){
+  var k='vitaFcCoach';try{if(localStorage.getItem(k))return;localStorage.setItem(k,'1');}catch(e){return;}
+  var pg=document.getElementById('pg-flashcards');if(!pg||!FCP.length)return;
+  var d=document.createElement('div');d.className='fc2-coach';d.setAttribute('role','dialog');d.setAttribute('aria-label','Как учить карточками');
+  d.innerHTML='<div class="fc2-hand" aria-hidden="true"><i class="ti ti-hand-finger"></i></div><b>Как учить карточками</b>'
+    +'<div class="fc2-g"><i class="ti ti-hand-click" aria-hidden="true"></i><span>Нажми на карточку — увидишь ответ</span>'
+    +'<i class="ti ti-arrow-right g" aria-hidden="true"></i><span>Смахни вправо — «Знаю»</span>'
+    +'<i class="ti ti-arrow-left r" aria-hidden="true"></i><span>Смахни влево — «Повторить»</span></div>'
+    +'<button type="button" onclick="this.parentNode.remove()">Понятно</button>';
+  pg.appendChild(d);
+}
+// выбор предмета и темы — одно меню
+function fcMenu(){
+  var s=document.getElementById('fcS').value,QS=getQS(),selT=SELECTED_TOPICS.flashcards||[];
+  var subs=Object.keys(SM).filter(function(k){return QS.some(function(q){return q.s===k;});});
+  var chips='<div class="fc2-chips" role="tablist"><button type="button" role="tab" aria-selected="'+(s==='all')+'" class="'+(s==='all'?'on':'')+'" onclick="fcMenuSub(\'all\')">Все</button>'
+    +subs.map(function(k){return '<button type="button" role="tab" aria-selected="'+(s===k)+'" class="'+(s===k?'on':'')+'" onclick="fcMenuSub(\''+esc(k)+'\')">'+esc(SM[k].label)+'</button>';}).join('')+'</div>';
+  var pool=QS.filter(function(q){return s==='all'||q.s===s;}),by={},order=[];
+  pool.forEach(function(q){if(!by[q.t]){by[q.t]={n:0,ok:0};order.push(q.t);}by[q.t].n++;var p=S.prog[q.id];if(p&&p.c>0)by[q.t].ok++;});
+  var row=function(t,label,n,pct,on){return '<button type="button" class="fc2-tr'+(on?' on':'')+'" onclick="fcMenuTopic('+(t===null?'null':'\''+esc(t).replace(/'/g,"\\'")+'\'')+')">'
+    +'<b>'+esc(label)+'</b>'+(pct!=null?'<span class="fc2-pb" aria-hidden="true"><i style="width:'+pct+'%"></i></span>':'')+'<small>'+n+'</small></button>';};
+  var list=row(null,'Все темы',pool.length,null,!selT.length)+order.map(function(t){var o=by[t];return row(t,t,o.n,Math.round(o.ok/o.n*100),selT.length===1&&selT[0]===t);}).join('');
+  showModal('Что учим',chips+'<div class="fc2-tl">'+list+'</div>');
+}
+function fcMenuSub(k){document.getElementById('fcS').value=k;SELECTED_TOPICS.flashcards=[];fcFilter();fcMenu();}
+function fcMenuTopic(t){SELECTED_TOPICS.flashcards=t===null?[]:[t];closeModal();fcFilter();}
 // Звуки (Web Audio, без файлов). Настройка S.sound
 function playSound(type){
   if(S.sound===false)return; // выключено в настройках
@@ -7436,11 +7566,13 @@ function fcSetupSwipe(){
       if(!moved){fcFlip();} // тап — тоже переворот
     }
   }
-  card.addEventListener('touchstart',function(e){down(e.touches[0].clientX,e.touches[0].clientY);},{passive:true});
+  var onBtn=function(e){return e.target&&e.target.closest&&e.target.closest('button');};   // кнопка внутри карточки — не переворот
+  card.addEventListener('touchstart',function(e){if(onBtn(e))return;down(e.touches[0].clientX,e.touches[0].clientY);},{passive:true});
   card.addEventListener('touchmove',function(e){move(e.touches[0].clientX,e.touches[0].clientY);},{passive:true});
   card.addEventListener('touchend',up);
   // мышь (для компа)
-  card.addEventListener('mousedown',function(e){down(e.clientX,e.clientY);});
+  card.addEventListener('mousedown',function(e){if(onBtn(e))return;down(e.clientX,e.clientY);});
+  card.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();fcFlip();}});
   window.addEventListener('mousemove',function(e){if(dragging)move(e.clientX,e.clientY);});
   window.addEventListener('mouseup',function(){if(dragging)up();});
 }
@@ -12002,7 +12134,7 @@ function hmAsk(){
 }
 // на телефоне у главной своя верхняя строка — общую шапку прячем
 (function(){
-  var mark=function(pg){document.documentElement.toggleAttribute('data-onhome',pg==='home');};
+  var mark=function(pg){document.documentElement.toggleAttribute('data-onhome',pg==='home');document.documentElement.toggleAttribute('data-onfc',pg==='flashcards');};
   var _g=go;go=function(pg,btn){var r=_g.apply(this,arguments);var on=document.querySelector('.page.on');mark(on?on.id.replace('pg-',''):pg);return r;};
   var on=document.querySelector('.page.on');mark(on?on.id.replace('pg-',''):'home');
 })();
