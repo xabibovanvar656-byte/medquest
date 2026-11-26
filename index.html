@@ -3687,6 +3687,59 @@ body.bd-open .study-toast{z-index:9700;top:calc(env(safe-area-inset-top,0px) + 7
 #pg-flashcards.fc2 #fcHint{flex:none}
 @media(max-width:360px){#pg-flashcards.fc2 .fc-nav-btn{font-size:13px;padding:0 6px}#pg-flashcards.fc2 .fc2-ai{font-size:12.5px;padding:0 8px}}
 #pg-flashcards.fc2 .fc2-q.ovf{align-items:flex-start;overflow-y:auto}#pg-flashcards.fc2 .fc2-back.ovf{justify-content:flex-start;overflow-y:auto}
+/* карточки: текст не вылезает за край, переворот без вспышки */
+#pg-flashcards.fc2 .fc2-mid,#pg-flashcards.fc2 .fc2-card,#pg-flashcards.fc2 .fc2-back,#pg-flashcards.fc2 .fc2-q,#pg-flashcards.fc2 .fc2-ans,#pg-flashcards.fc2 .fc2-qs{min-width:0}
+#pg-flashcards.fc2 .fc2-card{-webkit-tap-highlight-color:transparent}
+#pg-flashcards.fc2 .fc2-q{font-size:20px;font-weight:600;line-height:1.4}
+#pg-flashcards.fc2 .fc2-ans{font-size:26px;font-weight:700;line-height:1.25}
+#pg-flashcards.fc2 .fc2-q,#pg-flashcards.fc2 .fc2-ans,#pg-flashcards.fc2 .fc2-qs{overflow-wrap:anywhere}
+#pg-flashcards.fc2 .fc2-q.fit,#pg-flashcards.fc2 .fc2-ans.fit{overflow-wrap:normal}
+#pg-flashcards.fc2 .fc2-q,#pg-flashcards.fc2 .fc2-back{animation:fc2In .16s ease-out}
+@keyframes fc2In{from{opacity:.35}to{opacity:1}}
+@media(max-width:360px){#pg-flashcards.fc2 .fc2-q{font-size:18px}}
+/* ===== Все ответы ===== */
+.an{padding-bottom:84px}
+.an-hd{display:flex;align-items:center;gap:10px;margin:4px 0 12px}
+.an-hd h1{font-size:24px;font-weight:700;color:var(--tx);margin:0;flex:1;min-width:0}
+.an-bk{width:40px;height:40px;flex:none;border:none;border-radius:12px;background:var(--bg2);box-shadow:0 3px 0 var(--edge);color:var(--tx);font-size:22px;display:grid;place-items:center;cursor:pointer}
+.an-n{flex:none;font-size:13px;font-weight:600;color:var(--tx2);font-variant-numeric:tabular-nums}
+.an-pick{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.an-sel{display:flex;align-items:center;gap:8px;min-width:0;height:44px;padding:0 10px 0 6px;border:none;border-radius:14px;background:var(--bg2);box-shadow:0 3px 0 var(--edge);color:var(--tx);font:600 14px var(--f);cursor:pointer;text-align:left}
+.an-sel .lb-blob,.an-ic{width:32px;height:32px;flex:none;border-radius:10px;font-size:18px}
+.an-ic{display:grid;place-items:center;background:var(--bg3);color:var(--tx2)}
+.an-stx{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.an-sel>.ti-chevron-down{flex:none;font-size:16px;color:var(--tx3)}
+.an-srch{display:flex;align-items:center;gap:8px;height:44px;padding:0 6px 0 12px;border-radius:14px;background:var(--bg3);color:var(--tx3);margin-bottom:12px}
+.an-srch>i{font-size:19px;flex:none}
+.an-srch input{flex:1;min-width:0;height:100%;border:none;outline:none;background:transparent;color:var(--tx);font:500 15px var(--f)}
+.an-srch input::placeholder{color:var(--tx3)}
+.an-srch input::-webkit-search-cancel-button{display:none}
+.an-srch:focus-within{box-shadow:0 0 0 2px var(--mal)}
+.an-x[hidden]{display:none}
+.an-x{width:32px;height:32px;flex:none;border:none;border-radius:10px;background:transparent;color:var(--tx2);font-size:18px;display:grid;place-items:center;cursor:pointer}
+.an-tp{font-size:13px;font-weight:600;color:var(--tx2);margin:14px 2px 8px}
+.an-tp:first-child{margin-top:2px}
+.an-it{background:var(--bg2);border-radius:18px;box-shadow:0 3px 0 var(--edge);padding:12px 12px 12px 14px;margin-bottom:10px}
+.an-q{display:flex;align-items:flex-start;gap:10px;font-size:15px;font-weight:600;line-height:1.35;color:var(--tx)}
+.an-q>span{flex:1;min-width:0;overflow-wrap:anywhere}
+.an-q em{flex:none;min-width:26px;height:24px;padding:0 4px;border-radius:8px;background:var(--bg3);color:var(--tx2);font:600 12px var(--f);font-style:normal;display:grid;place-items:center;font-variant-numeric:tabular-nums;margin-top:-1px}
+.an-fav{flex:none;width:32px;height:32px;margin:-5px -4px 0 0;border:none;border-radius:10px;background:transparent;color:var(--tx3);font-size:20px;display:grid;place-items:center;cursor:pointer}
+.an-fav.on{color:var(--am)}
+.an-a{display:flex;align-items:flex-start;gap:8px;margin:9px 0 0 36px;padding:9px 11px;border-radius:12px;background:var(--mal-s);color:var(--mal-t);font-size:15px;font-weight:600;line-height:1.35;overflow-wrap:anywhere}
+.an-a>i{flex:none;font-size:18px;margin-top:1px}
+.an-a>span{min-width:0}
+button.an-a.lk{width:calc(100% - 36px);border:1.5px dashed var(--edge);background:var(--bg3);color:var(--tx2);font:600 14px var(--f);cursor:pointer;justify-content:center;align-items:center}
+.an-more{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;margin:2px 0 12px;border:1.5px solid var(--edge);border-radius:18px;background:var(--bg2);color:var(--tx);text-align:left;cursor:pointer;font-family:var(--f)}
+.an-more-i{width:40px;height:40px;flex:none;border-radius:12px;display:grid;place-items:center;background:var(--mal-s);color:var(--mal-t);font-size:20px}
+.an-more b{display:block;font-size:15px;font-weight:600}
+.an-more small{display:block;font-size:13px;color:var(--tx2);line-height:1.3;margin-top:2px}
+.an-more>.ti-chevron-right{margin-left:auto;color:var(--tx3);font-size:18px;flex:none}
+.an-load{display:block;width:100%;height:44px;margin:4px 0 10px;border:1.5px solid var(--edge);border-radius:14px;background:transparent;color:var(--tx);font:600 15px var(--f);cursor:pointer}
+.an-empty{display:flex;flex-direction:column;align-items:center;gap:6px;padding:40px 16px;text-align:center;color:var(--tx2)}
+.an-empty i{font-size:34px;color:var(--tx3)}.an-empty b{font-size:16px;color:var(--tx)}.an-empty span{font-size:14px}
+.an-cta{position:fixed;bottom:12px;z-index:40;display:none;pointer-events:none}
+#pg-answers.on .an-cta{display:flex}
+.an-cta .btn{pointer-events:auto;width:100%;height:52px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:16px}
 </style>
 </head>
 <body>
@@ -7437,10 +7490,13 @@ function fcLayout(){
 function fcFit(){
   var c=document.getElementById('fcCard');if(!c)return;
   var el=FCf?document.getElementById('fcAns'):document.getElementById('fcQ');if(!el)return;
-  var max=FCf?32:22,min=FCf?17:14,fs=max;el.style.fontSize=fs+'px';
+  var max=FCf?26:20,min=FCf?16:15,fs=max;el.style.fontSize=fs+'px';
   var box=c.querySelector(FCf?'.fc2-back':'.fc2-q');
   if(box)box.classList.remove("ovf");
-  for(var i=0;i<12&&box&&box.scrollHeight>box.clientHeight+1&&fs>min;i++){fs=Math.max(min,fs-1.5);el.style.fontSize=fs+"px";}
+  el.classList.add('fit');   // на время подбора слова не переносятся — так видно, влезает ли самое длинное слово
+  var over=function(){return box&&(box.scrollHeight>box.clientHeight+1||el.scrollWidth>el.clientWidth+1);};
+  for(var i=0;i<16&&over()&&fs>min;i++){fs=Math.max(min,fs-1);el.style.fontSize=fs+"px";}
+  el.classList.remove('fit');   // если слово всё равно длиннее строки — оно перенесётся, а не вылезет за край
   if(box&&box.scrollHeight>box.clientHeight+1)box.classList.add("ovf");   // совсем маленький экран — пусть прокручивается внутри карточки
 }
 window.addEventListener('resize',function(){try{if(document.querySelector('#pg-flashcards.on')){fcLayout();fcFit();}}catch(e){}});
@@ -7533,7 +7589,7 @@ function fcSetupSwipe(){
   var card=document.getElementById('fcCard');
   if(!card||card._swipeSet)return;
   card._swipeSet=true;
-  var startX=0,startY=0,dx=0,dy=0,dragging=false,moved=false;
+  var startX=0,startY=0,dx=0,dy=0,dragging=false,moved=false,lastTouch=0;
   function down(x,y){startX=x;startY=y;dx=0;dy=0;dragging=true;moved=false;card.classList.add('swiping');}
   function move(x,y){
     if(!dragging)return;
@@ -7567,11 +7623,11 @@ function fcSetupSwipe(){
     }
   }
   var onBtn=function(e){return e.target&&e.target.closest&&e.target.closest('button');};   // кнопка внутри карточки — не переворот
-  card.addEventListener('touchstart',function(e){if(onBtn(e))return;down(e.touches[0].clientX,e.touches[0].clientY);},{passive:true});
+  card.addEventListener('touchstart',function(e){lastTouch=Date.now();if(onBtn(e))return;down(e.touches[0].clientX,e.touches[0].clientY);},{passive:true});
   card.addEventListener('touchmove',function(e){move(e.touches[0].clientX,e.touches[0].clientY);},{passive:true});
-  card.addEventListener('touchend',up);
+  card.addEventListener('touchend',function(){lastTouch=Date.now();up();});
   // мышь (для компа)
-  card.addEventListener('mousedown',function(e){if(onBtn(e))return;down(e.clientX,e.clientY);});
+  card.addEventListener('mousedown',function(e){if(Date.now()-lastTouch<900||onBtn(e))return;down(e.clientX,e.clientY);});
   card.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();fcFlip();}});
   window.addEventListener('mousemove',function(e){if(dragging)move(e.clientX,e.clientY);});
   window.addEventListener('mouseup',function(){if(dragging)up();});
@@ -12153,6 +12209,7 @@ function renderTests(){
   var rows=[
     {fn:'vOpenErrors()',pg:'trainer',tone:'eos',i:'ti-refresh-alert',t:'Работа над ошибками',d:errs?errs+' '+vplural(errs,'вопрос ждёт','вопроса ждут','вопросов ждут')+' второй попытки':'Ошибок пока нет',n:errs||''},
     {fn:'mtOpen()',pg:'trainer',tone:'vio',i:'ti-photo-plus',t:'Мои тесты',d:'Сфотографируй свой тест — получится тренажёр'},
+    {fn:'anOpen()',pg:'answers',tone:'mal',i:'ti-list-details',t:'Все ответы',d:'Вопрос и правильный ответ — учить и сверять'},
     {fn:"vOpen('flashcards')",pg:'flashcards',tone:'meth',i:'ti-cards',t:'Карточки',d:'Вопрос — на лицевой стороне, ответ — на обороте'},
     {fn:"vOpen('exam')",pg:'exam',tone:'iod',i:'ti-clock-hour-4',t:'Экзамен',d:'Билет на время, без подсказок'+(S.hist.length?' · сдано '+S.hist.length:'')},
     {fn:"vOpen('duels')",pg:'duels',tone:'vio',i:'ti-swords',t:'Дуэль',d:'Одни и те же вопросы — кто точнее'},
@@ -15298,6 +15355,7 @@ function vpWall(why){
     imp:['Лимит своих тестов закончился',v.plus?'В этом месяце ты уже загрузил '+v.plus_imp+' вопросов. В следующем — снова можно.':'Бесплатная проба использована. С Vita+ — '+v.plus_imp+' вопросов в месяц.'],
     long:['Подробные объяснения — в Vita+','Кратко — бесплатно. Подробно — 10–12 шагов: механизм, пример из клиники и частая ошибка.'],
     file:['Разбор файлов — в Vita+','Сфотографируй страницу или пришли PDF — ИИ объяснит непонятное место.'],
+    ans:['Все ответы — в Vita+','Бесплатно — первые '+AN_FREE+' вопросов каждой темы. С Vita+ — все '+vNum(bank)+' вопросов с ответами.'],
     info:['Vita+','Готовься к деканату без остановок.']}[why]||['Vita+','Готовься к деканату без остановок.'];
   var h='<div class="vp-top vp-hero"><span class="vp-mark on" aria-hidden="true">✦</span><h2>'+(v.plus&&!v.staff?'Vita+ активна':head[0])+'</h2>'
     +'<p>'+(v.plus&&!v.staff&&v.until?'До '+vpDate(v.until,true)+'. Можно продлить заранее — дни прибавятся.':head[1])+'</p></div>';
@@ -16558,6 +16616,7 @@ var VX_TXT={
   ask:['Вопросы ИИ на сегодня закончились','С Vita+ спрашивай больше — текстом, голосом и с фото лекций.'],
   file:['Разбор фото и файлов — в Vita+','Сфотографируй страницу или пришли PDF — ИИ объяснит непонятное место.'],
   imp:['Лимит своих тестов закончился','С Vita+ делай тесты из скриншотов и файлов каждый месяц.'],
+  ans:['Все ответы — в Vita+','Бесплатно — первые 15 вопросов каждой темы с ответами. С Vita+ — весь банк: каждый вопрос и его правильный ответ.'],
   info:['Vita+','Готовься к деканату без остановок.']};
 function vxRing(used,lim){return '<div class="vx-ring"><div><b>'+used+'</b><small>из '+lim+'</small></div></div>';}
 function vxBen(why,v){
@@ -16568,7 +16627,7 @@ function vxBen(why,v){
     imp:['photo-plus','#7FB2FF','rgba(61,130,255,.18)','Свои тесты — '+v.plus_imp+' вопросов в месяц','из скриншотов и файлов'],
     gift:['gift','#FFC94D','rgba(255,201,77,.18)','+'+v.gift+' монет в подарок','сразу после оплаты'],
     badge:['crown','#FFC94D','rgba(255,201,77,.18)','Корона в рейтинге','и золотое кольцо в профиле']};
-  var order={q:['tests','board','ex'],ex:['ex','tests','board'],board:['board','ask','tests'],long:['board','ex','tests'],ask:['ask','ex','board'],file:['ask','ex','board'],imp:['imp','tests','ex'],info:['tests','ex','board','ask']}[why]||['tests','ex','board'];
+  var order={q:['tests','board','ex'],ex:['ex','tests','board'],board:['board','ask','tests'],long:['board','ex','tests'],ask:['ask','ex','board'],file:['ask','ex','board'],imp:['imp','tests','ex'],ans:['tests','ex','board'],info:['tests','ex','board','ask']}[why]||['tests','ex','board'];
   order=order.concat([v.gift?'gift':'badge']);
   return '<div class="vx-ben">'+order.map(function(k){var b=B[k];return '<div><i class="ti ti-'+b[0]+'" style="color:'+b[1]+';background:'+b[2]+'" aria-hidden="true"></i><span>'+b[3]+'<small>'+b[4]+'</small></span></div>';}).join('')+'</div>';
 }
@@ -17036,6 +17095,127 @@ async function stMyPublish(id){
   try{var r=await vRpc('admin_topic_publish',{p_token:vAdminToken(),p_id:id});stMyRefresh(Array.isArray(r)?r[0]:r);toast2('Тема теперь общая');}
   catch(e){vAlert(e.missing?'Сначала нужно запустить security_v26.sql в Supabase.':(e.message||'Не получилось'));}
 }
+// ===== ВСЕ ОТВЕТЫ: вопрос и правильный ответ списком (учить и сверять) =====
+// бесплатно — первые AN_FREE вопросов каждой темы, дальше — Vita+
+var AN_FREE=15,AN={s:'',t:null,q:'',n:60};
+try{if(PROTECTED.indexOf('answers')<0)PROTECTED.push('answers');}catch(e){}
+try{PAGE_LABELS.answers='учит ответы';}catch(e){}
+(function(){
+  var _g=go;go=function(pg,btn){
+    if(pg==='answers'&&!document.getElementById('pg-answers')){
+      var d=document.createElement('div');d.id='pg-answers';d.className='page';d.innerHTML='<div id="answersBody"></div>';
+      var t=document.getElementById('pg-tests');t.parentNode.insertBefore(d,t.nextSibling);
+    }
+    var r=_g.apply(this,arguments);
+    if(pg==='answers'&&document.querySelector('#pg-answers.on')){try{document.querySelectorAll('[data-pg="tests"]').forEach(function(x){x.classList.add('on');});setDockActive('tests');anRender();}catch(e){}}
+    return r;
+  };
+})();
+function anLocked(){return !S.isAdm&&(vpOn()||(!VP&&!!S.user));}
+function anNorm(x){return String(x||'').toLowerCase().replace(/ё/g,'е');}
+function anAns(q){return q.o&&q.o[q.a]!=null?q.o[q.a]:'';}
+function anSubjects(){var QS=getQS();return Object.keys(SM).filter(function(k){return QS.some(function(q){return q.s===k;});});}
+function anTopics(s){var seen={},o=[];getQS().forEach(function(q){if(q.s===s&&!seen[q.t]){seen[q.t]=1;o.push(q.t);}});return o;}
+function anOpen(){if(vIsLocked('answers')){showLoginWall();return;}vGo('answers');}
+function anRender(){
+  var subs=anSubjects();
+  if(!AN.s){try{AN.s=localStorage.getItem('vitaAnS')||'';var t=localStorage.getItem('vitaAnT');AN.t=t===null||t==='*'?null:t;}catch(e){}}
+  if(subs.indexOf(AN.s)<0){AN.s=subs[0]||'';AN.t=null;}
+  var tps=anTopics(AN.s);
+  if(AN.t!==null&&tps.indexOf(AN.t)<0)AN.t=null;
+  var saved=null;try{saved=localStorage.getItem('vitaAnT');}catch(e){}
+  if(AN.t===null&&saved===null&&tps.length)AN.t=tps[0];
+  var m=SM[AN.s]||{label:'Предмет',icon:''},tone=AN.s?vSubjTone(AN.s):'mal';
+  var h='<div class="v-home an">'
+    +'<div class="an-hd"><button type="button" class="an-bk" onclick="vGo(\'tests\')" aria-label="Назад к тестам"><i class="ti ti-chevron-left" aria-hidden="true"></i></button><h1>Все ответы</h1><span class="an-n" id="anN"></span></div>'
+    +'<div class="an-pick">'
+    +'<button type="button" class="an-sel" onclick="anMenu()" aria-haspopup="dialog"><span class="lb-blob '+tone+'">'+(m.icon||'<i class="ti ti-book"></i>')+'</span><span class="an-stx">'+esc(m.label)+'</span><i class="ti ti-chevron-down" aria-hidden="true"></i></button>'
+    +'<button type="button" class="an-sel" onclick="anMenu()" aria-haspopup="dialog"><span class="an-ic"><i class="ti ti-list" aria-hidden="true"></i></span><span class="an-stx">'+esc(AN.t===null?'Все темы':AN.t)+'</span><i class="ti ti-chevron-down" aria-hidden="true"></i></button></div>'
+    +'<label class="an-srch"><i class="ti ti-search" aria-hidden="true"></i><input id="anQ" type="search" inputmode="search" autocomplete="off" placeholder="Найти вопрос по словам" value="'+esc(AN.q)+'" oninput="anSearch(this.value)"><button type="button" id="anX" class="an-x"'+(AN.q?'':' hidden')+' onclick="anSearch(\'\');var i=document.getElementById(\'anQ\');i.value=\'\';i.focus()" aria-label="Очистить"><i class="ti ti-x" aria-hidden="true"></i></button></label>'
+    +'<div id="anList"></div></div>'
+    +'<div class="an-cta"><button type="button" class="btn bbl" onclick="anTrain()"><i class="ti ti-player-play-filled" aria-hidden="true"></i>'+(AN.t===null?'Решать этот предмет':'Решать эту тему тестом')+'</button></div>';
+  document.getElementById('answersBody').innerHTML=h;
+  anPlace();anList();
+  if(!VP&&S.user&&typeof vpLoad==='function'){vpLoad().then(function(){if(document.querySelector('#pg-answers.on'))anList();});}
+}
+// кнопка «Решать» — над нижним меню, по ширине колонки (на компьютере колонка сдвинута боковым меню)
+function anPlace(){
+  var c=document.querySelector('#pg-answers .an-cta'),col=document.querySelector('#pg-answers .v-home');if(!c||!col)return;
+  var r=col.getBoundingClientRect(),bn=document.querySelector('.bottomnav'),b=12;
+  if(bn&&getComputedStyle(bn).display!=='none'){var br=bn.getBoundingClientRect();if(br.height)b=Math.max(12,innerHeight-br.top+10);}
+  c.style.left=r.left+'px';c.style.width=r.width+'px';c.style.bottom=b+'px';
+}
+window.addEventListener('resize',function(){if(document.querySelector('#pg-answers.on'))anPlace();});
+var _anT=0;
+function anSearch(v){AN.q=v;AN.n=60;var x=document.getElementById('anX');if(x)x.hidden=!v;clearTimeout(_anT);_anT=setTimeout(anList,160);}
+function anList(){
+  var box=document.getElementById('anList');if(!box)return;
+  var lock=anLocked(),QS=getQS(),q=anNorm(AN.q).trim(),words=q?q.split(/\s+/):[];
+  var idx={},pool=[];   // номер вопроса внутри темы — по нему считаем бесплатные 15
+  QS.forEach(function(x){if(x.s!==AN.s)return;idx[x.t]=(idx[x.t]||0)+1;
+    if(!words.length&&AN.t!==null&&x.t!==AN.t)return;
+    if(words.length){var hay=anNorm(x.q+' '+anAns(x));if(!words.every(function(w){return hay.indexOf(w)>=0;}))return;}
+    pool.push({q:x,n:idx[x.t]});});
+  var nEl=document.getElementById('anN');if(nEl)nEl.textContent=vNum(pool.length)+' '+vplural(pool.length,'вопрос','вопроса','вопросов');
+  if(!pool.length){box.innerHTML='<div class="an-empty"><i class="ti ti-search-off" aria-hidden="true"></i><b>'+(words.length?'Ничего не нашлось':'В этой теме пока нет вопросов')+'</b>'+(words.length?'<span>Попробуй другое слово или часть слова</span>':'')+'</div>';return;}
+  var h='',shown=0,hidden={},lastT=null;
+  for(var i=0;i<pool.length&&shown<AN.n;i++){
+    var it=pool[i],x=it.q,locked=lock&&it.n>AN_FREE;
+    if(locked&&!words.length){hidden[x.t]=(hidden[x.t]||0)+1;continue;}   // без поиска закрытые не показываем — одна плашка на тему
+    if((words.length||AN.t===null)&&x.t!==lastT){h+='<div class="an-tp">'+esc(x.t)+'</div>';lastT=x.t;}
+    var fav=S.favs&&S.favs[x.id];
+    h+='<div class="an-it"><div class="an-q"><em>'+it.n+'</em><span>'+esc(x.q)+'</span>'
+      +'<button type="button" class="an-fav'+(fav?' on':'')+'" onclick="anFav(\''+esc(x.id)+'\',this)" aria-label="'+(fav?'Убрать из закладок':'В закладки')+'" aria-pressed="'+!!fav+'"><i class="ti ti-star'+(fav?'-filled':'')+'" aria-hidden="true"></i></button></div>'
+      +(locked?'<button type="button" class="an-a lk" onclick="vpWall(\'ans\')"><i class="ti ti-lock" aria-hidden="true"></i>Ответ — в Vita+</button>'
+              :'<div class="an-a"><i class="ti ti-circle-check-filled" aria-hidden="true"></i><span>'+esc(anAns(x))+'</span></div>')+'</div>';
+    shown++;
+    // после 15-го вопроса темы — плашка Vita+ (если дальше в этой теме есть закрытые)
+    if(lock&&!words.length&&it.n===AN_FREE){var rest=pool.filter(function(p){return p.q.t===x.t&&p.n>AN_FREE;}).length;
+      if(rest)h+='<button type="button" class="an-more" onclick="vpWall(\'ans\')"><span class="an-more-i"><i class="ti ti-lock" aria-hidden="true"></i></span><span><b>Ещё '+vNum(rest)+' '+vplural(rest,'вопрос','вопроса','вопросов')+' с ответами</b><small>Бесплатно — первые '+AN_FREE+' в каждой теме. Остальные — в Vita+</small></span><i class="ti ti-chevron-right" aria-hidden="true"></i></button>';}
+  }
+  var left=pool.filter(function(p){return !(lock&&!words.length&&p.n>AN_FREE);}).length-shown;
+  if(left>0)h+='<button type="button" class="an-load" onclick="AN.n+=60;anList()">Показать ещё</button>';
+  box.innerHTML=h;
+}
+function anMenu(){
+  var subs=anSubjects(),QS=getQS();
+  var chips='<div class="fc2-chips" role="tablist">'+subs.map(function(k){return '<button type="button" role="tab" aria-selected="'+(AN.s===k)+'" class="'+(AN.s===k?'on':'')+'" onclick="anSub(\''+esc(k)+'\')">'+esc(SM[k].label)+'</button>';}).join('')+'</div>';
+  var by={},order=[];QS.forEach(function(q){if(q.s!==AN.s)return;if(!by[q.t]){by[q.t]=0;order.push(q.t);}by[q.t]++;});
+  var all=order.reduce(function(a,t){return a+by[t];},0);
+  var row=function(t,label,n,on){return '<button type="button" class="fc2-tr'+(on?' on':'')+'" onclick="anTop('+(t===null?'null':'\''+esc(t).replace(/'/g,"\\'")+'\'')+')"><b>'+esc(label)+'</b><small>'+n+'</small></button>';};
+  showModal('Что смотрим',chips+'<div class="fc2-tl">'+row(null,'Все темы',all,AN.t===null)+order.map(function(t){return row(t,t,by[t],AN.t===t);}).join('')+'</div>');
+}
+function anSub(k){AN.s=k;var t=anTopics(k);AN.t=t.length?t[0]:null;anSave();anMenu();anRender();}
+function anTop(t){AN.t=t;AN.n=60;anSave();closeModal();anRender();document.getElementById('mscroll').scrollTop=0;}
+function anSave(){try{localStorage.setItem('vitaAnS',AN.s);localStorage.setItem('vitaAnT',AN.t===null?'*':AN.t);}catch(e){}}
+async function anFav(qid,b){
+  if(!S.favs)S.favs={};var on=!S.favs[qid];
+  if(on)S.favs[qid]=1;else delete S.favs[qid];
+  sv();
+  if(b){b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);b.setAttribute('aria-label',on?'Убрать из закладок':'В закладки');b.innerHTML='<i class="ti ti-star'+(on?'-filled':'')+'" aria-hidden="true"></i>';}
+  if(dbOK&&S.user){try{if(on)await sbPost('bookmarks',{user_email:S.user.email,question_id:qid});else await sbDel('bookmarks','user_email=eq.'+encodeURIComponent(S.user.email)+'&question_id=eq.'+encodeURIComponent(qid));}catch(e){}}
+}
+function anTrain(){if(AN.t===null)vOpenSubject(AN.s);else vTrainTopic(AN.s,AN.t);}
+// ===== КАРТОЧКИ С КЛАВИАТУРЫ (ноутбук): ← повторить, → знаю, пробел / ↑ / ↓ — перевернуть =====
+(function(){
+  var busy=0;
+  document.addEventListener('keydown',function(e){
+    if(!document.querySelector('#pg-flashcards.on')||e.ctrlKey||e.metaKey||e.altKey)return;
+    var a=document.activeElement,tag=a&&a.tagName;
+    if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT'||(a&&a.isContentEditable))return;
+    var md=document.getElementById('modal');
+    if((md&&md.style.display!=='none')||document.querySelector('#modalRoot .modal-bg')||document.querySelector('.fc2-coach'))return;
+    if(typeof FCP==='undefined'||!FCP.length)return;
+    var k=e.key;
+    if(k==='ArrowLeft'||k==='ArrowRight'){
+      e.preventDefault();if(e.repeat||Date.now()-busy<450)return;busy=Date.now();
+      fcSwipe(k==='ArrowRight'?'know':'dunno');
+    }else if(k===' '||k==='Spacebar'||k==='ArrowUp'||k==='ArrowDown'||(k==='Enter'&&a!==document.getElementById('fcCard'))){
+      if(a&&a!==document.body&&a!==document.getElementById('fcCard')&&tag==='BUTTON'&&(k===' '||k==='Enter'))return;   // пробел на кнопке — нажимает кнопку
+      e.preventDefault();if(e.repeat)return;fcFlip();
+    }
+  });
+})();
 // ===== VITA · КОНЕЦ БЛОКА «ЛАБОРАТОРИЯ» =====
 </script>
 <div id="modalRoot"></div>
